@@ -10,7 +10,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <div>
-        <h1>Home Page</h1>
+        <h1 className="text-blue-500">Home Page</h1>
       </div>
     </>
   );
