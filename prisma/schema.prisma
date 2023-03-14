@@ -46,6 +46,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   species       SpeciesInstances[]
+  totalYield    Int
+  dollars       Int
 }
 
 model VerificationToken {
