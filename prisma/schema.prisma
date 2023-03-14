@@ -11,18 +11,19 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.String
-  access_token       String?  @db.String
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.String
-  session_state      String?
+  id                       String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId                   String
+  type                     String
+  provider                 String
+  providerAccountId        String
+  refresh_token            String?  @db.String
+  access_token             String?  @db.String
+  expires_at               Int?
+  token_type               String?
+  scope                    String?
+  id_token                 String?  @db.String
+  session_state            String?
+  refresh_token_expires_in Int?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -46,8 +47,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   species       SpeciesInstances[]
-  totalYield    Int
-  dollars       Int
+  totalYield    Int?
+  dollars       Int?
 }
 
 model VerificationToken {
