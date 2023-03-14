@@ -1,6 +1,24 @@
+import { signIn, useSession } from "next-auth/react";
 import Head from "next/head";
+import { useState } from "react";
 
 export default function Home() {
+  const { data: session } = useSession();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+  };
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <>
       <Head>
@@ -16,8 +34,35 @@ export default function Home() {
                       before:shadow-[0_0_5px_5px_rgba(255,255,255,0.3)]"></div>
         <span className="change-text uppercase"></span>
       </div>
-      <div className="fade-in absolute flex h-screen w-screen justify-center bg-[url('../img/pokemon-bg.jpg')] bg-cover pt-10 font-bold">
-        <h1 className="text-7xl">PokéZoo</h1>
+      <div className="fade-in absolute flex h-screen w-screen flex-col items-center bg-[url('../img/pokemon-bg.jpg')] bg-cover pt-10 font-bold">
+        <h1 className="mb-20 text-7xl">PokéZoo</h1>
+        <div className="h-2/3 w-1/3 rounded-lg border-4 border-black bg-white pt-5 text-center">
+          <p>
+            <strong className="text-2xl">Login</strong>
+          </p>
+          <form onSubmit={handleLogin}>
+            <input
+              placeholder="Email"
+              onChange={handleEmail}
+              value={email}
+              className="mt-10 w-2/3 rounded-lg border-2 border-slate-300 p-2 text-slate-500 focus:text-black focus:outline-none"
+            />
+            <input
+              placeholder="Password"
+              onChange={handlePassword}
+              value={password}
+              className="mt-10 w-2/3 rounded-lg border-2 border-slate-300 p-2 text-slate-500 focus:text-black focus:outline-none"
+            />
+            <br></br>
+            <button
+              type="submit"
+              className="mt-10 h-10 w-2/3 rounded-lg bg-blue-500 text-white">
+              Login
+            </button>
+          </form>
+          {/* <button onClick={() => signIn()}>Sign in with GitHub</button> */}
+          {/* <button onClick={() => signIn("github")}>yo yo</button> */}
+        </div>
       </div>
     </>
   );
