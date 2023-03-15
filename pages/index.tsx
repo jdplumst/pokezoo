@@ -2,6 +2,7 @@ import { GetServerSidePropsContext } from "next";
 import { getSession, signIn } from "next-auth/react";
 import Head from "next/head";
 import { useState } from "react";
+import { GoMarkGithub } from "react-icons/go";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -80,7 +81,14 @@ export default function Home() {
               Login
             </button>
           </form>
-          <button onClick={() => signIn("github")}>Sign In With GitHub</button>
+          <button
+            onClick={() => signIn("github")}
+            className="mt-10 h-10 w-2/3 rounded-lg border-2 border-black">
+            <div className="flex items-center justify-center gap-2">
+              Sign in with GitHub
+              <GoMarkGithub />
+            </div>
+          </button>
         </div>
       </div>
     </>
