@@ -5,7 +5,8 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: number;
-      email: string;
+      name: string | null;
+      email: string | null;
       image: string;
 
       // Custom fields
@@ -16,6 +17,7 @@ declare module "next-auth" {
 
   interface User {
     id: number;
+    name: string | null;
     email: string | null;
     image: string;
 

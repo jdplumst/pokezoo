@@ -12,7 +12,6 @@ export const getServerSideProps = async (
       }
     };
   }
-  console.log(session);
   return {
     props: { session }
   };
@@ -20,6 +19,7 @@ export const getServerSideProps = async (
 
 export default function Game() {
   const { data: session } = useSession();
+
   if (session) {
     return (
       <>

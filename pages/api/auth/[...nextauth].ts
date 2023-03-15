@@ -14,6 +14,7 @@ export const authOptions = {
       profile(profile): Awaitable<User> {
         return {
           id: profile.id,
+          name: profile.name,
           email: profile.email,
           image: profile.avatar_url,
           totalYield: 0,
