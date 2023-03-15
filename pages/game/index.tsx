@@ -13,7 +13,7 @@ export const getServerSideProps = async (
       }
     };
   }
-
+  console.log(session);
   const user = session.user;
   const species = await client.species.findMany();
   const instances = await client.speciesInstances.findMany({

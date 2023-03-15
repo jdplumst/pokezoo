@@ -1,12 +1,13 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth, { Awaitable, Session, User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
+import TwitchProvider from "next-auth/providers/twitch";
+import GoogleProvider from "next-auth/providers/google";
 import prisma from "@/prisma/script";
 import { AdapterUser } from "next-auth/adapters";
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
-  // Configure one or more authentication providers
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
@@ -21,8 +22,35 @@ export const authOptions = {
           dollars: 0
         };
       }
+    }),
+    TwitchProvider({
+      clientId: process.env.TWITCH_CLIENT_ID,
+      clientSecret: process.env.TWITCH_CLIENT_SECRET,
+      profile(profile): Awaitable<User> {
+        return {
+          id: profile.sub,
+          name: profile.preferred_username,
+          email: profile.email,
+          image: profile.picture,
+          totalYield: 0,
+          dollars: 0
+        };
+      }
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      profile(profile): Awaitable<User> {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          totalYield: 0,
+          dollars: 0
+        };
+      }
     })
-    // ...add more providers here
   ],
   callbacks: {
     session({ session, user }: { session: Session; user: User | AdapterUser }) {
