@@ -1,6 +1,9 @@
-import { getSession } from "next-auth/react";
+import { GetServerSidePropsContext } from "next";
+import { getSession, signOut } from "next-auth/react";
 
-export const getServerSideProps = async (context: object) => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
   const session = await getSession(context);
   if (!session) {
     return {
@@ -18,6 +21,7 @@ export default function Game() {
   return (
     <>
       <h1>This is the Game page!</h1>
+      <button onClick={() => signOut()}>Sign Out</button>
     </>
   );
 }

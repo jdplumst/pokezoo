@@ -1,8 +1,11 @@
+import { GetServerSidePropsContext } from "next";
 import { getSession, signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useState } from "react";
 
-export const getServerSideProps = async (context: object) => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
   const session = await getSession(context);
   if (session) {
     return {
@@ -30,6 +33,10 @@ export default function Home() {
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+  };
+
+  const handleGithubSignIn = () => {
+    console.log(process.env.NEXT_PUBLIC_NEXTAUTH_URL + "/game");
   };
 
   return (
@@ -73,8 +80,7 @@ export default function Home() {
               Login
             </button>
           </form>
-          {/* <button onClick={() => signIn()}>Sign in with GitHub</button> */}
-          {/* <button onClick={() => signIn("github")}>yo yo</button> */}
+          <button onClick={() => signIn("github")}>Sign In With GitHub</button>
         </div>
       </div>
     </>
