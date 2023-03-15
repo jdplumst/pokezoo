@@ -1,9 +1,22 @@
-import { signIn, useSession } from "next-auth/react";
+import { getSession, signIn, useSession } from "next-auth/react";
 import Head from "next/head";
 import { useState } from "react";
 
+export const getServerSideProps = async (context: object) => {
+  const session = await getSession(context);
+  if (session) {
+    return {
+      redirect: {
+        destination: "/game"
+      }
+    };
+  }
+  return {
+    props: { session }
+  };
+};
+
 export default function Home() {
-  const { data: session } = useSession();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
