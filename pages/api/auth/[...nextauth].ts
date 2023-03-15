@@ -26,6 +26,10 @@ export const authOptions = {
   ],
   callbacks: {
     session({ session, user }: { session: Session; user: User | AdapterUser }) {
+      session.user.id = user.id;
+      session.user.name = user.name;
+      session.user.email = user.email;
+      session.user.image = user.image;
       session.user.totalYield = user.totalYield;
       session.user.dollars = user.dollars;
       return session;
