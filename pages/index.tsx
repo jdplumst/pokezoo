@@ -3,6 +3,7 @@ import { getSession, signIn } from "next-auth/react";
 import Head from "next/head";
 import { useState } from "react";
 import { GoMarkGithub } from "react-icons/go";
+import { FcGoogle } from "react-icons/fc";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -34,10 +35,6 @@ export default function Home() {
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-  };
-
-  const handleGithubSignIn = () => {
-    console.log(process.env.NEXT_PUBLIC_NEXTAUTH_URL + "/game");
   };
 
   return (
@@ -72,21 +69,29 @@ export default function Home() {
               placeholder="Password"
               onChange={handlePassword}
               value={password}
-              className="mt-10 w-2/3 rounded-lg border-2 border-slate-300 p-2 text-slate-500 focus:text-black focus:outline-none"
+              className="mt-5 w-2/3 rounded-lg border-2 border-slate-300 p-2 text-slate-500 focus:text-black focus:outline-none"
             />
             <br></br>
             <button
               type="submit"
-              className="mt-10 h-10 w-2/3 rounded-lg bg-blue-500 text-white">
+              className="mt-5 h-10 w-2/3 rounded-lg bg-blue-500 text-white">
               Login
             </button>
           </form>
           <button
             onClick={() => signIn("github")}
-            className="mt-10 h-10 w-2/3 rounded-lg border-2 border-black">
+            className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black">
             <div className="flex items-center justify-center gap-2">
               Sign in with GitHub
               <GoMarkGithub />
+            </div>
+          </button>
+          <button
+            onClick={() => signIn("google")}
+            className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black">
+            <div className="flex items-center justify-center gap-2">
+              Sign in with Google
+              <FcGoogle />
             </div>
           </button>
         </div>
