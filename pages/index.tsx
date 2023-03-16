@@ -23,21 +23,6 @@ export const getServerSideProps = async (
 };
 
 export default function Home() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-  };
-
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
-
   return (
     <>
       <Head>
@@ -55,30 +40,10 @@ export default function Home() {
       </div>
       <div className="fade-in absolute flex h-screen w-screen flex-col items-center bg-[url('../img/pokemon-bg.jpg')] bg-cover pt-10 font-bold">
         <h1 className="mb-20 text-7xl">PokéZoo</h1>
-        <div className="h-2/3 w-1/3 rounded-lg border-4 border-black bg-white pt-5 text-center">
+        <div className="w-1/3 rounded-lg border-4 border-black bg-white py-5 text-center">
           <p>
             <strong className="text-2xl">Login</strong>
           </p>
-          <form onSubmit={handleLogin}>
-            <input
-              placeholder="Email"
-              onChange={handleEmail}
-              value={email}
-              className="mt-5 w-2/3 rounded-lg border-2 border-slate-300 p-2 text-slate-500 focus:text-black focus:outline-none"
-            />
-            <input
-              placeholder="Password"
-              onChange={handlePassword}
-              value={password}
-              className="mt-5 w-2/3 rounded-lg border-2 border-slate-300 p-2 text-slate-500 focus:text-black focus:outline-none"
-            />
-            <br></br>
-            <button
-              type="submit"
-              className="mt-5 h-10 w-2/3 rounded-lg bg-blue-500">
-              Login
-            </button>
-          </form>
           <button
             onClick={() => signIn("github")}
             className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-green-500">
