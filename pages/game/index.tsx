@@ -1,3 +1,4 @@
+import Navbar from "@/components/Navbar";
 import client from "@/prisma/script";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getSession, signOut, useSession } from "next-auth/react";
@@ -32,6 +33,7 @@ export default function Game({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
     <>
+      <Navbar />
       {/* <h1>This is the Game page!</h1>
         <p>Your email is {session.user?.email}</p>
         <img src={`${session.user?.image}`} />
