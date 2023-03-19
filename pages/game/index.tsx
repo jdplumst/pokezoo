@@ -1,7 +1,9 @@
 import Navbar from "@/components/Navbar";
 import client from "@/prisma/script";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getSession, signOut, useSession } from "next-auth/react";
+import { getSession } from "next-auth/react";
+import Image from "next/image";
+import Head from "next/head";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -32,29 +34,48 @@ export default function Game({
   instances
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
-      <Navbar />
-      <div className="p-4">
-        <p>Your current balance is {user.dollars} Pokemon dollars.</p>
-        <p>
-          You will receive {user.totalYield} Pokemon dollars on the next payout.
-        </p>
-        <div className="cards grid gap-5 pt-5">
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
-          <div className="h-60 border-2"></div>
+    <>
+      <Head>
+        <title>PokéZoo</title>
+        <meta name="description" content="PokéZoo" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.png" />
+      </Head>
+      <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
+        <Navbar />
+        <div className="p-4">
+          <p>Your current balance is {user.dollars} Pokemon dollars.</p>
+          <p>
+            You will receive {user.totalYield} Pokemon dollars on the next
+            payout.
+          </p>
+          <div className="cards grid gap-y-5 pt-5">
+            <div className="flex h-60 w-60 flex-col items-center justify-center border-2">
+              <Image
+                src="/favicon.png"
+                alt="new_pokemon"
+                width={180}
+                height={180}
+              />
+              <button className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+                Add Pokemon
+              </button>
+            </div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+            <div className="h-60 w-60 border-2"></div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

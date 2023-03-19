@@ -1,7 +1,6 @@
 import { GetServerSidePropsContext } from "next";
 import { getSession, signIn } from "next-auth/react";
 import Head from "next/head";
-import { useState } from "react";
 import { GoMarkGithub } from "react-icons/go";
 import { FaTwitch } from "react-icons/fa";
 import { BsGoogle } from "react-icons/bs";

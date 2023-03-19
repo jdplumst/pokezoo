@@ -7,7 +7,7 @@ export default function Navbar() {
       <h1 className="text-4xl">PokéZoo</h1>
       <button
         onClick={() => signOut()}
-        className="w-24 rounded-lg border-2 border-black bg-slate-400 p-2 font-bold">
+        className="w-24 rounded-lg border-2 border-black bg-slate-400 p-2 font-bold hover:bg-slate-500">
         Sign Out
       </button>
     </nav>
