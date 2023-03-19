@@ -32,22 +32,29 @@ export default function Game({
   instances
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
       <Navbar />
-      {/* <h1>This is the Game page!</h1>
-        <p>Your email is {session.user?.email}</p>
-        <img src={`${session.user?.image}`} />
-        <p>{session.expires}</p>
-        <p>total yield: {session.user?.totalYield}</p>
-        <p>total dollars: {session.user?.dollars}</p>
-        <button onClick={() => signOut()}>Sign Out</button> */}
-      <h1>This is the Game page!</h1>
-      <p>Your email is {user.email}</p>
-      <p>Your id is {user.id}</p>
-      <img src={`${user.image}`} />
-      <p>total yield: {user.totalYield}</p>
-      <p>total dollars: {user.dollars}</p>
-      <button onClick={() => signOut()}>Sign Out</button>
-    </>
+      <div className="p-4">
+        <p>Your current balance is {user.dollars} Pokemon dollars.</p>
+        <p>
+          You will receive {user.totalYield} Pokemon dollars on the next payout.
+        </p>
+        <div className="cards grid gap-5 pt-5">
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+          <div className="h-60 border-2"></div>
+        </div>
+      </div>
+    </div>
   );
 }
