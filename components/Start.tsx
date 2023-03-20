@@ -37,30 +37,30 @@ export default function Start({ species }: IStarter) {
           className="text-center">
           <strong>Welcome to PokéZoo</strong>
         </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+        <Typography id="modal-modal-description" className="pt-2 text-center">
           Please select your starter Pokémon
         </Typography>
         <div className="flex gap-5 pt-4">
           <div
             className={`${
-              starter === "Bulbasaur" && `border-2 border-red-500`
-            } p-2`}>
+              starter === "Bulbasaur" && `border-4 border-green-500`
+            }`}>
             <button onClick={() => setStarter("Bulbasaur")}>
               <Card species={species[0]} />
             </button>
           </div>
           <div
             className={`${
-              starter === "Charmander" && `border-2 border-red-500`
-            } p-2`}>
+              starter === "Charmander" && `border-4 border-green-500`
+            }`}>
             <button onClick={() => setStarter("Charmander")}>
               <Card species={species[3]} />
             </button>
           </div>
           <div
             className={`${
-              starter === "Squirtle" && `border-2 border-red-500`
-            } p-2`}>
+              starter === "Squirtle" && `border-4 border-green-500`
+            }`}>
             <button onClick={() => setStarter("Squirtle")}>
               <Card species={species[6]} />
             </button>
