@@ -1,16 +1,17 @@
 import Navbar from "@/components/Navbar";
 import client from "@/prisma/script";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getSession } from "next-auth/react";
 import Image from "next/image";
 import Head from "next/head";
 import Card from "@/components/Card";
 import Start from "@/components/Start";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const session = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
   if (!session) {
     return {
       redirect: {

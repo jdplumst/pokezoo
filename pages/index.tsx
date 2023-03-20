@@ -1,14 +1,16 @@
 import { GetServerSidePropsContext } from "next";
-import { getSession, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import Head from "next/head";
 import { GoMarkGithub } from "react-icons/go";
 import { FaTwitch } from "react-icons/fa";
 import { BsGoogle } from "react-icons/bs";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const session = await getSession(context);
+  const session = await getServerSession(context.req, context.res, authOptions);
   if (session) {
     return {
       redirect: {
