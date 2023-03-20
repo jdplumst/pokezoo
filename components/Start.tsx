@@ -9,11 +9,7 @@ interface IStarter {
   species: Species[];
 }
 
-enum Starter {
-  Bulbasaur = "Bulbasaur",
-  Charmander = "Charmander",
-  Squirtle = "Squirtle"
-}
+type Starter = "Bulbasaur" | "Charmander" | "Squirtle";
 
 export default function Start({ species }: IStarter) {
   const [open, setOpen] = useState(true);
@@ -47,25 +43,25 @@ export default function Start({ species }: IStarter) {
         <div className="flex gap-5 pt-4">
           <div
             className={`${
-              starter === Starter.Bulbasaur && `border-2 border-red-500`
+              starter === "Bulbasaur" && `border-2 border-red-500`
             } p-2`}>
-            <button onClick={() => setStarter(Starter.Bulbasaur)}>
+            <button onClick={() => setStarter("Bulbasaur")}>
               <Card species={species[0]} />
             </button>
           </div>
           <div
             className={`${
-              starter === Starter.Charmander && `border-2 border-red-500`
+              starter === "Charmander" && `border-2 border-red-500`
             } p-2`}>
-            <button onClick={() => setStarter(Starter.Charmander)}>
+            <button onClick={() => setStarter("Charmander")}>
               <Card species={species[3]} />
             </button>
           </div>
           <div
             className={`${
-              starter === Starter.Squirtle && `border-2 border-red-500`
+              starter === "Squirtle" && `border-2 border-red-500`
             } p-2`}>
-            <button onClick={() => setStarter(Starter.Squirtle)}>
+            <button onClick={() => setStarter("Squirtle")}>
               <Card species={species[6]} />
             </button>
           </div>
