@@ -5,6 +5,7 @@ import { getSession } from "next-auth/react";
 import Image from "next/image";
 import Head from "next/head";
 import Card from "@/components/Card";
+import Start from "@/components/Start";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -41,6 +42,8 @@ export default function Game({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
+      {/* Modal for New Players */}
+      {instances.length === 0 && <Start species={species} />}
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Navbar />
         <div className="p-4">

@@ -2,7 +2,7 @@ import { Species, SpeciesInstances } from "@prisma/client";
 
 interface ICard {
   species: Species;
-  instance: SpeciesInstances;
+  instance?: SpeciesInstances;
 }
 
 export default function Card({ species, instance }: ICard) {
@@ -12,7 +12,7 @@ export default function Card({ species, instance }: ICard) {
       <p>
         {species.name} {species.pokedexNumber}
       </p>
-      <p>{instance.userId}</p>
+      <p>{instance && instance.userId}</p>
     </div>
   );
 }
