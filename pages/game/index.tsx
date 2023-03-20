@@ -4,6 +4,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getSession } from "next-auth/react";
 import Image from "next/image";
 import Head from "next/head";
+import Card from "@/components/Card";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -16,13 +17,12 @@ export const getServerSideProps = async (
       }
     };
   }
-  console.log(session);
+
   const user = session.user;
   const species = await client.species.findMany();
   const instances = await client.speciesInstances.findMany({
     where: { userId: user.id.toString() }
   });
-
   return {
     props: { user, species, instances }
   };
@@ -61,18 +61,12 @@ export default function Game({
                 Add Pokemon
               </button>
             </div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
-            <div className="h-60 w-60 border-2"></div>
+            {instances.map((i) => (
+              <Card
+                instance={i}
+                species={species.filter((s) => s.id === i.speciesId)[0]}
+              />
+            ))}
           </div>
         </div>
       </div>
