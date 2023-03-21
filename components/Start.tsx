@@ -14,11 +14,30 @@ type Starter = "Bulbasaur" | "Charmander" | "Squirtle";
 export default function Start({ species }: IStarter) {
   const [open, setOpen] = useState(true);
   const [starter, setStarter] = useState<Starter | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<any>(null);
 
-  const handleClose = () => {
+  const handleClose = async () => {
     if (starter) {
-      setOpen(false);
+      console.log(species[0].id);
+      const speciesId =
+        starter === "Bulbasaur"
+          ? species[0].id
+          : starter === "Charmander"
+          ? species[3].id
+          : starter === "Squirtle"
+          ? species[6].id
+          : "";
+      const response = await fetch("api/instances", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ speciesId: speciesId })
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setOpen(false);
+      } else if (!response.ok) {
+        console.log(data.error);
+      }
     } else if (!starter) {
       setError("Must pick a starter Pokémon");
     }
