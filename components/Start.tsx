@@ -3,22 +3,22 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Card from "./Card";
-import { Species } from "@prisma/client";
+import { Species, User } from "@prisma/client";
 
 interface IStarter {
   species: Species[];
+  user: User;
 }
 
 type Starter = "Bulbasaur" | "Charmander" | "Squirtle";
 
-export default function Start({ species }: IStarter) {
+export default function Start({ species, user }: IStarter) {
   const [open, setOpen] = useState(true);
   const [starter, setStarter] = useState<Starter | null>(null);
   const [error, setError] = useState<any>(null);
 
   const handleClose = async () => {
     if (starter) {
-      console.log(species[0].id);
       const speciesId =
         starter === "Bulbasaur"
           ? species[0].id
@@ -30,7 +30,11 @@ export default function Start({ species }: IStarter) {
       const response = await fetch("api/instances", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ speciesId: speciesId })
+        body: JSON.stringify({
+          speciesId: speciesId,
+          newYield: species[0].yield,
+          totalYield: user.totalYield
+        })
       });
       const data = await response.json();
       if (response.ok) {

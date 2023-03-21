@@ -17,6 +17,7 @@ export const authOptions = {
           id: profile.id,
           name: profile.name,
           email: profile.email,
+          emailVerified: null,
           image: profile.avatar_url,
           totalYield: 0,
           dollars: 0
@@ -31,6 +32,7 @@ export const authOptions = {
           id: profile.sub,
           name: profile.preferred_username,
           email: profile.email,
+          emailVerified: null,
           image: profile.picture,
           totalYield: 0,
           dollars: 0
@@ -45,6 +47,7 @@ export const authOptions = {
           id: profile.sub,
           name: profile.name,
           email: profile.email,
+          emailVerified: null,
           image: profile.picture,
           totalYield: 0,
           dollars: 0
@@ -54,9 +57,10 @@ export const authOptions = {
   ],
   callbacks: {
     session({ session, user }: { session: Session; user: User | AdapterUser }) {
-      session.user.id = user.id;
+      session.user.id = user.id.toString();
       session.user.name = user.name;
       session.user.email = user.email;
+      session.user.emailVerified = user.emailVerified;
       session.user.image = user.image;
       session.user.totalYield = user.totalYield;
       session.user.dollars = user.dollars;

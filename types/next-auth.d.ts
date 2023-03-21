@@ -7,6 +7,7 @@ declare module "next-auth" {
       id: number | string;
       name: string | null;
       email: string | null;
+      emailVerified: Date | null;
       image: string;
 
       // Custom fields
@@ -19,6 +20,7 @@ declare module "next-auth" {
     id: number | string;
     name: string | null;
     email: string | null;
+    emailVerified: Date | null;
     image: string;
 
     // Custom fields

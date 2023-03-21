@@ -44,7 +44,7 @@ export default function Game({
         <link rel="icon" href="/favicon.png" />
       </Head>
       {/* Modal for New Players */}
-      {instances.length === 0 && <Start species={species} />}
+      {instances.length === 0 && <Start species={species} user={user} />}
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Navbar />
         <div className="p-4">
