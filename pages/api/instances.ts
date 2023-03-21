@@ -1,3 +1,4 @@
+import client from "@/prisma/script";
 import { NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "./auth/[...nextauth]";
@@ -6,12 +7,20 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   const session = await getServerSession(req, res, authOptions);
   if (session) {
     // Signed in
+    console.log(req.method);
     switch (req.method) {
-      case "GET":
-        // Fetch all user's instances here
-        res
-          .status(200)
-          .json({ msg: "You are authorized to make this request!" });
+      case "POST":
+        // Add a new SpeciesInstance
+        const userId = session.user.id.toString();
+        const { speciesId } = req.body;
+        try {
+          const instance = await client.speciesInstances.create({
+            data: { userId: userId, speciesId: speciesId }
+          });
+          res.status(200).json({ instance: instance });
+        } catch (error) {
+          res.status(400).json({ error: error });
+        }
     }
   } else {
     // Not Signed in
