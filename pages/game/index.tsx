@@ -41,7 +41,7 @@ export default function Game({
         <title>PokéZoo</title>
         <meta name="description" content="PokéZoo" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
+        <link rel="icon" href="/img/master-ball.png" />
       </Head>
       {/* Modal for New Players */}
       {instances.length === 0 && <Start species={species} user={user} />}
@@ -56,7 +56,7 @@ export default function Game({
           <div className="cards grid gap-5 pt-5">
             <div className="flex h-52 w-52 flex-col items-center justify-center border-2">
               <Image
-                src="/favicon.png"
+                src="/img/master-ball.png"
                 alt="new_pokemon"
                 width={140}
                 height={140}
