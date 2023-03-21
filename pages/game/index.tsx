@@ -53,13 +53,13 @@ export default function Game({
             You will receive {user.totalYield} Pokemon dollars on the next
             payout.
           </p>
-          <div className="cards grid gap-y-5 pt-5">
-            <div className="flex h-60 w-60 flex-col items-center justify-center border-2">
+          <div className="cards grid gap-5 pt-5">
+            <div className="flex h-52 w-52 flex-col items-center justify-center border-2">
               <Image
                 src="/favicon.png"
                 alt="new_pokemon"
-                width={180}
-                height={180}
+                width={140}
+                height={140}
               />
               <button className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
                 Add Pokemon
@@ -67,6 +67,7 @@ export default function Game({
             </div>
             {instances.map((i) => (
               <Card
+                key={i.id}
                 instance={i}
                 species={species.filter((s) => s.id === i.speciesId)[0]}
               />
