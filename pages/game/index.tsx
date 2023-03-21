@@ -43,23 +43,21 @@ export default function Game({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/img/master-ball.png" />
       </Head>
+
       {/* Modal for New Players */}
       {instances.length === 0 && <Start species={species} user={user} />}
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Navbar />
         <div className="p-4">
-          <p>Your current balance is {user.dollars} Pokemon dollars.</p>
-          <p>
-            You will receive {user.totalYield} Pokemon dollars on the next
-            payout.
-          </p>
+          <p>Your current balance is P{user.dollars}.</p>
+          <p>You will receive P{user.totalYield} on the next payout.</p>
           <div className="cards grid gap-5 pt-5">
-            <div className="flex h-52 w-52 flex-col items-center justify-center border-2">
+            <div className="flex h-52 w-52 flex-col items-center justify-evenly border-2 border-black bg-slate-400">
               <Image
                 src="/img/master-ball.png"
                 alt="new_pokemon"
-                width={140}
-                height={140}
+                width={100}
+                height={100}
               />
               <button className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
                 Add Pokemon
