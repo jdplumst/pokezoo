@@ -7,6 +7,12 @@ import Card from "@/components/Card";
 import Start from "@/components/Start";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]";
+import { useState } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Modal from "@mui/material/Modal";
+
+type Ball = "Poke" | "Great" | "Ultra" | "Master";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -35,6 +41,20 @@ export default function Game({
   species,
   instances
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const [add, setAdd] = useState(false);
+  const [ball, setBall] = useState<Ball | null>(null);
+  const [addError, setAddError] = useState<any>(null);
+
+  const closeAdd = () => {
+    if (ball) {
+      setAdd(false);
+      setAddError(null);
+      setBall(null);
+    } else if (!ball) {
+      setAddError("Must select a ball");
+    }
+  };
+
   return (
     <>
       <Head>
@@ -46,6 +66,105 @@ export default function Game({
 
       {/* Modal for New Players */}
       {instances.length === 0 && <Start species={species} user={user} />}
+
+      {/* Modal to Add New Pokémon */}
+      {add && (
+        <Modal
+          open={add}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description">
+          <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black p-4 text-white">
+            <Typography
+              id="modal-modal-title"
+              variant="h6"
+              component="h2"
+              className="text-center">
+              <strong>Unlock a New Pokémon</strong>
+            </Typography>
+            <Typography
+              id="modal-modal-description"
+              className="pt-2 text-center">
+              Please select which Pokéball you'd like to open
+            </Typography>
+            <div className="flex gap-10 pt-4">
+              <div
+                className={`${
+                  ball === "Poke" ? `border-red-500` : `border-black`
+                } border-4 bg-slate-400`}>
+                <button
+                  onClick={() => setBall("Poke")}
+                  className="hover:cursor-pointer">
+                  <Image
+                    src="/img/poke-ball.png"
+                    alt="poke-ball"
+                    width={100}
+                    height={100}
+                  />
+                </button>
+              </div>
+              <div
+                className={`${
+                  ball === "Great" ? `border-red-500` : `border-black`
+                } border-4 bg-slate-400`}>
+                <button
+                  onClick={() => setBall("Great")}
+                  className="hover:cursor-pointer">
+                  <Image
+                    src="/img/great-ball.png"
+                    alt="great-ball"
+                    width={100}
+                    height={100}
+                  />
+                </button>
+              </div>
+              <div
+                className={`${
+                  ball === "Ultra" ? `border-red-500` : `border-black`
+                } border-4 bg-slate-400`}>
+                <button
+                  onClick={() => setBall("Ultra")}
+                  className="hover:cursor-pointer">
+                  <Image
+                    src="/img/ultra-ball.png"
+                    alt="ultra-ball"
+                    width={100}
+                    height={100}
+                  />
+                </button>
+              </div>
+              <div
+                className={`${
+                  ball === "Master" ? `border-red-500` : `border-black`
+                } border-4 bg-slate-400`}>
+                <button
+                  onClick={() => setBall("Master")}
+                  className="hover:cursor-pointer">
+                  <Image
+                    src="/img/master-ball.png"
+                    alt="master-ball"
+                    width={100}
+                    height={100}
+                  />
+                </button>
+              </div>
+            </div>
+            <div className="flex justify-center pt-4">
+              <button
+                onClick={() => closeAdd()}
+                className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+                Confirm Selection
+              </button>
+            </div>
+            {addError && (
+              <div className="flex justify-center pt-4 text-red-500">
+                {addError}
+              </div>
+            )}
+          </Box>
+        </Modal>
+      )}
+
+      {/* Main Game Screen */}
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Navbar />
         <div className="p-4">
@@ -59,7 +178,9 @@ export default function Game({
                 width={100}
                 height={100}
               />
-              <button className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+              <button
+                onClick={() => setAdd(true)}
+                className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
                 Add Pokemon
               </button>
             </div>
