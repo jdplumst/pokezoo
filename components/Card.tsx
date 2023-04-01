@@ -20,7 +20,7 @@ export default function Card({ species, instance }: ICard) {
           : ``
       } card-hover h-52 w-52 border-2 border-black p-2`}>
       <div className="flex flex-col items-center">
-        <img src={species.img} alt={species.name} className="h-28" />
+        <img src={species.img} alt={species.name} className="pixelated h-28" />
         <p className="font-bold capitalize">{species.name}</p>
         <p>Rarity: {species.rarity}</p>
         <p>Yield: P{species.yield}</p>

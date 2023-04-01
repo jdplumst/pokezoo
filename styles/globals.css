@@ -10,6 +10,11 @@
   }
 }
 
+/* Sprite */
+.pixelated {
+  image-rendering: pixelated;
+}
+
 /* Card Grid */
 .cards {
   grid-template-columns: repeat(auto-fill, 208px);

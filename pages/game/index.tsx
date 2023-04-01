@@ -99,6 +99,7 @@ export default function Game({
                     alt="poke-ball"
                     width={100}
                     height={100}
+                    className="pixelated"
                   />
                 </button>
               </div>
@@ -114,6 +115,7 @@ export default function Game({
                     alt="great-ball"
                     width={100}
                     height={100}
+                    className="pixelated"
                   />
                 </button>
               </div>
@@ -129,6 +131,7 @@ export default function Game({
                     alt="ultra-ball"
                     width={100}
                     height={100}
+                    className="pixelated"
                   />
                 </button>
               </div>
@@ -144,6 +147,7 @@ export default function Game({
                     alt="master-ball"
                     width={100}
                     height={100}
+                    className="pixelated"
                   />
                 </button>
               </div>
@@ -177,6 +181,7 @@ export default function Game({
                 alt="new_pokemon"
                 width={100}
                 height={100}
+                className="pixelated"
               />
               <button
                 onClick={() => setAdd(true)}
