@@ -11,4 +11,4 @@ jobs:
           curl -H "Content-Type: application/json" \ 
           -H "Authorization: Bearer ${{secrets.CRON_TOKEN }}" \
           -X POST \
-          localhost:3000/api/cron
+          https://pokezoo.vercel.app/api/cron
