@@ -11,6 +11,7 @@ import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
+import { SpeciesInstances } from "@prisma/client";
 
 type Ball = "Poke" | "Great" | "Ultra" | "Master";
 
@@ -45,6 +46,12 @@ export default function Game({
   const [ball, setBall] = useState<Ball | null>(null);
   const [addError, setAddError] = useState<any>(null);
 
+  const [instancesState, setInstancesState] = useState(instances);
+
+  const addStarter = (i: SpeciesInstances) => {
+    setInstancesState((prevInstancesState) => [...prevInstancesState, i]);
+  };
+
   const closeAdd = () => {
     if (ball) {
       setAdd(false);
@@ -65,7 +72,9 @@ export default function Game({
       </Head>
 
       {/* Modal for New Players */}
-      {instances.length === 0 && <Start species={species} user={user} />}
+      {instances.length === 0 && (
+        <Start species={species} user={user} addStarter={addStarter} />
+      )}
 
       {/* Modal to Add New Pokémon */}
       {add && (
@@ -189,7 +198,7 @@ export default function Game({
                 Add Pokemon
               </button>
             </div>
-            {instances.map((i) => (
+            {instancesState.map((i) => (
               <Card
                 key={i.id}
                 instance={i}

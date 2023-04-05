@@ -3,16 +3,17 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Card from "./Card";
-import { Species, User } from "@prisma/client";
+import { Species, SpeciesInstances, User } from "@prisma/client";
 
 interface IStarter {
   species: Species[];
   user: User;
+  addStarter: (i: SpeciesInstances) => void;
 }
 
 type Starter = "Bulbasaur" | "Charmander" | "Squirtle";
 
-export default function Start({ species, user }: IStarter) {
+export default function Start({ species, user, addStarter }: IStarter) {
   const [open, setOpen] = useState(true);
   const [starter, setStarter] = useState<Starter | null>(null);
   const [error, setError] = useState<any>(null);
@@ -38,6 +39,8 @@ export default function Start({ species, user }: IStarter) {
       });
       const data = await response.json();
       if (response.ok) {
+        // console.log(data.instance);
+        addStarter(data.instance);
         setOpen(false);
       } else if (!response.ok) {
         console.log(data.error);
