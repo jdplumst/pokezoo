@@ -15,6 +15,6 @@ declare module "next-auth" {
 
     // Custom fields
     totalYield: number;
-    dollars: number;
+    balance: number;
   }
 }

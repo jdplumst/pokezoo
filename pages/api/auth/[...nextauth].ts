@@ -20,7 +20,7 @@ export const authOptions = {
           emailVerified: null,
           image: profile.avatar_url,
           totalYield: 0,
-          dollars: 0
+          balance: 500
         };
       }
     }),
@@ -35,7 +35,7 @@ export const authOptions = {
           emailVerified: null,
           image: profile.picture,
           totalYield: 0,
-          dollars: 0
+          balance: 500
         };
       }
     }),
@@ -50,7 +50,7 @@ export const authOptions = {
           emailVerified: null,
           image: profile.picture,
           totalYield: 0,
-          dollars: 0
+          balance: 500
         };
       }
     })
@@ -63,7 +63,7 @@ export const authOptions = {
       session.user.emailVerified = user.emailVerified;
       session.user.image = user.image;
       session.user.totalYield = user.totalYield;
-      session.user.dollars = user.dollars;
+      session.user.balance = user.balance;
       return session;
     }
   },

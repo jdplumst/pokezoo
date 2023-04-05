@@ -188,7 +188,7 @@ export default function Game({
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Navbar />
         <div className="p-4">
-          <p>Your current balance is P{user.dollars}.</p>
+          <p>Your current balance is P{user.balance}.</p>
           <p>You will receive P{user.totalYield} on the next payout.</p>
           <div className="cards grid gap-5 pt-5">
             <div className="flex h-52 w-52 flex-col items-center justify-evenly border-2 border-black bg-slate-400">
