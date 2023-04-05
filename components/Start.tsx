@@ -39,7 +39,6 @@ export default function Start({ species, user, addStarter }: IStarter) {
       });
       const data = await response.json();
       if (response.ok) {
-        // console.log(data.instance);
         addStarter(data.instance);
         setOpen(false);
       } else if (!response.ok) {

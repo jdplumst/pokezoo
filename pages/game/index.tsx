@@ -12,8 +12,7 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import { SpeciesInstances } from "@prisma/client";
-
-type Ball = "Poke" | "Great" | "Ultra" | "Master";
+import Tooltip, { Ball } from "@/components/Tooltip";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -96,70 +95,78 @@ export default function Game({
               Please select which Pokéball you'd like to open
             </Typography>
             <div className="flex gap-10 pt-4">
-              <div
-                className={`${
-                  ball === "Poke" ? `border-red-500` : `border-black`
-                } border-4 bg-slate-400`}>
-                <button
-                  onClick={() => setBall("Poke")}
-                  className="hover:cursor-pointer">
-                  <Image
-                    src="/img/poke-ball.png"
-                    alt="poke-ball"
-                    width={100}
-                    height={100}
-                    className="pixelated"
-                  />
-                </button>
-              </div>
-              <div
-                className={`${
-                  ball === "Great" ? `border-red-500` : `border-black`
-                } border-4 bg-slate-400`}>
-                <button
-                  onClick={() => setBall("Great")}
-                  className="hover:cursor-pointer">
-                  <Image
-                    src="/img/great-ball.png"
-                    alt="great-ball"
-                    width={100}
-                    height={100}
-                    className="pixelated"
-                  />
-                </button>
-              </div>
-              <div
-                className={`${
-                  ball === "Ultra" ? `border-red-500` : `border-black`
-                } border-4 bg-slate-400`}>
-                <button
-                  onClick={() => setBall("Ultra")}
-                  className="hover:cursor-pointer">
-                  <Image
-                    src="/img/ultra-ball.png"
-                    alt="ultra-ball"
-                    width={100}
-                    height={100}
-                    className="pixelated"
-                  />
-                </button>
-              </div>
-              <div
-                className={`${
-                  ball === "Master" ? `border-red-500` : `border-black`
-                } border-4 bg-slate-400`}>
-                <button
-                  onClick={() => setBall("Master")}
-                  className="hover:cursor-pointer">
-                  <Image
-                    src="/img/master-ball.png"
-                    alt="master-ball"
-                    width={100}
-                    height={100}
-                    className="pixelated"
-                  />
-                </button>
-              </div>
+              <Tooltip ball="Poke">
+                <div
+                  className={`${
+                    ball === "Poke" ? `border-red-500` : `border-black`
+                  } border-4 bg-slate-400`}>
+                  <button
+                    onClick={() => setBall("Poke")}
+                    className="hover:cursor-pointer">
+                    <Image
+                      src="/img/poke-ball.png"
+                      alt="poke-ball"
+                      width={100}
+                      height={100}
+                      className="pixelated"
+                    />
+                  </button>
+                </div>
+              </Tooltip>
+              <Tooltip ball="Great">
+                <div
+                  className={`${
+                    ball === "Great" ? `border-red-500` : `border-black`
+                  } border-4 bg-slate-400`}>
+                  <button
+                    onClick={() => setBall("Great")}
+                    className="hover:cursor-pointer">
+                    <Image
+                      src="/img/great-ball.png"
+                      alt="great-ball"
+                      width={100}
+                      height={100}
+                      className="pixelated"
+                    />
+                  </button>
+                </div>
+              </Tooltip>
+              <Tooltip ball="Ultra">
+                <div
+                  className={`${
+                    ball === "Ultra" ? `border-red-500` : `border-black`
+                  } border-4 bg-slate-400`}>
+                  <button
+                    onClick={() => setBall("Ultra")}
+                    className="hover:cursor-pointer">
+                    <Image
+                      src="/img/ultra-ball.png"
+                      alt="ultra-ball"
+                      width={100}
+                      height={100}
+                      className="pixelated"
+                    />
+                  </button>
+                </div>
+              </Tooltip>
+              <Tooltip ball="Master">
+                <div
+                  className={`${
+                    ball === "Master" ? `border-red-500` : `border-black`
+                  } border-4 bg-slate-400`}>
+                  <button
+                    onClick={() => setBall("Master")}
+                    className="hover:cursor-pointer">
+                    <Image
+                      src="/img/master-ball.png"
+                      alt="master-ball"
+                      width={100}
+                      height={100}
+                      className="pixelated"
+                    />
+                  </button>
+                </div>
+              </Tooltip>
             </div>
             <div className="flex justify-center pt-4">
               <button

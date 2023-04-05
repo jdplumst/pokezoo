@@ -10,6 +10,17 @@
   }
 }
 
+/* Tooltip */
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip {
+  position: absolute;
+  top: calc(100%);
+}
+
 /* Sprite */
 .pixelated {
   image-rendering: pixelated;
