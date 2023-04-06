@@ -10,6 +10,7 @@ interface IStarter {
   totalYield: number;
   balance: number;
   addStarter: (i: SpeciesInstances) => void;
+  addStarterYield: () => void;
 }
 
 type Starter = "Bulbasaur" | "Charmander" | "Squirtle";
@@ -18,7 +19,8 @@ export default function Start({
   species,
   totalYield,
   balance,
-  addStarter
+  addStarter,
+  addStarterYield
 }: IStarter) {
   const [open, setOpen] = useState(true);
   const [starter, setStarter] = useState<Starter | null>(null);

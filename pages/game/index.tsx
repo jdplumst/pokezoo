@@ -75,6 +75,10 @@ export default function Game({
     setCards((prevCards) => [...prevCards, i]);
   };
 
+  const addStarterYield = () => {
+    setTotalYield(20);
+  };
+
   // Send POST request to add new instance
   const addInstance = async (newInstance: Species, cost: number) => {
     const response = await fetch("api/instances", {
@@ -236,6 +240,7 @@ export default function Game({
           totalYield={totalYield}
           balance={balance}
           addStarter={addStarter}
+          addStarterYield={addStarterYield}
         />
       )}
 
