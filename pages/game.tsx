@@ -67,7 +67,7 @@ export default function Game({
   const pokeAmt = 100;
   const greatAmt = 1000;
   const ultraAmt = 10000;
-  const masterAmt = 100000;
+  const masterAmt = 50000;
 
   const [cards, setCards] = useState(instances);
   const [balance, setBalance] = useState(user.balance);
@@ -123,12 +123,9 @@ export default function Game({
           if (random <= 80) {
             newInstance =
               commonSpecies[Math.floor(Math.random() * commonSpecies.length)];
-          } else if (random <= 95) {
-            newInstance =
-              rareSpecies[Math.floor(Math.random() * rareSpecies.length)];
           } else {
             newInstance =
-              epicSpecies[Math.floor(Math.random() * epicSpecies.length)];
+              rareSpecies[Math.floor(Math.random() * rareSpecies.length)];
           }
           const { response, data } = await addInstance(newInstance, pokeAmt);
           if (response.ok) {
@@ -144,10 +141,10 @@ export default function Game({
         } else if (ball === "Great") {
           const random = Math.floor(Math.random() * 100);
           let newInstance = species[0];
-          if (random <= 60) {
+          if (random <= 65) {
             newInstance =
               commonSpecies[Math.floor(Math.random() * commonSpecies.length)];
-          } else if (random <= 90) {
+          } else if (random <= 95) {
             newInstance =
               rareSpecies[Math.floor(Math.random() * rareSpecies.length)];
           } else {
@@ -168,10 +165,10 @@ export default function Game({
         } else if (ball === "Ultra") {
           const random = Math.floor(Math.random() * 100);
           let newInstance = species[0];
-          if (random <= 40) {
+          if (random <= 25) {
             newInstance =
               commonSpecies[Math.floor(Math.random() * commonSpecies.length)];
-          } else if (random <= 80) {
+          } else if (random <= 75) {
             newInstance =
               rareSpecies[Math.floor(Math.random() * rareSpecies.length)];
           } else if (random <= 98) {
@@ -197,13 +194,13 @@ export default function Game({
         } else if (ball === "Master") {
           const random = Math.floor(Math.random() * 100);
           let newInstance = species[0];
-          if (random <= 25) {
+          if (random <= 15) {
             newInstance =
               commonSpecies[Math.floor(Math.random() * commonSpecies.length)];
-          } else if (random <= 60) {
+          } else if (random <= 40) {
             newInstance =
               rareSpecies[Math.floor(Math.random() * rareSpecies.length)];
-          } else if (random <= 95) {
+          } else if (random <= 90) {
             newInstance =
               epicSpecies[Math.floor(Math.random() * epicSpecies.length)];
           } else {
