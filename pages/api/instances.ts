@@ -12,11 +12,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         // Add a new SpeciesInstance
         const userId = session.user.id.toString();
         const { speciesId, newYield, totalYield, balance, cost } = req.body;
-        if (!speciesId || !newYield || !totalYield || !balance) {
-          return res
-            .status(400)
-            .json({ error: "Must include all request body fields" });
-        }
         try {
           const instance = await client.speciesInstances.create({
             data: { userId: userId, speciesId: speciesId }
