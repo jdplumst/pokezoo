@@ -12,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         // Add a new SpeciesInstance
         const userId = session.user.id.toString();
         const { speciesId, newYield, totalYield, balance, cost } = req.body;
-        if (!speciesId || !newYield || !totalYield || !balance || !cost) {
+        if (!speciesId || !newYield || !totalYield || !balance) {
           return res
             .status(400)
             .json({ error: "Must include all request body fields" });
