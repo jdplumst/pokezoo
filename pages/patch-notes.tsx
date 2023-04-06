@@ -41,7 +41,7 @@ export default function PatchNotes() {
             <ul className="list-disc px-4 pb-4">
               <li className="ml-4">Changed price from P100,000 to P50,000</li>
               <li className="ml-4">Common chance changed from 25% to 15%</li>
-              <li className="ml-4">Rare chance changed from 50% to 25%</li>
+              <li className="ml-4">Rare chance changed from 35% to 25%</li>
               <li className="ml-4">Epic chance changed from 35% to 50%</li>
               <li className="ml-4">Epic chance changed from 5% to 10%</li>
             </ul>
