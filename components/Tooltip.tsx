@@ -24,10 +24,10 @@ export default function Tooltip({ ball, children }: ITooltip) {
                 80% Chance <span className="text-white">Common</span>
               </p>
               <p>
-                15% Chance <span className="text-orange-500">Rare</span>
+                20% Chance <span className="text-orange-500">Rare</span>
               </p>
               <p>
-                5% Chance <span className="text-purple-500">Epic</span>
+                0% Chance <span className="text-purple-500">Epic</span>
               </p>
               <p>
                 0% Chance <span className="text-yellow-500">Legendary</span>
@@ -38,13 +38,13 @@ export default function Tooltip({ ball, children }: ITooltip) {
             <div>
               Opening this ball gives:
               <p>
-                60% Chance <span className="text-white">Common</span>
+                65% Chance <span className="text-white">Common</span>
               </p>
               <p>
                 30% Chance <span className="text-orange-500">Rare</span>
               </p>
               <p>
-                10% Chance <span className="text-purple-500">Epic</span>
+                5% Chance <span className="text-purple-500">Epic</span>
               </p>
               <p>
                 0% Chance <span className="text-yellow-500">Legendary</span>
@@ -55,13 +55,13 @@ export default function Tooltip({ ball, children }: ITooltip) {
             <div>
               Opening this ball gives:
               <p>
-                40% Chance <span className="text-white">Common</span>
+                25% Chance <span className="text-white">Common</span>
               </p>
               <p>
-                40% Chance <span className="text-orange-500">Rare</span>
+                50% Chance <span className="text-orange-500">Rare</span>
               </p>
               <p>
-                18% Chance <span className="text-purple-500">Epic</span>
+                23% Chance <span className="text-purple-500">Epic</span>
               </p>
               <p>
                 2% Chance <span className="text-yellow-500">Legendary</span>
@@ -72,16 +72,16 @@ export default function Tooltip({ ball, children }: ITooltip) {
             <div>
               Opening this ball gives:
               <p>
-                25% Chance <span className="text-white">Common</span>
+                15% Chance <span className="text-white">Common</span>
               </p>
               <p>
-                35% Chance <span className="text-orange-500">Rare</span>
+                25% Chance <span className="text-orange-500">Rare</span>
               </p>
               <p>
-                35% Chance <span className="text-purple-500">Epic</span>
+                50% Chance <span className="text-purple-500">Epic</span>
               </p>
               <p>
-                5% Chance <span className="text-yellow-500">Legendary</span>
+                10% Chance <span className="text-yellow-500">Legendary</span>
               </p>
             </div>
           )}
