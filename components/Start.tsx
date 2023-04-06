@@ -25,8 +25,10 @@ export default function Start({
   const [open, setOpen] = useState(true);
   const [starter, setStarter] = useState<Starter | null>(null);
   const [error, setError] = useState<any>(null);
+  const [disabled, setDisabled] = useState(false);
 
   const handleClose = async () => {
+    setDisabled(true);
     if (starter) {
       const speciesId =
         starter === "Bulbasaur"
@@ -58,6 +60,7 @@ export default function Start({
       }
     } else if (!starter) {
       setError("Must pick a starter Pokémon");
+      setDisabled(false);
     }
   };
 
@@ -106,6 +109,7 @@ export default function Start({
         <div className="flex justify-center pt-4">
           <button
             onClick={() => handleClose()}
+            disabled={disabled}
             className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
             Confirm Selection
           </button>

@@ -6,7 +6,7 @@ import Head from "next/head";
 import Card from "@/components/Card";
 import Start from "@/components/Start";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]";
+import { authOptions } from "./api/auth/[...nextauth]";
 import { useState } from "react";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
@@ -62,6 +62,8 @@ export default function Game({
   const [add, setAdd] = useState(false);
   const [ball, setBall] = useState<Ball | null>(null);
   const [addError, setAddError] = useState<any>(null);
+  const [addDisabled, setAddDisabled] = useState(false);
+
   const pokeAmt = 100;
   const greatAmt = 1000;
   const ultraAmt = 10000;
@@ -77,6 +79,12 @@ export default function Game({
 
   const addStarterYield = () => {
     setTotalYield(20);
+  };
+
+  // Open Add Modal
+  const openAdd = () => {
+    setAddDisabled(false);
+    setAdd(true);
   };
 
   // Send POST request to add new instance
@@ -97,6 +105,7 @@ export default function Game({
   };
 
   const confirmAdd = async () => {
+    setAddDisabled(true);
     if (ball) {
       if (
         // Set error if user can't afford to buy the ball
@@ -356,6 +365,7 @@ export default function Game({
             <div className="flex justify-center pt-4">
               <button
                 onClick={() => confirmAdd()}
+                disabled={addDisabled}
                 className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
                 Confirm Selection
               </button>
@@ -385,7 +395,7 @@ export default function Game({
                 className="pixelated"
               />
               <button
-                onClick={() => setAdd(true)}
+                onClick={() => openAdd()}
                 className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
                 Add Pokemon
               </button>
