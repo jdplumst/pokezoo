@@ -5,7 +5,7 @@ interface ICard {
   instance?: SpeciesInstances;
 }
 
-export default function Card({ species, instance }: ICard) {
+export default function Card({ species }: ICard) {
   return (
     <div
       className={`${

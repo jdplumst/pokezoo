@@ -11,23 +11,32 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
       case "POST":
         // Add a new SpeciesInstance
         const userId = session.user.id.toString();
-        const { speciesId, newYield, totalYield } = req.body;
+        const { speciesId, newYield, totalYield, balance, cost } = req.body;
+        if (!speciesId || !newYield || !totalYield || !balance || !cost) {
+          return res
+            .status(400)
+            .json({ error: "Must include all request body fields" });
+        }
         try {
           const instance = await client.speciesInstances.create({
             data: { userId: userId, speciesId: speciesId }
           });
           await client.user.update({
             where: { id: userId },
-            data: { totalYield: totalYield + newYield }
+            data: { totalYield: totalYield + newYield, balance: balance - cost }
           });
-          res.status(200).json({ instance: instance });
+          return res.status(200).json({ instance: instance });
         } catch (error) {
-          res.status(400).json({ error: error });
+          return res.status(400).json({ error: error });
         }
+      default:
+        return res.status(405).json({ error: "Method Not Allowed" });
     }
   } else {
     // Not Signed in
-    res.status(401).json({ error: "Not authorized to make this request." });
+    return res
+      .status(401)
+      .json({ error: "Not authorized to make this request." });
   }
   res.end();
 };

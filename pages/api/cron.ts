@@ -14,7 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "POST":
       try {
-        await client.$executeRaw`UPDATE User SET dollars = dollars + totalYield`;
+        await client.$executeRaw`UPDATE User SET balance = balance + totalYield`;
         return res
           .status(200)
           .json({ msg: "Successfully updated all user's dollars" });

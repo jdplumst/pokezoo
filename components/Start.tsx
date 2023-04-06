@@ -7,13 +7,19 @@ import { Species, SpeciesInstances, User } from "@prisma/client";
 
 interface IStarter {
   species: Species[];
-  user: User;
+  totalYield: number;
+  balance: number;
   addStarter: (i: SpeciesInstances) => void;
 }
 
 type Starter = "Bulbasaur" | "Charmander" | "Squirtle";
 
-export default function Start({ species, user, addStarter }: IStarter) {
+export default function Start({
+  species,
+  totalYield,
+  balance,
+  addStarter
+}: IStarter) {
   const [open, setOpen] = useState(true);
   const [starter, setStarter] = useState<Starter | null>(null);
   const [error, setError] = useState<any>(null);
@@ -34,15 +40,18 @@ export default function Start({ species, user, addStarter }: IStarter) {
         body: JSON.stringify({
           speciesId: speciesId,
           newYield: species[0].yield,
-          totalYield: user.totalYield
+          totalYield: totalYield,
+          balance: balance,
+          cost: 0
         })
       });
       const data = await response.json();
       if (response.ok) {
         addStarter(data.instance);
+        setError(null);
         setOpen(false);
       } else if (!response.ok) {
-        console.log(data.error);
+        setError("Something went wrong. Try again.");
       }
     } else if (!starter) {
       setError("Must pick a starter Pokémon");
