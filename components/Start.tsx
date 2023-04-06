@@ -50,6 +50,7 @@ export default function Start({
       const data = await response.json();
       if (response.ok) {
         addStarter(data.instance);
+        addStarterYield();
         setError(null);
         setOpen(false);
       } else if (!response.ok) {
