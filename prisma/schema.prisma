@@ -79,6 +79,17 @@ model SpeciesInstances {
   species   Species @relation(fields: [speciesId], references: [id], onDelete: Cascade)
 }
 
+model Balls {
+  id              String @id @default(cuid())
+  name            String @unique
+  img             String
+  cost            Int
+  commonChance    Int
+  rareChance      Int
+  epicChance      Int
+  legendaryChance Int
+}
+
 enum Rarity {
   Common
   Rare
