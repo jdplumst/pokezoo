@@ -50,6 +50,7 @@ model User {
   species       SpeciesInstances[]
   totalYield    Int?
   balance       Int?
+  claimedDaily  Boolean            @default(false)
 }
 
 model VerificationToken {

@@ -16,5 +16,6 @@ declare module "next-auth" {
     // Custom fields
     totalYield: number;
     balance: number;
+    claimedDaily: boolean;
   }
 }

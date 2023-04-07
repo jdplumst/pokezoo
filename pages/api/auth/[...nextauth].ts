@@ -20,7 +20,8 @@ export const authOptions = {
           emailVerified: null,
           image: profile.avatar_url,
           totalYield: 0,
-          balance: 500
+          balance: 500,
+          claimedDaily: false
         };
       }
     }),
@@ -35,7 +36,8 @@ export const authOptions = {
           emailVerified: null,
           image: profile.picture,
           totalYield: 0,
-          balance: 500
+          balance: 500,
+          claimedDaily: false
         };
       }
     }),
@@ -50,7 +52,8 @@ export const authOptions = {
           emailVerified: null,
           image: profile.picture,
           totalYield: 0,
-          balance: 500
+          balance: 500,
+          claimedDaily: false
         };
       }
     })
@@ -64,6 +67,7 @@ export const authOptions = {
       session.user.image = user.image;
       session.user.totalYield = user.totalYield;
       session.user.balance = user.balance;
+      session.user.claimedDaily = user.claimedDaily;
       return session;
     }
   },
