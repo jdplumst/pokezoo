@@ -16,6 +16,15 @@ export default function PatchNotes() {
           <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
           <hr className="border-black pb-4"></hr>
           <div className="pb-4">
+            <h3 className="p-4 text-4xl font-bold">1.02 (April 6, 2023)</h3>
+            <hr className="border-black"></hr>
+            <p className="p-4">
+              Added daily rewards for players to claim. Each day the user
+              accesses the app, they can claim P25.
+            </p>
+          </div>
+          <hr className="border-black pb-4"></hr>
+          <div className="pb-4">
             <h3 className="p-4 text-4xl font-bold">1.01 (April 6, 2023)</h3>
             <hr className="border-black"></hr>
             <p className="p-4">
@@ -53,7 +62,7 @@ export default function PatchNotes() {
             The base game is now released! Start creating your collection on
             your quest to complete the Pokédex!
           </p>
-          <p className="px-4">
+          <p className="px-4 pb-4">
             Choose your starter between Bulbasaur, Charmander, and Squirtle, and
             try to collect all 151 Pokémon from the Kanto Pokédex!
           </p>
