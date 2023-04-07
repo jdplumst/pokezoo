@@ -1,11 +1,12 @@
 import { Rarity, Species, SpeciesInstances } from "@prisma/client";
+import Image from "next/image";
 
 interface ICard {
   species: Species;
   instance?: SpeciesInstances;
 }
 
-export default function Card({ species }: ICard) {
+export default function Card({ species, instance }: ICard) {
   return (
     <div
       className={`${
@@ -20,7 +21,13 @@ export default function Card({ species }: ICard) {
           : ``
       } card-hover h-52 w-52 border-2 border-black p-2`}>
       <div className="flex flex-col items-center">
-        <img src={species.img} alt={species.name} className="pixelated h-28" />
+        <Image
+          src={species.img}
+          alt={species.name}
+          width={112}
+          height={112}
+          className="pixelated"
+        />
         <p className="font-bold capitalize">{species.name}</p>
         <p>Rarity: {species.rarity}</p>
         <p>Yield: P{species.yield}</p>
