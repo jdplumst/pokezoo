@@ -58,12 +58,15 @@ export default function Game({
   epicSpecies,
   legendarySpecies
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  // Variables associated with daily reward
+  const [claimedDaily, setClaimedDaily] = useState(user.claimedDaily);
+  const [dailyDisabled, setDailyDisabled] = useState(false);
+
   // Variables associated with add modal
   const [add, setAdd] = useState(false);
   const [ball, setBall] = useState<Ball | null>(null);
   const [addError, setAddError] = useState<any>(null);
   const [addDisabled, setAddDisabled] = useState(false);
-
   const pokeAmt = 100;
   const greatAmt = 1000;
   const ultraAmt = 10000;
@@ -79,6 +82,22 @@ export default function Game({
 
   const addStarterYield = () => {
     setTotalYield(20);
+  };
+
+  // Claim Daily Reward
+  const claimDaily = async () => {
+    setDailyDisabled(true);
+    const response = await fetch("api/users", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ balance: balance })
+    });
+    if (!response.ok) {
+      setDailyDisabled(false);
+    } else if (response.ok) {
+      setClaimedDaily(true);
+      setBalance((prevBalance) => prevBalance + 25);
+    }
   };
 
   // Open Add Modal
@@ -380,8 +399,23 @@ export default function Game({
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Navbar />
         <div className="p-4">
-          <p>Your current balance is P{balance}.</p>
+          <div className="flex items-center justify-between">
+            <span>Your current balance is P{balance}.</span>
+            {claimedDaily ? (
+              <span className="mr-28">
+                You have already claimed your daily reward.
+              </span>
+            ) : (
+              <button
+                onClick={() => claimDaily()}
+                disabled={dailyDisabled}
+                className="mr-28 w-fit rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
+                Claim Daily Reward
+              </button>
+            )}
+          </div>
           <p>You will receive P{totalYield} on the next payout.</p>
+
           <div className="cards grid justify-center gap-5 pt-5">
             <div className="flex h-52 w-52 flex-col items-center justify-evenly border-2 border-black bg-slate-400">
               <Image

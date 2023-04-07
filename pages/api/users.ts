@@ -8,19 +8,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (session) {
     // Signed in
     switch (req.method) {
-      case "POST":
-        // Add a new SpeciesInstance
+      case "PATCH":
+        // Claim daily reward
         const userId = session.user.id.toString();
-        const { speciesId, newYield, totalYield, balance, cost } = req.body;
+        const { balance } = req.body;
         try {
-          const instance = await client.speciesInstances.create({
-            data: { userId: userId, speciesId: speciesId }
-          });
-          await client.user.update({
+          const user = await client.user.update({
             where: { id: userId },
-            data: { totalYield: totalYield + newYield, balance: balance - cost }
+            data: { balance: balance + 25, claimedDaily: true }
           });
-          return res.status(200).json({ instance: instance });
+          return res.status(200).json({ user: user });
         } catch (error) {
           return res.status(400).json({ error: error });
         }
