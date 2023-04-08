@@ -56,7 +56,7 @@
 
 /* Loading Animation */
 .ring {
-  animation: ring 2s linear 4;
+  animation: ring 2s linear infinite;
 }
 
 @keyframes ring {
@@ -130,42 +130,9 @@
   }
 }
 
-/* Change Text When Loading Animation Ends */
-.change-text:before {
-  content: "LOADING...";
-  animation: changeText 8s forwards;
-}
-
-@keyframes changeText {
-  99% {
-    content: "LOADING...";
-  }
-  100% {
-    content: "LOADING COMPLETE";
-  }
-}
-
-/* Fade Loading Ring Out */
-.fade-out {
-  animation: fadeOut 5s forwards;
-  animation-delay: 8s;
-}
-
-@keyframes fadeOut {
-  from {
-    opacity: 1;
-    z-index: 10;
-  }
-
-  to {
-    opacity: 0;
-    z-index: 0;
-  }
-}
-
 /* Fade Home Page In */
-.fade-in:after {
-  animation: fadeIn 16s forwards;
+.fade-in {
+  animation: fadeIn 4s;
 }
 
 @keyframes fadeIn {
@@ -173,12 +140,8 @@
     opacity: 0;
     z-index: 0;
   }
-  50% {
-    opacity: 0;
-    z-index: 10;
-  }
   100% {
     opacity: 1;
-    z-index: 20;
+    z-index: 0;
   }
 }
