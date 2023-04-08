@@ -18,7 +18,7 @@
 
 .tooltip {
   position: absolute;
-  top: calc(100% - 50px);
+  top: calc(0% - 50px);
   transform: translateX(100%);
 }
 
