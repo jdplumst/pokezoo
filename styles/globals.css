@@ -18,7 +18,8 @@
 
 .tooltip {
   position: absolute;
-  top: calc(100%);
+  top: calc(100% - 50px);
+  transform: translateX(100%);
 }
 
 /* Sprite */
@@ -29,6 +30,11 @@
 /* Card Grid */
 .cards {
   grid-template-columns: repeat(auto-fill, 208px);
+}
+
+/* Ball Grid */
+.balls {
+  grid-template-columns: repeat(auto-fill, 288px);
 }
 
 /* Card Hover Animation */
