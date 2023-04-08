@@ -1,9 +1,9 @@
-import { Rarity, Species, SpeciesInstances } from "@prisma/client";
+import { Rarity, Species, Instance } from "@prisma/client";
 import Image from "next/image";
 
 interface ICard {
   species: Species;
-  instance?: SpeciesInstances;
+  instance?: Instance;
 }
 
 export default function Card({ species, instance }: ICard) {

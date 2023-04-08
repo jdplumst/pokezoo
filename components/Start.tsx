@@ -3,13 +3,13 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Card from "./Card";
-import { Species, SpeciesInstances, User } from "@prisma/client";
+import { Species, Instance } from "@prisma/client";
 
 interface IStarter {
   species: Species[];
   totalYield: number;
   balance: number;
-  addStarter: (i: SpeciesInstances) => void;
+  addStarter: (i: Instance) => void;
   addStarterYield: () => void;
 }
 
