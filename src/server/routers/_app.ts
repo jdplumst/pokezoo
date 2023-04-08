@@ -1,18 +1,11 @@
-import { z } from "zod";
-import { procedure, router } from "../trpc";
+import { router } from "../trpc";
+import { helloRouter } from "./hello";
+
+// Primary Router
+// All routers in routers folder should be added here
 
 export const appRouter = router({
-  hello: procedure
-    .input(
-      z.object({
-        text: z.string()
-      })
-    )
-    .query(({ input }) => {
-      return {
-        greeting: `hello ${input.text}`
-      };
-    })
+  hello: helloRouter
 });
 
 // export type definition of API

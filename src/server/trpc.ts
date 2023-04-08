@@ -1,11 +1,59 @@
-import { initTRPC } from "@trpc/server";
+import { initTRPC, TRPCError } from "@trpc/server";
+import { getServerAuthSession } from "./auth";
+import { type CreateNextContextOptions } from "@trpc/server/adapters/next";
+import { type Session } from "next-auth";
+import superjson from "superjson";
+import client from "@/prisma/script";
+import { ZodError } from "zod";
 
-// Avoid exporting the entire t-object
-// since it's not very descriptive.
-// For instance, the use of a t variable
-// is common in i18n libraries.
-const t = initTRPC.create();
+type CreateContextOptions = {
+  session: Session | null;
+};
+
+const createInnerTRPCContext = (opts: CreateContextOptions) => {
+  return {
+    session: opts.session,
+    client
+  };
+};
+
+export const createTRPCContext = async (opts: CreateNextContextOptions) => {
+  const { req, res } = opts;
+  const session = await getServerAuthSession({ req, res });
+  return createInnerTRPCContext({
+    session
+  });
+};
+
+const t = initTRPC
+  .context<Awaited<ReturnType<typeof createTRPCContext>>>()
+  .create({
+    transformer: superjson,
+    errorFormatter({ shape, error }) {
+      return {
+        ...shape,
+        data: {
+          ...shape.data,
+          zodError:
+            error.cause instanceof ZodError ? error.cause.flatten() : null
+        }
+      };
+    }
+  });
+
+const isAuthed = t.middleware(({ ctx, next }) => {
+  if (!ctx.session || !ctx.session.user) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+  return next({
+    ctx: {
+      // infers the `session` as non-nullable
+      session: { ...ctx.session, user: ctx.session.user }
+    }
+  });
+});
 
 // Base router and procedure helpers
 export const router = t.router;
-export const procedure = t.procedure;
+export const publicProcedure = t.procedure;
+export const protectedProcedure = t.procedure.use(isAuthed);

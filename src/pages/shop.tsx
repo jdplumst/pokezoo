@@ -1,20 +1,20 @@
-import Navbar from "@/components/Navbar";
+import Navbar from "@/src/components/Navbar";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getServerSession } from "next-auth";
 import Head from "next/head";
 import { authOptions } from "./api/auth/[...nextauth]";
 import client from "@/prisma/script";
 import { useState } from "react";
-import BallCard from "@/components/BallCard";
+import BallCard from "@/src/components/BallCard";
 import { Ball, Rarity, Species } from "@prisma/client";
 import { Box, Modal, Typography } from "@mui/material";
-import Card from "@/components/Card";
+import Card from "@/src/components/Card";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session) {
+  if (!session || !session.user) {
     return {
       redirect: {
         destination: "/"
