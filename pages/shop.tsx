@@ -8,6 +8,7 @@ import { useState } from "react";
 import Ball from "@/components/Ball";
 import { Balls, Rarity, Species, SpeciesInstances } from "@prisma/client";
 import { Box, Modal, Typography } from "@mui/material";
+import Card from "@/components/Card";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -145,14 +146,15 @@ export default function Shop({
         onClose={() => setOpenModal(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
-        <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black p-4 text-white">
+        <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black p-4">
           <Typography
             id="modal-modal-title"
             variant="h6"
             component="h2"
-            className="text-center font-bold">
+            className="text-center font-bold text-white">
             You got a {newSpecies.name}!
           </Typography>
+          <Card species={newSpecies} />
         </Box>
       </Modal>
 
