@@ -10,6 +10,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { useState } from "react";
 import { Instance } from "@prisma/client";
 import Link from "next/link";
+import { trpc } from "../utils/trpc";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -46,6 +47,7 @@ export default function Game({
   // Variables associated with daily reward
   const [claimedDaily, setClaimedDaily] = useState(user.claimedDaily);
   const [dailyDisabled, setDailyDisabled] = useState(false);
+  const dailyMutation = trpc.user.claimDaily.useMutation();
 
   const [cards, setCards] = useState(instances);
   const [balance, setBalance] = useState(user.balance);
@@ -62,17 +64,15 @@ export default function Game({
   // Claim Daily Reward
   const claimDaily = async () => {
     setDailyDisabled(true);
-    const response = await fetch("api/users", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ balance: balance })
-    });
-    if (!response.ok) {
-      setDailyDisabled(false);
-    } else if (response.ok) {
-      setClaimedDaily(true);
-      setBalance((prevBalance) => prevBalance + 25);
-    }
+    dailyMutation
+      .mutateAsync({ balance: balance })
+      .then((response) => {
+        setClaimedDaily(true);
+        setBalance(response.user.balance || 0);
+      })
+      .catch((error) => {
+        setDailyDisabled(false);
+      });
   };
 
   return (
