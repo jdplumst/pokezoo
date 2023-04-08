@@ -1,13 +1,11 @@
-import { router } from "../trpc";
-import { helloRouter } from "./hello";
-import { instanceRouter } from "./instance";
-import { userRouter } from "./user";
+import { router } from "./trpc";
+import { instanceRouter } from "./routers/instance";
+import { userRouter } from "./routers/user";
 
 // Primary Router
 // All routers in routers folder should be added here
 
 export const appRouter = router({
-  hello: helloRouter,
   instance: instanceRouter,
   user: userRouter
 });
