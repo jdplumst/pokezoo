@@ -114,8 +114,8 @@ export default function Shop({
           instanceMutation
             .mutateAsync({ speciesId: newInstance.id })
             .then((instanceResponse) => {
-              setBalance(userResponse.user.balance || 0);
-              setTotalYield(userResponse.user.totalYield || 0);
+              setBalance(userResponse.user.balance);
+              setTotalYield(userResponse.user.totalYield);
               setNewSpecies(
                 species.filter(
                   (s) => s.id === instanceResponse.instance.speciesId

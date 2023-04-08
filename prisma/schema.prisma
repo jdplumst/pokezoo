@@ -47,8 +47,8 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
-  totalYield    Int?
-  balance       Int?
+  totalYield    Int
+  balance       Int
   claimedDaily  Boolean    @default(false)
   instances     Instance[]
 }

@@ -68,7 +68,7 @@ export default function Game({
       .mutateAsync({ balance: balance })
       .then((response) => {
         setClaimedDaily(true);
-        setBalance(response.user.balance || 0);
+        setBalance(response.user.balance);
       })
       .catch((error) => {
         setDailyDisabled(false);
