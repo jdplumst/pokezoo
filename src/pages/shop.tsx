@@ -9,6 +9,7 @@ import BallCard from "@/src/components/BallCard";
 import { Ball, Rarity, Species } from "@prisma/client";
 import { Box, Modal, Typography } from "@mui/material";
 import Card from "@/src/components/Card";
+import { trpc } from "../utils/trpc";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -55,6 +56,8 @@ export default function Shop({
   const [totalYield, setTotalYield] = useState(user.totalYield);
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
+  const userMutation = trpc.user.updateBalance.useMutation();
+  const instanceMutation = trpc.instance.createInstance.useMutation();
 
   // Modal variables
   const [openModal, setOpenModal] = useState(false);
@@ -63,12 +66,6 @@ export default function Shop({
   const purchaseBall = async (ball: Ball) => {
     // Disable all purchase buttons
     setDisabled(true);
-
-    // Check that user can afford ball
-    if (balance < ball.cost) {
-      setError("You cannot afford this ball.");
-      return;
-    }
 
     // Determine rarity
     const randomizer: Rarity[] = [];
@@ -101,35 +98,36 @@ export default function Shop({
     }
 
     // Create new instance
-    try {
-      const response = await fetch("api/instances", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          speciesId: newInstance.id,
-          newYield: newInstance.yield,
-          totalYield: totalYield,
-          balance: balance,
-          cost: ball.cost
-        })
-      });
-      const data = await response.json();
-      if (!response.ok) {
-        setError(data.error || "Something went wrong. Try again.");
-        setDisabled(false);
-      } else if (response.ok) {
-        setBalance((prevBalance) => prevBalance - ball.cost);
-        setTotalYield((prevTotalYield) => prevTotalYield + newInstance.yield);
-        setNewSpecies(
-          species.filter((s) => s.id === data.instance.speciesId)[0]
-        );
-        setOpenModal(true);
-        setDisabled(false);
-      }
-    } catch (error) {
-      setError("Something went wrong. Try again.");
-      setDisabled(false);
-    }
+    userMutation
+      .mutateAsync({
+        speciesYield: newInstance.yield,
+        userYield: totalYield,
+        balance: balance,
+        cost: ball.cost
+      })
+      .then((userResponse) => {
+        if (userResponse.error) {
+          setError(userResponse.error);
+          setDisabled(false);
+          return;
+        } else if (userResponse.user) {
+          instanceMutation
+            .mutateAsync({ speciesId: newInstance.id })
+            .then((instanceResponse) => {
+              setBalance(userResponse.user.balance || 0);
+              setTotalYield(userResponse.user.totalYield || 0);
+              setNewSpecies(
+                species.filter(
+                  (s) => s.id === instanceResponse.instance.speciesId
+                )[0]
+              );
+              setOpenModal(true);
+              setDisabled(false);
+            })
+            .catch((error) => setError("Something went wrong. Try again."));
+        }
+      })
+      .catch((error) => setError("Something went wrong. Try again"));
   };
 
   return (
