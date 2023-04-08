@@ -25,5 +25,17 @@ export const userRouter = router({
       return {
         user: user
       };
+    }),
+
+  claimDaily: protectedProcedure
+    .input(z.object({ balance: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.client.user.update({
+        where: { id: ctx.session.user.id },
+        data: { balance: input.balance + 25, claimedDaily: true }
+      });
+      return {
+        user: user
+      };
     })
 });
