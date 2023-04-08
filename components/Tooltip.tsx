@@ -1,8 +1,8 @@
-import { Balls } from "@prisma/client";
+import { Ball } from "@prisma/client";
 import { ReactNode, useState } from "react";
 
 interface ITooltip {
-  ball: Balls;
+  ball: Ball;
   children: ReactNode;
 }
 

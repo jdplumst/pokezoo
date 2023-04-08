@@ -8,7 +8,7 @@ import Start from "@/components/Start";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { useState } from "react";
-import { SpeciesInstances } from "@prisma/client";
+import { Instance } from "@prisma/client";
 import Link from "next/link";
 
 export const getServerSideProps = async (
@@ -24,7 +24,7 @@ export const getServerSideProps = async (
   }
 
   const user = session.user;
-  const instances = await client.speciesInstances.findMany({
+  const instances = await client.instance.findMany({
     where: { userId: user.id.toString() }
   });
   const species = await client.species.findMany();
@@ -51,7 +51,7 @@ export default function Game({
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
 
-  const addStarter = (i: SpeciesInstances) => {
+  const addStarter = (i: Instance) => {
     setCards((prevCards) => [...prevCards, i]);
   };
 

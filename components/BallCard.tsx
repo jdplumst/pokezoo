@@ -1,14 +1,14 @@
-import { Balls } from "@prisma/client";
+import { Ball } from "@prisma/client";
 import Image from "next/image";
 import Tooltip from "./Tooltip";
 
 interface IBall {
-  ball: Balls;
+  ball: Ball;
   disabled: boolean;
-  purchaseBall: (ball: Balls) => void;
+  purchaseBall: (ball: Ball) => void;
 }
 
-export default function Ball({ ball, disabled, purchaseBall }: IBall) {
+export default function BallCard({ ball, disabled, purchaseBall }: IBall) {
   return (
     <Tooltip ball={ball}>
       <div className="h-72 w-72 border-2 border-black bg-emerald-500 p-2">

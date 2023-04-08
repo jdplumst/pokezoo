@@ -5,8 +5,8 @@ import Head from "next/head";
 import { authOptions } from "./api/auth/[...nextauth]";
 import client from "@/prisma/script";
 import { useState } from "react";
-import Ball from "@/components/Ball";
-import { Balls, Rarity, Species, SpeciesInstances } from "@prisma/client";
+import BallCard from "@/components/BallCard";
+import { Ball, Rarity, Species } from "@prisma/client";
 import { Box, Modal, Typography } from "@mui/material";
 import Card from "@/components/Card";
 
@@ -23,7 +23,7 @@ export const getServerSideProps = async (
   }
 
   const user = session.user;
-  const balls = await client.balls.findMany();
+  const balls = await client.ball.findMany();
   const species = await client.species.findMany();
   const commonSpecies = species.filter((s) => s.rarity === Rarity.Common);
   const rareSpecies = species.filter((s) => s.rarity === Rarity.Rare);
@@ -60,7 +60,7 @@ export default function Shop({
   const [openModal, setOpenModal] = useState(false);
   const [newSpecies, setNewSpecies] = useState<Species>(commonSpecies[0]);
 
-  const purchaseBall = async (ball: Balls) => {
+  const purchaseBall = async (ball: Ball) => {
     // Disable all purchase buttons
     setDisabled(true);
 
@@ -166,7 +166,7 @@ export default function Shop({
           {error && <p className="font-bold text-red-500">{error}</p>}
           <div className="balls grid justify-center gap-10 pt-5">
             {balls.map((b) => (
-              <Ball
+              <BallCard
                 key={b.id}
                 ball={b}
                 disabled={disabled}

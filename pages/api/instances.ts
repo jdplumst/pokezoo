@@ -13,7 +13,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const userId = session.user.id.toString();
         const { speciesId, newYield, totalYield, balance, cost } = req.body;
         try {
-          const instance = await client.speciesInstances.create({
+          const instance = await client.instance.create({
             data: { userId: userId, speciesId: speciesId }
           });
           await client.user.update({
