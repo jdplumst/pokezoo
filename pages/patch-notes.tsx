@@ -16,9 +16,17 @@ export default function PatchNotes() {
           <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
           <hr className="border-black pb-4"></hr>
           <div className="pb-4">
+            <h3 className="p-4 text-4xl font-bold">1.03 (April 8, 2023)</h3>
+            <hr className="border-black"></hr>
+            <p className="px-4 pt-4">
+              Created a shop page where users can go to buy new Pokémon.
+            </p>
+          </div>
+          <hr className="border-black pb-4"></hr>
+          <div className="pb-4">
             <h3 className="p-4 text-4xl font-bold">1.02 (April 6, 2023)</h3>
             <hr className="border-black"></hr>
-            <p className="p-4">
+            <p className="px-4 pt-4">
               Added daily rewards for players to claim. Each day the user
               accesses the app, they can claim P25.
             </p>
@@ -47,7 +55,7 @@ export default function PatchNotes() {
               <li className="ml-4">Epic chance changed from 18% to 23%</li>
             </ul>
             <div className="px-4 text-2xl font-bold">Master Ball</div>
-            <ul className="list-disc px-4 pb-4">
+            <ul className="list-disc px-4">
               <li className="ml-4">Changed price from P100,000 to P50,000</li>
               <li className="ml-4">Common chance changed from 25% to 15%</li>
               <li className="ml-4">Rare chance changed from 35% to 25%</li>
