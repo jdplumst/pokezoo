@@ -4,7 +4,7 @@ This app can be found at https://pokezoo.vercel.app
 
 This is a PokéZoo app where users can collect Pokémon to earn points which they can use to collect even more Pokémon.
 
-The app is currently on version 1.03.
+The app is currently on version 1.04.
 
 ## Built With
 
@@ -15,3 +15,5 @@ The app is currently on version 1.03.
 - MySQL with PlanetScale
 - Prisma
 - NextAuth.js
+- tRPC
+- React Query
