@@ -36,7 +36,7 @@ export default function Card({ species, instance, deleteInstance }: ICard) {
         <p className="font-bold capitalize">{species.name}</p>
         <p>Rarity: {species.rarity}</p>
         <p>Yield: P{species.yield}</p>
-        <p>Sell Price: {species.sellPrice}</p>
+        <p>Sell Price: P{species.sellPrice}</p>
         {instance && deleteInstance && (
           <button
             onClick={() =>
