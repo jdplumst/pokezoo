@@ -88,22 +88,27 @@ export default function Game({
     instanceDeleteMutation
       .mutateAsync({ id: id })
       .then((instanceResponse) => {
-        userDeleteMutation
-          .mutateAsync({
-            speciesYield: speciesYield,
-            userYield: totalYield,
-            balance: balance,
-            sellPrice: sellPrice
-          })
-          .then((userResponse) => {
-            setCards((prevCards) =>
-              prevCards.filter((c) => c.id !== instanceResponse.instance.id)
-            );
-            setTotalYield(userResponse.user.totalYield);
-            setBalance(userResponse.user.balance);
-            setError(null);
-          })
-          .catch((userError) => setError("Something went wrong. Try again."));
+        if (instanceResponse.error) {
+          setError(instanceResponse.error);
+          return;
+        } else if (instanceResponse.instance) {
+          userDeleteMutation
+            .mutateAsync({
+              speciesYield: speciesYield,
+              userYield: totalYield,
+              balance: balance,
+              sellPrice: sellPrice
+            })
+            .then((userResponse) => {
+              setCards((prevCards) =>
+                prevCards.filter((c) => c.id !== instanceResponse.instance.id)
+              );
+              setTotalYield(userResponse.user.totalYield);
+              setBalance(userResponse.user.balance);
+              setError(null);
+            })
+            .catch((userError) => setError("Something went wrong. Try again."));
+        }
       })
       .catch((instanceError) => setError("Something went wrong. Try again."));
   };

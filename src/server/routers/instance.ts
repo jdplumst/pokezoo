@@ -24,6 +24,12 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const numInstances = await ctx.client.instance.count({
+        where: { userId: ctx.session.user.id }
+      });
+      if (numInstances <= 1) {
+        return { error: "You must keep at least one species." };
+      }
       const instance = await ctx.client.instance.delete({
         where: { id: input.id }
       });
