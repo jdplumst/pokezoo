@@ -27,6 +27,28 @@ export const userRouter = router({
       };
     }),
 
+  updateSell: protectedProcedure
+    .input(
+      z.object({
+        speciesYield: z.number(),
+        userYield: z.number(),
+        balance: z.number(),
+        sellPrice: z.number()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.client.user.update({
+        where: { id: ctx.session.user.id },
+        data: {
+          totalYield: input.userYield - input.speciesYield,
+          balance: input.balance + input.sellPrice
+        }
+      });
+      return {
+        user: user
+      };
+    }),
+
   claimDaily: protectedProcedure
     .input(z.object({ balance: z.number() }))
     .mutation(async ({ ctx, input }) => {

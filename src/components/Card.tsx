@@ -4,7 +4,11 @@ import Image from "next/image";
 interface ICard {
   species: Species;
   instance?: Instance;
-  deleteInstance?: (id: string) => void;
+  deleteInstance?: (
+    id: string,
+    speciesYield: number,
+    sellPrice: number
+  ) => void;
 }
 
 export default function Card({ species, instance, deleteInstance }: ICard) {
@@ -35,7 +39,7 @@ export default function Card({ species, instance, deleteInstance }: ICard) {
         <p>Sell Price: P0</p>
         {instance && deleteInstance && (
           <button
-            onClick={() => deleteInstance(instance.id)}
+            onClick={() => deleteInstance(instance.id, species.yield, 0)}
             className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
             Sell Pokémon
           </button>
