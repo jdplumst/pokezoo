@@ -141,7 +141,6 @@ export default function Shop({
 
       <Modal
         open={openModal}
-        onClose={() => setOpenModal(false)}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description">
         <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black p-4">
@@ -150,9 +149,30 @@ export default function Shop({
             variant="h6"
             component="h2"
             className="text-center font-bold text-white">
-            You got a {newSpecies.name}!
+            {"aeiou".includes(newSpecies.name[0]) ? (
+              <div>
+                You got an{" "}
+                {newSpecies.name[0].toUpperCase() +
+                  newSpecies.name.slice(1).toLowerCase()}
+                !{" "}
+              </div>
+            ) : (
+              <div>
+                You got a{" "}
+                {newSpecies.name[0].toUpperCase() +
+                  newSpecies.name.slice(1).toLowerCase()}
+                !
+              </div>
+            )}
           </Typography>
           <Card species={newSpecies} />
+          <div className="flex justify-center pt-4">
+            <button
+              onClick={() => setOpenModal(false)}
+              className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+              Got it!
+            </button>
+          </div>
         </Box>
       </Modal>
 
