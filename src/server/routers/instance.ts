@@ -15,5 +15,18 @@ export const instanceRouter = router({
       return {
         instance: instance
       };
+    }),
+
+  deleteInstance: protectedProcedure
+    .input(
+      z.object({
+        id: z.string()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const instance = await ctx.client.instance.delete({
+        where: { id: input.id }
+      });
+      return { instance: instance };
     })
 });
