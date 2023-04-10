@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
 export const userRouter = router({
-  updateBalance: protectedProcedure
+  updateBuy: protectedProcedure
     .input(
       z.object({
         speciesYield: z.number(),

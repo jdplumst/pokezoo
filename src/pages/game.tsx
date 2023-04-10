@@ -52,6 +52,9 @@ export default function Game({
   const [cards, setCards] = useState(instances);
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
+  const [error, setError] = useState<string | null>(null);
+
+  const deleteMutation = trpc.instance.deleteInstance.useMutation();
 
   const addStarter = (i: Instance) => {
     setCards((prevCards) => [...prevCards, i]);
@@ -73,6 +76,18 @@ export default function Game({
       .catch((error) => {
         setDailyDisabled(false);
       });
+  };
+
+  const deleteInstance = (id: string) => {
+    deleteMutation
+      .mutateAsync({ id: id })
+      .then((response) => {
+        setCards((prevCards) =>
+          prevCards.filter((c) => c.id !== response.instance.id)
+        );
+        setError(null);
+      })
+      .catch((error) => setError("Something went wrong. Try again."));
   };
 
   return (
@@ -116,17 +131,17 @@ export default function Game({
           </div>
           <p>You will receive P{totalYield} on the next payout.</p>
           <div className="cards grid justify-center gap-5 pt-5">
-            <div className="flex h-52 w-52 flex-col items-center justify-evenly border-2 border-black bg-slate-400">
+            <div className="flex h-64 w-52 flex-col items-center justify-between border-2 border-black bg-slate-400">
               <Image
                 src="/img/master-ball.png"
                 alt="new_pokemon"
                 width={100}
                 height={100}
-                className="pixelated"
+                className="pixelated mt-14"
               />
               <Link href="/shop">
-                <button className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
-                  Add Pokemon
+                <button className="mb-2 rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+                  Add Pokémon
                 </button>
               </Link>
             </div>
@@ -135,6 +150,7 @@ export default function Game({
                 key={c.id}
                 instance={c}
                 species={species.filter((s) => s.id === c.speciesId)[0]}
+                deleteInstance={deleteInstance}
               />
             ))}
           </div>
