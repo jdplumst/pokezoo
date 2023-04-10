@@ -88,27 +88,22 @@ export default function Game({
     instanceDeleteMutation
       .mutateAsync({ id: id })
       .then((instanceResponse) => {
-        if (instanceResponse.error) {
-          setError(instanceResponse.error);
-          return;
-        } else if (instanceResponse.instance) {
-          userDeleteMutation
-            .mutateAsync({
-              speciesYield: speciesYield,
-              userYield: totalYield,
-              balance: balance,
-              sellPrice: sellPrice
-            })
-            .then((userResponse) => {
-              setCards((prevCards) =>
-                prevCards.filter((c) => c.id !== instanceResponse.instance.id)
-              );
-              setTotalYield(userResponse.user.totalYield);
-              setBalance(userResponse.user.balance);
-              setError(null);
-            })
-            .catch((userError) => setError("Something went wrong. Try again."));
-        }
+        userDeleteMutation
+          .mutateAsync({
+            speciesYield: speciesYield,
+            userYield: totalYield,
+            balance: balance,
+            sellPrice: sellPrice
+          })
+          .then((userResponse) => {
+            setCards((prevCards) =>
+              prevCards.filter((c) => c.id !== instanceResponse.instance.id)
+            );
+            setTotalYield(userResponse.user.totalYield);
+            setBalance(userResponse.user.balance);
+            setError(null);
+          })
+          .catch((userError) => setError("Something went wrong. Try again."));
       })
       .catch((instanceError) => setError("Something went wrong. Try again."));
   };
@@ -153,6 +148,7 @@ export default function Game({
             )}
           </div>
           <p>You will receive P{totalYield} on the next payout.</p>
+          {error && <p>{error}</p>}
           <div className="cards grid justify-center gap-5 pt-5">
             <div className="flex h-64 w-52 flex-col items-center justify-between border-2 border-black bg-slate-400">
               <Image

@@ -69,6 +69,7 @@ model Species {
   yield         Int
   img           String
   instances     Instance[]
+  sellPrice     Int        @default(0)
 }
 
 model Instance {
