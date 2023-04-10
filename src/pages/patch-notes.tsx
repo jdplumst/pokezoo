@@ -16,6 +16,18 @@ export default function PatchNotes() {
           <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
           <hr className="border-black pb-4"></hr>
           <div className="pb-4">
+            <h3 className="p-4 text-4xl font-bold">1.05 (April 9, 2023)</h3>
+            <hr className="border-black"></hr>
+            <p className="px-4 pt-4">
+              Added button to shop modal that closes the modal when pressed.
+            </p>
+            <p className="px-4 pt-4">
+              Changed shop modal message to say "an" instead of "a" when the
+              species shown starts with a vowel.
+            </p>
+          </div>
+          <hr className="border-black pb-4"></hr>
+          <div className="pb-4">
             <h3 className="p-4 text-4xl font-bold">1.04 (April 8, 2023)</h3>
             <hr className="border-black"></hr>
             <p className="px-4 pt-4">
