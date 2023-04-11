@@ -16,6 +16,15 @@ export default function PatchNotes() {
           <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
           <hr className="border-black pb-4"></hr>
           <div className="pb-4">
+            <h3 className="p-4 text-4xl font-bold">1.07 (April 11, 2023)</h3>
+            <hr className="border-black"></hr>
+            <p className="px-4 pt-4">
+              Added Shiny Pokémon. Every time a user gets a new Pokémon, there
+              is a 1 in 4096 chance of the Pokémon being shiny.
+            </p>
+          </div>
+          <hr className="border-black pb-4"></hr>
+          <div className="pb-4">
             <h3 className="p-4 text-4xl font-bold">1.06 (April 10, 2023)</h3>
             <hr className="border-black"></hr>
             <p className="px-4 pt-4">
