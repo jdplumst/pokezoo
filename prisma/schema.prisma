@@ -70,6 +70,7 @@ model Species {
   img           String
   instances     Instance[]
   sellPrice     Int        @default(0)
+  shiny         Boolean    @default(false)
 }
 
 model Instance {
