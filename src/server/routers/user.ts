@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
 export const userRouter = router({
-  updateBuy: protectedProcedure
+  updateBalance: protectedProcedure
     .input(
       z.object({
         speciesYield: z.number(),
@@ -20,28 +20,6 @@ export const userRouter = router({
         data: {
           totalYield: input.userYield + input.speciesYield,
           balance: input.balance - input.cost
-        }
-      });
-      return {
-        user: user
-      };
-    }),
-
-  updateSell: protectedProcedure
-    .input(
-      z.object({
-        speciesYield: z.number(),
-        userYield: z.number(),
-        balance: z.number(),
-        sellPrice: z.number()
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const user = await ctx.client.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          totalYield: input.userYield - input.speciesYield,
-          balance: input.balance + input.sellPrice
         }
       });
       return {

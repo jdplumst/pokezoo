@@ -55,7 +55,7 @@ export default function Game({
   const [error, setError] = useState<string | null>(null);
 
   const instanceDeleteMutation = trpc.instance.deleteInstance.useMutation();
-  const userDeleteMutation = trpc.user.updateSell.useMutation();
+  const userDeleteMutation = trpc.user.updateBalance.useMutation();
 
   const addStarter = (i: Instance) => {
     setCards((prevCards) => [...prevCards, i]);
@@ -90,18 +90,20 @@ export default function Game({
       .then((instanceResponse) => {
         userDeleteMutation
           .mutateAsync({
-            speciesYield: speciesYield,
+            speciesYield: speciesYield * -1,
             userYield: totalYield,
             balance: balance,
-            sellPrice: sellPrice
+            cost: sellPrice * -1
           })
           .then((userResponse) => {
-            setCards((prevCards) =>
-              prevCards.filter((c) => c.id !== instanceResponse.instance.id)
-            );
-            setTotalYield(userResponse.user.totalYield);
-            setBalance(userResponse.user.balance);
-            setError(null);
+            if (userResponse.user) {
+              setCards((prevCards) =>
+                prevCards.filter((c) => c.id !== instanceResponse.instance.id)
+              );
+              setTotalYield(userResponse.user.totalYield);
+              setBalance(userResponse.user.balance);
+              setError(null);
+            }
           })
           .catch((userError) => setError("Something went wrong. Try again."));
       })

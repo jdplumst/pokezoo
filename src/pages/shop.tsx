@@ -84,7 +84,7 @@ export default function Shop({
   const [totalYield, setTotalYield] = useState(user.totalYield);
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
-  const userMutation = trpc.user.updateBuy.useMutation();
+  const userMutation = trpc.user.updateBalance.useMutation();
   const instanceMutation = trpc.instance.createInstance.useMutation();
 
   // Modal variables
