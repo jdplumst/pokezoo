@@ -26,10 +26,30 @@ export const getServerSideProps = async (
   const user = session.user;
   const balls = await client.ball.findMany();
   const species = await client.species.findMany();
-  const commonSpecies = species.filter((s) => s.rarity === Rarity.Common);
-  const rareSpecies = species.filter((s) => s.rarity === Rarity.Rare);
-  const epicSpecies = species.filter((s) => s.rarity === Rarity.Epic);
-  const legendarySpecies = species.filter((s) => s.rarity === Rarity.Legendary);
+  const commonSpecies = species.filter(
+    (s) => s.rarity === Rarity.Common && !s.shiny
+  );
+  const rareSpecies = species.filter(
+    (s) => s.rarity === Rarity.Rare && !s.shiny
+  );
+  const epicSpecies = species.filter(
+    (s) => s.rarity === Rarity.Epic && !s.shiny
+  );
+  const legendarySpecies = species.filter(
+    (s) => s.rarity === Rarity.Legendary && !s.shiny
+  );
+  const commonShinySpecies = species.filter(
+    (s) => s.rarity === Rarity.Common && s.shiny
+  );
+  const rareShinySpecies = species.filter(
+    (s) => s.rarity === Rarity.Rare && s.shiny
+  );
+  const epicShinySpecies = species.filter(
+    (s) => s.rarity === Rarity.Epic && s.shiny
+  );
+  const legendaryShinySpecies = species.filter(
+    (s) => s.rarity === Rarity.Legendary && s.shiny
+  );
   return {
     props: {
       user,
@@ -38,7 +58,11 @@ export const getServerSideProps = async (
       commonSpecies,
       rareSpecies,
       epicSpecies,
-      legendarySpecies
+      legendarySpecies,
+      commonShinySpecies,
+      rareShinySpecies,
+      epicShinySpecies,
+      legendaryShinySpecies
     }
   };
 };
@@ -50,7 +74,11 @@ export default function Shop({
   commonSpecies,
   rareSpecies,
   epicSpecies,
-  legendarySpecies
+  legendarySpecies,
+  commonShinySpecies,
+  rareShinySpecies,
+  epicShinySpecies,
+  legendaryShinySpecies
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
@@ -66,6 +94,16 @@ export default function Shop({
   const purchaseBall = async (ball: Ball) => {
     // Disable all purchase buttons
     setDisabled(true);
+
+    // Determine if shiny
+    const shinyRandomizer = Math.floor(Math.random() * 4096) + 1;
+    console.log(shinyRandomizer);
+    let shiny = false;
+    if (shinyRandomizer === 8) {
+      shiny = true;
+    } else {
+      shiny = false;
+    }
 
     // Determine rarity
     const randomizer: Rarity[] = [];
@@ -85,16 +123,30 @@ export default function Shop({
 
     // Determine the new species the user gets
     let newInstance = commonSpecies[0];
-    if (rarity === "Common") {
+    if (rarity === "Common" && !shiny) {
       newInstance =
         commonSpecies[Math.floor(Math.random() * commonSpecies.length)];
-    } else if (rarity === "Rare") {
+    } else if (rarity === "Rare" && !shiny) {
       newInstance = rareSpecies[Math.floor(Math.random() * rareSpecies.length)];
-    } else if (rarity === "Epic") {
+    } else if (rarity === "Epic" && !shiny) {
       newInstance = epicSpecies[Math.floor(Math.random() * epicSpecies.length)];
-    } else {
+    } else if (rarity === "Legendary" && !shiny) {
       newInstance =
         legendarySpecies[Math.floor(Math.random() * legendarySpecies.length)];
+    } else if (rarity === "Common" && shiny) {
+      newInstance =
+        commonShinySpecies[Math.floor(Math.random() * commonSpecies.length)];
+    } else if (rarity === "Rare" && shiny) {
+      newInstance =
+        rareShinySpecies[Math.floor(Math.random() * rareSpecies.length)];
+    } else if (rarity === "Epic" && shiny) {
+      newInstance =
+        epicShinySpecies[Math.floor(Math.random() * epicSpecies.length)];
+    } else if (rarity === "Legendary" && shiny) {
+      newInstance =
+        legendaryShinySpecies[
+          Math.floor(Math.random() * legendarySpecies.length)
+        ];
     }
 
     // Create new instance
