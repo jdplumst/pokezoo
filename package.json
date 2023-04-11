@@ -6,7 +6,8 @@
     "dev": "explorer http://localhost:3000 & next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "analyze": "cross-env ANALYZE=true next build"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -30,8 +31,10 @@
     "zod": "^3.21.4"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^13.3.0",
     "@types/node": "^18.15.3",
     "autoprefixer": "^10.4.13",
+    "cross-env": "^7.0.3",
     "postcss": "^8.4.21",
     "prettier": "^2.8.4",
     "prettier-plugin-tailwindcss": "^0.2.4",
