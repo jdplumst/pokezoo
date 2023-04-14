@@ -11,7 +11,6 @@ The app is currently on version 1.08.
 - Next.js
 - TypeScript
 - TailwindCSS
-- Material UI
 - MySQL with PlanetScale
 - Prisma
 - NextAuth.js

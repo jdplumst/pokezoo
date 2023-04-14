@@ -7,7 +7,6 @@ import client from "@/prisma/script";
 import { useState } from "react";
 import BallCard from "@/src/components/BallCard";
 import { Ball, Rarity, Species } from "@prisma/client";
-import { Box, Typography } from "@mui/material";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
 import Modal from "@/src/components/Modal";
