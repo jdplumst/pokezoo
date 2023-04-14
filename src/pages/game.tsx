@@ -1,4 +1,3 @@
-import Navbar from "@/src/components/Navbar";
 import client from "@/prisma/script";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Image from "next/image";
@@ -12,6 +11,7 @@ import { Instance, Species } from "@prisma/client";
 import Link from "next/link";
 import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
+import Sidebar from "../components/Sidebar";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -168,50 +168,50 @@ export default function Game({
 
       {/* Main Game Screen */}
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
-        <Navbar />
-        <div className="p-4">
-          <div className="flex items-center justify-between">
-            <span>Your current balance is P{balance}.</span>
-            {claimedDaily ? (
-              <span className="mr-28">
-                You have already claimed your daily reward.
-              </span>
-            ) : (
-              <button
-                onClick={() => claimDaily()}
-                disabled={dailyDisabled}
-                className="mr-28 w-fit rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
-                Claim Daily Reward
-              </button>
-            )}
-          </div>
-          <p>You will receive P{totalYield} on the next payout.</p>
-          {error && <p>{error}</p>}
-          <div className="cards grid justify-center gap-5 pt-5">
-            <div className="flex h-64 w-52 flex-col items-center justify-between border-2 border-black bg-slate-400">
-              <Image
-                src="/img/master-ball.png"
-                alt="new_pokemon"
-                width={100}
-                height={100}
-                className="pixelated mt-14"
-              />
-              <Link href="/shop">
-                <button className="mb-2 rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
-                  Add Pokémon
+        <Sidebar page="Game">
+          {/* <Navbar /> */}
+          <div className="p-4">
+            <div className="flex items-center justify-between">
+              <span>Your current balance is P{balance}.</span>
+              {claimedDaily ? (
+                <span>You have already claimed your daily reward.</span>
+              ) : (
+                <button
+                  onClick={() => claimDaily()}
+                  disabled={dailyDisabled}
+                  className="mr-28 w-fit rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
+                  Claim Daily Reward
                 </button>
-              </Link>
+              )}
             </div>
-            {cards.map((c) => (
-              <Card
-                key={c.id}
-                instance={c}
-                species={species.filter((s) => s.id === c.speciesId)[0]}
-                openDelete={openDelete}
-              />
-            ))}
+            <p>You will receive P{totalYield} on the next payout.</p>
+            {error && <p>{error}</p>}
+            <div className="cards grid justify-center gap-5 pt-5">
+              <div className="flex h-64 w-52 flex-col items-center justify-between border-2 border-black bg-slate-400">
+                <Image
+                  src="/img/master-ball.png"
+                  alt="new_pokemon"
+                  width={100}
+                  height={100}
+                  className="pixelated mt-14"
+                />
+                <Link href="/shop">
+                  <button className="mb-2 rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+                    Add Pokémon
+                  </button>
+                </Link>
+              </div>
+              {cards.map((c) => (
+                <Card
+                  key={c.id}
+                  instance={c}
+                  species={species.filter((s) => s.id === c.speciesId)[0]}
+                  openDelete={openDelete}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </Sidebar>
       </div>
     </>
   );

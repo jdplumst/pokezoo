@@ -10,6 +10,11 @@
   }
 }
 
+/* Sidebar */
+.sidebar {
+  transition: all 0.5s;
+}
+
 /* Tooltip */
 .tooltip-container {
   position: relative;
@@ -19,7 +24,7 @@
 .tooltip {
   position: absolute;
   top: calc(0% - 50px);
-  transform: translateX(100%);
+  transform: translateX(-40%);
 }
 
 /* Sprite */

@@ -1,4 +1,3 @@
-import Navbar from "@/src/components/Navbar";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getServerSession } from "next-auth";
 import Head from "next/head";
@@ -10,6 +9,7 @@ import { Ball, Rarity, Species } from "@prisma/client";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
 import Modal from "@/src/components/Modal";
+import Sidebar from "../components/Sidebar";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -179,22 +179,23 @@ export default function Shop({
       </Head>
 
       <div className="z-0 min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
-        <Navbar />
-        <div className="p-4">
-          <p>Your current balance is P{balance}.</p>
-          <p>You will receive P{totalYield} on the next payout.</p>
-          {error && <p className="font-bold text-red-500">{error}</p>}
-          <div className="balls grid justify-center gap-10 pt-5">
-            {balls.map((b) => (
-              <BallCard
-                key={b.id}
-                ball={b}
-                disabled={disabled}
-                purchaseBall={purchaseBall}
-              />
-            ))}
+        <Sidebar page="Shop">
+          <div className="p-4">
+            <p>Your current balance is P{balance}.</p>
+            <p>You will receive P{totalYield} on the next payout.</p>
+            {error && <p className="font-bold text-red-500">{error}</p>}
+            <div className="balls grid justify-center gap-10 pt-5">
+              {balls.map((b) => (
+                <BallCard
+                  key={b.id}
+                  ball={b}
+                  disabled={disabled}
+                  purchaseBall={purchaseBall}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </Sidebar>
       </div>
 
       {openModal && (
