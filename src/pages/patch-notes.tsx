@@ -16,6 +16,14 @@ export default function PatchNotes() {
           <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
           <hr className="border-black pb-4"></hr>
           <div className="pb-4">
+            <h3 className="p-4 text-4xl font-bold">1.08 (April 14, 2023)</h3>
+            <hr className="border-black"></hr>
+            <p className="px-4 pt-4">
+              Added confirmation modal when user tries to delete a Pokémon.
+            </p>
+          </div>
+          <hr className="border-black pb-4"></hr>
+          <div className="pb-4">
             <h3 className="p-4 text-4xl font-bold">1.07 (April 11, 2023)</h3>
             <hr className="border-black"></hr>
             <p className="px-4 pt-4">

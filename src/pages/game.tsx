@@ -138,36 +138,37 @@ export default function Game({
         />
       )}
 
+      {/* Modal for Deleting */}
+      {deleteModal && (
+        <Modal>
+          <div className="text-center text-xl font-bold">
+            You are about to delete a Pokémon
+          </div>
+          <div className="pb-4">
+            Are you sure you want to delete{" "}
+            <span className="capitalize">{deleteSpecies.name}</span>?
+          </div>
+          <Card species={deleteSpecies} />
+          <div className="grid grid-cols-2 gap-5 pt-4">
+            <button
+              onClick={() => confirmDelete(deleteInstance as Instance)}
+              disabled={deleteDisabled}
+              className="mb-2 w-28 rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+              Yes
+            </button>
+            <button
+              onClick={() => setDeleteModal(false)}
+              disabled={deleteDisabled}
+              className="mb-2 w-28 rounded-lg border-2 border-black bg-green-500 p-2 font-bold hover:bg-green-600 ">
+              No
+            </button>
+          </div>
+        </Modal>
+      )}
+
       {/* Main Game Screen */}
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Navbar />
-        {/* Modal for Deleting */}
-        {deleteModal && (
-          <Modal>
-            <div className="text-center text-xl font-bold">
-              You are about to delete a Pokémon
-            </div>
-            <div className="pb-4">
-              Are you sure you want to delete{" "}
-              <span className="capitalize">{deleteSpecies.name}</span>?
-            </div>
-            <Card species={deleteSpecies} />
-            <div className="grid grid-cols-2 gap-5 pt-4">
-              <button
-                onClick={() => confirmDelete(deleteInstance as Instance)}
-                disabled={deleteDisabled}
-                className="mb-2 w-28 rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
-                Yes
-              </button>
-              <button
-                onClick={() => setDeleteModal(false)}
-                disabled={deleteDisabled}
-                className="mb-2 w-28 rounded-lg border-2 border-black bg-green-500 p-2 font-bold hover:bg-green-600 ">
-                No
-              </button>
-            </div>
-          </Modal>
-        )}
         <div className="p-4">
           <div className="flex items-center justify-between">
             <span>Your current balance is P{balance}.</span>
