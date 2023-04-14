@@ -8,9 +8,10 @@ import Start from "@/src/components/Start";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { useState } from "react";
-import { Instance } from "@prisma/client";
+import { Instance, Species } from "@prisma/client";
 import Link from "next/link";
 import { trpc } from "../utils/trpc";
+import Modal from "../components/Modal";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -54,6 +55,10 @@ export default function Game({
   const [totalYield, setTotalYield] = useState(user.totalYield);
   const [error, setError] = useState<string | null>(null);
 
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [deleteSpecies, setDeleteSpecies] = useState<Species>(species[0]);
+  const [deleteInstance, setDeleteInstance] = useState<Instance | null>(null);
+  const [deleteDisabled, setDeleteDisabled] = useState(false);
   const instanceDeleteMutation = trpc.instance.deleteInstance.useMutation();
   const userDeleteMutation = trpc.user.updateBalance.useMutation();
 
@@ -76,21 +81,27 @@ export default function Game({
       });
   };
 
+  // Open Delete Modal
+  const openDelete = (species: Species, instance: Instance) => {
+    setDeleteModal(true);
+    window.scrollTo(0, 0);
+    setDeleteSpecies(species);
+    setDeleteInstance(instance);
+    setDeleteDisabled(false);
+  };
+
   // Delete an Instance
-  const deleteInstance = (
-    id: string,
-    speciesYield: number,
-    sellPrice: number
-  ) => {
+  const confirmDelete = (i: Instance) => {
+    setDeleteDisabled(true);
     instanceDeleteMutation
-      .mutateAsync({ id: id })
+      .mutateAsync({ id: i.id })
       .then((instanceResponse) => {
         userDeleteMutation
           .mutateAsync({
-            speciesYield: speciesYield * -1,
+            speciesYield: deleteSpecies.yield * -1,
             userYield: totalYield,
             balance: balance,
-            cost: sellPrice * -1
+            cost: deleteSpecies.sellPrice * -1
           })
           .then((userResponse) => {
             if (userResponse.user) {
@@ -100,6 +111,7 @@ export default function Game({
               setTotalYield(userResponse.user.totalYield);
               setBalance(userResponse.user.balance);
               setError(null);
+              setDeleteModal(false);
             }
           })
           .catch((userError) => setError("Something went wrong. Try again."));
@@ -129,6 +141,33 @@ export default function Game({
       {/* Main Game Screen */}
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Navbar />
+        {/* Modal for Deleting */}
+        {deleteModal && (
+          <Modal>
+            <div className="text-center text-xl font-bold">
+              You are about to delete a Pokémon
+            </div>
+            <div className="pb-4">
+              Are you sure you want to delete{" "}
+              <span className="capitalize">{deleteSpecies.name}</span>?
+            </div>
+            <Card species={deleteSpecies} />
+            <div className="grid grid-cols-2 gap-5 pt-4">
+              <button
+                onClick={() => confirmDelete(deleteInstance as Instance)}
+                disabled={deleteDisabled}
+                className="mb-2 w-28 rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+                Yes
+              </button>
+              <button
+                onClick={() => setDeleteModal(false)}
+                disabled={deleteDisabled}
+                className="mb-2 w-28 rounded-lg border-2 border-black bg-green-500 p-2 font-bold hover:bg-green-600 ">
+                No
+              </button>
+            </div>
+          </Modal>
+        )}
         <div className="p-4">
           <div className="flex items-center justify-between">
             <span>Your current balance is P{balance}.</span>
@@ -167,7 +206,7 @@ export default function Game({
                 key={c.id}
                 instance={c}
                 species={species.filter((s) => s.id === c.speciesId)[0]}
-                deleteInstance={deleteInstance}
+                openDelete={openDelete}
               />
             ))}
           </div>
