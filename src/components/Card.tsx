@@ -26,7 +26,7 @@ export default function Card({ species, instance, deleteInstance }: ICard) {
           : ``
       } card-hover h-64 w-52 border-2 ${
         species.shiny ? `border-pink-500` : `border-black`
-      } p-2`}>
+      } p-2 text-black`}>
       <div className="flex flex-col items-center">
         <Image
           src={species.img}

@@ -7,9 +7,10 @@ import client from "@/prisma/script";
 import { useState } from "react";
 import BallCard from "@/src/components/BallCard";
 import { Ball, Rarity, Species } from "@prisma/client";
-import { Box, Modal, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
+import Modal from "@/src/components/Modal";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -177,44 +178,7 @@ export default function Shop({
         <link rel="icon" href="/img/master-ball.png" />
       </Head>
 
-      <Modal
-        open={openModal}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description">
-        <Box className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-black p-4">
-          <Typography
-            id="modal-modal-title"
-            variant="h6"
-            component="h2"
-            className="text-center font-bold text-white">
-            {"aeiou".includes(newSpecies.name[0]) ? (
-              <div>
-                You got an{" "}
-                {newSpecies.name[0].toUpperCase() +
-                  newSpecies.name.slice(1).toLowerCase()}
-                !{" "}
-              </div>
-            ) : (
-              <div>
-                You got a{" "}
-                {newSpecies.name[0].toUpperCase() +
-                  newSpecies.name.slice(1).toLowerCase()}
-                !
-              </div>
-            )}
-          </Typography>
-          <Card species={newSpecies} />
-          <div className="flex justify-center pt-4">
-            <button
-              onClick={() => setOpenModal(false)}
-              className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
-              Got it!
-            </button>
-          </div>
-        </Box>
-      </Modal>
-
-      <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
+      <div className="z-0 min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Navbar />
         <div className="p-4">
           <p>Your current balance is P{balance}.</p>
@@ -232,6 +196,34 @@ export default function Shop({
           </div>
         </div>
       </div>
+
+      {openModal && (
+        <Modal>
+          {"aeiou".includes(newSpecies.name[0]) ? (
+            <div className="text-center text-xl font-bold">
+              You got an{" "}
+              {newSpecies.name[0].toUpperCase() +
+                newSpecies.name.slice(1).toLowerCase()}
+              !{" "}
+            </div>
+          ) : (
+            <div className="text-center text-xl font-bold">
+              You got a{" "}
+              {newSpecies.name[0].toUpperCase() +
+                newSpecies.name.slice(1).toLowerCase()}
+              !
+            </div>
+          )}
+          <Card species={newSpecies} />
+          <div className="flex justify-center pt-4">
+            <button
+              onClick={() => setOpenModal(false)}
+              className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+              Got it!
+            </button>
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

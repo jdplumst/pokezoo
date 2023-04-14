@@ -59,9 +59,6 @@ export default function Game({
 
   const addStarter = (i: Instance) => {
     setCards((prevCards) => [...prevCards, i]);
-  };
-
-  const addStarterYield = () => {
     setTotalYield(20);
   };
 
@@ -120,13 +117,12 @@ export default function Game({
       </Head>
 
       {/* Modal for New Players */}
-      {instances.length === 0 && (
+      {cards.length === 0 && (
         <Start
           species={species}
           totalYield={totalYield}
           balance={balance}
           addStarter={addStarter}
-          addStarterYield={addStarterYield}
         />
       )}
 
