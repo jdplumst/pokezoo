@@ -32,7 +32,7 @@ export default function Tooltip({ ball, children }: ITooltip) {
             </p>
             <p>
               {ball.legendaryChance}% Chance{" "}
-              <span className="text-yellow-500">Legendary</span>
+              <span className="text-emerald-500">Legendary</span>
             </p>
           </div>
         </div>
