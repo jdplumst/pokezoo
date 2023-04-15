@@ -1,6 +1,5 @@
 import client from "@/prisma/script";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import Image from "next/image";
 import Head from "next/head";
 import Card from "@/src/components/Card";
 import Start from "@/src/components/Start";
@@ -8,7 +7,6 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { useState } from "react";
 import { Instance, Species } from "@prisma/client";
-import Link from "next/link";
 import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
@@ -169,7 +167,6 @@ export default function Game({
       {/* Main Game Screen */}
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Sidebar page="Game">
-          {/* <Navbar /> */}
           <div className="p-4">
             <div className="flex items-center justify-between">
               <span>Your current balance is P{balance}.</span>
