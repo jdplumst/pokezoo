@@ -187,20 +187,6 @@ export default function Game({
             <p>You will receive P{totalYield} on the next payout.</p>
             {error && <p>{error}</p>}
             <div className="cards grid justify-center gap-5 pt-5">
-              <div className="flex h-64 w-52 flex-col items-center justify-between border-2 border-black bg-slate-400">
-                <Image
-                  src="/img/master-ball.png"
-                  alt="new_pokemon"
-                  width={100}
-                  height={100}
-                  className="pixelated mt-14"
-                />
-                <Link href="/shop">
-                  <button className="mb-2 rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
-                    Add Pokémon
-                  </button>
-                </Link>
-              </div>
               {cards.map((c) => (
                 <Card
                   key={c.id}
