@@ -33,7 +33,7 @@ export default function Card({ species, instance, openDelete }: ICard) {
         />
         <p className="font-bold capitalize">
           #{species.pokedexNumber}: {species.name}{" "}
-          {!species.shiny && <span>⭐</span>}
+          {species.shiny && <span>⭐</span>}
         </p>
         <div className="py-4 capitalize">
           <span
