@@ -71,6 +71,8 @@ model Species {
   instances     Instance[]
   sellPrice     Int        @default(0)
   shiny         Boolean    @default(false)
+  typeOne       String     @default("null")
+  typeTwo       String?
 }
 
 model Instance {
