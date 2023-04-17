@@ -29,6 +29,7 @@ model Account {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
 }
 
 model Session {
@@ -37,6 +38,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 model User {
@@ -81,6 +84,9 @@ model Instance {
   speciesId String
   user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   species   Species @relation(fields: [speciesId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([speciesId])
 }
 
 model Ball {
