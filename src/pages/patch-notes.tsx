@@ -19,7 +19,8 @@ export default function PatchNotes() {
               <h3 className="p-4 text-4xl font-bold">1.11 (April 16, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
-                Added Sidebar item highlighting when mouse hovers a menu item.
+                Added Sidebar item highlighting when mouse hovers over a menu
+                item.
               </p>
             </div>
             <hr className="border-black pb-4"></hr>
