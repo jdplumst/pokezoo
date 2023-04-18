@@ -1,12 +1,12 @@
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import NextAuth, { Awaitable, Session, User } from "next-auth";
+import NextAuth, { Awaitable, NextAuthOptions, Session, User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import TwitchProvider from "next-auth/providers/twitch";
 import GoogleProvider from "next-auth/providers/google";
 import prisma from "@/prisma/script";
 import { AdapterUser } from "next-auth/adapters";
 
-export const authOptions = {
+export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({

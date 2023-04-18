@@ -61,8 +61,6 @@ export default function Shop({
     let shiny = false;
     if (shinyRandomizer === 8) {
       shiny = true;
-    } else {
-      shiny = false;
     }
 
     // Determine rarity
