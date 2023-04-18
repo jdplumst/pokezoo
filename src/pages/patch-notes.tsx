@@ -18,7 +18,7 @@ export default function PatchNotes() {
             <div className="pb-4">
               <h3 className="p-4 text-4xl font-bold">1.12 (April 18, 2023)</h3>
               <hr className="border-black"></hr>
-              <p className="px-4 pt-4">Added balance changes:</p>
+              <p className="p-4">Added balance changes:</p>
               <div className="px-4 text-2xl font-bold">Great Ball</div>
               <ul className="list-disc px-4">
                 <li className="ml-4">Common chance changed from 65% to 60%</li>
