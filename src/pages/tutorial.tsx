@@ -70,8 +70,11 @@ export default function Tutorial() {
             </p>
             <br></br>
             <p>
-              Pokémon can also be sold from the game page for 5x their yield
-              amount.
+              Pokémon can also be sold from the game page. Common Pokémon can be
+              sold for P50, Rare Pokémon can be sold for P100, Epic Pokémon can
+              be sold for P250, and Legendary Pokémon can be sold for P500.
+              Shiny Pokémon can be sold for double the amount of their non-shiny
+              counterparts.
             </p>
           </div>
         </Sidebar>
