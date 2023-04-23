@@ -18,6 +18,12 @@ export default function Tooltip({ ball, children }: ITooltip) {
         <div className="tooltip z-10 min-w-[200px] bg-blue-700 p-4 text-black">
           <div>
             Opening this ball gives:
+            {ball.name === "Net" && (
+              <p>
+                A guaranteed <span className="text-blue-500">Water</span> or{" "}
+                <span className="text-lime-500">Bug</span> type Pokémon.
+              </p>
+            )}
             <p>
               {ball.commonChance}% Chance{" "}
               <span className="text-white">Common</span>
