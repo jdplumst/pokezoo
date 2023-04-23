@@ -30,7 +30,7 @@ export default function Home() {
         <title>PokéZoo</title>
         <meta name="description" content="PokéZoo" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/img/master-ball.png" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
       <div className="fade-in absolute flex h-screen w-screen flex-col items-center bg-[url('../img/pokemon-bg.jpg')] bg-cover pt-10 font-bold">
         <h1 className="mb-20 text-7xl">PokéZoo</h1>

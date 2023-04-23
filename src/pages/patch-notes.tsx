@@ -8,12 +8,18 @@ export default function PatchNotes() {
         <title>PokéZoo - Patch Notes</title>
         <meta name="description" content="PokéZoo" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/img/master-ball.png" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Sidebar page="PatchNotes">
           <div className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
+            <hr className="border-black pb-4"></hr>
+            <div className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">1.13 (April 23, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">Added tutorial page.</p>
+            </div>
             <hr className="border-black pb-4"></hr>
             <div className="pb-4">
               <h3 className="p-4 text-4xl font-bold">1.12 (April 18, 2023)</h3>

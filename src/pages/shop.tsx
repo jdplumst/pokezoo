@@ -173,7 +173,7 @@ export default function Shop({
         <title>PokéZoo - Shop</title>
         <meta name="description" content="PokéZoo" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/img/master-ball.png" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
 
       <div className="z-0 min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">

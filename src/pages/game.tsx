@@ -123,7 +123,7 @@ export default function Game({
         <title>PokéZoo</title>
         <meta name="description" content="PokéZoo" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/img/master-ball.png" />
+        <link rel="icon" href="/favicon.png" />
       </Head>
 
       {/* Modal for New Players */}
