@@ -63,6 +63,18 @@ export default function Shop({
       shiny = true;
     }
 
+    // Filter species based on ball
+    let filteredSpecies = species.slice();
+    if (ball.name === "Net") {
+      filteredSpecies = species.filter(
+        (s) =>
+          s.typeOne === "water" ||
+          s.typeTwo === "water" ||
+          s.typeOne === "bug" ||
+          s.typeTwo === "bug"
+      );
+    }
+
     // Determine rarity
     const randomizer: Rarity[] = [];
     for (let i = 0; i < ball.commonChance; i++) {
@@ -82,29 +94,29 @@ export default function Shop({
     // Determine the new species the user gets
     let newInstance = species[0];
     if (rarity === "Common" && !shiny) {
-      const commonSpecies = species.filter(
+      const commonSpecies = filteredSpecies.filter(
         (s) => s.rarity === Rarity.Common && !s.shiny
       );
       newInstance =
         commonSpecies[Math.floor(Math.random() * commonSpecies.length)];
     } else if (rarity === "Rare" && !shiny) {
-      const rareSpecies = species.filter(
+      const rareSpecies = filteredSpecies.filter(
         (s) => s.rarity === Rarity.Rare && !s.shiny
       );
       newInstance = rareSpecies[Math.floor(Math.random() * rareSpecies.length)];
     } else if (rarity === "Epic" && !shiny) {
-      const epicSpecies = species.filter(
+      const epicSpecies = filteredSpecies.filter(
         (s) => s.rarity === Rarity.Epic && !s.shiny
       );
       newInstance = epicSpecies[Math.floor(Math.random() * epicSpecies.length)];
     } else if (rarity === "Legendary" && !shiny) {
-      const legendarySpecies = species.filter(
+      const legendarySpecies = filteredSpecies.filter(
         (s) => s.rarity === Rarity.Legendary && !s.shiny
       );
       newInstance =
         legendarySpecies[Math.floor(Math.random() * legendarySpecies.length)];
     } else if (rarity === "Common" && shiny) {
-      const commonShinySpecies = species.filter(
+      const commonShinySpecies = filteredSpecies.filter(
         (s) => s.rarity === Rarity.Common && s.shiny
       );
       newInstance =
@@ -112,19 +124,19 @@ export default function Shop({
           Math.floor(Math.random() * commonShinySpecies.length)
         ];
     } else if (rarity === "Rare" && shiny) {
-      const rareShinySpecies = species.filter(
+      const rareShinySpecies = filteredSpecies.filter(
         (s) => s.rarity === Rarity.Rare && s.shiny
       );
       newInstance =
         rareShinySpecies[Math.floor(Math.random() * rareShinySpecies.length)];
     } else if (rarity === "Epic" && shiny) {
-      const epicShinySpecies = species.filter(
+      const epicShinySpecies = filteredSpecies.filter(
         (s) => s.rarity === Rarity.Epic && s.shiny
       );
       newInstance =
         epicShinySpecies[Math.floor(Math.random() * epicShinySpecies.length)];
     } else if (rarity === "Legendary" && shiny) {
-      const legendaryShinySpecies = species.filter(
+      const legendaryShinySpecies = filteredSpecies.filter(
         (s) => s.rarity === Rarity.Legendary && s.shiny
       );
       newInstance =
