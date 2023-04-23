@@ -5,7 +5,7 @@ export default function Tutorial() {
   return (
     <>
       <Head>
-        <title>PokéZoo - Patch Notes</title>
+        <title>PokéZoo - Tutorial</title>
         <meta name="description" content="PokéZoo" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
