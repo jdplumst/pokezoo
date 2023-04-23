@@ -39,8 +39,6 @@ export default function Start({
       userMutation
         .mutateAsync({
           speciesYield: species[0].yield,
-          userYield: totalYield,
-          balance: balance,
           cost: 0
         })
         .then((userResponse) => {
