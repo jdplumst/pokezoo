@@ -18,7 +18,7 @@ export default function Tutorial() {
             <p>
               PokéZoo is a game where players collect Pokémon. Each Pokémon
               gives the user a certain amount of money depending on their
-              rarity. Money can then ben used to collect even more Pokémon.
+              rarity. Money can then be used to collect even more Pokémon.
             </p>
             <br></br>
             <p>
