@@ -149,8 +149,6 @@ export default function Shop({
     userMutation
       .mutateAsync({
         speciesYield: newInstance.yield,
-        userYield: totalYield,
-        balance: balance,
         cost: ball.cost
       })
       .then((userResponse) => {

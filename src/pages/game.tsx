@@ -97,8 +97,6 @@ export default function Game({
         userDeleteMutation
           .mutateAsync({
             speciesYield: deleteSpecies.yield * -1,
-            userYield: totalYield,
-            balance: balance,
             cost: deleteSpecies.sellPrice * -1
           })
           .then((userResponse) => {

@@ -6,20 +6,25 @@ export const userRouter = router({
     .input(
       z.object({
         speciesYield: z.number(),
-        userYield: z.number(),
-        balance: z.number(),
         cost: z.number()
       })
     )
     .mutation(async ({ ctx, input }) => {
-      if (input.balance < input.cost) {
+      const currUser = await ctx.client.user.findFirst({
+        where: { id: ctx.session.user.id },
+        select: { totalYield: true, balance: true }
+      });
+      if (!currUser) {
+        return { error: "Not authorized to make this request" };
+      }
+      if (currUser.balance < input.cost) {
         return { error: "You cannot afford this ball." };
       }
       const user = await ctx.client.user.update({
         where: { id: ctx.session.user.id },
         data: {
-          totalYield: input.userYield + input.speciesYield,
-          balance: input.balance - input.cost
+          totalYield: currUser.totalYield + input.speciesYield,
+          balance: currUser.balance - input.cost
         }
       });
       return {
