@@ -65,7 +65,8 @@ export default function Tutorial() {
               New Pokémon can be obtained through the shop page. There are
               different balls which each contain their own rarity chances. Each
               ball also has a 1 in 4096 chance of giving the user a shiny
-              Pokémon.
+              Pokémon. Shiny Pokémon give double the amount of their non-shiny
+              counterparts.
             </p>
             <br></br>
             <p>
