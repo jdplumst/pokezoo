@@ -16,6 +16,26 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <div className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">1.15 (April 23, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">Added balance changes:</p>
+              <ul className="list-disc px-4">
+                <li className="ml-4">
+                  Rare yield changed from P20 to P50 (Shiny Rare yield changed
+                  from P40 to P100)
+                </li>
+                <li className="ml-4">
+                  Epic yield changed from P50 to P150 (Shiny Epic yield changed
+                  from P100 to P300)
+                </li>
+                <li className="ml-4">
+                  Legendary yield changed from P100 to P500 (Shiny Legendary
+                  yield changed from P200 to P1000)
+                </li>
+              </ul>
+            </div>
+            <hr className="border-black pb-4"></hr>
+            <div className="pb-4">
               <h3 className="p-4 text-4xl font-bold">1.14 (April 23, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">Added Net Ball.</p>
