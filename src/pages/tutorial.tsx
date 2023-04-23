@@ -11,7 +11,7 @@ export default function Tutorial() {
         <link rel="icon" href="/img/master-ball.png" />
       </Head>
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
-        <Sidebar page="PatchNotes">
+        <Sidebar page="Tutorial">
           <div className="px-8">
             <h1 className="py-4 text-7xl font-bold">Tutorial</h1>
             <hr className="border-black pb-4"></hr>
