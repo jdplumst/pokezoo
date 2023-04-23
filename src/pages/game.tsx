@@ -69,7 +69,7 @@ export default function Game({
   const claimDaily = async () => {
     setDailyDisabled(true);
     dailyMutation
-      .mutateAsync({ balance: balance })
+      .mutateAsync()
       .then((response) => {
         setClaimedDaily(true);
         setBalance(response.user.balance);

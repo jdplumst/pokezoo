@@ -32,15 +32,20 @@ export const userRouter = router({
       };
     }),
 
-  claimDaily: protectedProcedure
-    .input(z.object({ balance: z.number() }))
-    .mutation(async ({ ctx, input }) => {
-      const user = await ctx.client.user.update({
-        where: { id: ctx.session.user.id },
-        data: { balance: input.balance + 25, claimedDaily: true }
-      });
-      return {
-        user: user
-      };
-    })
+  claimDaily: protectedProcedure.mutation(async ({ ctx }) => {
+    const currUser = await ctx.client.user.findFirst({
+      where: { id: ctx.session.user.id },
+      select: { balance: true }
+    });
+    if (!currUser) {
+      throw new Error("Not authorized to make this request");
+    }
+    const user = await ctx.client.user.update({
+      where: { id: ctx.session.user.id },
+      data: { balance: currUser.balance + 25, claimedDaily: true }
+    });
+    return {
+      user: user
+    };
+  })
 });
