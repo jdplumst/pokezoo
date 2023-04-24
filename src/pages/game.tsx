@@ -126,12 +126,7 @@ export default function Game({
 
       {/* Modal for New Players */}
       {cards.length === 0 && (
-        <Start
-          species={species}
-          totalYield={totalYield}
-          balance={balance}
-          addStarter={addStarter}
-        />
+        <Start species={species} addStarter={addStarter} />
       )}
 
       {/* Modal for Deleting */}
@@ -179,7 +174,10 @@ export default function Game({
                 </button>
               )}
             </div>
-            <p>You will receive P{totalYield} on the next payout.</p>
+            <div className="flex items-center justify-between">
+              <span>You will receive P{totalYield} on the next payout.</span>
+              <span>You have {cards.length} / 2000 Pokémon.</span>
+            </div>
             {error && <p>{error}</p>}
             <div className="cards grid justify-center gap-5 pt-5">
               {cards.map((c) => (

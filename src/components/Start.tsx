@@ -6,19 +6,12 @@ import { trpc } from "../utils/trpc";
 
 interface IStarter {
   species: Species[];
-  totalYield: number;
-  balance: number;
   addStarter: (i: Instance) => void;
 }
 
 type Starter = "Bulbasaur" | "Charmander" | "Squirtle";
 
-export default function Start({
-  species,
-  totalYield,
-  balance,
-  addStarter
-}: IStarter) {
+export default function Start({ species, addStarter }: IStarter) {
   const [starter, setStarter] = useState<Starter | null>(null);
   const [error, setError] = useState<any>(null);
   const [disabled, setDisabled] = useState(false);

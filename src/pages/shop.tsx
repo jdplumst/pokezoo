@@ -170,6 +170,7 @@ export default function Shop({
               setOpenModal(true);
               window.scrollTo(0, 0);
               setDisabled(false);
+              setError(null);
             })
             .catch((error) => setError("Something went wrong. Try again."));
         }

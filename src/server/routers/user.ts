@@ -20,6 +20,17 @@ export const userRouter = router({
       if (currUser.balance < input.cost) {
         return { error: "You cannot afford this ball." };
       }
+
+      // Make sure users do not go over their Instance limit
+      const numInstances = await ctx.client.instance.count({
+        where: { userId: ctx.session.user.id }
+      });
+      if (numInstances >= 2000 && input.cost >= 0) {
+        return {
+          error:
+            "You have reached your limit. Sell Pokémon if you want to buy more."
+        };
+      }
       const user = await ctx.client.user.update({
         where: { id: ctx.session.user.id },
         data: {
