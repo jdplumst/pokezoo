@@ -16,6 +16,19 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <div className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">1.18 (April 24, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">Added Pokédex page.</p>
+              <p className="px-4">
+                Changed Shiny card borders from Pink to Gold.
+              </p>
+              <p className="px-4">
+                Removed space from bottom of cards when sell button isn't
+                present.
+              </p>
+            </div>
+            <hr className="border-black pb-4"></hr>
+            <div className="pb-4">
               <h3 className="p-4 text-4xl font-bold">1.17 (April 24, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
@@ -135,7 +148,7 @@ export default function PatchNotes() {
               <p className="px-4 pt-4">
                 Added button to shop modal that closes the modal when pressed.
               </p>
-              <p className="px-4 pt-4">
+              <p className="px-4">
                 Changed shop modal message to say "an" instead of "a" when the
                 species shown starts with a vowel.
               </p>
