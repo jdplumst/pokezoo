@@ -219,7 +219,7 @@ export default function Game({
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Sidebar page="Game">
           <div className="p-4">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-4">
               <span>Your current balance is P{balance}.</span>
               {claimedDaily ? (
                 <span>You have already claimed your daily reward.</span>
@@ -227,12 +227,12 @@ export default function Game({
                 <button
                   onClick={() => claimDaily()}
                   disabled={dailyDisabled}
-                  className="mr-28 w-fit rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
+                  className="w-fit rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
                   Claim Daily Reward
                 </button>
               )}
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between px-4">
               <span>You will receive P{totalYield} on the next payout.</span>
               <span>You have {cards.length} / 2000 Pokémon.</span>
             </div>
