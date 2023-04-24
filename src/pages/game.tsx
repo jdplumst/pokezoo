@@ -11,6 +11,13 @@ import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
 
+enum Rarity {
+  Common = 1,
+  Rare = 2,
+  Epic = 3,
+  Legendary = 4
+}
+
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
@@ -38,6 +45,8 @@ export const getServerSideProps = async (
   };
 };
 
+type Sort = "Oldest" | "Newest" | "Pokedex" | "Rarity";
+
 export default function Game({
   user,
   species,
@@ -48,10 +57,12 @@ export default function Game({
   const [dailyDisabled, setDailyDisabled] = useState(false);
   const dailyMutation = trpc.user.claimDaily.useMutation();
 
+  let orderedInstances = instances;
   const [cards, setCards] = useState(instances);
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
   const [error, setError] = useState<string | null>(null);
+  const [sort, setSort] = useState<Sort>("Oldest");
 
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteSpecies, setDeleteSpecies] = useState<Species>(species[0]);
@@ -62,6 +73,7 @@ export default function Game({
 
   const addStarter = (i: Instance) => {
     setCards((prevCards) => [...prevCards, i]);
+    orderedInstances.push(i);
     setTotalYield(20);
   };
 
@@ -77,6 +89,45 @@ export default function Game({
       .catch((error) => {
         setDailyDisabled(false);
       });
+  };
+
+  // Change Card Sort Order
+  const changeSort = (s: Sort) => {
+    console.log(orderedInstances);
+    if (s === "Oldest") {
+      setSort("Oldest");
+      setCards(orderedInstances.slice());
+    } else if (s === "Newest") {
+      setSort("Newest");
+      setCards(orderedInstances.slice().reverse());
+    } else if (s === "Pokedex") {
+      setSort("Pokedex");
+      setCards((prevCards) =>
+        prevCards.sort((a, b) =>
+          (species.find((s) => s.id === a.speciesId)?.pokedexNumber || 1) >=
+          (species.find((s) => s.id === b.speciesId)?.pokedexNumber || 1)
+            ? 1
+            : -1
+        )
+      );
+    } else if (s === "Rarity") {
+      setSort("Rarity");
+      setCards((prevCards) =>
+        prevCards
+          .sort((a, b) =>
+            (species.find((s) => s.id === a.speciesId)?.pokedexNumber || 1) <=
+            (species.find((s) => s.id === b.speciesId)?.pokedexNumber || 1)
+              ? 1
+              : -1
+          )
+          .sort((a, b) =>
+            Rarity[species.find((s) => s.id === a.speciesId)?.rarity || 1] >=
+            Rarity[species.find((s) => s.id === b.speciesId)?.rarity || 1]
+              ? 1
+              : -1
+          )
+      );
+    }
   };
 
   // Open Delete Modal
@@ -103,6 +154,9 @@ export default function Game({
             if (userResponse.user) {
               setCards((prevCards) =>
                 prevCards.filter((c) => c.id !== instanceResponse.instance.id)
+              );
+              orderedInstances = orderedInstances.filter(
+                (o) => o.id !== instanceResponse.instance.id
               );
               setTotalYield(userResponse.user.totalYield);
               setBalance(userResponse.user.balance);
@@ -179,6 +233,44 @@ export default function Game({
               <span>You have {cards.length} / 2000 Pokémon.</span>
             </div>
             {error && <p>{error}</p>}
+            <div className="flex justify-center gap-5">
+              <button
+                onClick={() => changeSort("Oldest")}
+                className={`${
+                  sort === "Oldest"
+                    ? `bg-violet-600`
+                    : `bg-violet-500 hover:bg-violet-600`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Oldest
+              </button>
+              <button
+                onClick={() => changeSort("Newest")}
+                className={`${
+                  sort === "Newest"
+                    ? `bg-violet-600`
+                    : `bg-violet-500 hover:bg-violet-600`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Newest
+              </button>
+              <button
+                onClick={() => changeSort("Pokedex")}
+                className={`${
+                  sort === "Pokedex"
+                    ? `bg-violet-600`
+                    : `bg-violet-500 hover:bg-violet-600`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Pokédex #
+              </button>
+              <button
+                onClick={() => changeSort("Rarity")}
+                className={`${
+                  sort === "Rarity"
+                    ? `bg-violet-600`
+                    : `bg-violet-500 hover:bg-violet-600`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Rarity
+              </button>
+            </div>
             <div className="cards grid justify-center gap-5 pt-5">
               {cards.map((c) => (
                 <Card
