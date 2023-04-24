@@ -57,13 +57,13 @@ export default function Pokedex({
   return (
     <>
       <Head>
-        <title>PokéZoo - Tutorial</title>
+        <title>PokéZoo - Pokédex</title>
         <meta name="description" content="PokéZoo" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
-        <Sidebar page="Tutorial">
+        <Sidebar page="Pokedex">
           <div className="p-4">
             <div className="flex justify-center gap-5">
               <button

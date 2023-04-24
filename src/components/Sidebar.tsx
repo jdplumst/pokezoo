@@ -68,6 +68,23 @@ export default function Sidebar({ children, page }: ISidebar) {
             </h2>
           </div>
         </Link>
+        <Link href="/pokedex">
+          <div
+            className={`${
+              page === "Pokedex" && `bg-white`
+            } mb-4 flex w-full items-center hover:bg-slate-300`}>
+            <Image
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/journal.png"
+              alt="pokedex"
+              width={50}
+              height={50}
+              className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
+            />
+            <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
+              Pokédex
+            </h2>
+          </div>
+        </Link>
         <Link href="/tutorial">
           <div
             className={`${
