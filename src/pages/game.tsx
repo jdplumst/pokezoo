@@ -57,8 +57,8 @@ export default function Game({
   const [dailyDisabled, setDailyDisabled] = useState(false);
   const dailyMutation = trpc.user.claimDaily.useMutation();
 
-  let orderedInstances = instances;
-  const [cards, setCards] = useState(instances);
+  const [originalInstances, setOriginalInstances] = useState(instances.slice());
+  const [cards, setCards] = useState(instances.slice());
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
   const [error, setError] = useState<string | null>(null);
@@ -73,7 +73,10 @@ export default function Game({
 
   const addStarter = (i: Instance) => {
     setCards((prevCards) => [...prevCards, i]);
-    orderedInstances.push(i);
+    setOriginalInstances((prevOriginalInstances) => [
+      ...prevOriginalInstances,
+      i
+    ]);
     setTotalYield(20);
   };
 
@@ -93,13 +96,12 @@ export default function Game({
 
   // Change Card Sort Order
   const changeSort = (s: Sort) => {
-    console.log(orderedInstances);
     if (s === "Oldest") {
       setSort("Oldest");
-      setCards(orderedInstances.slice());
+      setCards(originalInstances.slice());
     } else if (s === "Newest") {
       setSort("Newest");
-      setCards(orderedInstances.slice().reverse());
+      setCards(originalInstances.slice().reverse());
     } else if (s === "Pokedex") {
       setSort("Pokedex");
       setCards((prevCards) =>
@@ -155,8 +157,10 @@ export default function Game({
               setCards((prevCards) =>
                 prevCards.filter((c) => c.id !== instanceResponse.instance.id)
               );
-              orderedInstances = orderedInstances.filter(
-                (o) => o.id !== instanceResponse.instance.id
+              setOriginalInstances((prevOriginalInstances) =>
+                prevOriginalInstances.filter(
+                  (o) => o.id !== instanceResponse.instance.id
+                )
               );
               setTotalYield(userResponse.user.totalYield);
               setBalance(userResponse.user.balance);
