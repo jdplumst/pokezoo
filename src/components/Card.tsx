@@ -20,7 +20,7 @@ export default function Card({ species, instance, openDelete }: ICard) {
           : species.rarity === Rarity.Legendary
           ? `bg-emerald-500 hover:bg-emerald-600`
           : ``
-      } card-hover h-80 w-52 border-2 ${
+      } card-hover ${instance && openDelete ? `h-80` : `h-72`} w-52 border-2 ${
         species.shiny ? `border-yellow-500` : `border-black`
       } p-2 text-black`}>
       <div className="flex flex-col items-center">
