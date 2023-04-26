@@ -16,6 +16,22 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <div className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">1.19 (April 25, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">Added balance changes:</p>
+              <ul className="list-disc px-4">
+                <li className="ml-4">
+                  Epic yield changed from P150 to P300 (Shiny Rare yield changed
+                  from 300 to P600)
+                </li>
+                <li className="ml-4">
+                  Legendary yield changed from P500 to P1000 (Shiny Epic yield
+                  changed from P1000 to P200)
+                </li>
+              </ul>
+            </div>
+            <hr className="border-black pb-4"></hr>
+            <div className="pb-4">
               <h3 className="p-4 text-4xl font-bold">1.18 (April 24, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">Added Pokédex page.</p>
@@ -59,6 +75,19 @@ export default function PatchNotes() {
                 <li className="ml-4">
                   Legendary yield changed from P100 to P500 (Shiny Legendary
                   yield changed from P200 to P1000)
+                </li>
+              </ul>
+              <div className="px-4 text-2xl font-bold">Ultra Ball</div>
+              <ul className="list-disc px-4 pb-4">
+                <li className="ml-4">Epic chance changed from 23% to 25%</li>
+                <li className="ml-4">Legendary chance changed from 2% to 0%</li>
+              </ul>
+              <div className="px-4 text-2xl font-bold">Master Ball</div>
+              <ul className="list-disc px-4">
+                <li className="ml-4">Changed price from P100,000 to P50,000</li>
+                <li className="ml-4">Common chance changed from 15% to 10%</li>
+                <li className="ml-4">
+                  Legendary chance changed from 10% to 5%
                 </li>
               </ul>
             </div>
@@ -207,7 +236,9 @@ export default function PatchNotes() {
                 <li className="ml-4">Common chance changed from 25% to 15%</li>
                 <li className="ml-4">Rare chance changed from 35% to 25%</li>
                 <li className="ml-4">Epic chance changed from 35% to 50%</li>
-                <li className="ml-4">Epic chance changed from 5% to 10%</li>
+                <li className="ml-4">
+                  Legendary chance changed from 5% to 10%
+                </li>
               </ul>
             </div>
             <hr className="border-black pb-4"></hr>
