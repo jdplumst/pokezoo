@@ -21,7 +21,8 @@ export const authOptions: NextAuthOptions = {
           image: profile.avatar_url,
           totalYield: 0,
           balance: 500,
-          claimedDaily: false
+          claimedDaily: false,
+          johtoStarter: true
         };
       }
     }),
@@ -37,7 +38,8 @@ export const authOptions: NextAuthOptions = {
           image: profile.picture,
           totalYield: 0,
           balance: 500,
-          claimedDaily: false
+          claimedDaily: false,
+          johtoStarter: true
         };
       }
     }),
@@ -53,7 +55,8 @@ export const authOptions: NextAuthOptions = {
           image: profile.picture,
           totalYield: 0,
           balance: 500,
-          claimedDaily: false
+          claimedDaily: false,
+          johtoStarter: true
         };
       }
     })
@@ -69,6 +72,7 @@ export const authOptions: NextAuthOptions = {
         session.user.totalYield = user.totalYield;
         session.user.balance = user.balance;
         session.user.claimedDaily = user.claimedDaily;
+        session.user.johtoStarter = user.johtoStarter;
       }
       return session;
     }
