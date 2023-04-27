@@ -55,6 +55,7 @@ model User {
   balance       Int
   claimedDaily  Boolean    @default(false)
   instances     Instance[]
+  johtoStarter  Boolean    @default(true)
 }
 
 model VerificationToken {
