@@ -16,6 +16,14 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <div className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">1.20 (April 26, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Changed Master Ball price from P50,000 to P100,000.
+              </p>
+            </div>
+            <hr className="border-black pb-4"></hr>
+            <div className="pb-4">
               <h3 className="p-4 text-4xl font-bold">1.19 (April 25, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">Added balance changes:</p>
