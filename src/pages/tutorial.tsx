@@ -30,9 +30,24 @@ export default function Tutorial() {
             <br></br>
             <p>
               Users are automatically gifted their total yield once per day
-              around 9PM EDT. The daily reward of P25 is also reset at this
-              time.
+              around 9PM EDT. The daily reward is also reset at this time.
             </p>
+            <br></br>
+            <p>Daily Reward works as follows:</p>
+            <ul className="list-disc px-4">
+              <li>
+                If player has total yield of less than P1,000, then they get a
+                P25 daily reward.
+              </li>
+              <li>
+                If player has total yield of P1,000 or more and less than
+                P10,000, then they get a P100 daily reward.
+              </li>
+              <li>
+                If player has total yield of P10,000 or more, then they get a
+                P1,000 daily reward.
+              </li>
+            </ul>
             <br></br>
             <p>
               Pokémon rarity is calculated as following (using terms from{" "}
