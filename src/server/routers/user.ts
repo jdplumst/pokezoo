@@ -46,7 +46,7 @@ export const userRouter = router({
   claimDaily: protectedProcedure.mutation(async ({ ctx }) => {
     const currUser = await ctx.client.user.findFirst({
       where: { id: ctx.session.user.id },
-      select: { balance: true, claimedDaily: true }
+      select: { balance: true, claimedDaily: true, totalYield: true }
     });
     if (!currUser) {
       throw new Error("Not authorized to make this request");
@@ -54,9 +54,15 @@ export const userRouter = router({
     if (currUser.claimedDaily) {
       throw new Error("Daily reward already claimed");
     }
+    let reward = 25;
+    if (currUser.totalYield >= 10000) {
+      reward = 1000;
+    } else if (currUser.totalYield >= 1000) {
+      reward = 100;
+    }
     const user = await ctx.client.user.update({
       where: { id: ctx.session.user.id },
-      data: { balance: currUser.balance + 25, claimedDaily: true }
+      data: { balance: currUser.balance + reward, claimedDaily: true }
     });
     return {
       user: user
