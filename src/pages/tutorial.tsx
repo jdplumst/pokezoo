@@ -22,9 +22,10 @@ export default function Tutorial() {
             </p>
             <br></br>
             <p>
-              Common Pokémon give P10 per day, Rare Pokémon give P20 per day,
-              Epic Pokémon give P50 per day, and Legendary Pokémon give P100 per
-              day.
+              Common Pokémon give P10 per day, Rare Pokémon give P50 per day,
+              Epic Pokémon give P300 per day, and Legendary Pokémon give P1000
+              per day. Shiny Pokémon give double the amount of their non-shiny
+              counterparts.
             </p>
             <br></br>
             <p>
@@ -65,8 +66,7 @@ export default function Tutorial() {
               New Pokémon can be obtained through the shop page. There are
               different balls which each contain their own rarity chances. Each
               ball also has a 1 in 4096 chance of giving the user a shiny
-              Pokémon. Shiny Pokémon give double the amount of their non-shiny
-              counterparts.
+              Pokémon.
             </p>
             <br></br>
             <p>
