@@ -16,6 +16,28 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <div className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">2.01 (April 28, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Modified Daily Reward amount. Daily Reward now works as follows:
+              </p>
+              <ul className="list-disc px-4">
+                <li className="ml-4">
+                  If player has total yield of less than P1,000, then they get a
+                  P25 daily reward.
+                </li>
+                <li className="ml-4">
+                  If player has total yield of P1,000 or more and less than
+                  P10,000, then they get a P100 daily reward.
+                </li>
+                <li className="ml-4">
+                  If player has total yield of P10,000 or more, then they get a
+                  P1,000 daily reward.
+                </li>
+              </ul>
+            </div>
+            <hr className="border-black pb-4"></hr>
+            <div className="pb-4">
               <h3 className="p-4 text-4xl font-bold">2.00 (April 27, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
