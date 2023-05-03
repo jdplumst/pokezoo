@@ -3,7 +3,7 @@ import Sidebar from "../components/Sidebar";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import client from "@/prisma/script";
+import { prisma } from "../server/db";
 import Card from "../components/Card";
 import { useState } from "react";
 
@@ -20,10 +20,10 @@ export const getServerSideProps = async (
   }
 
   const user = session.user;
-  const instances = await client.instance.findMany({
+  const instances = await prisma.instance.findMany({
     where: { userId: user.id.toString() }
   });
-  const species = await client.species.findMany();
+  const species = await prisma.species.findMany();
 
   return {
     props: {

@@ -1,4 +1,4 @@
-import client from "@/prisma/script";
+import { prisma } from "@/src/server/db";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -12,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "POST":
       try {
-        await client.$executeRaw`UPDATE User SET balance = balance + totalYield, claimedDaily = false`;
+        await prisma.$executeRaw`UPDATE User SET balance = balance + totalYield, claimedDaily = false`;
         return res.status(200).json({
           msg: "Successfully updated all user's dollars and reset daily claim"
         });
