@@ -15,8 +15,7 @@ export default function Start({ species, addStarter }: IStarter) {
   const [starter, setStarter] = useState<Starter | null>(null);
   const [error, setError] = useState<any>(null);
   const [disabled, setDisabled] = useState(false);
-  const userMutation = trpc.user.updateBalance.useMutation();
-  const instanceMutation = trpc.instance.createInstance.useMutation();
+  const purchaseMutation = trpc.instance.purchaseInstance.useMutation();
 
   const handleClose = async () => {
     setDisabled(true);
@@ -29,23 +28,19 @@ export default function Start({ species, addStarter }: IStarter) {
           : starter === "Squirtle"
           ? species[6].id
           : "";
-      userMutation
-        .mutateAsync({
-          speciesYield: species[0].yield,
-          cost: 0
-        })
-        .then((userResponse) => {
-          if (userResponse.user) {
-            instanceMutation
-              .mutateAsync({ speciesId: speciesId })
-              .then((instanceResponse) => {
-                addStarter(instanceResponse.instance);
-                setDisabled(false);
-              })
-              .catch((error) => setError("Something went wrong. Try again."));
+
+      purchaseMutation.mutate(
+        { speciesId: speciesId, cost: 0 },
+        {
+          onSuccess(data, variables, context) {
+            addStarter(data.instance);
+            setDisabled(false);
+          },
+          onError(error, variables, context) {
+            setError(error.message);
           }
-        })
-        .catch((error) => setError("Something went wrong. Try again"));
+        }
+      );
     } else if (!starter) {
       setError("Must pick a starter Pokémon");
       setDisabled(false);
