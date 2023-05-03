@@ -59,6 +59,7 @@ export default function Game({
   const [dailyDisabled, setDailyDisabled] = useState(false);
   const dailyMutation = trpc.user.claimDaily.useMutation();
 
+  // Variables associated with cards
   const [originalInstances, setOriginalInstances] = useState(instances.slice());
   const [cards, setCards] = useState(instances.slice());
   const [balance, setBalance] = useState(user.balance);
@@ -66,15 +67,12 @@ export default function Game({
   const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<Sort>("Oldest");
 
+  // Variables associated with selling an instance
   const [deleteModal, setDeleteModal] = useState(false);
   const [deleteSpecies, setDeleteSpecies] = useState<Species>(species[0]);
   const [deleteInstance, setDeleteInstance] = useState<Instance | null>(null);
   const [deleteDisabled, setDeleteDisabled] = useState(false);
-  const instanceDeleteMutation = trpc.instance.deleteInstance.useMutation();
-  const userDeleteMutation = trpc.user.updateBalance.useMutation();
-
-  const userMutation = trpc.user.updateBalance.useMutation();
-  // const instanceMutation = trpc.instance.createInstance.useMutation();
+  const sellMutation = trpc.instance.sellInstance.useMutation();
 
   // Variables associated with Johto Starter
   const [claimedJohto, setClaimedJohto] = useState(user.johtoStarter);
@@ -190,34 +188,54 @@ export default function Game({
   // Delete an Instance
   const confirmDelete = (i: Instance) => {
     setDeleteDisabled(true);
-    instanceDeleteMutation
-      .mutateAsync({ id: i.id })
-      .then((instanceResponse) => {
-        userDeleteMutation
-          .mutateAsync({
-            speciesYield: deleteSpecies.yield * -1,
-            cost: deleteSpecies.sellPrice * -1
-          })
-          .then((userResponse) => {
-            if (userResponse.user) {
-              setCards((prevCards) =>
-                prevCards.filter((c) => c.id !== instanceResponse.instance.id)
-              );
-              setOriginalInstances((prevOriginalInstances) =>
-                prevOriginalInstances.filter(
-                  (o) => o.id !== instanceResponse.instance.id
-                )
-              );
-              setTotalYield(userResponse.user.totalYield);
-              setBalance(userResponse.user.balance);
-              setError(null);
-              setDeleteModal(false);
-            }
-          })
-          .catch((userError) => setError("Something went wrong. Try again."));
-      })
-      .catch((instanceError) => setError("Something went wrong. Try again."));
+    sellMutation.mutate(
+      { id: i.id },
+      {
+        onSuccess(data, variables, context) {
+          setCards((prevCards) =>
+            prevCards.filter((c) => c.id !== data.instance.id)
+          );
+          setOriginalInstances((prevOriginalInstances) =>
+            prevOriginalInstances.filter((o) => o.id !== data.instance.id)
+          );
+          setTotalYield(data.user.totalYield);
+          setBalance(data.user.balance);
+          setError(null);
+          setDeleteModal(false);
+        },
+        onError(error, variables, context) {
+          setError(error.message);
+        }
+      }
+    );
   };
+  // instanceDeleteMutation
+  //   .mutateAsync({ id: i.id })
+  //   .then((instanceResponse) => {
+  //     userDeleteMutation
+  //       .mutateAsync({
+  //         speciesYield: deleteSpecies.yield * -1,
+  //         cost: deleteSpecies.sellPrice * -1
+  //       })
+  //       .then((userResponse) => {
+  //         if (userResponse.user) {
+  //           setCards((prevCards) =>
+  //             prevCards.filter((c) => c.id !== instanceResponse.instance.id)
+  //           );
+  //           setOriginalInstances((prevOriginalInstances) =>
+  //             prevOriginalInstances.filter(
+  //               (o) => o.id !== instanceResponse.instance.id
+  //             )
+  //           );
+  //           setTotalYield(userResponse.user.totalYield);
+  //           setBalance(userResponse.user.balance);
+  //           setError(null);
+  //           setDeleteModal(false);
+  //         }
+  //       })
+  //       .catch((userError) => setError("Something went wrong. Try again."));
+  //   })
+  //   .catch((instanceError) => setError("Something went wrong. Try again."));
 
   return (
     <>

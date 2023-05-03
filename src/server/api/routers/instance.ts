@@ -2,19 +2,6 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
 export const instanceRouter = router({
-  deleteInstance: protectedProcedure
-    .input(
-      z.object({
-        id: z.string()
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const instance = await ctx.prisma.instance.delete({
-        where: { id: input.id }
-      });
-      return { instance: instance };
-    }),
-
   purchaseInstance: protectedProcedure
     .input(
       z.object({
