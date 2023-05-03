@@ -6,7 +6,6 @@ export const instanceRouter = router({
     .input(
       z.object({
         speciesId: z.string(),
-        userId: z.string(),
         cost: z.number()
       })
     )

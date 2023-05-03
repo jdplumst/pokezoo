@@ -146,7 +146,7 @@ export default function Shop({
 
     // Create new instance
     purchaseMutation.mutate(
-      { userId: user.id, speciesId: newInstance.id, cost: ball.cost },
+      { speciesId: newInstance.id, cost: ball.cost },
       {
         onSuccess(data, variables, context) {
           setBalance(data.user.balance);
