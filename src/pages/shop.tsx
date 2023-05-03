@@ -45,8 +45,8 @@ export default function Shop({
   const [totalYield, setTotalYield] = useState(user.totalYield);
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
+  const purchaseMutation = trpc.instance.purchaseInstance.useMutation();
   const userMutation = trpc.user.updateBalance.useMutation();
-  const instanceMutation = trpc.instance.createInstance.useMutation();
 
   // Modal variables
   const [openModal, setOpenModal] = useState(false);
@@ -146,36 +146,25 @@ export default function Shop({
     }
 
     // Create new instance
-    userMutation
-      .mutateAsync({
-        speciesYield: newInstance.yield,
-        cost: ball.cost
-      })
-      .then((userResponse) => {
-        if (userResponse.error) {
-          setError(userResponse.error);
+    purchaseMutation.mutate(
+      { userId: user.id, speciesId: newInstance.id, cost: ball.cost },
+      {
+        onSuccess(data, variables, context) {
+          setBalance(data.user.balance);
+          setTotalYield(data.user.totalYield);
+          setNewSpecies(
+            species.filter((s) => s.id === data.instance.speciesId)[0]
+          );
+          setOpenModal(true);
+          window.scrollTo(0, 0);
           setDisabled(false);
-          return;
-        } else if (userResponse.user) {
-          instanceMutation
-            .mutateAsync({ speciesId: newInstance.id })
-            .then((instanceResponse) => {
-              setBalance(userResponse.user.balance);
-              setTotalYield(userResponse.user.totalYield);
-              setNewSpecies(
-                species.filter(
-                  (s) => s.id === instanceResponse.instance.speciesId
-                )[0]
-              );
-              setOpenModal(true);
-              window.scrollTo(0, 0);
-              setDisabled(false);
-              setError(null);
-            })
-            .catch((error) => setError("Something went wrong. Try again."));
+          setError(null);
+        },
+        onError(error, variables, context) {
+          setError(error.message);
         }
-      })
-      .catch((error) => setError("Something went wrong. Try again"));
+      }
+    );
   };
 
   return (
