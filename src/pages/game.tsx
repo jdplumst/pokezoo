@@ -74,14 +74,14 @@ export default function Game({
   const userDeleteMutation = trpc.user.updateBalance.useMutation();
 
   const userMutation = trpc.user.updateBalance.useMutation();
-  const instanceMutation = trpc.instance.createInstance.useMutation();
+  // const instanceMutation = trpc.instance.createInstance.useMutation();
 
   // Variables associated with Johto Starter
   const [claimedJohto, setClaimedJohto] = useState(user.johtoStarter);
   const [johtoStarter, setJohtoStarter] = useState<JohtoStarter | null>(null);
   const [johtoDisabled, setJohtoDisabled] = useState(false);
   const [johtoError, setJohtoError] = useState<string | null>(null);
-  const johtoMutation = trpc.user.getJohto.useMutation();
+  const johtoMutation = trpc.instance.getJohto.useMutation();
 
   const addStarter = (i: Instance) => {
     setCards((prevCards) => [...prevCards, i]);
@@ -107,32 +107,19 @@ export default function Game({
           ? species.find((s) => s.pokedexNumber === 158 && !s.shiny)?.id ||
             species[0].id
           : "";
-      userMutation
-        .mutateAsync({
-          speciesYield: species[0].yield,
-          cost: 0
-        })
-        .then((userResponse) => {
-          if (userResponse.user) {
-            instanceMutation
-              .mutateAsync({ speciesId: speciesId })
-              .then((instanceResponse) => {
-                johtoMutation
-                  .mutateAsync()
-                  .then((johtoResponse) => {
-                    addStarter(instanceResponse.instance);
-                    setClaimedJohto(true);
-                  })
-                  .catch((error) =>
-                    setJohtoError("Something went wrong. Try again.")
-                  );
-              })
-              .catch((error) =>
-                setJohtoError("Something went wrong. Try again.")
-              );
+
+      johtoMutation.mutate(
+        { userId: user.id, speciesId: speciesId, cost: 0 },
+        {
+          onSuccess(data, variables, context) {
+            addStarter(data.instance);
+            setClaimedJohto(true);
+          },
+          onError(error, variables, context) {
+            setError(error.message);
           }
-        })
-        .catch((error) => setJohtoError("Something went wrong. Try again"));
+        }
+      );
     } else if (!johtoStarter) {
       setJohtoError("Must pick a starter Pokémon");
       setJohtoDisabled(false);
