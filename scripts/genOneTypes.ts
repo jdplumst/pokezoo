@@ -1,5 +1,4 @@
-import client from "../prisma/script";
-import { Rarity } from "@prisma/client";
+import { prisma } from "@/src/server/db";
 
 // Script to populate Species collection
 const populateGenOneDB = async () => {
@@ -10,7 +9,7 @@ const populateGenOneDB = async () => {
     const pokemonData = await pokemonResponse.json();
     let species;
     if (pokemonData.types.length === 2) {
-      species = await client.species.updateMany({
+      species = await prisma.species.updateMany({
         where: { pokedexNumber: i },
         data: {
           typeOne: pokemonData.types[0].type.name,
@@ -18,7 +17,7 @@ const populateGenOneDB = async () => {
         }
       });
     } else {
-      species = await client.species.updateMany({
+      species = await prisma.species.updateMany({
         where: { pokedexNumber: i },
         data: { typeOne: pokemonData.types[0].type.name }
       });

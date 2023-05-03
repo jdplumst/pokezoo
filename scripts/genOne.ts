@@ -1,4 +1,4 @@
-import client from "../prisma/script";
+import { prisma } from "@/src/server/db";
 import { Rarity } from "@prisma/client";
 
 // Script to populate Species collection
@@ -34,7 +34,7 @@ const populateGenOneDB = async () => {
       rarity = "Epic";
       income = 50;
     }
-    const species = await client.species.create({
+    const species = await prisma.species.create({
       data: {
         pokedexNumber: i,
         name: pokemonData.name,
