@@ -9,7 +9,7 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const instance = await ctx.client.instance.create({
+      const instance = await ctx.prisma.instance.create({
         data: { userId: ctx.session.user.id, speciesId: input.speciesId }
       });
       return {
@@ -24,7 +24,7 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const instance = await ctx.client.instance.delete({
+      const instance = await ctx.prisma.instance.delete({
         where: { id: input.id }
       });
       return { instance: instance };

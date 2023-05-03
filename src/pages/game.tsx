@@ -1,4 +1,5 @@
-import client from "@/prisma/script";
+// import client from "@/prisma/script";
+import { prisma } from "../server/db";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Card from "@/src/components/Card";
@@ -31,10 +32,10 @@ export const getServerSideProps = async (
   }
 
   const user = session.user;
-  const instances = await client.instance.findMany({
+  const instances = await prisma.instance.findMany({
     where: { userId: user.id.toString() }
   });
-  const species = await client.species.findMany();
+  const species = await prisma.species.findMany();
 
   return {
     props: {

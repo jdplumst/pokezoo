@@ -2,7 +2,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { getServerSession } from "next-auth";
 import Head from "next/head";
 import { authOptions } from "./api/auth/[...nextauth]";
-import client from "@/prisma/script";
+import { prisma } from "../server/db";
 import { useState } from "react";
 import BallCard from "@/src/components/BallCard";
 import { Ball, Rarity, Species } from "@prisma/client";
@@ -24,8 +24,8 @@ export const getServerSideProps = async (
   }
 
   const user = session.user;
-  const balls = await client.ball.findMany();
-  const species = await client.species.findMany();
+  const balls = await prisma.ball.findMany();
+  const species = await prisma.species.findMany();
 
   return {
     props: {

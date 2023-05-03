@@ -10,7 +10,7 @@ export const userRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.client.user.findFirst({
+      const currUser = await ctx.prisma.user.findFirst({
         where: { id: ctx.session.user.id },
         select: { totalYield: true, balance: true }
       });
@@ -22,7 +22,7 @@ export const userRouter = router({
       }
 
       // Make sure users do not go over their Instance limit
-      const numInstances = await ctx.client.instance.count({
+      const numInstances = await ctx.prisma.instance.count({
         where: { userId: ctx.session.user.id }
       });
       if (numInstances >= 2000 && input.cost >= 0) {
@@ -31,7 +31,7 @@ export const userRouter = router({
             "You have reached your limit. Sell Pokémon if you want to buy more."
         };
       }
-      const user = await ctx.client.user.update({
+      const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
         data: {
           totalYield: currUser.totalYield + input.speciesYield,
@@ -44,7 +44,7 @@ export const userRouter = router({
     }),
 
   claimDaily: protectedProcedure.mutation(async ({ ctx }) => {
-    const currUser = await ctx.client.user.findFirst({
+    const currUser = await ctx.prisma.user.findFirst({
       where: { id: ctx.session.user.id },
       select: { balance: true, claimedDaily: true, totalYield: true }
     });
@@ -60,7 +60,7 @@ export const userRouter = router({
     } else if (currUser.totalYield >= 1000) {
       reward = 100;
     }
-    const user = await ctx.client.user.update({
+    const user = await ctx.prisma.user.update({
       where: { id: ctx.session.user.id },
       data: { balance: currUser.balance + reward, claimedDaily: true }
     });
@@ -70,14 +70,14 @@ export const userRouter = router({
   }),
 
   getJohto: protectedProcedure.mutation(async ({ ctx }) => {
-    const currUser = await ctx.client.user.findFirst({
+    const currUser = await ctx.prisma.user.findFirst({
       where: { id: ctx.session.user.id },
       select: { balance: true, claimedDaily: true }
     });
     if (!currUser) {
       throw new Error("Not authorized to make this request");
     }
-    const user = await ctx.client.user.update({
+    const user = await ctx.prisma.user.update({
       where: { id: ctx.session.user.id },
       data: { johtoStarter: true }
     });
