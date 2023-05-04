@@ -1,4 +1,3 @@
-// import client from "@/prisma/script";
 import { prisma } from "../server/db";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
