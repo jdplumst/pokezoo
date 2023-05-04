@@ -126,15 +126,15 @@ export default function Game({
   // Claim Daily Reward
   const claimDaily = async () => {
     setDailyDisabled(true);
-    dailyMutation
-      .mutateAsync()
-      .then((response) => {
+    dailyMutation.mutate(undefined, {
+      onSuccess(data, variables, context) {
         setClaimedDaily(true);
-        setBalance(response.user.balance);
-      })
-      .catch((error) => {
+        setBalance(data.user.balance);
+      },
+      onError(error, variables, context) {
         setDailyDisabled(false);
-      });
+      }
+    });
   };
 
   // Change Card Sort Order
