@@ -16,6 +16,27 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <div className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">2.03 (May 4, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="p-4">Added balance changes:</p>
+              <div className="px-4 text-2xl font-bold">Poké Ball</div>
+              <ul className="list-disc px-4">
+                <li className="ml-4">
+                  Rare sell price changed from P100 to P250 (Shiny Rare sell
+                  price changed from P200 to P500)
+                </li>
+                <li className="ml-4">
+                  Epic sell price changed from P250 to P1,500 (Shiny Epic sell
+                  price changed from P500 to P3,000)
+                </li>
+                <li className="ml-4">
+                  Legendary sell price changed from P500 to P5,000 (Shiny
+                  Legendary sell price changed from P1,000 to P10,000)
+                </li>
+              </ul>
+            </div>
+            <hr className="border-black pb-4"></hr>
+            <div className="pb-4">
               <h3 className="p-4 text-4xl font-bold">2.02 (May 1, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="p-4">Added balance changes:</p>
