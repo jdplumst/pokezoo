@@ -168,6 +168,7 @@ export default function Shop({
           setError(null);
         },
         onError(error, variables, context) {
+          setDisabled(false);
           setError(error.message);
         }
       }
