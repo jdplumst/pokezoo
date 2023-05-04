@@ -72,6 +72,14 @@ export default function Shop({
           s.typeOne === "bug" ||
           s.typeTwo === "bug"
       );
+    } else if (ball.name === "Dusk") {
+      filteredSpecies = species.filter(
+        (s) =>
+          s.typeOne === "dark" ||
+          s.typeTwo === "dark" ||
+          s.typeOne === "ghost" ||
+          s.typeTwo === "ghost"
+      );
     }
 
     // Determine rarity
