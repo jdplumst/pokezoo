@@ -74,7 +74,7 @@ export default function Sidebar({ children, page }: ISidebar) {
               page === "Pokedex" && `bg-white`
             } mb-4 flex w-full items-center hover:bg-slate-300`}>
             <Image
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/journal.png"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-radar.png"
               alt="pokedex"
               width={50}
               height={50}
