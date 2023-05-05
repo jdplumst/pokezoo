@@ -57,7 +57,7 @@ export default function Sidebar({ children, page }: ISidebar) {
               page === "Shop" && `bg-white`
             } mb-4 flex w-full items-center hover:bg-slate-300`}>
             <Image
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/amulet-coin.png"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/coin-case.png"
               alt="shop"
               width={50}
               height={50}
@@ -91,7 +91,7 @@ export default function Sidebar({ children, page }: ISidebar) {
               page === "Tutorial" && `bg-white`
             } mb-4 flex w-full items-center hover:bg-slate-300`}>
             <Image
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/wise-glasses.png"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/wide-lens.png"
               alt="tutorial"
               width={50}
               height={50}
@@ -108,7 +108,7 @@ export default function Sidebar({ children, page }: ISidebar) {
               page === "PatchNotes" && `bg-white`
             } mb-4 flex w-full items-center hover:bg-slate-300`}>
             <Image
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/rule-book.png"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pal-pad.png"
               alt="patch_notes"
               width={50}
               height={50}
