@@ -41,26 +41,26 @@ export default function Home() {
           <button
             onClick={() => signIn("github")}
             className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-green-500">
-            <div className="flex items-center justify-center gap-2">
+            <span className="flex items-center justify-center gap-2">
               Sign in with GitHub
               <GoMarkGithub />
-            </div>
+            </span>
           </button>
           <button
             onClick={() => signIn("twitch")}
             className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black  bg-purple-500">
-            <div className="flex items-center justify-center gap-2">
+            <span className="flex items-center justify-center gap-2">
               Sign in with Twitch
               <FaTwitch />
-            </div>
+            </span>
           </button>
           <button
             onClick={() => signIn("google")}
             className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-orange-500">
-            <div className="flex items-center justify-center gap-2">
+            <span className="flex items-center justify-center gap-2">
               Sign in with Google
               <BsGoogle />
-            </div>
+            </span>
           </button>
         </div>
       </div>
