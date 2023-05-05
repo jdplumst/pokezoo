@@ -5,7 +5,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { prisma } from "../server/db";
 import Card from "../components/Card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -35,6 +35,7 @@ export const getServerSideProps = async (
 };
 
 type Shiny = "Original" | "Shiny";
+type Region = "All" | "Kanto" | "Johto";
 
 export default function Pokedex({
   user,
@@ -43,16 +44,27 @@ export default function Pokedex({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [cards, setCards] = useState(species.filter((s) => !s.shiny));
   const [shiny, setShiny] = useState<Shiny>("Original");
+  const [region, setRegion] = useState<Region>("All");
 
-  const changeShiny = (s: Shiny) => {
-    if (s === "Original") {
-      setShiny("Original");
+  const filterSpecies = () => {
+    // Filter based on shiny
+    if (shiny === "Original") {
       setCards(species.filter((s) => !s.shiny));
-    } else if (s === "Shiny") {
-      setShiny("Shiny");
+    } else if (shiny === "Shiny") {
       setCards(species.filter((s) => s.shiny));
     }
+
+    // Filter based on region
+    if (region === "Kanto") {
+      setCards((prevCards) => prevCards.filter((s) => s.generation === 1));
+    } else if (region === "Johto") {
+      setCards((prevCards) => prevCards.filter((s) => s.generation === 2));
+    }
   };
+
+  useEffect(() => {
+    filterSpecies();
+  }, [shiny, region]);
 
   return (
     <>
@@ -67,7 +79,7 @@ export default function Pokedex({
           <div className="p-4">
             <div className="flex justify-center gap-5">
               <button
-                onClick={() => changeShiny("Original")}
+                onClick={() => setShiny("Original")}
                 className={`${
                   shiny === "Original"
                     ? `bg-violet-600`
@@ -76,13 +88,42 @@ export default function Pokedex({
                 Original
               </button>
               <button
-                onClick={() => changeShiny("Shiny")}
+                onClick={() => setShiny("Shiny")}
                 className={`${
                   shiny === "Shiny"
                     ? `bg-violet-600`
                     : `bg-violet-500 hover:bg-violet-600`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Shiny
+              </button>
+            </div>
+            <div className="flex justify-center gap-5 pt-5">
+              <button
+                onClick={() => setRegion("All")}
+                className={`${
+                  region === "All"
+                    ? `bg-emerald-600`
+                    : `bg-emerald-500 hover:bg-emerald-600`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                All
+              </button>
+              <button
+                onClick={() => setRegion("Kanto")}
+                className={`${
+                  region === "Kanto"
+                    ? `bg-emerald-600`
+                    : `bg-emerald-500 hover:bg-emerald-600`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Kanto
+              </button>
+              <button
+                onClick={() => setRegion("Johto")}
+                className={`${
+                  region === "Johto"
+                    ? `bg-emerald-600`
+                    : `bg-emerald-500 hover:bg-emerald-600`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Johto
               </button>
             </div>
             <div className="cards grid justify-center gap-5 pt-5">
