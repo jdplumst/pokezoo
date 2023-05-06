@@ -1,35 +1,16 @@
 import Head from "next/head";
 import Sidebar from "../components/Sidebar";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]";
 import { prisma } from "../server/db";
 import Card from "../components/Card";
 import { useEffect, useState } from "react";
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session || !session.user) {
-    return {
-      redirect: {
-        destination: "/"
-      }
-    };
-  }
-
-  const user = session.user;
-  const instances = await prisma.instance.findMany({
-    where: { userId: user.id.toString() }
-  });
+export const getServerSideProps = async () => {
   const species = await prisma.species.findMany();
 
   return {
     props: {
-      user,
-      species,
-      instances
+      species
     }
   };
 };
@@ -38,9 +19,7 @@ type Shiny = "Original" | "Shiny";
 type Region = "All" | "Kanto" | "Johto";
 
 export default function Pokedex({
-  user,
   species,
-  instances
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [cards, setCards] = useState(species.filter((s) => !s.shiny));
   const [shiny, setShiny] = useState<Shiny>("Original");
