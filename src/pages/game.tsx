@@ -208,33 +208,6 @@ export default function Game({
       }
     );
   };
-  // instanceDeleteMutation
-  //   .mutateAsync({ id: i.id })
-  //   .then((instanceResponse) => {
-  //     userDeleteMutation
-  //       .mutateAsync({
-  //         speciesYield: deleteSpecies.yield * -1,
-  //         cost: deleteSpecies.sellPrice * -1
-  //       })
-  //       .then((userResponse) => {
-  //         if (userResponse.user) {
-  //           setCards((prevCards) =>
-  //             prevCards.filter((c) => c.id !== instanceResponse.instance.id)
-  //           );
-  //           setOriginalInstances((prevOriginalInstances) =>
-  //             prevOriginalInstances.filter(
-  //               (o) => o.id !== instanceResponse.instance.id
-  //             )
-  //           );
-  //           setTotalYield(userResponse.user.totalYield);
-  //           setBalance(userResponse.user.balance);
-  //           setError(null);
-  //           setDeleteModal(false);
-  //         }
-  //       })
-  //       .catch((userError) => setError("Something went wrong. Try again."));
-  //   })
-  //   .catch((instanceError) => setError("Something went wrong. Try again."));
 
   return (
     <>
@@ -345,7 +318,7 @@ export default function Game({
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Sidebar page="Game">
           <div className="p-4">
-            <div className="flex items-center justify-between px-4">
+            <div className="flex items-end justify-between px-4">
               <span>Your current balance is P{balance}.</span>
               {claimedDaily ? (
                 <span>You have already claimed your daily reward.</span>
