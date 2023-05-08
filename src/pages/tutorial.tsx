@@ -12,7 +12,7 @@ export default function Tutorial() {
       </Head>
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Sidebar page="Tutorial">
-          <div className="px-8">
+          <main className="px-8">
             <h1 className="py-4 text-7xl font-bold">Tutorial</h1>
             <hr className="border-black pb-4"></hr>
             <p>
@@ -91,7 +91,7 @@ export default function Tutorial() {
               Shiny Pokémon can be sold for double the amount of their non-shiny
               counterparts.
             </p>
-          </div>
+          </main>
         </Sidebar>
       </div>
     </>

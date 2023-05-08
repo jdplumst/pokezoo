@@ -32,7 +32,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div className="fade-in absolute flex h-screen w-screen flex-col items-center bg-[url('../img/pokemon-bg.jpg')] bg-cover pt-10 font-bold">
+      <main className="fade-in absolute flex h-screen w-screen flex-col items-center bg-[url('../img/pokemon-bg.jpg')] bg-cover pt-10 font-bold">
         <h1 className="mb-20 text-7xl">PokéZoo</h1>
         <div className="w-1/3 rounded-lg border-4 border-black bg-white py-5 text-center">
           <p>
@@ -63,7 +63,7 @@ export default function Home() {
             </span>
           </button>
         </div>
-      </div>
+      </main>
     </>
   );
 }

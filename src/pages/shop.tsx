@@ -186,7 +186,7 @@ export default function Shop({
 
       <div className="z-0 min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Sidebar page="Shop">
-          <div className="p-4">
+          <main className="p-4">
             <p>Your current balance is P{balance}.</p>
             <p>You will receive P{totalYield} on the next payout.</p>
             {error && <p className="font-bold text-red-500">{error}</p>}
@@ -200,7 +200,7 @@ export default function Shop({
                 />
               ))}
             </div>
-          </div>
+          </main>
         </Sidebar>
       </div>
 

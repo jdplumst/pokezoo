@@ -15,7 +15,7 @@ export default function Sidebar({ children, page }: ISidebar) {
 
   return (
     <div className="flex">
-      <div
+      <nav
         className={`${
           open ? `w-1/5` : `w-1/12`
         } sidebar sticky top-0 flex h-screen flex-col p-4 shadow-lg`}>
@@ -165,7 +165,7 @@ export default function Sidebar({ children, page }: ISidebar) {
             </h2>
           </button>
         </div>
-      </div>
+      </nav>
       <div className={`${open ? `w-4/5` : `w-11/12`}`}>{children}</div>
     </div>
   );

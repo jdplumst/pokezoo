@@ -19,7 +19,7 @@ type Shiny = "Original" | "Shiny";
 type Region = "All" | "Kanto" | "Johto";
 
 export default function Pokedex({
-  species,
+  species
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [cards, setCards] = useState(species.filter((s) => !s.shiny));
   const [shiny, setShiny] = useState<Shiny>("Original");
@@ -55,7 +55,7 @@ export default function Pokedex({
       </Head>
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Sidebar page="Pokedex">
-          <div className="p-4">
+          <main className="p-4">
             <div className="flex justify-center gap-5">
               <button
                 onClick={() => setShiny("Original")}
@@ -110,7 +110,7 @@ export default function Pokedex({
                 <Card key={c.id} species={c} />
               ))}
             </div>
-          </div>
+          </main>
         </Sidebar>
       </div>
     </>

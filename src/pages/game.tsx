@@ -317,7 +317,7 @@ export default function Game({
       {/* Main Game Screen */}
       <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
         <Sidebar page="Game">
-          <div className="p-4">
+          <main className="p-4">
             <div className="flex items-end justify-between px-4">
               <span>Your current balance is P{balance}.</span>
               {claimedDaily ? (
@@ -384,7 +384,7 @@ export default function Game({
                 />
               ))}
             </div>
-          </div>
+          </main>
         </Sidebar>
       </div>
     </>
