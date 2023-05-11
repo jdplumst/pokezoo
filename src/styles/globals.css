@@ -22,6 +22,8 @@ html {
   --color-blue-btn-unfocus: #6366f1;
   --color-green-btn-focus: #059669;
   --color-green-btn-unfocus: #22c55e;
+  --color-red-btn-focus: #dc2626;
+  --color-red-btn-unfocus: #ef4444;
   --color-text: black;
   --color-sidebar-focus: white;
   --color-sidebar-unfocus: #cbd5e1;
@@ -42,6 +44,8 @@ html .night {
   --color-blue-btn-unfocus: #3730a3;
   --color-green-btn-focus: #065f46;
   --color-green-btn-unfocus: #15803d;
+  --color-red-btn-focus: #b91c1c;
+  --color-red-btn-unfocus: #dc2626;
   --color-text: rgb(240, 220, 252);
   --color-sidebar-focus: #3b0764;
   --color-sidebar-unfocus: #581c87;

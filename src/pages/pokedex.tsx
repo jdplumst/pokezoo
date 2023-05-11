@@ -8,17 +8,9 @@ import { useEffect, useState } from "react";
 export const getServerSideProps = async () => {
   const species = await prisma.species.findMany();
 
-  const today = new Date();
-  const hour = today.getHours();
-  let time: Time = "night";
-  if (hour >= 6 && hour <= 17) {
-    time = "day";
-  }
-
   return {
     props: {
-      species,
-      time
+      species
     }
   };
 };
@@ -27,9 +19,15 @@ type Shiny = "Original" | "Shiny";
 type Region = "All" | "Kanto" | "Johto";
 
 export default function Pokedex({
-  species,
-  time
+  species
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const today = new Date();
+  const hour = today.getHours();
+  let time: Time = "night";
+  if (hour >= 6 && hour <= 17) {
+    time = "day";
+  }
+
   const [cards, setCards] = useState(species.filter((s) => !s.shiny));
   const [shiny, setShiny] = useState<Shiny>("Original");
   const [region, setRegion] = useState<Region>("All");

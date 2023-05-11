@@ -129,7 +129,7 @@ export default function Card({ species, instance, openDelete }: ICard) {
         {instance && openDelete && (
           <button
             onClick={() => openDelete(species, instance)}
-            className="rounded-lg border-2 border-black bg-red-600 p-2 font-bold text-white hover:bg-red-700">
+            className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold text-white hover:bg-red-btn-focus">
             Sell Pokémon
           </button>
         )}

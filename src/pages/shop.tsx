@@ -27,19 +27,11 @@ export const getServerSideProps = async (
   const balls = await prisma.ball.findMany();
   const species = await prisma.species.findMany();
 
-  const today = new Date();
-  const hour = today.getHours();
-  let time: Time = "night";
-  if (hour >= 6 && hour <= 17) {
-    time = "day";
-  }
-
   return {
     props: {
       user,
       balls,
-      species,
-      time
+      species
     }
   };
 };
@@ -47,9 +39,15 @@ export const getServerSideProps = async (
 export default function Shop({
   user,
   balls,
-  species,
-  time
+  species
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const today = new Date();
+  const hour = today.getHours();
+  let time: Time = "night";
+  if (hour >= 6 && hour <= 17) {
+    time = "day";
+  }
+
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
   const [error, setError] = useState<string | null>(null);
@@ -235,7 +233,7 @@ export default function Shop({
           <div className="flex justify-center pt-4">
             <button
               onClick={() => setOpenModal(false)}
-              className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
               Got it!
             </button>
           </div>

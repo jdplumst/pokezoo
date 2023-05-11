@@ -36,19 +36,11 @@ export const getServerSideProps = async (
   });
   const species = await prisma.species.findMany();
 
-  const today = new Date();
-  const hour = today.getHours();
-  let time: Time = "night";
-  if (hour >= 6 && hour <= 17) {
-    time = "day";
-  }
-
   return {
     props: {
       user,
       species,
-      instances,
-      time
+      instances
     }
   };
 };
@@ -59,9 +51,15 @@ type JohtoStarter = "Chikorita" | "Cyndaquil" | "Totodile";
 export default function Game({
   user,
   species,
-  instances,
-  time
+  instances
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const today = new Date();
+  const hour = today.getHours();
+  let time: Time = "night";
+  if (hour >= 6 && hour <= 17) {
+    time = "day";
+  }
+
   // Variables associated with daily reward
   const [claimedDaily, setClaimedDaily] = useState(user.claimedDaily);
   const [dailyDisabled, setDailyDisabled] = useState(false);
@@ -283,7 +281,7 @@ export default function Game({
             <button
               onClick={() => handleJohtoClose()}
               disabled={johtoDisabled}
-              className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
               Confirm Selection
             </button>
           </div>
@@ -310,13 +308,13 @@ export default function Game({
             <button
               onClick={() => confirmDelete(deleteInstance as Instance)}
               disabled={deleteDisabled}
-              className="mb-2 w-28 rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+              className="mb-2 w-28 rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
               Yes
             </button>
             <button
               onClick={() => setDeleteModal(false)}
               disabled={deleteDisabled}
-              className="mb-2 w-28 rounded-lg border-2 border-black bg-green-500 p-2 font-bold hover:bg-green-600 ">
+              className="mb-2 w-28 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus ">
               No
             </button>
           </div>
