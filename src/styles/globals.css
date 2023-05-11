@@ -7,7 +7,7 @@
 @layer base {
   html {
     font-family: "Dosis", sans-serif;
-    scrollbar-color: #d946ef #7dd3fc;
+    scrollbar-color: #d946ef rgba(0, 0, 0, 0);
     scrollbar-width: thin;
   }
 }
@@ -23,7 +23,7 @@ html::-webkit-scrollbar {
 }
 
 html::-webkit-scrollbar-track {
-  background-color: #7dd3fc;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 html::-webkit-scrollbar-thumb {
