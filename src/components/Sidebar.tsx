@@ -37,8 +37,8 @@ export default function Sidebar({ children, page }: ISidebar) {
         <Link href="/game">
           <div
             className={`${
-              page === "Game" && `bg-purple-800`
-            } mb-4 flex w-full items-center hover:bg-purple-900`}>
+              page === "Game" && `bg-sidebar-focus`
+            } mb-4 flex w-full items-center hover:bg-sidebar-unfocus`}>
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"
               alt="game"
@@ -54,8 +54,8 @@ export default function Sidebar({ children, page }: ISidebar) {
         <Link href="/shop">
           <div
             className={`${
-              page === "Shop" && `bg-purple-800`
-            } mb-4 flex w-full items-center hover:bg-purple-900`}>
+              page === "Shop" && `bg-sidebar-focus`
+            } mb-4 flex w-full items-center hover:bg-sidebar-unfocus`}>
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/coin-case.png"
               alt="shop"
@@ -71,8 +71,8 @@ export default function Sidebar({ children, page }: ISidebar) {
         <Link href="/pokedex">
           <div
             className={`${
-              page === "Pokedex" && `bg-purple-800`
-            } mb-4 flex w-full items-center hover:bg-purple-900`}>
+              page === "Pokedex" && `bg-sidebar-focus`
+            } mb-4 flex w-full items-center hover:bg-sidebar-unfocus`}>
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-radar.png"
               alt="pokedex"
@@ -88,8 +88,8 @@ export default function Sidebar({ children, page }: ISidebar) {
         <Link href="/tutorial">
           <div
             className={`${
-              page === "Tutorial" && `bg-purple-800`
-            } mb-4 flex w-full items-center hover:bg-purple-900`}>
+              page === "Tutorial" && `bg-sidebar-focus`
+            } mb-4 flex w-full items-center hover:bg-sidebar-unfocus`}>
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/wide-lens.png"
               alt="tutorial"
@@ -105,8 +105,8 @@ export default function Sidebar({ children, page }: ISidebar) {
         <Link href="/patch-notes">
           <div
             className={`${
-              page === "PatchNotes" && `bg-purple-800`
-            } mb-4 flex w-full items-center hover:bg-purple-900`}>
+              page === "PatchNotes" && `bg-sidebar-focus`
+            } mb-4 flex w-full items-center hover:bg-sidebar-unfocus`}>
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pal-pad.png"
               alt="patch_notes"
@@ -121,7 +121,7 @@ export default function Sidebar({ children, page }: ISidebar) {
         </Link>
         <div className="mt-auto">
           <a href="https://pokeapi.co/" target="_blank">
-            <div className="mb-2 flex items-center hover:bg-purple-900">
+            <div className="mb-2 flex items-center hover:bg-sidebar-unfocus">
               <Image
                 src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
                 alt="pokeapi"
@@ -135,7 +135,7 @@ export default function Sidebar({ children, page }: ISidebar) {
             </div>
           </a>
           <a href="https://github.com/jdplumst/pokezoo" target="_blank">
-            <div className="mb-2 flex items-center py-2 hover:bg-purple-900">
+            <div className="mb-2 flex items-center py-2 hover:bg-sidebar-unfocus">
               <GoMarkGithub
                 size={30}
                 className={`${open ? `ml-3` : `ml-auto mr-auto`} pixelated`}
@@ -152,7 +152,7 @@ export default function Sidebar({ children, page }: ISidebar) {
             onClick={() => signOut()}
             className={`${
               open ? `` : `ml-auto mr-auto`
-            } pixelated flex w-full items-center py-2 hover:bg-purple-900`}>
+            } pixelated flex w-full items-center py-2 hover:bg-sidebar-unfocus`}>
             <GoSignOut
               size={30}
               className={`${open ? `ml-3` : `ml-auto mr-auto`} pixelated mt-1`}

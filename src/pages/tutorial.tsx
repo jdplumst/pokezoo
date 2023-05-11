@@ -2,6 +2,13 @@ import Head from "next/head";
 import Sidebar from "../components/Sidebar";
 
 export default function Tutorial() {
+  const today = new Date();
+  const hour = today.getHours();
+  let time: Time = "night";
+  if (hour >= 6 && hour <= 17) {
+    time = "day";
+  }
+
   return (
     <>
       <Head>
@@ -10,7 +17,8 @@ export default function Tutorial() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div className="color min-h-screen">
+      <div
+        className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Tutorial">
           <main className="px-8">
             <h1 className="py-4 text-7xl font-bold">Tutorial</h1>

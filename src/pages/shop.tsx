@@ -27,11 +27,19 @@ export const getServerSideProps = async (
   const balls = await prisma.ball.findMany();
   const species = await prisma.species.findMany();
 
+  const today = new Date();
+  const hour = today.getHours();
+  let time: Time = "night";
+  if (hour >= 6 && hour <= 17) {
+    time = "day";
+  }
+
   return {
     props: {
       user,
       balls,
-      species
+      species,
+      time
     }
   };
 };
@@ -39,7 +47,8 @@ export const getServerSideProps = async (
 export default function Shop({
   user,
   balls,
-  species
+  species,
+  time
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
@@ -184,7 +193,8 @@ export default function Shop({
         <link rel="icon" href="/favicon.png" />
       </Head>
 
-      <div className="color z-0 min-h-screen">
+      <div
+        className={`z-0 min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Shop">
           <main className="p-4">
             <p>Your current balance is P{balance}.</p>

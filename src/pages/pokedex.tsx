@@ -8,9 +8,17 @@ import { useEffect, useState } from "react";
 export const getServerSideProps = async () => {
   const species = await prisma.species.findMany();
 
+  const today = new Date();
+  const hour = today.getHours();
+  let time: Time = "night";
+  if (hour >= 6 && hour <= 17) {
+    time = "day";
+  }
+
   return {
     props: {
-      species
+      species,
+      time
     }
   };
 };
@@ -19,7 +27,8 @@ type Shiny = "Original" | "Shiny";
 type Region = "All" | "Kanto" | "Johto";
 
 export default function Pokedex({
-  species
+  species,
+  time
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [cards, setCards] = useState(species.filter((s) => !s.shiny));
   const [shiny, setShiny] = useState<Shiny>("Original");
@@ -53,7 +62,8 @@ export default function Pokedex({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div className="color min-h-screen">
+      <div
+        className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Pokedex">
           <main className="p-4">
             <div className="flex justify-center gap-5">
@@ -61,8 +71,8 @@ export default function Pokedex({
                 onClick={() => setShiny("Original")}
                 className={`${
                   shiny === "Original"
-                    ? `bg-violet-800`
-                    : `bg-violet-700 hover:bg-violet-800`
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Original
               </button>
@@ -70,8 +80,8 @@ export default function Pokedex({
                 onClick={() => setShiny("Shiny")}
                 className={`${
                   shiny === "Shiny"
-                    ? `bg-violet-800`
-                    : `bg-violet-700 hover:bg-violet-800`
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Shiny
               </button>
@@ -81,8 +91,8 @@ export default function Pokedex({
                 onClick={() => setRegion("All")}
                 className={`${
                   region === "All"
-                    ? `bg-emerald-800`
-                    : `bg-emerald-700 hover:bg-emerald-800`
+                    ? `bg-green-btn-focus`
+                    : `bg-green-btn-unfocus hover:bg-green-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 All
               </button>
@@ -90,8 +100,8 @@ export default function Pokedex({
                 onClick={() => setRegion("Kanto")}
                 className={`${
                   region === "Kanto"
-                    ? `bg-emerald-800`
-                    : `bg-emerald-700 hover:bg-emerald-800`
+                    ? `bg-green-btn-focus`
+                    : `bg-green-btn-unfocus hover:bg-green-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Kanto
               </button>
@@ -99,8 +109,8 @@ export default function Pokedex({
                 onClick={() => setRegion("Johto")}
                 className={`${
                   region === "Johto"
-                    ? `bg-emerald-800`
-                    : `bg-emerald-700 hover:bg-emerald-800`
+                    ? `bg-green-btn-focus`
+                    : `bg-green-btn-unfocus hover:bg-green-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Johto
               </button>

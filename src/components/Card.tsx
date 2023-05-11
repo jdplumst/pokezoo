@@ -12,7 +12,7 @@ export default function Card({ species, instance, openDelete }: ICard) {
     <div
       className={`${
         species.rarity === Rarity.Common
-          ? `bg-slate-500 hover:bg-slate-600`
+          ? `bg-common-unfocus hover:bg-common-focus`
           : species.rarity === Rarity.Rare
           ? `bg-orange-500 hover:bg-orange-600`
           : species.rarity === Rarity.Epic

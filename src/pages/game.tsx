@@ -36,11 +36,19 @@ export const getServerSideProps = async (
   });
   const species = await prisma.species.findMany();
 
+  const today = new Date();
+  const hour = today.getHours();
+  let time: Time = "night";
+  if (hour >= 6 && hour <= 17) {
+    time = "day";
+  }
+
   return {
     props: {
       user,
       species,
-      instances
+      instances,
+      time
     }
   };
 };
@@ -51,7 +59,8 @@ type JohtoStarter = "Chikorita" | "Cyndaquil" | "Totodile";
 export default function Game({
   user,
   species,
-  instances
+  instances,
+  time
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   // Variables associated with daily reward
   const [claimedDaily, setClaimedDaily] = useState(user.claimedDaily);
@@ -315,7 +324,8 @@ export default function Game({
       )}
 
       {/* Main Game Screen */}
-      <div className="color min-h-screen">
+      <div
+        className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Game">
           <main className="p-4">
             <div className="flex items-end justify-between px-4">
@@ -341,8 +351,8 @@ export default function Game({
                 onClick={() => changeSort("Oldest")}
                 className={`${
                   sort === "Oldest"
-                    ? `bg-violet-800`
-                    : `bg-violet-700 hover:bg-violet-800`
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Oldest
               </button>
@@ -350,8 +360,8 @@ export default function Game({
                 onClick={() => changeSort("Newest")}
                 className={`${
                   sort === "Newest"
-                    ? `bg-violet-800`
-                    : `bg-violet-700 hover:bg-violet-800`
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Newest
               </button>
@@ -359,8 +369,8 @@ export default function Game({
                 onClick={() => changeSort("Pokedex")}
                 className={`${
                   sort === "Pokedex"
-                    ? `bg-violet-800`
-                    : `bg-violet-700 hover:bg-violet-800`
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Pokédex #
               </button>
@@ -368,8 +378,8 @@ export default function Game({
                 onClick={() => changeSort("Rarity")}
                 className={`${
                   sort === "Rarity"
-                    ? `bg-violet-800`
-                    : `bg-violet-700 hover:bg-violet-800`
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Rarity
               </button>

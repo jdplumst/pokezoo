@@ -15,7 +15,7 @@ export default function Tooltip({ ball, children }: ITooltip) {
       onMouseLeave={() => setVisible(false)}
       className="tooltip-container">
       {visible && (
-        <div className="tooltip color z-10 min-w-[200px] border-2 border-[#6943ff62] p-4">
+        <div className="tooltip color z-10 min-w-[200px] border-2 border-tooltip-border bg-tooltip p-4">
           <div>
             Opening this ball gives:
             {ball.name === "Net" && (
