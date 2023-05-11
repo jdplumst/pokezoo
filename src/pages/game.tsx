@@ -59,6 +59,7 @@ export default function Game({
   if (hour >= 6 && hour <= 17) {
     time = "day";
   }
+  console.log("today: " + today + " hour: " + hour + " time: " + time);
 
   // Variables associated with daily reward
   const [claimedDaily, setClaimedDaily] = useState(user.claimedDaily);
