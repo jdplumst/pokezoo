@@ -326,7 +326,7 @@ export default function Game({
                 <button
                   onClick={() => claimDaily()}
                   disabled={dailyDisabled}
-                  className="w-fit rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
+                  className="w-fit rounded-lg border-2 border-black bg-yellow-500 p-2 font-bold hover:bg-yellow-600">
                   Claim Daily Reward
                 </button>
               )}
