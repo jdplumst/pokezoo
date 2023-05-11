@@ -27,10 +27,11 @@ export default function PatchNotes() {
               <h3 className="p-4 text-4xl font-bold">2.10 (May 10, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
-                Added day and night colour themes. The day colour theme uses the
-                previous theme. The night theme uses a slightly modified version
-                of the newer darker theme. The day theme is used between 6am and
-                6pm. The night theme is used between 6pm and 6am.
+                Added day and night colour themes. The day colour theme uses a
+                slightly modified version of the previous theme. The night theme
+                uses a slightly modified version of the newer darker theme. The
+                day theme is used between 6am and 6pm. The night theme is used
+                between 6pm and 6am.
               </p>
             </section>
             <hr className="border-black pb-4"></hr>
