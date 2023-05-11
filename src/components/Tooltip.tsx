@@ -32,19 +32,19 @@ export default function Tooltip({ ball, children }: ITooltip) {
             )}
             <p>
               {ball.commonChance}% Chance{" "}
-              <span className="text-white">Common</span>
+              <span className="text-common-unfocus">Common</span>
             </p>
             <p>
               {ball.rareChance}% Chance{" "}
-              <span className="text-orange-500">Rare</span>
+              <span className="text-rare-unfocus">Rare</span>
             </p>
             <p>
               {ball.epicChance}% Chance{" "}
-              <span className="text-purple-500">Epic</span>
+              <span className="text-epic-unfocus">Epic</span>
             </p>
             <p>
               {ball.legendaryChance}% Chance{" "}
-              <span className="text-emerald-500">Legendary</span>
+              <span className="text-legendary-unfocus">Legendary</span>
             </p>
           </div>
         </div>

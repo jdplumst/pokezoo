@@ -14,11 +14,11 @@ export default function Card({ species, instance, openDelete }: ICard) {
         species.rarity === Rarity.Common
           ? `bg-common-unfocus hover:bg-common-focus`
           : species.rarity === Rarity.Rare
-          ? `bg-orange-500 hover:bg-orange-600`
+          ? `bg-rare-unfocus hover:bg-rare-focus`
           : species.rarity === Rarity.Epic
-          ? `bg-purple-500 hover:bg-purple-600`
+          ? `bg-epic-unfocus hover:bg-epic-focus`
           : species.rarity === Rarity.Legendary
-          ? `bg-emerald-500 hover:bg-emerald-600`
+          ? `bg-legendary-unfocus hover:bg-legendary-focus`
           : ``
       } card-hover ${instance && openDelete ? `h-80` : `h-72`} w-52 border-2 ${
         species.shiny ? `border-yellow-500` : `border-black`

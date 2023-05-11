@@ -22,11 +22,19 @@ module.exports = {
         "color-text": "var(--color-text)",
         "sidebar-focus": "var(--color-sidebar-focus)",
         "sidebar-unfocus": "var(--color-sidebar-unfocus)",
-        "common-focus": "var(--color-common-focus)",
-        "common-unfocus": "var(--color-common-unfocus)",
         "ball": "var(--color-ball)",
         "tooltip": "var(--color-tooltip)",
         "tooltip-border": "var(--color-tooltip-border)",
+
+        // Pokemon Rarity Colours
+        "common-focus": "var(--color-common-focus)",
+        "common-unfocus": "var(--color-common-unfocus)",
+        "rare-focus": "var(--color-rare-focus)",
+        "rare-unfocus": "var(--color-rare-unfocus)",
+        "epic-focus": "var(--color-epic-focus)",
+        "epic-unfocus": "var(--color-epic-unfocus)",
+        "legendary-focus": "var(---color-legendary-focus)",
+        "legendary-unfocus": "var(--color-legendary-unfocus)",
 
         // Pokemon Type Colours
         "normal": "var(--color-normal)",

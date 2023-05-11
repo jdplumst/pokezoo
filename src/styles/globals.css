@@ -27,11 +27,19 @@ html {
   --color-text: black;
   --color-sidebar-focus: white;
   --color-sidebar-unfocus: #cbd5e1;
-  --color-common-focus: #f1f5f9;
-  --color-common-unfocus: white;
   --color-ball: #10b981;
   --color-tooltip: #1d4ed8;
   --color-tooltip-border: black;
+
+  /* Pokemon Rarity Colours */
+  --color-common-focus: #f1f5f9;
+  --color-common-unfocus: white;
+  --color-rare-focus: #ea580c;
+  --color-rare-unfocus: #f97316;
+  --color-epic-focus: #9333ea;
+  --color-epic-unfocus: #a855f7;
+  --color-legendary-focus: #059669;
+  --color-legendary-unfocus: #10b981;
 
   /* Pokemon Type Colours */
   --color-normal: #d97706;
@@ -69,11 +77,13 @@ html .night {
   --color-text: rgb(240, 220, 252);
   --color-sidebar-focus: #3b0764;
   --color-sidebar-unfocus: #581c87;
-  --color-common-focus: #475569;
-  --color-common-unfocus: #64748b;
   --color-ball: #581c87;
   --color-tooltip: #28284e;
   --color-tooltip-border: #6943ff62;
+
+  /* Pokemon Rarity Colours */
+  --color-common-focus: #475569;
+  --color-common-unfocus: #64748b;
 }
 
 /* Scrollbar */
