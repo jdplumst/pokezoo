@@ -32,6 +32,26 @@ html {
   --color-ball: #10b981;
   --color-tooltip: #1d4ed8;
   --color-tooltip-border: black;
+
+  /* Pokemon Type Colours */
+  --color-normal: #d97706;
+  --color-grass: #22c55e;
+  --color-bug: #84cc16;
+  --color-fire: #ea580c;
+  --color-electric: #facc15;
+  --color-ground: #c2410c;
+  --color-water: #3b82f6;
+  --color-fighting: #dc2626;
+  --color-poison: #9333ea;
+  --color-rock: #78716c;
+  --color-ice: #06b6d4;
+  --color-ghost: #8b5cf6;
+  --color-psychic: #d946ef;
+  --color-fairy: #ec4899;
+  --color-dark: black;
+  --color-dragon: #6366f1;
+  --color-steel: #64748b;
+  --color-flying: #a78bfa;
 }
 
 html .night {

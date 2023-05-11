@@ -38,7 +38,7 @@ export default function Pokedex({
       setTime("night");
     }
     setLoading(false);
-  }, [time]);
+  }, []);
 
   const filterSpecies = () => {
     // Filter based on shiny

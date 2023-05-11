@@ -64,7 +64,7 @@ export default function Shop({
       setTime("night");
     }
     setLoading(false);
-  }, [time]);
+  }, []);
 
   const purchaseBall = async (ball: Ball) => {
     // Disable all purchase buttons

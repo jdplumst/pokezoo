@@ -39,41 +39,41 @@ export default function Card({ species, instance, openDelete }: ICard) {
           <span
             className={`${
               species.typeOne === `normal`
-                ? `bg-amber-600`
+                ? `bg-normal`
                 : species.typeOne === `grass`
-                ? `bg-green-500`
+                ? `bg-grass`
                 : species.typeOne === `bug`
-                ? `bg-lime-500`
+                ? `bg-bug`
                 : species.typeOne === `fire`
-                ? `bg-orange-600`
+                ? `bg-fire`
                 : species.typeOne === `electric`
-                ? `bg-yellow-400`
+                ? `bg-electric`
                 : species.typeOne === `ground`
-                ? `bg-orange-700`
+                ? `bg-ground`
                 : species.typeOne === `water`
-                ? `bg-blue-500`
+                ? `bg-water`
                 : species.typeOne === `fighting`
-                ? `bg-red-600`
+                ? `bg-fighting`
                 : species.typeOne === `poison`
-                ? `bg-purple-600`
+                ? `bg-poison`
                 : species.typeOne === `rock`
-                ? `bg-stone-500`
+                ? `bg-rock`
                 : species.typeOne === `ice`
-                ? `bg-cyan-500`
+                ? `bg-ice`
                 : species.typeOne === `ghost`
-                ? `bg-violet-500`
+                ? `bg-ghost`
                 : species.typeOne === `psychic`
-                ? `bg-fuchsia-500`
+                ? `bg-psychic`
                 : species.typeOne === `fairy`
-                ? `bg-pink-500`
+                ? `bg-fairy`
                 : species.typeOne === `dark`
-                ? `bg-black`
+                ? `bg-dark`
                 : species.typeOne === `dragon`
-                ? `bg-indigo-500`
+                ? `bg-dragon`
                 : species.typeOne === `steel`
-                ? `bg-slate-500`
+                ? `bg-steel`
                 : species.typeOne === `flying`
-                ? `bg-violet-400`
+                ? `bg-flying`
                 : ``
             } rounded-lg border-2 border-black p-2 font-bold text-white`}>
             {species.typeOne}
@@ -82,41 +82,41 @@ export default function Card({ species, instance, openDelete }: ICard) {
             <span
               className={`${
                 species.typeTwo === `normal`
-                  ? `bg-amber-600`
+                  ? `bg-normal`
                   : species.typeTwo === `grass`
-                  ? `bg-green-500`
+                  ? `bg-grass`
                   : species.typeTwo === `bug`
-                  ? `bg-lime-500`
+                  ? `bg-bug`
                   : species.typeTwo === `fire`
-                  ? `bg-orange-600`
+                  ? `bg-fire`
                   : species.typeTwo === `electric`
-                  ? `bg-yellow-400`
+                  ? `bg-electric`
                   : species.typeTwo === `ground`
-                  ? `bg-orange-700`
+                  ? `bg-ground`
                   : species.typeTwo === `water`
-                  ? `bg-blue-500`
+                  ? `bg-water`
                   : species.typeTwo === `fighting`
-                  ? `bg-red-600`
+                  ? `bg-fighting`
                   : species.typeTwo === `poison`
-                  ? `bg-purple-600`
+                  ? `bg-poison`
                   : species.typeTwo === `rock`
-                  ? `bg-stone-500`
+                  ? `bg-rock`
                   : species.typeTwo === `ice`
-                  ? `bg-cyan-500`
+                  ? `bg-ice`
                   : species.typeTwo === `ghost`
-                  ? `bg-violet-500`
+                  ? `bg-ghost`
                   : species.typeTwo === `psychic`
-                  ? `bg-fuchsia-500`
+                  ? `bg-psychic`
                   : species.typeTwo === `fairy`
-                  ? `bg-pink-500`
+                  ? `bg-fairy`
                   : species.typeTwo === `dark`
-                  ? `bg-black`
+                  ? `bg-dark`
                   : species.typeTwo === `dragon`
-                  ? `bg-indigo-500`
+                  ? `bg-dragon`
                   : species.typeTwo === `steel`
-                  ? `bg-slate-500`
+                  ? `bg-steel`
                   : species.typeTwo === `flying`
-                  ? `bg-violet-400`
+                  ? `bg-flying`
                   : ``
               } rounded-lg border-2 border-black p-2 font-bold text-white`}>
               {species.typeTwo}

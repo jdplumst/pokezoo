@@ -26,7 +26,27 @@ module.exports = {
         "common-unfocus": "var(--color-common-unfocus)",
         "ball": "var(--color-ball)",
         "tooltip": "var(--color-tooltip)",
-        "tooltip-border": "var(--color-tooltip-border)"
+        "tooltip-border": "var(--color-tooltip-border)",
+
+        // Pokemon Type Colours
+        "normal": "var(--color-normal)",
+        "grass": "var(--color-grass)",
+        "bug": "var(--color-bug)",
+        "fire": "var(--color-fire)",
+        "electric": "var(--color-electric)",
+        "ground": "var(--color-ground)",
+        "water": "var(--color-water)",
+        "fighting": "var(--color-fighting)",
+        "poison": "var(--color-poison)",
+        "rock": "var(--color-rock)",
+        "ice": "var(--color-ice)",
+        "ghost": "var(--color-ghost)",
+        "psychic": "var(--color-psychic)",
+        "fairy": "var(--color-fairy)",
+        "dark": "var(--color-dark)",
+        "dragon": "var(--color-dragon)",
+        "steel": "var(--color-steel)",
+        "flying": "var(--color-flying)"
       }
     }
   },

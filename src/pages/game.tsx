@@ -93,7 +93,7 @@ export default function Game({
       setTime("night");
     }
     setLoading(false);
-  }, [time]);
+  }, []);
 
   const addStarter = (i: Instance) => {
     setCards((prevCards) => [...prevCards, i]);

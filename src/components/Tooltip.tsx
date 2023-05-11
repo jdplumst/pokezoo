@@ -20,14 +20,14 @@ export default function Tooltip({ ball, children }: ITooltip) {
             Opening this ball gives:
             {ball.name === "Net" && (
               <p>
-                A guaranteed <span className="text-blue-500">Water</span> or{" "}
-                <span className="text-lime-500">Bug</span> type Pokémon.
+                A guaranteed <span className="text-water">Water</span> or{" "}
+                <span className="text-bug">Bug</span> type Pokémon.
               </p>
             )}
             {ball.name === "Dusk" && (
               <p>
-                A guaranteed <span className="text-black">Dark</span> or{" "}
-                <span className="text-violet-500">Ghost</span> type Pokémon.
+                A guaranteed <span className="text-dark">Dark</span> or{" "}
+                <span className="text-ghost">Ghost</span> type Pokémon.
               </p>
             )}
             <p>
