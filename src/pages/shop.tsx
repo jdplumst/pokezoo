@@ -3,13 +3,14 @@ import { getServerSession } from "next-auth";
 import Head from "next/head";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { prisma } from "../server/db";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BallCard from "@/src/components/BallCard";
 import { Ball, Rarity, Species } from "@prisma/client";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
 import Modal from "@/src/components/Modal";
 import Sidebar from "../components/Sidebar";
+import Loading from "../components/Loading";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -41,12 +42,8 @@ export default function Shop({
   balls,
   species
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const today = new Date();
-  const hour = today.getHours();
-  let time: Time = "night";
-  if (hour >= 6 && hour <= 17) {
-    time = "day";
-  }
+  const [time, setTime] = useState<Time>("night");
+  const [loading, setLoading] = useState(true);
 
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
@@ -57,6 +54,17 @@ export default function Shop({
   // Modal variables
   const [openModal, setOpenModal] = useState(false);
   const [newSpecies, setNewSpecies] = useState<Species>(species[0]);
+
+  useEffect(() => {
+    const today = new Date();
+    const hour = today.getHours();
+    if (hour >= 6 && hour <= 17) {
+      setTime("day");
+    } else {
+      setTime("night");
+    }
+    setLoading(false);
+  }, [time]);
 
   const purchaseBall = async (ball: Ball) => {
     // Disable all purchase buttons
@@ -181,6 +189,8 @@ export default function Shop({
       }
     );
   };
+
+  if (loading) return <Loading />;
 
   return (
     <>

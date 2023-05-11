@@ -4,6 +4,7 @@ import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { prisma } from "../server/db";
 import Card from "../components/Card";
 import { useEffect, useState } from "react";
+import Loading from "../components/Loading";
 
 export const getServerSideProps = async () => {
   const species = await prisma.species.findMany();
@@ -21,16 +22,23 @@ type Region = "All" | "Kanto" | "Johto";
 export default function Pokedex({
   species
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const today = new Date();
-  const hour = today.getHours();
-  let time: Time = "night";
-  if (hour >= 6 && hour <= 17) {
-    time = "day";
-  }
+  const [time, setTime] = useState<Time>("night");
+  const [loading, setLoading] = useState(true);
 
   const [cards, setCards] = useState(species.filter((s) => !s.shiny));
   const [shiny, setShiny] = useState<Shiny>("Original");
   const [region, setRegion] = useState<Region>("All");
+
+  useEffect(() => {
+    const today = new Date();
+    const hour = today.getHours();
+    if (hour >= 6 && hour <= 17) {
+      setTime("day");
+    } else {
+      setTime("night");
+    }
+    setLoading(false);
+  }, [time]);
 
   const filterSpecies = () => {
     // Filter based on shiny
@@ -51,6 +59,8 @@ export default function Pokedex({
   useEffect(() => {
     filterSpecies();
   }, [shiny, region]);
+
+  if (loading) return <Loading />;
 
   return (
     <>

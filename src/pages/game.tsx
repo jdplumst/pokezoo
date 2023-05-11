@@ -5,11 +5,12 @@ import Card from "@/src/components/Card";
 import Start from "@/src/components/Start";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Instance, Species } from "@prisma/client";
 import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
+import Loading from "../components/Loading";
 
 enum Rarity {
   Common = 1,
@@ -53,13 +54,8 @@ export default function Game({
   species,
   instances
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-  const today = new Date();
-  const hour = today.getHours();
-  let time: Time = "night";
-  if (hour >= 6 && hour <= 17) {
-    time = "day";
-  }
-  console.log("today: " + today + " hour: " + hour + " time: " + time);
+  const [time, setTime] = useState<Time>("night");
+  const [loading, setLoading] = useState(true);
 
   // Variables associated with daily reward
   const [claimedDaily, setClaimedDaily] = useState(user.claimedDaily);
@@ -87,6 +83,17 @@ export default function Game({
   const [johtoDisabled, setJohtoDisabled] = useState(false);
   const [johtoError, setJohtoError] = useState<string | null>(null);
   const johtoMutation = trpc.instance.getJohto.useMutation();
+
+  useEffect(() => {
+    const today = new Date();
+    const hour = today.getHours();
+    if (hour >= 6 && hour <= 17) {
+      setTime("day");
+    } else {
+      setTime("night");
+    }
+    setLoading(false);
+  }, [time]);
 
   const addStarter = (i: Instance) => {
     setCards((prevCards) => [...prevCards, i]);
@@ -216,6 +223,8 @@ export default function Game({
       }
     );
   };
+
+  if (loading) return <Loading />;
 
   return (
     <>
