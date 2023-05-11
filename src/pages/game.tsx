@@ -315,7 +315,6 @@ export default function Game({
       )}
 
       {/* Main Game Screen */}
-      {/* <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500"> */}
       <div className="color min-h-screen">
         <Sidebar page="Game">
           <main className="p-4">
