@@ -10,7 +10,7 @@ export default function Tutorial() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
+      <div className="color min-h-screen">
         <Sidebar page="Tutorial">
           <main className="px-8">
             <h1 className="py-4 text-7xl font-bold">Tutorial</h1>

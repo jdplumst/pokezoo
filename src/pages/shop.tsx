@@ -184,7 +184,7 @@ export default function Shop({
         <link rel="icon" href="/favicon.png" />
       </Head>
 
-      <div className="z-0 min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
+      <div className="color z-0 min-h-screen">
         <Sidebar page="Shop">
           <main className="p-4">
             <p>Your current balance is P{balance}.</p>

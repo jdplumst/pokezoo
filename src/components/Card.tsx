@@ -12,7 +12,7 @@ export default function Card({ species, instance, openDelete }: ICard) {
     <div
       className={`${
         species.rarity === Rarity.Common
-          ? `bg-white hover:bg-slate-100`
+          ? `bg-slate-500 hover:bg-slate-600`
           : species.rarity === Rarity.Rare
           ? `bg-orange-500 hover:bg-orange-600`
           : species.rarity === Rarity.Epic
@@ -129,7 +129,7 @@ export default function Card({ species, instance, openDelete }: ICard) {
         {instance && openDelete && (
           <button
             onClick={() => openDelete(species, instance)}
-            className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+            className="rounded-lg border-2 border-black bg-red-600 p-2 font-bold text-white hover:bg-red-700">
             Sell Pokémon
           </button>
         )}

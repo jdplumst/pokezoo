@@ -12,6 +12,13 @@
   }
 }
 
+.color {
+  background-color: #28284e;
+  color: white;
+  /* background-image: linear-gradient(225deg, #784ba0 0%, #2b86c5 100%); */
+  /* background-image: linear-gradient(90deg, #784ba0 0%, #28284e 100%); */
+}
+
 /* Scrollbar */
 html::-webkit-scrollbar {
   width: 8px;

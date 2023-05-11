@@ -11,7 +11,7 @@ interface IBall {
 export default function BallCard({ ball, disabled, purchaseBall }: IBall) {
   return (
     <Tooltip ball={ball}>
-      <div className="h-72 w-72 border-2 border-black bg-emerald-500 p-2">
+      <div className="h-72 w-72 border-2 border-black bg-purple-900 p-2">
         <div className="flex h-full flex-col items-center justify-around">
           <Image
             src={ball.img}
@@ -27,7 +27,7 @@ export default function BallCard({ ball, disabled, purchaseBall }: IBall) {
           <button
             onClick={() => purchaseBall(ball)}
             disabled={disabled}
-            className="w-24 rounded-lg border-2 border-black bg-indigo-500 p-2 font-bold hover:bg-indigo-600">
+            className="w-24 rounded-lg border-2 border-black bg-indigo-800 p-2 font-bold hover:bg-indigo-900">
             Buy
           </button>
         </div>

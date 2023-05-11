@@ -53,7 +53,7 @@ export default function Pokedex({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
+      <div className="color min-h-screen">
         <Sidebar page="Pokedex">
           <main className="p-4">
             <div className="flex justify-center gap-5">
@@ -61,8 +61,8 @@ export default function Pokedex({
                 onClick={() => setShiny("Original")}
                 className={`${
                   shiny === "Original"
-                    ? `bg-violet-600`
-                    : `bg-violet-500 hover:bg-violet-600`
+                    ? `bg-violet-800`
+                    : `bg-violet-700 hover:bg-violet-800`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Original
               </button>
@@ -70,8 +70,8 @@ export default function Pokedex({
                 onClick={() => setShiny("Shiny")}
                 className={`${
                   shiny === "Shiny"
-                    ? `bg-violet-600`
-                    : `bg-violet-500 hover:bg-violet-600`
+                    ? `bg-violet-800`
+                    : `bg-violet-700 hover:bg-violet-800`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Shiny
               </button>
@@ -81,8 +81,8 @@ export default function Pokedex({
                 onClick={() => setRegion("All")}
                 className={`${
                   region === "All"
-                    ? `bg-emerald-600`
-                    : `bg-emerald-500 hover:bg-emerald-600`
+                    ? `bg-emerald-800`
+                    : `bg-emerald-700 hover:bg-emerald-800`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 All
               </button>
@@ -90,8 +90,8 @@ export default function Pokedex({
                 onClick={() => setRegion("Kanto")}
                 className={`${
                   region === "Kanto"
-                    ? `bg-emerald-600`
-                    : `bg-emerald-500 hover:bg-emerald-600`
+                    ? `bg-emerald-800`
+                    : `bg-emerald-700 hover:bg-emerald-800`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Kanto
               </button>
@@ -99,8 +99,8 @@ export default function Pokedex({
                 onClick={() => setRegion("Johto")}
                 className={`${
                   region === "Johto"
-                    ? `bg-emerald-600`
-                    : `bg-emerald-500 hover:bg-emerald-600`
+                    ? `bg-emerald-800`
+                    : `bg-emerald-700 hover:bg-emerald-800`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Johto
               </button>

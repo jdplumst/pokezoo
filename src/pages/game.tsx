@@ -315,7 +315,8 @@ export default function Game({
       )}
 
       {/* Main Game Screen */}
-      <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500">
+      {/* <div className="min-h-screen bg-gradient-to-r from-cyan-500 to-indigo-500"> */}
+      <div className="color min-h-screen">
         <Sidebar page="Game">
           <main className="p-4">
             <div className="flex items-end justify-between px-4">
@@ -341,8 +342,8 @@ export default function Game({
                 onClick={() => changeSort("Oldest")}
                 className={`${
                   sort === "Oldest"
-                    ? `bg-violet-600`
-                    : `bg-violet-500 hover:bg-violet-600`
+                    ? `bg-violet-800`
+                    : `bg-violet-700 hover:bg-violet-800`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Oldest
               </button>
@@ -350,8 +351,8 @@ export default function Game({
                 onClick={() => changeSort("Newest")}
                 className={`${
                   sort === "Newest"
-                    ? `bg-violet-600`
-                    : `bg-violet-500 hover:bg-violet-600`
+                    ? `bg-violet-800`
+                    : `bg-violet-700 hover:bg-violet-800`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Newest
               </button>
@@ -359,8 +360,8 @@ export default function Game({
                 onClick={() => changeSort("Pokedex")}
                 className={`${
                   sort === "Pokedex"
-                    ? `bg-violet-600`
-                    : `bg-violet-500 hover:bg-violet-600`
+                    ? `bg-violet-800`
+                    : `bg-violet-700 hover:bg-violet-800`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Pokédex #
               </button>
@@ -368,8 +369,8 @@ export default function Game({
                 onClick={() => changeSort("Rarity")}
                 className={`${
                   sort === "Rarity"
-                    ? `bg-violet-600`
-                    : `bg-violet-500 hover:bg-violet-600`
+                    ? `bg-violet-800`
+                    : `bg-violet-700 hover:bg-violet-800`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Rarity
               </button>
