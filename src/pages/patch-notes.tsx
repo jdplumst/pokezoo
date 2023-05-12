@@ -24,7 +24,22 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
-              <h3 className="p-4 text-4xl font-bold">2.10 (May 10, 2023)</h3>
+              <h3 className="p-4 text-4xl font-bold">2.11 (May 11, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Added nightly rewards. Nightly rewards give the same amount as
+                daily rewards and can be claimed at night. Daily rewards can be
+                claimed during the day.
+              </p>
+              <p className="px-4 pt-4">
+                Daily and nightly rewards are now reset at around 4AM EDT
+                instead of around 9PM EDT. Total yield is now gifted at around
+                4AM EDT as well.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">2.10 (May 11, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
                 Added day and night colour themes. The day colour theme uses a
