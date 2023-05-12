@@ -13,7 +13,6 @@
 }
 
 html {
-  --color-bg: linear-gradient(to right, #06b6d4, #6366f1);
   --color-bg-left: #06b6d4;
   --color-bg-right: #6366f1;
   --color-purple-btn-focus: #7c3aed;
@@ -63,8 +62,7 @@ html {
 }
 
 html .night {
-  --color-bg: linear-gradient(to right, #7e22ce, #28284e);
-  --color-bg-left: #7e22ce;
+  --color-bg-left: #581c87;
   --color-bg-right: #28284e;
   --color-purple-btn-focus: #5b21b6;
   --color-purple-btn-unfocus: #6d28d9;
