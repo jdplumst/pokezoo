@@ -57,10 +57,12 @@ export default function Game({
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
 
-  // Variables associated with daily reward
+  // Variables associated with daily and nightly rewards
   const [claimedDaily, setClaimedDaily] = useState(user.claimedDaily);
   const [dailyDisabled, setDailyDisabled] = useState(false);
-  const dailyMutation = trpc.user.claimDaily.useMutation();
+  const [claimedNightly, setClaimedNightly] = useState(user.claimedNightly);
+  const [nightlyDisabled, setNightlyDisabled] = useState(false);
+  const rewardMutation = trpc.user.claimReward.useMutation();
 
   // Variables associated with cards
   const [originalInstances, setOriginalInstances] = useState(instances.slice());
@@ -138,18 +140,36 @@ export default function Game({
     }
   };
 
-  // Claim Daily Reward
-  const claimDaily = async () => {
+  // Claim Daily and Nightly Reward
+  const claimReward = async () => {
     setDailyDisabled(true);
-    dailyMutation.mutate(undefined, {
-      onSuccess(data, variables, context) {
-        setClaimedDaily(true);
-        setBalance(data.user.balance);
-      },
-      onError(error, variables, context) {
-        setDailyDisabled(false);
-      }
-    });
+    if (time === "day") {
+      rewardMutation.mutate(
+        { time: time },
+        {
+          onSuccess(data, variables, context) {
+            setClaimedDaily(true);
+            setBalance(data.user.balance);
+          },
+          onError(error, variables, context) {
+            setDailyDisabled(false);
+          }
+        }
+      );
+    } else if (time === "night") {
+      rewardMutation.mutate(
+        { time: time },
+        {
+          onSuccess(data, variables, context) {
+            setClaimedNightly(true);
+            setBalance(data.user.balance);
+          },
+          onError(error, variables, context) {
+            setNightlyDisabled(false);
+          }
+        }
+      );
+    }
   };
 
   // Change Card Sort Order
@@ -338,15 +358,26 @@ export default function Game({
           <main className="p-4">
             <div className="flex items-end justify-between px-4">
               <span>Your current balance is P{balance}.</span>
-              {claimedDaily ? (
+              {claimedDaily && time === "day" ? (
                 <span>You have already claimed your daily reward.</span>
-              ) : (
+              ) : !claimedDaily && time === "day" ? (
                 <button
-                  onClick={() => claimDaily()}
+                  onClick={() => claimReward()}
                   disabled={dailyDisabled}
                   className="w-fit rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
                   Claim Daily Reward
                 </button>
+              ) : claimedNightly && time === "night" ? (
+                <span>You have already claimed your nightly reward.</span>
+              ) : !claimedNightly && time === "night" ? (
+                <button
+                  onClick={() => claimReward()}
+                  disabled={dailyDisabled}
+                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
+                  Claim Nightly Reward
+                </button>
+              ) : (
+                <></>
               )}
             </div>
             <div className="flex items-center justify-between px-4">
