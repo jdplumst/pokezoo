@@ -17,6 +17,7 @@ declare module "next-auth" {
     totalYield: number;
     balance: number;
     claimedDaily: boolean;
+    claimedNightly: boolean;
     johtoStarter: boolean;
   }
 }

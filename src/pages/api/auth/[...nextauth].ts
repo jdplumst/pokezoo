@@ -22,6 +22,7 @@ export const authOptions: NextAuthOptions = {
           totalYield: 0,
           balance: 500,
           claimedDaily: false,
+          claimedNightly: false,
           johtoStarter: true
         };
       }
@@ -39,6 +40,7 @@ export const authOptions: NextAuthOptions = {
           totalYield: 0,
           balance: 500,
           claimedDaily: false,
+          claimedNightly: false,
           johtoStarter: true
         };
       }
@@ -56,6 +58,7 @@ export const authOptions: NextAuthOptions = {
           totalYield: 0,
           balance: 500,
           claimedDaily: false,
+          claimedNightly: false,
           johtoStarter: true
         };
       }
@@ -72,6 +75,7 @@ export const authOptions: NextAuthOptions = {
         session.user.totalYield = user.totalYield;
         session.user.balance = user.balance;
         session.user.claimedDaily = user.claimedDaily;
+        session.user.claimedNightly = user.claimedNightly;
         session.user.johtoStarter = user.johtoStarter;
       }
       return session;
