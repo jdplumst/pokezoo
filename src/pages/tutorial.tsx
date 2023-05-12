@@ -38,7 +38,8 @@ export default function Tutorial() {
             <br></br>
             <p>
               Users are automatically gifted their total yield once per day
-              around 9PM EDT. The daily reward is also reset at this time.
+              around 3AM EDT. The daily and nightly rewards are also reset at
+              this time.
             </p>
             <br></br>
             <p>Daily Reward works as follows:</p>

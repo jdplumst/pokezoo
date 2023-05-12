@@ -32,9 +32,9 @@ export default function PatchNotes() {
                 claimed during the day.
               </p>
               <p className="px-4 pt-4">
-                Daily and nightly rewards are now reset at around 4AM EDT
+                Daily and nightly rewards are now reset at around 3AM EDT
                 instead of around 9PM EDT. Total yield is now gifted at around
-                4AM EDT as well.
+                3AM EDT as well.
               </p>
             </section>
             <hr className="border-black pb-4"></hr>
