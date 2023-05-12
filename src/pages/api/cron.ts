@@ -12,13 +12,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "POST":
       try {
-        await prisma.$executeRaw`UPDATE User SET balance = balance + totalYield, claimedDaily = false`;
+        await prisma.$executeRaw`UPDATE User SET balance = balance + totalYield, claimedDaily = false, claimedNightly = false`;
         return res.status(200).json({
-          msg: "Successfully updated all user's dollars and reset daily claim"
+          msg: "Successfully updated all user's dollars and reset daily and nightly claims"
         });
       } catch (error) {
         throw new Error(
-          "User's dollars and daily claim not updated successfully"
+          "User's dollars and daily and nightly claims not updated successfully"
         );
       }
   }
