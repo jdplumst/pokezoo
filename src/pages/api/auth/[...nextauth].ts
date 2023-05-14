@@ -19,6 +19,7 @@ export const authOptions: NextAuthOptions = {
           email: profile.email,
           emailVerified: null,
           image: profile.avatar_url,
+          admin: false,
           totalYield: 0,
           balance: 500,
           claimedDaily: false,
@@ -37,6 +38,7 @@ export const authOptions: NextAuthOptions = {
           email: profile.email,
           emailVerified: null,
           image: profile.picture,
+          admin: false,
           totalYield: 0,
           balance: 500,
           claimedDaily: false,
@@ -55,6 +57,7 @@ export const authOptions: NextAuthOptions = {
           email: profile.email,
           emailVerified: null,
           image: profile.picture,
+          admin: false,
           totalYield: 0,
           balance: 500,
           claimedDaily: false,
@@ -72,6 +75,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = user.email;
         session.user.emailVerified = user.emailVerified;
         session.user.image = user.image;
+        session.user.admin = user.admin;
         session.user.totalYield = user.totalYield;
         session.user.balance = user.balance;
         session.user.claimedDaily = user.claimedDaily;

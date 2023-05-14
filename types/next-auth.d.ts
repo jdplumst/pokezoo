@@ -14,6 +14,7 @@ declare module "next-auth" {
     image: string;
 
     // Custom fields
+    admin: boolean;
     totalYield: number;
     balance: number;
     claimedDaily: boolean;
