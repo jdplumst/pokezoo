@@ -41,24 +41,24 @@ html {
   --color-legendary-unfocus: #10b981;
 
   /* Pokemon Type Colours */
-  --color-normal: #d97706;
-  --color-grass: #22c55e;
-  --color-bug: #84cc16;
-  --color-fire: #ea580c;
-  --color-electric: #facc15;
-  --color-ground: #c2410c;
-  --color-water: #3b82f6;
-  --color-fighting: #dc2626;
-  --color-poison: #9333ea;
-  --color-rock: #78716c;
-  --color-ice: #06b6d4;
-  --color-ghost: #8b5cf6;
-  --color-psychic: #d946ef;
-  --color-fairy: #ec4899;
-  --color-dark: black;
-  --color-dragon: #6366f1;
-  --color-steel: #64748b;
-  --color-flying: #a78bfa;
+  --color-normal: #a8a77a;
+  --color-grass: #7ac74c;
+  --color-bug: #a6b91a;
+  --color-fire: #ee8130;
+  --color-electric: #f7d02c;
+  --color-ground: #e2bf65;
+  --color-water: #6390f0;
+  --color-fighting: #c22e28;
+  --color-poison: #a33ea1;
+  --color-rock: #b6a136;
+  --color-ice: #96d9d6;
+  --color-ghost: #735797;
+  --color-psychic: #f95587;
+  --color-fairy: #d685ad;
+  --color-dark: #705746;
+  --color-dragon: #6f35fc;
+  --color-steel: #b7b7ce;
+  --color-flying: #a98ff3;
 }
 
 html .night {
