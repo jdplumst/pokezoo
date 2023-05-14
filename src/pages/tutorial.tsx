@@ -1,13 +1,28 @@
 import Head from "next/head";
 import Sidebar from "../components/Sidebar";
+import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import Loading from "../components/Loading";
 
 export default function Tutorial() {
-  const today = new Date();
-  const hour = today.getHours();
-  let time: Time = "night";
-  if (hour >= 6 && hour <= 17) {
-    time = "day";
-  }
+  const { data: session } = useSession();
+  const user = session?.user;
+
+  const [time, setTime] = useState<Time>("night");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const today = new Date();
+    const hour = today.getHours();
+    if (hour >= 6 && hour <= 17) {
+      setTime("day");
+    } else {
+      setTime("night");
+    }
+    setLoading(false);
+  }, []);
+
+  if (loading) return <Loading />;
 
   return (
     <>
@@ -21,6 +36,15 @@ export default function Tutorial() {
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Tutorial">
           <main className="px-8">
+            {user?.admin && (
+              <div className="flex justify-center bg-red-500">
+                <button
+                  onClick={() => setTime(time === "day" ? "night" : "day")}
+                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
+                  Toggle day/night
+                </button>
+              </div>
+            )}
             <h1 className="py-4 text-7xl font-bold">Tutorial</h1>
             <hr className="border-black pb-4"></hr>
             <p>

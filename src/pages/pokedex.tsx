@@ -5,12 +5,19 @@ import { prisma } from "../server/db";
 import Card from "../components/Card";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]";
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (
+  context: GetServerSidePropsContext
+) => {
+  const session = await getServerSession(context.req, context.res, authOptions);
+  const user = session?.user;
   const species = await prisma.species.findMany();
 
   return {
     props: {
+      user,
       species
     }
   };
@@ -20,6 +27,7 @@ type Shiny = "Original" | "Shiny";
 type Region = "All" | "Kanto" | "Johto";
 
 export default function Pokedex({
+  user,
   species
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [time, setTime] = useState<Time>("night");
@@ -74,6 +82,15 @@ export default function Pokedex({
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Pokedex">
           <main className="p-4">
+            {user?.admin && (
+              <div className="flex justify-center bg-red-500">
+                <button
+                  onClick={() => setTime(time === "day" ? "night" : "day")}
+                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
+                  Toggle day/night
+                </button>
+              </div>
+            )}
             <div className="flex justify-center gap-5">
               <button
                 onClick={() => setShiny("Original")}

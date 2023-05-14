@@ -356,6 +356,15 @@ export default function Game({
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Game">
           <main className="p-4">
+            {user.admin && (
+              <div className="flex justify-center bg-red-500">
+                <button
+                  onClick={() => setTime(time === "day" ? "night" : "day")}
+                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
+                  Toggle day/night
+                </button>
+              </div>
+            )}
             <div className="flex items-end justify-between px-4">
               <span>Your current balance is P{balance}.</span>
               {claimedDaily && time === "day" ? (
