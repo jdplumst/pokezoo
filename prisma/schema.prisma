@@ -81,6 +81,7 @@ model Species {
   typeOne       String     @default("null")
   typeTwo       String?
   generation    Int        @default(1)
+  habitat       String     @default("null")
 }
 
 model Instance {
