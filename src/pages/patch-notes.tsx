@@ -59,7 +59,7 @@ export default function PatchNotes() {
               <p className="px-4 pt-4">
                 Modified type colours to use the colours from{" "}
                 <a href="https://gist.github.com/apaleslimghost/0d25ec801ca4fc43317bcff298af43c3">
-                  here
+                  <span>here</span>
                 </a>
                 .
               </p>

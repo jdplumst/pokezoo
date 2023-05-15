@@ -85,7 +85,7 @@ export default function Tutorial() {
             <p>
               Pokémon rarity is calculated as following (using terms from{" "}
               <a href="https://bulbapedia.bulbagarden.net/wiki/Experience">
-                Bulbapedia
+                <span>Bulbapedia</span>
               </a>
               ):
             </p>
