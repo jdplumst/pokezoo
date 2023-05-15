@@ -124,9 +124,9 @@ export default function Card({ species, instance, openDelete }: ICard) {
           )}
         </div>
         <p>Rarity: {species.rarity}</p>
+        <p className="capitalize">Habitat: {species.habitat}</p>
         <p>Yield: P{species.yield.toLocaleString()}</p>
         <p>Sell Price: P{species.sellPrice.toLocaleString()}</p>
-        <p className="capitalize">Habitat: {species.habitat}</p>
         {instance && openDelete && (
           <button
             onClick={() => openDelete(species, instance)}
