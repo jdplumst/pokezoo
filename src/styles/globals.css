@@ -97,6 +97,14 @@ html::-webkit-scrollbar-thumb {
   background-color: #d946ef;
 }
 
+a {
+  color: rgb(37, 99, 235);
+}
+
+a:visited {
+  color: rgb(147, 51, 234);
+}
+
 /* Sidebar */
 .sidebar {
   transition: all 0.5s;

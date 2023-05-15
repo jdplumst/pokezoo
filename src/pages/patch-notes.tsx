@@ -52,9 +52,7 @@ export default function PatchNotes() {
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
                 Modified type colours to use the colours from{" "}
-                <a
-                  href="https://gist.github.com/apaleslimghost/0d25ec801ca4fc43317bcff298af43c3"
-                  className="text-blue-600 visited:text-purple-600">
+                <a href="https://gist.github.com/apaleslimghost/0d25ec801ca4fc43317bcff298af43c3">
                   here
                 </a>
                 .
