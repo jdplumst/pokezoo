@@ -20,7 +20,7 @@ export default function Card({ species, instance, openDelete }: ICard) {
           : species.rarity === Rarity.Legendary
           ? `bg-legendary-unfocus hover:bg-legendary-focus`
           : ``
-      } card-hover ${instance && openDelete ? `h-80` : `h-72`} w-52 border-2 ${
+      } card-hover h-fit w-52 border-2 ${
         species.shiny ? `border-yellow-500` : `border-black`
       } p-2 text-black`}>
       <div className="flex flex-col items-center">
@@ -126,6 +126,7 @@ export default function Card({ species, instance, openDelete }: ICard) {
         <p>Rarity: {species.rarity}</p>
         <p>Yield: P{species.yield.toLocaleString()}</p>
         <p>Sell Price: P{species.sellPrice.toLocaleString()}</p>
+        <p className="capitalize">Habitat: {species.habitat}</p>
         {instance && openDelete && (
           <button
             onClick={() => openDelete(species, instance)}
