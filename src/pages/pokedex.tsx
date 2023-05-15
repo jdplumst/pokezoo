@@ -12,7 +12,7 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const session = await getServerSession(context.req, context.res, authOptions);
-  const user = session?.user;
+  const user = session?.user || null;
   const species = await prisma.species.findMany();
 
   return {
