@@ -66,19 +66,19 @@ export default function Tutorial() {
               this time.
             </p>
             <br></br>
-            <p>Daily Reward works as follows:</p>
+            <p>Daily and Nightly Rewards work as follows:</p>
             <ul className="list-disc px-4">
               <li>
                 If player has total yield of less than P1,000, then they get a
-                P25 daily reward.
+                P25 reward.
               </li>
               <li>
                 If player has total yield of P1,000 or more and less than
-                P10,000, then they get a P100 daily reward.
+                P10,000, then they get a P100 reward.
               </li>
               <li>
                 If player has total yield of P10,000 or more, then they get a
-                P1,000 daily reward.
+                P1,000 reward.
               </li>
             </ul>
             <br></br>
@@ -113,6 +113,14 @@ export default function Tutorial() {
               different balls which each contain their own rarity chances. Each
               ball also has a 1 in 4096 chance of giving the user a shiny
               Pokémon.
+            </p>
+            <br></br>
+            <p>
+              Additionally, there is daytime and nighttime. Daytime occurs
+              between 6am and 6pm EDT and nighttime occurs between 6pm and 6am
+              EDT. During daytime, Pokémon with a cave or forest habitat cannot
+              be obtained. During nighttime, Pokémon with a grassland habitat
+              cannot be obtained.
             </p>
             <br></br>
             <p>
