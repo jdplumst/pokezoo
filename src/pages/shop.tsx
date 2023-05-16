@@ -77,10 +77,20 @@ export default function Shop({
       shiny = true;
     }
 
+    // Filter species based on time
+    let timeSpecies = species.slice();
+    if (time === "day") {
+      timeSpecies = species.filter(
+        (s) => s.habitat !== "cave" && s.habitat !== "forest"
+      );
+    } else if (time === "night") {
+      timeSpecies = species.filter((s) => s.habitat !== "grassland");
+    }
+
     // Filter species based on ball
-    let filteredSpecies = species.slice();
+    let filteredSpecies = timeSpecies.slice();
     if (ball.name === "Net") {
-      filteredSpecies = species.filter(
+      filteredSpecies = timeSpecies.filter(
         (s) =>
           s.typeOne === "water" ||
           s.typeTwo === "water" ||
@@ -88,7 +98,7 @@ export default function Shop({
           s.typeTwo === "bug"
       );
     } else if (ball.name === "Dusk") {
-      filteredSpecies = species.filter(
+      filteredSpecies = timeSpecies.filter(
         (s) =>
           s.typeOne === "dark" ||
           s.typeTwo === "dark" ||
