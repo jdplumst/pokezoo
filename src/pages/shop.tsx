@@ -105,6 +105,10 @@ export default function Shop({
           s.typeOne === "ghost" ||
           s.typeTwo === "ghost"
       );
+    } else if (ball.name === "Dive") {
+      filteredSpecies = timeSpecies.filter(
+        (s) => s.habitat === "waters-edge" || s.habitat === "sea"
+      );
     }
 
     // Determine rarity
