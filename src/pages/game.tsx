@@ -79,12 +79,8 @@ export default function Game({
   const [deleteDisabled, setDeleteDisabled] = useState(false);
   const sellMutation = trpc.instance.sellInstance.useMutation();
 
-  // Variables associated with Johto Starter
+  // Variable associated with Johto starters
   const [claimedJohto, setClaimedJohto] = useState(user.johtoStarter);
-  const [johtoStarter, setJohtoStarter] = useState<JohtoStarter | null>(null);
-  const [johtoDisabled, setJohtoDisabled] = useState(false);
-  const [johtoError, setJohtoError] = useState<string | null>(null);
-  const johtoMutation = trpc.instance.getJohto.useMutation();
 
   useEffect(() => {
     const today = new Date();
@@ -97,46 +93,17 @@ export default function Game({
     setLoading(false);
   }, []);
 
-  const addStarter = (i: Instance) => {
+  // Display starter and updated yield
+  const addStarter = (i: Instance, r: Region) => {
     setCards((prevCards) => [...prevCards, i]);
     setOriginalInstances((prevOriginalInstances) => [
       ...prevOriginalInstances,
       i
     ]);
     setTotalYield((prevTotalYield) => prevTotalYield + 50);
-  };
 
-  // Close Johto Starter Modal
-  const handleJohtoClose = async () => {
-    setJohtoDisabled(true);
-    if (johtoStarter) {
-      const speciesId =
-        johtoStarter === "Chikorita"
-          ? species.find((s) => s.pokedexNumber === 152 && !s.shiny)?.id ||
-            species[0].id
-          : johtoStarter === "Cyndaquil"
-          ? species.find((s) => s.pokedexNumber === 155 && !s.shiny)?.id ||
-            species[0].id
-          : johtoStarter === "Totodile"
-          ? species.find((s) => s.pokedexNumber === 158 && !s.shiny)?.id ||
-            species[0].id
-          : "";
-
-      johtoMutation.mutate(
-        { userId: user.id, speciesId: speciesId, cost: 0 },
-        {
-          onSuccess(data, variables, context) {
-            addStarter(data.instance);
-            setClaimedJohto(true);
-          },
-          onError(error, variables, context) {
-            setError(error.message);
-          }
-        }
-      );
-    } else if (!johtoStarter) {
-      setJohtoError("Must pick a starter Pokémon");
-      setJohtoDisabled(false);
+    if (r === "Johto") {
+      setClaimedJohto(true);
     }
   };
 
@@ -257,70 +224,22 @@ export default function Game({
 
       {/* Modal for New Players */}
       {cards.length === 0 && (
-        <Start species={species} addStarter={addStarter} />
+        <Start
+          user={user}
+          species={species}
+          region="Kanto"
+          addStarter={addStarter}
+        />
       )}
 
       {/* Modal for Johto Starter */}
       {!claimedJohto && (
-        <Modal>
-          <div className="text-center text-xl font-bold">
-            Johto Pokémon are now in PokéZoo!
-          </div>
-          <div className="pt-2">Please select your Johto starter!</div>
-          <div className="flex gap-5 pt-4">
-            <div
-              className={`${
-                johtoStarter === "Chikorita" && `border-4 border-green-500`
-              }`}>
-              <button onClick={() => setJohtoStarter("Chikorita")}>
-                <Card
-                  species={
-                    species.find((s) => s.pokedexNumber === 152 && !s.shiny) ||
-                    species[0]
-                  }
-                />
-              </button>
-            </div>
-            <div
-              className={`${
-                johtoStarter === "Cyndaquil" && `border-4 border-green-500`
-              }`}>
-              <button onClick={() => setJohtoStarter("Cyndaquil")}>
-                <Card
-                  species={
-                    species.find((s) => s.pokedexNumber === 155 && !s.shiny) ||
-                    species[0]
-                  }
-                />
-              </button>
-            </div>
-            <div
-              className={`${
-                johtoStarter === "Totodile" && `border-4 border-green-500`
-              }`}>
-              <button onClick={() => setJohtoStarter("Totodile")}>
-                <Card
-                  species={
-                    species.find((s) => s.pokedexNumber === 158) || species[0]
-                  }
-                />
-              </button>
-            </div>
-          </div>
-          <div className="flex justify-center pt-4">
-            <button
-              onClick={() => handleJohtoClose()}
-              disabled={johtoDisabled}
-              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-              Confirm Selection
-            </button>
-          </div>
-          {johtoError && (
-            <div className="flex justify-center pt-4 text-red-500">
-              {johtoError}
-            </div>
-          )}
-        </Modal>
+        <Start
+          user={user}
+          species={species}
+          region="Johto"
+          addStarter={addStarter}
+        />
       )}
 
       {/* Modal for Deleting */}
