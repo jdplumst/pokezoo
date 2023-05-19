@@ -123,7 +123,7 @@ export default function Tutorial() {
               cannot be obtained.
             </p>
             <br></br>
-            <p>
+            <p className="pb-4">
               Pokémon can also be sold from the game page. Common Pokémon can be
               sold for P50, Rare Pokémon can be sold for P250, Epic Pokémon can
               be sold for P1,500, and Legendary Pokémon can be sold for P5,000.
