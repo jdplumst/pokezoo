@@ -48,6 +48,19 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">3.00 (May 19, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Added Hoenn Pokémon! Start collecting Pokémon from Hoenn
+                alongside Pokémon from Kanto and Johto.
+              </p>
+              <p className="px-4">
+                All exising users will get to choose a Hoenn starter between
+                Treecko, Torchic, and Mudkip for free!
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">2.16 (May 18, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">Added Dive Ball.</p>
