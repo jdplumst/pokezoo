@@ -24,7 +24,6 @@ export const getServerSideProps = async (
 };
 
 type Shiny = "Original" | "Shiny";
-type Region = "All" | "Kanto" | "Johto";
 
 export default function Pokedex({
   user,
@@ -61,6 +60,8 @@ export default function Pokedex({
       setCards((prevCards) => prevCards.filter((s) => s.generation === 1));
     } else if (region === "Johto") {
       setCards((prevCards) => prevCards.filter((s) => s.generation === 2));
+    } else if (region === "Hoenn") {
+      setCards((prevCards) => prevCards.filter((s) => s.generation === 3));
     }
   };
 
@@ -138,6 +139,15 @@ export default function Pokedex({
                     : `bg-green-btn-unfocus hover:bg-green-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Johto
+              </button>
+              <button
+                onClick={() => setRegion("Hoenn")}
+                className={`${
+                  region === "Hoenn"
+                    ? `bg-green-btn-focus`
+                    : `bg-green-btn-unfocus hover:bg-green-btn-focus`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Hoenn
               </button>
             </div>
             <div className="cards grid justify-center gap-5 pt-5">
