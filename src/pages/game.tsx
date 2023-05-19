@@ -79,8 +79,9 @@ export default function Game({
   const [deleteDisabled, setDeleteDisabled] = useState(false);
   const sellMutation = trpc.instance.sellInstance.useMutation();
 
-  // Variable associated with Johto starters
+  // Variables associated with starters
   const [claimedJohto, setClaimedJohto] = useState(user.johtoStarter);
+  const [claimedHoenn, setClaimedHoenn] = useState(user.hoennStarter);
 
   useEffect(() => {
     const today = new Date();
@@ -104,6 +105,8 @@ export default function Game({
 
     if (r === "Johto") {
       setClaimedJohto(true);
+    } else if (r === "Hoenn") {
+      setClaimedHoenn(true);
     }
   };
 
@@ -238,6 +241,16 @@ export default function Game({
           user={user}
           species={species}
           region="Johto"
+          addStarter={addStarter}
+        />
+      )}
+
+      {/* Modal for Hoenn Starter */}
+      {!claimedHoenn && (
+        <Start
+          user={user}
+          species={species}
+          region="Hoenn"
           addStarter={addStarter}
         />
       )}

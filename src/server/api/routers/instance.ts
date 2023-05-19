@@ -145,5 +145,57 @@ export const instanceRouter = router({
         instance: instance,
         user: user
       };
+    }),
+
+  getHoenn: protectedProcedure
+    .input(
+      z.object({
+        speciesId: z.string(),
+        userId: z.string(),
+        cost: z.number()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const currUser = await ctx.prisma.user.findUnique({
+        where: { id: ctx.session.user.id },
+        select: { totalYield: true, balance: true, hoennStarter: true }
+      });
+      if (!currUser) {
+        throw Error("Not authorized to make this request");
+      }
+      if (currUser.hoennStarter) {
+        throw Error("You have already received a Hoenn starter.");
+      }
+      const species = await ctx.prisma.species.findUnique({
+        where: {
+          id: input.speciesId
+        }
+      });
+      if (!species) {
+        throw Error("Species does not exist.");
+      }
+      const numInstances = await ctx.prisma.instance.count({
+        where: { userId: ctx.session.user.id }
+      });
+      if (numInstances >= 2000) {
+        throw Error(
+          "You have reached your limit. Sell Pokémon if you want to buy more."
+        );
+      }
+      const user = await ctx.prisma.user.update({
+        where: { id: ctx.session.user.id },
+        data: {
+          totalYield: currUser.totalYield + species.yield,
+          balance: currUser.balance - input.cost,
+          hoennStarter: true
+        }
+      });
+      const instance = await ctx.prisma.instance.create({
+        data: { userId: ctx.session.user.id, speciesId: input.speciesId }
+      });
+      return {
+        instance: instance,
+        user: user
+      };
     })
 });
