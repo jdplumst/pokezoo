@@ -58,6 +58,7 @@ model User {
   claimedNightly Boolean    @default(false)
   instances      Instance[]
   johtoStarter   Boolean    @default(true)
+  hoennStarter   Boolean    @default(true)
 }
 
 model VerificationToken {

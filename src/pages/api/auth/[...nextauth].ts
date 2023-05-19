@@ -24,7 +24,8 @@ export const authOptions: NextAuthOptions = {
           balance: 500,
           claimedDaily: false,
           claimedNightly: false,
-          johtoStarter: true
+          johtoStarter: true,
+          hoennStarter: true
         };
       }
     }),
@@ -43,7 +44,8 @@ export const authOptions: NextAuthOptions = {
           balance: 500,
           claimedDaily: false,
           claimedNightly: false,
-          johtoStarter: true
+          johtoStarter: true,
+          hoennStarter: true
         };
       }
     }),
@@ -62,7 +64,8 @@ export const authOptions: NextAuthOptions = {
           balance: 500,
           claimedDaily: false,
           claimedNightly: false,
-          johtoStarter: true
+          johtoStarter: true,
+          hoennStarter: true
         };
       }
     })
@@ -81,6 +84,7 @@ export const authOptions: NextAuthOptions = {
         session.user.claimedDaily = user.claimedDaily;
         session.user.claimedNightly = user.claimedNightly;
         session.user.johtoStarter = user.johtoStarter;
+        session.user.hoennStarter = user.hoennStarter;
       }
       return session;
     }

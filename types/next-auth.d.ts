@@ -20,5 +20,6 @@ declare module "next-auth" {
     claimedDaily: boolean;
     claimedNightly: boolean;
     johtoStarter: boolean;
+    hoennStarter: boolean;
   }
 }
