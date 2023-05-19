@@ -313,7 +313,7 @@ export default function Game({
               ) : !claimedNightly && time === "night" ? (
                 <button
                   onClick={() => claimReward()}
-                  disabled={dailyDisabled}
+                  disabled={nightlyDisabled}
                   className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
                   Claim Nightly Reward
                 </button>
