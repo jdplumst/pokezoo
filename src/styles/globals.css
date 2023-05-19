@@ -129,7 +129,7 @@ a span:visited {
 
 /* Card Grid */
 .cards {
-  grid-template-columns: repeat(auto-fill, 208px);
+  grid-template-columns: repeat(auto-fill, 224px);
 }
 
 /* Ball Grid */

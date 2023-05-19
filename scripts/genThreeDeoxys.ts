@@ -42,7 +42,7 @@ const populateGenThreeDB = async () => {
     if (pokemonData.types.length === 2) {
       const species = await prisma.species.create({
         data: {
-          pokedexNumber: i,
+          pokedexNumber: 386,
           name: pokemonData.name,
           rarity: rarity,
           yield: income,
@@ -57,7 +57,7 @@ const populateGenThreeDB = async () => {
       });
       const shinySpecies = await prisma.species.create({
         data: {
-          pokedexNumber: i,
+          pokedexNumber: 386,
           name: pokemonData.name,
           rarity: rarity,
           yield: income * 2,
@@ -75,7 +75,7 @@ const populateGenThreeDB = async () => {
     } else {
       const species = await prisma.species.create({
         data: {
-          pokedexNumber: i,
+          pokedexNumber: 386,
           name: pokemonData.name,
           rarity: rarity,
           yield: income,
@@ -89,8 +89,8 @@ const populateGenThreeDB = async () => {
       });
       const shinySpecies = await prisma.species.create({
         data: {
-          pokedexNumber: i,
-          name: pokemonData.name,
+          pokedexNumber: 386,
+          name: pokemonData.sname,
           rarity: rarity,
           yield: income * 2,
           img: pokemonData.sprites.front_shiny,
