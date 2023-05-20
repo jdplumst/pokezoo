@@ -48,6 +48,18 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">3.01 (May 13, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="p-4">Added balance changes:</p>
+              <div className="px-4 text-2xl font-bold">Dusk Ball</div>
+              <ul className="list-disc px-4">
+                <li className="ml-4">Common chance changed to 20%</li>
+                <li className="ml-4">Rare chance changed to 50%</li>
+                <li className="ml-4">Epic chance changed to 30%</li>
+              </ul>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">3.00 (May 19, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
