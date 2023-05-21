@@ -226,8 +226,7 @@ export default function PatchNotes() {
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">2.03 (May 4, 2023)</h3>
               <hr className="border-black"></hr>
-              <p className="p-4">Added balance changes:</p>
-              <div className="px-4 text-2xl font-bold">Poké Ball</div>
+              <p className="px-4 pt-4">Added balance changes:</p>
               <ul className="list-disc px-4">
                 <li className="ml-4">
                   Rare sell price changed from P100 to P250 (Shiny Rare sell
