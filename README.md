@@ -8,6 +8,7 @@ The app is currently on version 3.01.
 
 ## Built With
 
+- React
 - Next.js
 - TypeScript
 - TailwindCSS
