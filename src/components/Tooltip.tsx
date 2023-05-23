@@ -33,6 +33,9 @@ export default function Tooltip({ ball, children }: ITooltip) {
             {ball.name === "Dive" && (
               <p>A guaranteed Waters-Edge or Sea Pokémon.</p>
             )}
+            {ball.name === "Safari" && (
+              <p>A guaranteed Mountain or Rough-Terrain Pokémon.</p>
+            )}
             <p>
               {ball.commonChance}% Chance{" "}
               <span className="text-common-unfocus">Common</span>
