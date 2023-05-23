@@ -109,6 +109,10 @@ export default function Shop({
       filteredSpecies = timeSpecies.filter(
         (s) => s.habitat === "waters-edge" || s.habitat === "sea"
       );
+    } else if (ball.name === "Safari") {
+      filteredSpecies = timeSpecies.filter(
+        (s) => s.habitat === "mountain" || s.habitat === "rough-terrain"
+      );
     }
 
     // Determine rarity
