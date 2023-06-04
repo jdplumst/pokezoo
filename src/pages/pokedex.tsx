@@ -24,6 +24,7 @@ export const getServerSideProps = async (
 };
 
 type Shiny = "Original" | "Shiny";
+type Rarity = "All" | "Common" | "Rare" | "Epic" | "Legendary";
 
 export default function Pokedex({
   user,
@@ -35,6 +36,7 @@ export default function Pokedex({
   const [cards, setCards] = useState(species.filter((s) => !s.shiny));
   const [shiny, setShiny] = useState<Shiny>("Original");
   const [region, setRegion] = useState<Region>("All");
+  const [rarity, setRarity] = useState<Rarity>("All");
 
   useEffect(() => {
     const today = new Date();
@@ -63,11 +65,24 @@ export default function Pokedex({
     } else if (region === "Hoenn") {
       setCards((prevCards) => prevCards.filter((s) => s.generation === 3));
     }
+
+    // Filter based on rarity
+    if (rarity === "Common") {
+      setCards((prevCards) => prevCards.filter((s) => s.rarity === "Common"));
+    } else if (rarity === "Rare") {
+      setCards((prevCards) => prevCards.filter((s) => s.rarity === "Rare"));
+    } else if (rarity === "Epic") {
+      setCards((prevCards) => prevCards.filter((s) => s.rarity === "Epic"));
+    } else if (rarity === "Legendary") {
+      setCards((prevCards) =>
+        prevCards.filter((s) => s.rarity === "Legendary")
+      );
+    }
   };
 
   useEffect(() => {
     filterSpecies();
-  }, [shiny, region]);
+  }, [shiny, region, rarity]);
 
   if (loading) return <Loading />;
 
@@ -148,6 +163,53 @@ export default function Pokedex({
                     : `bg-green-btn-unfocus hover:bg-green-btn-focus`
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Hoenn
+              </button>
+            </div>
+            <div className="flex justify-center gap-5 pt-5">
+              <button
+                onClick={() => setRarity("All")}
+                className={`${
+                  rarity === "All"
+                    ? `bg-orange-btn-focus`
+                    : `bg-orange-btn-unfocus hover:bg-orange-btn-focus`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                All
+              </button>
+              <button
+                onClick={() => setRarity("Common")}
+                className={`${
+                  rarity === "Common"
+                    ? `bg-orange-btn-focus`
+                    : `bg-orange-btn-unfocus hover:bg-orange-btn-focus`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Common
+              </button>
+              <button
+                onClick={() => setRarity("Rare")}
+                className={`${
+                  rarity === "Rare"
+                    ? `bg-orange-btn-focus`
+                    : `bg-orange-btn-unfocus hover:bg-orange-btn-focus`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Rare
+              </button>
+              <button
+                onClick={() => setRarity("Epic")}
+                className={`${
+                  rarity === "Epic"
+                    ? `bg-orange-btn-focus`
+                    : `bg-orange-btn-unfocus hover:bg-orange-btn-focus`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Epic
+              </button>
+              <button
+                onClick={() => setRarity("Legendary")}
+                className={`${
+                  rarity === "Legendary"
+                    ? `bg-orange-btn-focus`
+                    : `bg-orange-btn-unfocus hover:bg-orange-btn-focus`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Legendary
               </button>
             </div>
             <div className="cards grid justify-center gap-5 pt-5">
