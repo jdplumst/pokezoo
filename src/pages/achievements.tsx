@@ -6,6 +6,7 @@ import { authOptions } from "./api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { prisma } from "../server/db";
 import Loading from "../components/Loading";
+import ProgressBar from "../components/ProgressBar";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -22,7 +23,19 @@ export const getServerSideProps = async (
   const user = session?.user || null;
   const instances = await prisma.instance.findMany({
     where: { userId: user.id.toString() },
-    distinct: ["speciesId"]
+    distinct: ["speciesId"],
+    include: {
+      species: {
+        select: {
+          rarity: true,
+          habitat: true,
+          typeOne: true,
+          typeTwo: true,
+          generation: true,
+          shiny: true
+        }
+      }
+    }
   });
   const species = await prisma.species.findMany();
   const achievements = await prisma.achievement.findMany();
@@ -75,14 +88,22 @@ export default function Achievements({
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Achievements">
-          <main className="p-4">
-            <ul>
+          <main className="flex justify-center p-4">
+            <ul className="w-3/4">
               {achievements.map((a) => (
-                <li className="mb-5 flex justify-between border-2 border-tooltip-border p-2">
+                <li
+                  key={a.id}
+                  className="mb-5 flex justify-between border-2 border-tooltip-border p-2">
                   <div>
                     <b>Tier {a.tier}</b> | {a.description}
                   </div>
-                  <div>progress or claim</div>
+                  <div>
+                    <ProgressBar
+                      species={species}
+                      instances={instances}
+                      achievement={a}
+                    />
+                  </div>
                 </li>
               ))}
             </ul>
