@@ -63,6 +63,7 @@ export default function Achievements({
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
+  const [totalYield, setTotalYield] = useState(user.totalYield);
 
   useEffect(() => {
     const today = new Date();
@@ -74,6 +75,10 @@ export default function Achievements({
     }
     setLoading(false);
   }, []);
+
+  const updateBalance = (x: number) => {
+    setTotalYield((prevTotalYield) => prevTotalYield + x);
+  };
 
   if (loading) return <Loading />;
 
@@ -98,20 +103,27 @@ export default function Achievements({
                 </button>
               </div>
             )}
-            <div className="flex justify-center">
+            <p>Your current balance is P{user.balance}.</p>
+            <p>You will receive P{totalYield} on the next payout.</p>
+            <div className="flex justify-center pt-5">
               <ul className="w-3/4">
                 {achievements.map((a) => (
                   <li
                     key={a.id}
-                    className="mb-5 flex justify-between border-2 border-tooltip-border p-2">
+                    className="mb-5 flex h-14 items-center justify-between border-2 border-tooltip-border p-2">
                     <div>
                       <b>Tier {a.tier}</b> | {a.description}
                     </div>
                     <div>
                       <ProgressBar
+                        user={user}
                         species={species}
                         instances={instances}
                         achievement={a}
+                        achieved={userAchievements.some(
+                          (u) => u.achievementId === a.id
+                        )}
+                        updateBalance={updateBalance}
                       />
                     </div>
                   </li>
