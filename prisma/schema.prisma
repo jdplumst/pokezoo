@@ -111,7 +111,7 @@ model Ball {
 model Achievement {
   id              String            @id @default(cuid())
   description     String
-  region          String
+  generation      Int               @default(1)
   type            AchievementType   @default(Rarity)
   attribute       String            @default("Common")
   tier            Int
