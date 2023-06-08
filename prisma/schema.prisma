@@ -112,6 +112,7 @@ model Achievement {
   id              String            @id @default(cuid())
   description     String
   region          String
+  type            AchievementType   @default(Rarity)
   tier            Int
   yield           Int
   UserAchievement UserAchievement[]
@@ -133,4 +134,10 @@ enum Rarity {
   Rare
   Epic
   Legendary
+}
+
+enum AchievementType {
+  Rarity
+  Habitat
+  Type
 }
