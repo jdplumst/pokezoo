@@ -113,6 +113,7 @@ model Achievement {
   description     String
   region          String
   type            AchievementType   @default(Rarity)
+  attribute       String            @default("Common")
   tier            Int
   yield           Int
   UserAchievement UserAchievement[]
