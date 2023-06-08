@@ -50,14 +50,23 @@ export default function Tutorial() {
             <p>
               PokéZoo is a game where players collect Pokémon. Each Pokémon
               gives the user a certain amount of money depending on their
-              rarity. Money can then be used to collect even more Pokémon.
+              rarity. Money can then be used to collect even more Pokémon and
+              claim achievements.
             </p>
             <br></br>
             <p>
-              Common Pokémon give P10 per day, Rare Pokémon give P50 per day,
-              Epic Pokémon give P300 per day, and Legendary Pokémon give P1000
-              per day. Shiny Pokémon give double the amount of their non-shiny
-              counterparts.
+              Pokémon are one source of yield. Common Pokémon give P10 per day,
+              Rare Pokémon give P50 per day, Epic Pokémon give P300 per day, and
+              Legendary Pokémon give P1000 per day. Shiny Pokémon give double
+              the amount of their non-shiny counterparts.
+            </p>
+            <br></br>
+            <p>
+              Achievements are the second source of yield. Users can claim
+              achievements from the achievements page. Tier 1 achievements give
+              P1,000 per day, tier 2 achievements give P2,000 per day, tier 3
+              achievements give P5,000 per day, and tier 4 achievements give
+              P10,000 per day.
             </p>
             <br></br>
             <p>
