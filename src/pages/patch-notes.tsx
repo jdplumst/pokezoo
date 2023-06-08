@@ -48,6 +48,15 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">3.04 (June 8, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Added Achievements! Go to the Achievements page to claim
+                achievements to increase your total yield.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">3.03 (June 4, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
