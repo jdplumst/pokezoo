@@ -18,7 +18,7 @@ export default function Sidebar({ children, page }: ISidebar) {
       <nav
         className={`${
           open ? `w-1/5` : `w-1/12`
-        } sidebar sticky top-0 flex h-screen flex-col p-4 shadow-lg`}>
+        } sidebar sticky top-0 flex h-screen max-h-screen flex-col overflow-scroll p-4 shadow-lg`}>
         <div className="flex items-center pb-10">
           <h1
             className={`${
@@ -65,6 +65,24 @@ export default function Sidebar({ children, page }: ISidebar) {
             />
             <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
               Shop
+            </h2>
+          </div>
+        </Link>
+        <Link href="/achievements">
+          <div
+            className={`${
+              page === "Achievements" && `bg-sidebar-focus`
+            } mb-4 flex w-full items-center hover:bg-sidebar-unfocus`}>
+            <Image
+              // src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/badges/31.png"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/badges/29.png"
+              alt="shop"
+              width={50}
+              height={50}
+              className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
+            />
+            <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
+              Achievements
             </h2>
           </div>
         </Link>
