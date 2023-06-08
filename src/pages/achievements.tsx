@@ -88,25 +88,36 @@ export default function Achievements({
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Achievements">
-          <main className="flex justify-center p-4">
-            <ul className="w-3/4">
-              {achievements.map((a) => (
-                <li
-                  key={a.id}
-                  className="mb-5 flex justify-between border-2 border-tooltip-border p-2">
-                  <div>
-                    <b>Tier {a.tier}</b> | {a.description}
-                  </div>
-                  <div>
-                    <ProgressBar
-                      species={species}
-                      instances={instances}
-                      achievement={a}
-                    />
-                  </div>
-                </li>
-              ))}
-            </ul>
+          <main className="p-4">
+            {user?.admin && (
+              <div className="flex justify-center bg-red-500">
+                <button
+                  onClick={() => setTime(time === "day" ? "night" : "day")}
+                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
+                  Toggle day/night
+                </button>
+              </div>
+            )}
+            <div className="flex justify-center">
+              <ul className="w-3/4">
+                {achievements.map((a) => (
+                  <li
+                    key={a.id}
+                    className="mb-5 flex justify-between border-2 border-tooltip-border p-2">
+                    <div>
+                      <b>Tier {a.tier}</b> | {a.description}
+                    </div>
+                    <div>
+                      <ProgressBar
+                        species={species}
+                        instances={instances}
+                        achievement={a}
+                      />
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </main>
         </Sidebar>
       </div>
