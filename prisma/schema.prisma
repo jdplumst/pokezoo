@@ -44,21 +44,22 @@ model Session {
 }
 
 model User {
-  id             String     @id @default(cuid())
-  name           String?
-  email          String?    @unique
-  emailVerified  DateTime?
-  image          String?
-  accounts       Account[]
-  sessions       Session[]
-  admin          Boolean    @default(false)
-  totalYield     Int
-  balance        Int
-  claimedDaily   Boolean    @default(false)
-  claimedNightly Boolean    @default(false)
-  instances      Instance[]
-  johtoStarter   Boolean    @default(true)
-  hoennStarter   Boolean    @default(true)
+  id              String            @id @default(cuid())
+  name            String?
+  email           String?           @unique
+  emailVerified   DateTime?
+  image           String?
+  accounts        Account[]
+  sessions        Session[]
+  admin           Boolean           @default(false)
+  totalYield      Int
+  balance         Int
+  claimedDaily    Boolean           @default(false)
+  claimedNightly  Boolean           @default(false)
+  instances       Instance[]
+  johtoStarter    Boolean           @default(true)
+  hoennStarter    Boolean           @default(true)
+  UserAchievement UserAchievement[]
 }
 
 model VerificationToken {
@@ -105,6 +106,26 @@ model Ball {
   rareChance      Int
   epicChance      Int
   legendaryChance Int
+}
+
+model Achievement {
+  id              String            @id @default(cuid())
+  description     String
+  region          String
+  tier            Int
+  yield           Int
+  UserAchievement UserAchievement[]
+}
+
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  achievementId String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([achievementId])
 }
 
 enum Rarity {
