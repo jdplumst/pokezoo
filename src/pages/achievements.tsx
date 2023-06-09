@@ -42,11 +42,12 @@ export const getServerSideProps = async (
   const userAchievements = await prisma.userAchievement.findMany({
     where: { userId: user.id.toString() }
   });
+  let parsedInstances: typeof instances = JSON.parse(JSON.stringify(instances));
 
   return {
     props: {
       user,
-      instances,
+      instances: parsedInstances,
       species,
       achievements,
       userAchievements
