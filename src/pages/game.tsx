@@ -36,12 +36,12 @@ export const getServerSideProps = async (
     where: { userId: user.id.toString() }
   });
   const species = await prisma.species.findMany();
-
+  let parsedInstances: Instance[] = JSON.parse(JSON.stringify(instances));
   return {
     props: {
       user,
       species,
-      instances
+      instances: parsedInstances
     }
   };
 };
@@ -144,10 +144,10 @@ export default function Game({
   const changeSort = (s: Sort) => {
     if (s === "Oldest") {
       setSort("Oldest");
-      setCards((prevCards) => prevCards.sort((a, b) => (a.createDate < b.createDate) ? 1 : -1));
+      setCards((prevCards) => prevCards.sort((a, b) => (a.createDate > b.createDate) ? 1 : -1));
     } else if (s === "Newest") {
       setSort("Newest");
-      setCards((prevCards) => prevCards.sort((a, b) => (a.createDate > b.createDate) ? 1 : -1));
+      setCards((prevCards) => prevCards.sort((a, b) => (a.createDate < b.createDate) ? 1 : -1));
     } else if (s === "Pokedex") {
       setSort("Pokedex");
       setCards((prevCards) =>
