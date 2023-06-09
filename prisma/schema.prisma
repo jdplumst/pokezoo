@@ -87,11 +87,12 @@ model Species {
 }
 
 model Instance {
-  id        String  @id @default(cuid())
-  userId    String
-  speciesId String
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  species   Species @relation(fields: [speciesId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  userId     String
+  speciesId  String
+  createDate DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  species    Species  @relation(fields: [speciesId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([speciesId])

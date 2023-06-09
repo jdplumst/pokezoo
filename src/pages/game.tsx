@@ -65,7 +65,6 @@ export default function Game({
   const rewardMutation = trpc.user.claimReward.useMutation();
 
   // Variables associated with cards
-  const [originalInstances, setOriginalInstances] = useState(instances.slice());
   const [cards, setCards] = useState(instances.slice());
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
@@ -92,15 +91,14 @@ export default function Game({
       setTime("night");
     }
     setLoading(false);
-  }, []);
+
+    // For when cards are added and deleted
+    changeSort(sort);
+  }, [cards]);
 
   // Display starter and updated yield
   const addStarter = (i: Instance, r: Region) => {
     setCards((prevCards) => [...prevCards, i]);
-    setOriginalInstances((prevOriginalInstances) => [
-      ...prevOriginalInstances,
-      i
-    ]);
     setTotalYield((prevTotalYield) => prevTotalYield + 50);
 
     if (r === "Johto") {
@@ -146,10 +144,10 @@ export default function Game({
   const changeSort = (s: Sort) => {
     if (s === "Oldest") {
       setSort("Oldest");
-      setCards(originalInstances.slice());
+      setCards((prevCards) => prevCards.sort((a, b) => (a.createDate < b.createDate) ? 1 : -1));
     } else if (s === "Newest") {
       setSort("Newest");
-      setCards(originalInstances.slice().reverse());
+      setCards((prevCards) => prevCards.sort((a, b) => (a.createDate > b.createDate) ? 1 : -1));
     } else if (s === "Pokedex") {
       setSort("Pokedex");
       setCards((prevCards) =>
@@ -198,9 +196,6 @@ export default function Game({
         onSuccess(data, variables, context) {
           setCards((prevCards) =>
             prevCards.filter((c) => c.id !== data.instance.id)
-          );
-          setOriginalInstances((prevOriginalInstances) =>
-            prevOriginalInstances.filter((o) => o.id !== data.instance.id)
           );
           setTotalYield(data.user.totalYield);
           setBalance(data.user.balance);
