@@ -124,6 +124,7 @@ model UserAchievement {
   id            String      @id @default(cuid())
   userId        String
   achievementId String
+  createDate    DateTime    @default(now())
   user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
 

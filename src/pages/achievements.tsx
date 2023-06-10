@@ -43,6 +43,7 @@ export const getServerSideProps = async (
     where: { userId: user.id.toString() }
   });
   let parsedInstances: typeof instances = JSON.parse(JSON.stringify(instances));
+  let parsedUserAchievements: typeof userAchievements = JSON.parse(JSON.stringify(userAchievements));
 
   return {
     props: {
@@ -50,7 +51,7 @@ export const getServerSideProps = async (
       instances: parsedInstances,
       species,
       achievements,
-      userAchievements
+      userAchievements: parsedUserAchievements
     }
   };
 };
