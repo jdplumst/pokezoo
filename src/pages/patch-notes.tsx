@@ -48,6 +48,14 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">3.07 (June 11, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Added habitat achievements for Hoenn.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">3.06 (June 10, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
