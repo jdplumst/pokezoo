@@ -41,26 +41,26 @@ export default function ProgressBar({
       (s) =>
         s.rarity === achievement.attribute &&
         s.generation === achievement.generation &&
-        !s.shiny
+        s.shiny === achievement.shiny
     ).length;
     value = instances.filter(
       (i) =>
         i.species.rarity === achievement.attribute &&
         i.species.generation === achievement.generation &&
-        !i.species.shiny
+        i.species.shiny === achievement.shiny
     ).length;
   } else if (achievement.type === "Habitat") {
     max = species.filter(
       (s) =>
         s.habitat === achievement.attribute &&
         s.generation === achievement.generation &&
-        !s.shiny
+        s.shiny === achievement.shiny
     ).length;
     value = instances.filter(
       (i) =>
         i.species.habitat === achievement.attribute &&
         i.species.generation === achievement.generation &&
-        !i.species.shiny
+        i.species.shiny === achievement.shiny
     ).length;
   } else if (achievement.type === "Type") {
     max = species.filter(
@@ -68,14 +68,14 @@ export default function ProgressBar({
         (s.typeOne === achievement.attribute ||
           s.typeTwo === achievement.attribute) &&
         s.generation === achievement.generation &&
-        !s.shiny
+        s.shiny === achievement.shiny
     ).length;
     value = instances.filter(
       (i) =>
         (i.species.typeOne === achievement.attribute ||
           i.species.typeTwo === achievement.attribute) &&
         i.species.generation === achievement.generation &&
-        !i.species.shiny
+        i.species.shiny === achievement.shiny
     ).length;
   }
 

@@ -115,6 +115,7 @@ model Achievement {
   generation      Int               @default(1)
   type            AchievementType   @default(Rarity)
   attribute       String            @default("Common")
+  shiny           Boolean           @default(false)
   tier            Int
   yield           Int
   UserAchievement UserAchievement[]
@@ -143,4 +144,5 @@ enum AchievementType {
   Rarity
   Habitat
   Type
+  All
 }
