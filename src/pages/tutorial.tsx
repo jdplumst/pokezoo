@@ -65,8 +65,8 @@ export default function Tutorial() {
               Achievements are the second source of yield. Users can claim
               achievements from the achievements page. Tier 1 achievements give
               P1,000 per day, tier 2 achievements give P2,000 per day, tier 3
-              achievements give P5,000 per day, and tier 4 achievements give
-              P10,000 per day.
+              achievements give P5,000 per day, tier 4 achievements give P10,000
+              per day, and tier 5 achievements give P20,000 per day.
             </p>
             <br></br>
             <p>
