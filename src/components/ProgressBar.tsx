@@ -36,7 +36,17 @@ export default function ProgressBar({
   let max = 0;
   let value = 0;
 
-  if (achievement.type === "Rarity") {
+  if (achievement.type === "All") {
+    max = species.filter(
+      (s) =>
+        s.generation === achievement.generation && s.shiny === achievement.shiny
+    ).length;
+    value = instances.filter(
+      (i) =>
+        i.species.generation === achievement.generation &&
+        i.species.shiny === achievement.shiny
+    ).length;
+  } else if (achievement.type === "Rarity") {
     max = species.filter(
       (s) =>
         s.rarity === achievement.attribute &&
