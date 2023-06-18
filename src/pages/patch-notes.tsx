@@ -48,51 +48,50 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
-              <h3 className="p-4 text-4xl font-bold">3.10 (June 15, 2023)</h3>
+              <h3 className="p-4 text-4xl font-bold">3.11 (June 17, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
-                Added type achievements for Hoenn.
+                Added complete achievements for Kanto, Johto, and Hoenn.
               </p>
+              <p className="px-4">
+                Added tier 5 achievements which increase yield by P20,000.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">3.10 (June 15, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">Added type achievements for Hoenn.</p>
             </section>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">3.09 (June 14, 2023)</h3>
               <hr className="border-black"></hr>
-              <p className="px-4 pt-4">
-                Added type achievements for Johto.
-              </p>
+              <p className="px-4 pt-4">Added type achievements for Johto.</p>
             </section>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">3.08 (June 13, 2023)</h3>
               <hr className="border-black"></hr>
-              <p className="px-4 pt-4">
-                Added type achievements for Kanto.
-              </p>
+              <p className="px-4 pt-4">Added type achievements for Kanto.</p>
             </section>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">3.07 (June 11, 2023)</h3>
               <hr className="border-black"></hr>
-              <p className="px-4 pt-4">
-                Added habitat achievements for Hoenn.
-              </p>
+              <p className="px-4 pt-4">Added habitat achievements for Hoenn.</p>
             </section>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">3.06 (June 10, 2023)</h3>
               <hr className="border-black"></hr>
-              <p className="px-4 pt-4">
-                Added habitat achievements for Johto.
-              </p>
+              <p className="px-4 pt-4">Added habitat achievements for Johto.</p>
             </section>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">3.05 (June 9, 2023)</h3>
               <hr className="border-black"></hr>
-              <p className="px-4 pt-4">
-                Added habitat achievements for Kanto.
-              </p>
+              <p className="px-4 pt-4">Added habitat achievements for Kanto.</p>
             </section>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
