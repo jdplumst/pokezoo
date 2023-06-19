@@ -4,13 +4,15 @@ import Head from "next/head";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { prisma } from "../server/db";
 import { useEffect, useState } from "react";
-import BallCard from "@/src/components/BallCard";
 import { Ball, Rarity, Species } from "@prisma/client";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
 import Modal from "@/src/components/Modal";
 import Sidebar from "../components/Sidebar";
 import Loading from "../components/Loading";
+import Tooltip from "../components/Tooltip";
+import Image from "next/image";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -237,12 +239,35 @@ export default function Shop({
             {error && <p className="font-bold text-red-500">{error}</p>}
             <div className="balls grid justify-center gap-10 pt-5">
               {balls.map((b) => (
-                <BallCard
-                  key={b.id}
-                  ball={b}
-                  disabled={disabled}
-                  purchaseBall={purchaseBall}
-                />
+                <Tooltip ball={b}>
+                  <div className="h-72 w-72 border-2 border-black bg-ball p-2">
+                    <div className="flex h-full flex-col items-center justify-around">
+                      <Image
+                        src={b.img}
+                        alt={b.name}
+                        width={112}
+                        height={112}
+                        className="pixelated"
+                      />
+                      <p className="text-center text-3xl font-bold">
+                        {b.name} Ball
+                      </p>
+                      <p className="text-center text-2xl font-bold">
+                        P{b.cost.toLocaleString()}
+                      </p>
+                      <button
+                        onClick={() => purchaseBall(b)}
+                        disabled={disabled}
+                        className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                        {purchaseMutation.isLoading ? (
+                          <LoadingSpinner />
+                        ) : (
+                          "Buy"
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </Tooltip>
               ))}
             </div>
           </main>
