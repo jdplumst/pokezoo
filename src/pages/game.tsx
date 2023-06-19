@@ -11,6 +11,7 @@ import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
 import Loading from "../components/Loading";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 enum Rarity {
   Common = 1,
@@ -144,10 +145,14 @@ export default function Game({
   const changeSort = (s: Sort) => {
     if (s === "Oldest") {
       setSort("Oldest");
-      setCards((prevCards) => prevCards.sort((a, b) => (a.createDate > b.createDate) ? 1 : -1));
+      setCards((prevCards) =>
+        prevCards.sort((a, b) => (a.createDate > b.createDate ? 1 : -1))
+      );
     } else if (s === "Newest") {
       setSort("Newest");
-      setCards((prevCards) => prevCards.sort((a, b) => (a.createDate < b.createDate) ? 1 : -1));
+      setCards((prevCards) =>
+        prevCards.sort((a, b) => (a.createDate < b.createDate ? 1 : -1))
+      );
     } else if (s === "Pokedex") {
       setSort("Pokedex");
       setCards((prevCards) =>
@@ -266,7 +271,7 @@ export default function Game({
               onClick={() => confirmDelete(deleteInstance as Instance)}
               disabled={deleteDisabled}
               className="mb-2 w-28 rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-              Yes
+              {sellMutation.isLoading ? <LoadingSpinner /> : "Yes"}
             </button>
             <button
               onClick={() => setDeleteModal(false)}
@@ -300,8 +305,12 @@ export default function Game({
                 <button
                   onClick={() => claimReward()}
                   disabled={dailyDisabled}
-                  className="w-fit rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
-                  Claim Daily Reward
+                  className="w-48 rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
+                  {rewardMutation.isLoading ? (
+                    <LoadingSpinner />
+                  ) : (
+                    "Claim Daily Reward"
+                  )}
                 </button>
               ) : claimedNightly && time === "night" ? (
                 <span>You have already claimed your nightly reward.</span>
@@ -309,8 +318,12 @@ export default function Game({
                 <button
                   onClick={() => claimReward()}
                   disabled={nightlyDisabled}
-                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
-                  Claim Nightly Reward
+                  className="w-48 rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
+                  {rewardMutation.isLoading ? (
+                    <LoadingSpinner />
+                  ) : (
+                    "Claim Nightly Reward"
+                  )}
                 </button>
               ) : (
                 <></>
