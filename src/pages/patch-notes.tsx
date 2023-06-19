@@ -53,9 +53,6 @@ export default function PatchNotes() {
               <p className="px-4 pt-4">
                 Added loading spinner to several buttons.
               </p>
-              <p className="px-4">
-                Added tier 5 achievements which increase yield by P20,000.
-              </p>
             </section>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
