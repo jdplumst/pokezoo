@@ -1,6 +1,7 @@
 import { Achievement, Instance, Rarity, Species, User } from "@prisma/client";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
+import LoadingSpinner from "./LoadingSpinner";
 
 interface IProgressBar {
   user: User;
@@ -129,7 +130,7 @@ export default function ProgressBar({
             onClick={() => handleClaimAchievement()}
             disabled={disabled}
             className="mx-auto w-40 rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
-            Claim
+            {achievementMutation.isLoading ? <LoadingSpinner /> : "Claim"}
           </button>
         </div>
       ) : value !== max && !isAchieved ? (
