@@ -7,6 +7,7 @@ import { getServerSession } from "next-auth";
 import { prisma } from "../server/db";
 import Loading from "../components/Loading";
 import ProgressBar from "../components/ProgressBar";
+import { FullAchievement } from "../components/ProgressBar";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -42,15 +43,109 @@ export const getServerSideProps = async (
   const userAchievements = await prisma.userAchievement.findMany({
     where: { userId: user.id.toString() }
   });
+
+  // Calculate the percentage for each achievement
+  let fullAchievements: FullAchievement[] = [];
+
+  for (let x = 0; x < achievements.length; x++) {
+    let max = 0;
+    let value = 0;
+
+    if (achievements[x].type === "All") {
+      max = species.filter(
+        (s) =>
+          s.generation === achievements[x].generation &&
+          s.shiny === achievements[x].shiny
+      ).length;
+      value = instances.filter(
+        (i) =>
+          i.species.generation === achievements[x].generation &&
+          i.species.shiny === achievements[x].shiny
+      ).length;
+    } else if (achievements[x].type === "Rarity") {
+      max = species.filter(
+        (s) =>
+          s.rarity === achievements[x].attribute &&
+          s.generation === achievements[x].generation &&
+          s.shiny === achievements[x].shiny
+      ).length;
+      value = instances.filter(
+        (i) =>
+          i.species.rarity === achievements[x].attribute &&
+          i.species.generation === achievements[x].generation &&
+          i.species.shiny === achievements[x].shiny
+      ).length;
+    } else if (achievements[x].type === "Habitat") {
+      max = species.filter(
+        (s) =>
+          s.habitat === achievements[x].attribute &&
+          s.generation === achievements[x].generation &&
+          s.shiny === achievements[x].shiny
+      ).length;
+      value = instances.filter(
+        (i) =>
+          i.species.habitat === achievements[x].attribute &&
+          i.species.generation === achievements[x].generation &&
+          i.species.shiny === achievements[x].shiny
+      ).length;
+    } else if (achievements[x].type === "Type") {
+      max = species.filter(
+        (s) =>
+          (s.typeOne === achievements[x].attribute ||
+            s.typeTwo === achievements[x].attribute) &&
+          s.generation === achievements[x].generation &&
+          s.shiny === achievements[x].shiny
+      ).length;
+      value = instances.filter(
+        (i) =>
+          (i.species.typeOne === achievements[x].attribute ||
+            i.species.typeTwo === achievements[x].attribute) &&
+          i.species.generation === achievements[x].generation &&
+          i.species.shiny === achievements[x].shiny
+      ).length;
+    }
+
+    const low = 0.35 * max;
+    const high = 0.7 * max;
+    const percent = Math.round((value / max) * 100);
+    const achieved = userAchievements.some(
+      (u) => u.achievementId === achievements[x].id
+    );
+
+    fullAchievements.push({
+      achievement: achievements[x],
+      max: max,
+      value: value,
+      low: low,
+      high: high,
+      percent: percent,
+      achieved: achieved
+    });
+  }
+
+  fullAchievements.sort(function (a, b) {
+    if (a.achieved > b.achieved) return 1;
+    if (b.achieved > a.achieved) return -1;
+
+    if (a.percent >= b.percent) return -1;
+    if (b.percent < a.percent) return 1;
+    return 0;
+  });
+
+  // .sort((a, b) => (a.percent > b.percent ? 1 : -1))
+  // .sort((a, b) => (a.achieved > b.achieved ? 1 : -1));
+
   let parsedInstances: typeof instances = JSON.parse(JSON.stringify(instances));
-  let parsedUserAchievements: typeof userAchievements = JSON.parse(JSON.stringify(userAchievements));
+  let parsedUserAchievements: typeof userAchievements = JSON.parse(
+    JSON.stringify(userAchievements)
+  );
 
   return {
     props: {
       user,
       instances: parsedInstances,
       species,
-      achievements,
+      fullAchievements,
       userAchievements: parsedUserAchievements
     }
   };
@@ -60,7 +155,7 @@ export default function Achievements({
   user,
   instances,
   species,
-  achievements,
+  fullAchievements,
   userAchievements
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [time, setTime] = useState<Time>("night");
@@ -109,22 +204,20 @@ export default function Achievements({
             <p>You will receive P{totalYield} on the next payout.</p>
             <div className="flex justify-center pt-5">
               <ul className="w-3/4">
-                {achievements.map((a) => (
+                {fullAchievements.map((a) => (
                   <li
-                    key={a.id}
+                    key={a.achievement.id}
                     className="mb-5 flex h-14 items-center justify-between border-2 border-tooltip-border p-2">
                     <div>
-                      <b>Tier {a.tier}</b> | {a.description}
+                      <b>Tier {a.achievement.tier}</b> |{" "}
+                      {a.achievement.description}
                     </div>
                     <div>
                       <ProgressBar
                         user={user}
                         species={species}
                         instances={instances}
-                        achievement={a}
-                        achieved={userAchievements.some(
-                          (u) => u.achievementId === a.id
-                        )}
+                        fullAchievement={a}
                         updateBalance={updateBalance}
                       />
                     </div>

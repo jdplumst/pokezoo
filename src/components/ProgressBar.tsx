@@ -3,6 +3,16 @@ import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "./LoadingSpinner";
 
+export interface FullAchievement {
+  achievement: Achievement;
+  max: number;
+  value: number;
+  low: number;
+  high: number;
+  percent: number;
+  achieved: boolean;
+}
+
 interface IProgressBar {
   user: User;
   species: Species[];
@@ -16,8 +26,7 @@ interface IProgressBar {
       habitat: string;
     };
   })[];
-  achievement: Achievement;
-  achieved: boolean;
+  fullAchievement: FullAchievement;
   updateBalance: (x: number) => void;
 }
 
@@ -25,85 +34,24 @@ export default function ProgressBar({
   user,
   species,
   instances,
-  achievement,
-  achieved,
+  fullAchievement,
   updateBalance
 }: IProgressBar) {
   const [disabled, setDisabled] = useState(false);
-  const [isAchieved, setIsAchieved] = useState(achieved);
+  const [isAchieved, setIsAchieved] = useState(fullAchievement.achieved);
   const [error, setError] = useState<null | string>(null);
   const achievementMutation = trpc.achievement.claimAchievement.useMutation();
-
-  let max = 0;
-  let value = 0;
-
-  if (achievement.type === "All") {
-    max = species.filter(
-      (s) =>
-        s.generation === achievement.generation && s.shiny === achievement.shiny
-    ).length;
-    value = instances.filter(
-      (i) =>
-        i.species.generation === achievement.generation &&
-        i.species.shiny === achievement.shiny
-    ).length;
-  } else if (achievement.type === "Rarity") {
-    max = species.filter(
-      (s) =>
-        s.rarity === achievement.attribute &&
-        s.generation === achievement.generation &&
-        s.shiny === achievement.shiny
-    ).length;
-    value = instances.filter(
-      (i) =>
-        i.species.rarity === achievement.attribute &&
-        i.species.generation === achievement.generation &&
-        i.species.shiny === achievement.shiny
-    ).length;
-  } else if (achievement.type === "Habitat") {
-    max = species.filter(
-      (s) =>
-        s.habitat === achievement.attribute &&
-        s.generation === achievement.generation &&
-        s.shiny === achievement.shiny
-    ).length;
-    value = instances.filter(
-      (i) =>
-        i.species.habitat === achievement.attribute &&
-        i.species.generation === achievement.generation &&
-        i.species.shiny === achievement.shiny
-    ).length;
-  } else if (achievement.type === "Type") {
-    max = species.filter(
-      (s) =>
-        (s.typeOne === achievement.attribute ||
-          s.typeTwo === achievement.attribute) &&
-        s.generation === achievement.generation &&
-        s.shiny === achievement.shiny
-    ).length;
-    value = instances.filter(
-      (i) =>
-        (i.species.typeOne === achievement.attribute ||
-          i.species.typeTwo === achievement.attribute) &&
-        i.species.generation === achievement.generation &&
-        i.species.shiny === achievement.shiny
-    ).length;
-  }
-
-  const low = 0.35 * max;
-  const high = 0.7 * max;
-  const percent = Math.round((value / max) * 100);
 
   const handleClaimAchievement = () => {
     setDisabled(true);
     achievementMutation.mutate(
       {
         userId: user.id,
-        achievementId: achievement.id
+        achievementId: fullAchievement.achievement.id
       },
       {
         onSuccess(data, variables, context) {
-          updateBalance(achievement.yield);
+          updateBalance(fullAchievement.achievement.yield);
           setIsAchieved(true);
           setError(null);
         },
@@ -118,13 +66,14 @@ export default function ProgressBar({
   return (
     <div className="flex items-center">
       {!isAchieved ? (
-        <label htmlFor={achievement.id} className="mr-4">
-          {value} / {max} ({Math.round(percent)}%)
+        <label htmlFor={fullAchievement.achievement.id} className="mr-4">
+          {fullAchievement.value} / {fullAchievement.max} (
+          {Math.round(fullAchievement.percent)}%)
         </label>
       ) : (
         <span>You have claimed this achievement!</span>
       )}
-      {value === max && !isAchieved ? (
+      {fullAchievement.value === fullAchievement.max && !isAchieved ? (
         <div className="inline-block w-40 text-center">
           <button
             onClick={() => handleClaimAchievement()}
@@ -133,16 +82,16 @@ export default function ProgressBar({
             {achievementMutation.isLoading ? <LoadingSpinner /> : "Claim"}
           </button>
         </div>
-      ) : value !== max && !isAchieved ? (
+      ) : fullAchievement.value !== fullAchievement.max && !isAchieved ? (
         <meter
-          id={achievement.id}
+          id={fullAchievement.achievement.id}
           className="h-6 w-40"
-          max={max}
-          optimum={max}
-          value={value}
-          low={low}
-          high={high}>
-          {percent}%
+          max={fullAchievement.max}
+          optimum={fullAchievement.max}
+          value={fullAchievement.value}
+          low={fullAchievement.low}
+          high={fullAchievement.high}>
+          {fullAchievement.percent}%
         </meter>
       ) : isAchieved ? (
         <span className="text-4xl">✅</span>
