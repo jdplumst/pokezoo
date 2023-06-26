@@ -5,9 +5,10 @@ interface ICard {
   species: Species;
   instance?: Instance;
   openDelete?: (species: Species, instance: Instance) => void;
+  caught?: Boolean;
 }
 
-export default function Card({ species, instance, openDelete }: ICard) {
+export default function Card({ species, instance, openDelete, caught }: ICard) {
   return (
     <div
       className={`${
@@ -23,6 +24,17 @@ export default function Card({ species, instance, openDelete }: ICard) {
       } card-hover h-fit w-56 border-2 ${
         species.shiny ? `border-yellow-500` : `border-black`
       } p-2 text-black`}>
+      {caught && (
+        <Image
+          className="absolute"
+          src={
+            "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
+          }
+          alt="caught"
+          width={40}
+          height={40}
+        />
+      )}
       <div className="flex flex-col items-center">
         <Image
           src={species.img}
