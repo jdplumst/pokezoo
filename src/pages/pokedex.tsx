@@ -21,7 +21,10 @@ export const getServerSideProps = async (
   }
   const user = session.user;
   const species = await prisma.species.findMany();
-  const instances = await prisma.instance.findMany({ distinct: ["speciesId"] });
+  const instances = await prisma.instance.findMany({
+    where: { userId: user.id },
+    distinct: ["speciesId"]
+  });
   const parsedInstances: typeof instances = JSON.parse(
     JSON.stringify(instances)
   );
