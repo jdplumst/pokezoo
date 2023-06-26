@@ -12,13 +12,25 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const session = await getServerSession(context.req, context.res, authOptions);
-  const user = session?.user || null;
+  if (!session || !session.user) {
+    return {
+      redirect: {
+        destination: "/"
+      }
+    };
+  }
+  const user = session.user;
   const species = await prisma.species.findMany();
+  const instances = await prisma.instance.findMany({ distinct: ["speciesId"] });
+  const parsedInstances: typeof instances = JSON.parse(
+    JSON.stringify(instances)
+  );
 
   return {
     props: {
       user,
-      species
+      species,
+      instances: parsedInstances
     }
   };
 };
@@ -28,7 +40,8 @@ type Rarity = "All" | "Common" | "Rare" | "Epic" | "Legendary";
 
 export default function Pokedex({
   user,
-  species
+  species,
+  instances
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
@@ -214,7 +227,11 @@ export default function Pokedex({
             </div>
             <div className="cards grid justify-center gap-5 pt-5">
               {cards.map((c) => (
-                <Card key={c.id} species={c} />
+                <Card
+                  key={c.id}
+                  species={c}
+                  caught={instances.some((i) => i.speciesId === c.id)}
+                />
               ))}
             </div>
           </main>
