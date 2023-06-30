@@ -3,10 +3,11 @@ import Sidebar from "../components/Sidebar";
 import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import { prisma } from "../server/db";
 import Card from "../components/Card";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
+import DrowpdownItem from "../components/DropdownItem";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -38,8 +39,23 @@ export const getServerSideProps = async (
   };
 };
 
-type Shiny = "Original" | "Shiny";
-type Rarity = "All" | "Common" | "Rare" | "Epic" | "Legendary";
+interface Shiny {
+  "Not Shiny": boolean;
+  "Shiny": boolean;
+}
+
+interface Region {
+  Kanto: boolean;
+  Johto: boolean;
+  Hoenn: boolean;
+}
+
+interface Rarity {
+  Common: boolean;
+  Rare: boolean;
+  Epic: boolean;
+  Legendary: boolean;
+}
 
 export default function Pokedex({
   user,
@@ -50,9 +66,26 @@ export default function Pokedex({
   const [loading, setLoading] = useState(true);
 
   const [cards, setCards] = useState(species.filter((s) => !s.shiny));
-  const [shiny, setShiny] = useState<Shiny>("Original");
-  const [region, setRegion] = useState<Region>("All");
-  const [rarity, setRarity] = useState<Rarity>("All");
+  const [shiny, setShiny] = useState<Shiny>({
+    "Not Shiny": true,
+    "Shiny": false
+  });
+  const [region, setRegion] = useState<Region>({
+    Kanto: true,
+    Johto: true,
+    Hoenn: true
+  });
+  const [rarity, setRarity] = useState<Rarity>({
+    Common: true,
+    Rare: true,
+    Epic: true,
+    Legendary: true
+  });
+
+  // Dropdown open states
+  const [shinyOpen, setShinyOpen] = useState(false);
+  const [regionOpen, setRegionOpen] = useState(false);
+  const [rarityOpen, setRarityOpen] = useState(false);
 
   useEffect(() => {
     const today = new Date();
@@ -65,35 +98,100 @@ export default function Pokedex({
     setLoading(false);
   }, []);
 
+  // Handle Shiny State
+  const handleShiny = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.labels![0].htmlFor;
+    const checked = e.target.checked;
+    if (label === "Not Shiny") {
+      setShiny({ "Shiny": !checked, "Not Shiny": checked });
+    } else if (label === "Shiny") {
+      setShiny({ "Shiny": checked, "Not Shiny": !checked });
+    }
+  };
+
+  // Handle Region State
+  const handleRegion = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.labels![0].htmlFor;
+    const checked = e.target.checked;
+    if (label === "Kanto") {
+      setRegion({ ...region, Kanto: checked });
+    } else if (label === "Johto") {
+      setRegion({ ...region, Johto: checked });
+    } else if (label === "Hoenn") {
+      setRegion({ ...region, Hoenn: checked });
+    }
+  };
+
+  // Handle Rarity State
+  const handleRarity = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.labels![0].htmlFor;
+    const checked = e.target.checked;
+    if (label === "Common") {
+      setRarity({ ...rarity, Common: checked });
+    } else if (label === "Rare") {
+      setRarity({ ...rarity, Rare: checked });
+    } else if (label === "Epic") {
+      setRarity({ ...rarity, Epic: checked });
+    } else if (label === "Legendary") {
+      setRarity({ ...rarity, Legendary: checked });
+    }
+  };
+
   const filterSpecies = () => {
     // Filter based on shiny
-    if (shiny === "Original") {
-      setCards(species.filter((s) => !s.shiny));
-    } else if (shiny === "Shiny") {
+    if (shiny.Shiny) {
       setCards(species.filter((s) => s.shiny));
+    } else if (shiny["Not Shiny"]) {
+      setCards(species.filter((s) => !s.shiny));
     }
 
     // Filter based on region
-    if (region === "Kanto") {
-      setCards((prevCards) => prevCards.filter((s) => s.generation === 1));
-    } else if (region === "Johto") {
-      setCards((prevCards) => prevCards.filter((s) => s.generation === 2));
-    } else if (region === "Hoenn") {
-      setCards((prevCards) => prevCards.filter((s) => s.generation === 3));
-    }
+    setCards((p) =>
+      p.filter((s) => {
+        let generations = [];
+        if (region.Kanto) {
+          generations.push(1);
+        }
+        if (region.Johto) {
+          generations.push(2);
+        }
+        if (region.Hoenn) {
+          generations.push(3);
+        }
+        return generations.includes(s.generation);
+      })
+    );
 
     // Filter based on rarity
-    if (rarity === "Common") {
-      setCards((prevCards) => prevCards.filter((s) => s.rarity === "Common"));
-    } else if (rarity === "Rare") {
-      setCards((prevCards) => prevCards.filter((s) => s.rarity === "Rare"));
-    } else if (rarity === "Epic") {
-      setCards((prevCards) => prevCards.filter((s) => s.rarity === "Epic"));
-    } else if (rarity === "Legendary") {
-      setCards((prevCards) =>
-        prevCards.filter((s) => s.rarity === "Legendary")
-      );
-    }
+    setCards((p) =>
+      p.filter((s) => {
+        let rarities = [];
+        if (rarity.Common) {
+          rarities.push("Common");
+        }
+        if (rarity.Rare) {
+          rarities.push("Rare");
+        }
+        if (rarity.Epic) {
+          rarities.push("Epic");
+        }
+        if (rarity.Legendary) {
+          rarities.push("Legendary");
+        }
+        return rarities.includes(s.rarity);
+      })
+    );
+    // if (rarity === "Common") {
+    //   setCards((prevCards) => prevCards.filter((s) => s.rarity === "Common"));
+    // } else if (rarity === "Rare") {
+    //   setCards((prevCards) => prevCards.filter((s) => s.rarity === "Rare"));
+    // } else if (rarity === "Epic") {
+    //   setCards((prevCards) => prevCards.filter((s) => s.rarity === "Epic"));
+    // } else if (rarity === "Legendary") {
+    //   setCards((prevCards) =>
+    //     prevCards.filter((s) => s.rarity === "Legendary")
+    //   );
+    // }
   };
 
   useEffect(() => {
@@ -124,109 +222,111 @@ export default function Pokedex({
               </div>
             )}
             <div className="flex justify-center gap-5">
-              <button
-                onClick={() => setShiny("Original")}
-                className={`${
-                  shiny === "Original"
-                    ? `bg-purple-btn-focus`
-                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                Original
-              </button>
-              <button
-                onClick={() => setShiny("Shiny")}
-                className={`${
-                  shiny === "Shiny"
-                    ? `bg-purple-btn-focus`
-                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                Shiny
-              </button>
-            </div>
-            <div className="flex justify-center gap-5 pt-5">
-              <button
-                onClick={() => setRegion("All")}
-                className={`${
-                  region === "All"
-                    ? `bg-green-btn-focus`
-                    : `bg-green-btn-unfocus hover:bg-green-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                All
-              </button>
-              <button
-                onClick={() => setRegion("Kanto")}
-                className={`${
-                  region === "Kanto"
-                    ? `bg-green-btn-focus`
-                    : `bg-green-btn-unfocus hover:bg-green-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                Kanto
-              </button>
-              <button
-                onClick={() => setRegion("Johto")}
-                className={`${
-                  region === "Johto"
-                    ? `bg-green-btn-focus`
-                    : `bg-green-btn-unfocus hover:bg-green-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                Johto
-              </button>
-              <button
-                onClick={() => setRegion("Hoenn")}
-                className={`${
-                  region === "Hoenn"
-                    ? `bg-green-btn-focus`
-                    : `bg-green-btn-unfocus hover:bg-green-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                Hoenn
-              </button>
-            </div>
-            <div className="flex justify-center gap-5 pt-5">
-              <button
-                onClick={() => setRarity("All")}
-                className={`${
-                  rarity === "All"
-                    ? `bg-orange-btn-focus`
-                    : `bg-orange-btn-unfocus hover:bg-orange-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                All
-              </button>
-              <button
-                onClick={() => setRarity("Common")}
-                className={`${
-                  rarity === "Common"
-                    ? `bg-orange-btn-focus`
-                    : `bg-orange-btn-unfocus hover:bg-orange-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                Common
-              </button>
-              <button
-                onClick={() => setRarity("Rare")}
-                className={`${
-                  rarity === "Rare"
-                    ? `bg-orange-btn-focus`
-                    : `bg-orange-btn-unfocus hover:bg-orange-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                Rare
-              </button>
-              <button
-                onClick={() => setRarity("Epic")}
-                className={`${
-                  rarity === "Epic"
-                    ? `bg-orange-btn-focus`
-                    : `bg-orange-btn-unfocus hover:bg-orange-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                Epic
-              </button>
-              <button
-                onClick={() => setRarity("Legendary")}
-                className={`${
-                  rarity === "Legendary"
-                    ? `bg-orange-btn-focus`
-                    : `bg-orange-btn-unfocus hover:bg-orange-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
-                Legendary
-              </button>
+              <div className="w-60">
+                <button
+                  onClick={() => setShinyOpen((p) => !p)}
+                  className="w-full border-2 border-black bg-purple-500 p-2 font-bold">
+                  Select Shiny/Not Shiny
+                </button>
+                {shinyOpen && (
+                  <ul>
+                    <li>
+                      <DrowpdownItem
+                        label={"Not Shiny"}
+                        fn={handleShiny}
+                        checked={shiny["Not Shiny"]}
+                        colour="purple"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="Shiny"
+                        fn={handleShiny}
+                        checked={shiny.Shiny}
+                        colour="purple"
+                      />
+                    </li>
+                  </ul>
+                )}
+              </div>
+              <div className="w-60">
+                <button
+                  onClick={() => setRegionOpen((p) => !p)}
+                  className="w-full border-2 border-black bg-green-500 p-2 font-bold">
+                  Select Region
+                </button>
+                {regionOpen && (
+                  <ul>
+                    <li>
+                      <DrowpdownItem
+                        label={"Kanto"}
+                        fn={handleRegion}
+                        checked={region.Kanto}
+                        colour={"green"}
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="Johto"
+                        fn={handleRegion}
+                        checked={region.Johto}
+                        colour={"green"}
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="Hoenn"
+                        fn={handleRegion}
+                        checked={region.Hoenn}
+                        colour={"green"}
+                      />
+                    </li>
+                  </ul>
+                )}
+              </div>
+              <div className="w-60">
+                <button
+                  onClick={() => setRarityOpen((p) => !p)}
+                  className="w-full border-2 border-black bg-orange-500 p-2 font-bold">
+                  Select Rarity
+                </button>
+                {rarityOpen && (
+                  <ul>
+                    <li>
+                      <DrowpdownItem
+                        label={"Common"}
+                        fn={handleRarity}
+                        checked={rarity.Common}
+                        colour="orange"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="Rare"
+                        fn={handleRarity}
+                        checked={rarity.Rare}
+                        colour="orange"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="Epic"
+                        fn={handleRarity}
+                        checked={rarity.Epic}
+                        colour="orange"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="Legendary"
+                        fn={handleRarity}
+                        checked={rarity.Legendary}
+                        colour="orange"
+                      />
+                    </li>
+                  </ul>
+                )}
+              </div>
             </div>
             <div className="cards grid justify-center gap-5 pt-5">
               {cards.map((c) => (
