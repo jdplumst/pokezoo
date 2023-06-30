@@ -181,17 +181,6 @@ export default function Pokedex({
         return rarities.includes(s.rarity);
       })
     );
-    // if (rarity === "Common") {
-    //   setCards((prevCards) => prevCards.filter((s) => s.rarity === "Common"));
-    // } else if (rarity === "Rare") {
-    //   setCards((prevCards) => prevCards.filter((s) => s.rarity === "Rare"));
-    // } else if (rarity === "Epic") {
-    //   setCards((prevCards) => prevCards.filter((s) => s.rarity === "Epic"));
-    // } else if (rarity === "Legendary") {
-    //   setCards((prevCards) =>
-    //     prevCards.filter((s) => s.rarity === "Legendary")
-    //   );
-    // }
   };
 
   useEffect(() => {
