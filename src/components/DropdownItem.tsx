@@ -15,11 +15,13 @@ export default function DrowpdownItem({
     <div
       className={`w-full border-x-2 border-b-2 border-black ${
         colour === "purple"
-          ? `bg-purple-500`
+          ? `bg-purple-btn-unfocus`
           : colour === `green`
-          ? `bg-green-500`
+          ? `bg-green-btn-unfocus`
           : colour === `orange`
-          ? `bg-orange-500`
+          ? `bg-orange-btn-unfocus`
+          : colour === `blue`
+          ? `bg-blue-btn-unfocus`
           : `bg-white`
       } p-2 font-bold`}>
       <input
@@ -30,7 +32,9 @@ export default function DrowpdownItem({
         id={label}
         name={label}
       />
-      <label htmlFor={label}>{label}</label>
+      <label htmlFor={label} className="capitalize">
+        {label}
+      </label>
     </div>
   );
 }
