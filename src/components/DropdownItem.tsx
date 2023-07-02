@@ -30,11 +30,13 @@ export default function DrowpdownItem({
         onChange={fn}
         type="checkbox"
         checked={checked}
-        className="mr-4"
+        className="hover:cursor-pointer"
         id={label}
         name={label}
       />
-      <label htmlFor={label} className="inline-block w-32 capitalize">
+      <label
+        htmlFor={label}
+        className="inline-block w-32 pl-4 capitalize hover:cursor-pointer">
         {label}
       </label>
     </div>
