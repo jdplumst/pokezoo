@@ -25,6 +25,8 @@ html {
   --color-red-btn-unfocus: #ef4444;
   --color-orange-btn-focus: #ea580c;
   --color-orange-btn-unfocus: #f97316;
+  --color-lime-btn-focus: #65a30d;
+  --color-lime-btn-unfocus: #84cc16;
   --color-text: black;
   --color-sidebar-focus: white;
   --color-sidebar-unfocus: #cbd5e1;
@@ -76,6 +78,8 @@ html .night {
   --color-red-btn-unfocus: #dc2626;
   --color-orange-btn-focus: #c2410c;
   --color-orange-btn-unfocus: #ea580c;
+  --color-lime-btn-focus: #4d7c0f;
+  --color-lime-btn-unfocus: #65a30d;
   --color-text: rgb(240, 220, 252);
   --color-sidebar-focus: #3b0764;
   --color-sidebar-unfocus: #7e22ce;

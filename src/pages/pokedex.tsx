@@ -8,7 +8,6 @@ import Loading from "../components/Loading";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import DrowpdownItem from "../components/DropdownItem";
-import { types } from "util";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -79,6 +78,18 @@ interface Type {
   flying: boolean;
 }
 
+interface Habitat {
+  "grassland": boolean;
+  "forest": boolean;
+  "waters-edge": boolean;
+  "sea": boolean;
+  "cave": boolean;
+  "mountain": boolean;
+  "rough-terrain": boolean;
+  "urban": boolean;
+  "rare": boolean;
+}
+
 export default function Pokedex({
   user,
   species,
@@ -103,7 +114,7 @@ export default function Pokedex({
     Epic: true,
     Legendary: true
   });
-  const [type, setType] = useState({
+  const [type, setType] = useState<Type>({
     normal: true,
     grass: true,
     bug: true,
@@ -123,12 +134,24 @@ export default function Pokedex({
     steel: true,
     flying: true
   });
+  const [habitat, setHabitat] = useState<Habitat>({
+    "grassland": true,
+    "forest": true,
+    "waters-edge": true,
+    "sea": true,
+    "cave": true,
+    "mountain": true,
+    "rough-terrain": true,
+    "urban": true,
+    "rare": true
+  });
 
   // Dropdown open states
   const [shinyOpen, setShinyOpen] = useState(false);
   const [regionOpen, setRegionOpen] = useState(false);
   const [rarityOpen, setRarityOpen] = useState(false);
   const [typeOpen, setTypeOpen] = useState(false);
+  const [habitatOpen, setHabitatOpen] = useState(false);
 
   useEffect(() => {
     const today = new Date();
@@ -220,6 +243,31 @@ export default function Pokedex({
       setType({ ...type, steel: checked });
     } else if (label === "flying") {
       setType({ ...type, flying: checked });
+    }
+  };
+
+  // Handle Habitat State
+  const handleHabitat = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.labels![0].htmlFor;
+    const checked = e.target.checked;
+    if (label === "grassland") {
+      setHabitat({ ...habitat, grassland: checked });
+    } else if (label === "forest") {
+      setHabitat({ ...habitat, forest: checked });
+    } else if (label === "waters-edge") {
+      setHabitat({ ...habitat, "waters-edge": checked });
+    } else if (label === "sea") {
+      setHabitat({ ...habitat, sea: checked });
+    } else if (label === "cave") {
+      setHabitat({ ...habitat, cave: checked });
+    } else if (label === "mountain") {
+      setHabitat({ ...habitat, mountain: checked });
+    } else if (label === "rough-terrain") {
+      setHabitat({ ...habitat, "rough-terrain": checked });
+    } else if (label === "urban") {
+      setHabitat({ ...habitat, urban: checked });
+    } else if (label === "rare") {
+      setHabitat({ ...habitat, rare: checked });
     }
   };
 
@@ -329,11 +377,46 @@ export default function Pokedex({
         return types.includes(s.typeOne) || types.includes(s.typeTwo!);
       })
     );
+
+    // Filter based on habitat
+    setCards((p) =>
+      p.filter((s) => {
+        let habitats = [];
+        if (habitat.grassland) {
+          habitats.push("grassland");
+        }
+        if (habitat.forest) {
+          habitats.push("forest");
+        }
+        if (habitat["waters-edge"]) {
+          habitats.push("waters-edge");
+        }
+        if (habitat.sea) {
+          habitats.push("sea");
+        }
+        if (habitat.cave) {
+          habitats.push("cave");
+        }
+        if (habitat.mountain) {
+          habitats.push("mountain");
+        }
+        if (habitat["rough-terrain"]) {
+          habitats.push("rough-terrain");
+        }
+        if (habitat.urban) {
+          habitats.push("urban");
+        }
+        if (habitat.rare) {
+          habitats.push("rare");
+        }
+        return habitats.includes(s.habitat);
+      })
+    );
   };
 
   useEffect(() => {
     filterSpecies();
-  }, [shiny, region, rarity, type]);
+  }, [shiny, region, rarity, type, habitat]);
 
   if (loading) return <Loading />;
 
@@ -359,11 +442,11 @@ export default function Pokedex({
               </div>
             )}
             <div className="flex justify-center gap-5">
-              <div className="w-60">
+              <div className="w-48">
                 <button
                   onClick={() => setShinyOpen((p) => !p)}
                   className="w-full border-2 border-black bg-purple-btn-unfocus p-2 font-bold">
-                  Select Shiny/Not Shiny
+                  Select Shiny
                 </button>
                 {shinyOpen && (
                   <ul>
@@ -386,7 +469,7 @@ export default function Pokedex({
                   </ul>
                 )}
               </div>
-              <div className="w-60">
+              <div className="w-48">
                 <button
                   onClick={() => setRegionOpen((p) => !p)}
                   className="w-full border-2 border-black bg-green-btn-unfocus p-2 font-bold">
@@ -421,7 +504,7 @@ export default function Pokedex({
                   </ul>
                 )}
               </div>
-              <div className="w-60">
+              <div className="w-48">
                 <button
                   onClick={() => setRarityOpen((p) => !p)}
                   className="w-full border-2 border-black bg-orange-btn-unfocus p-2 font-bold">
@@ -464,7 +547,7 @@ export default function Pokedex({
                   </ul>
                 )}
               </div>
-              <div className="w-60">
+              <div className="w-48">
                 <button
                   onClick={() => setTypeOpen((p) => !p)}
                   className="w-full border-2 border-black bg-blue-btn-unfocus p-2 font-bold">
@@ -614,6 +697,89 @@ export default function Pokedex({
                         fn={handleType}
                         checked={type.flying}
                         colour="blue"
+                      />
+                    </li>
+                  </ul>
+                )}
+              </div>
+              <div className="w-48">
+                <button
+                  onClick={() => setHabitatOpen((p) => !p)}
+                  className="w-full border-2 border-black bg-lime-btn-unfocus p-2 font-bold">
+                  Select Habitat
+                </button>
+                {habitatOpen && (
+                  <ul>
+                    <li>
+                      <DrowpdownItem
+                        label={"grassland"}
+                        fn={handleHabitat}
+                        checked={habitat.grassland}
+                        colour="lime"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="forest"
+                        fn={handleHabitat}
+                        checked={habitat.forest}
+                        colour="lime"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="waters-edge"
+                        fn={handleHabitat}
+                        checked={habitat["waters-edge"]}
+                        colour="lime"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="sea"
+                        fn={handleHabitat}
+                        checked={habitat.sea}
+                        colour="lime"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="cave"
+                        fn={handleHabitat}
+                        checked={habitat.cave}
+                        colour="lime"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="mountain"
+                        fn={handleHabitat}
+                        checked={habitat.mountain}
+                        colour="lime"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="rough-terrain"
+                        fn={handleHabitat}
+                        checked={habitat["rough-terrain"]}
+                        colour="lime"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="urban"
+                        fn={handleHabitat}
+                        checked={habitat.urban}
+                        colour="lime"
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="rare"
+                        fn={handleHabitat}
+                        checked={habitat.rare}
+                        colour="lime"
                       />
                     </li>
                   </ul>

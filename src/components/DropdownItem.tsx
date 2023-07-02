@@ -22,6 +22,8 @@ export default function DrowpdownItem({
           ? `bg-orange-btn-unfocus`
           : colour === `blue`
           ? `bg-blue-btn-unfocus`
+          : colour === "lime"
+          ? `bg-lime-btn-unfocus`
           : `bg-white`
       } p-2 font-bold`}>
       <input
@@ -32,7 +34,7 @@ export default function DrowpdownItem({
         id={label}
         name={label}
       />
-      <label htmlFor={label} className="capitalize">
+      <label htmlFor={label} className="inline-block w-32 capitalize">
         {label}
       </label>
     </div>

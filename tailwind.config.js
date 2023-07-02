@@ -21,6 +21,8 @@ module.exports = {
         "orange-btn-unfocus": "var(--color-orange-btn-unfocus)",
         "red-btn-focus": "var(--color-red-btn-focus)",
         "red-btn-unfocus": "var(--color-red-btn-unfocus)",
+        "lime-btn-focus": "var(--color-lime-btn-focus)",
+        "lime-btn-unfocus": "var(--color-lime-btn-unfocus)",
         "color-text": "var(--color-text)",
         "sidebar-focus": "var(--color-sidebar-focus)",
         "sidebar-unfocus": "var(--color-sidebar-unfocus)",
