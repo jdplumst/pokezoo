@@ -45,12 +45,14 @@ interface Shiny {
 }
 
 interface Region {
+  All: boolean;
   Kanto: boolean;
   Johto: boolean;
   Hoenn: boolean;
 }
 
 interface Rarity {
+  All: boolean;
   Common: boolean;
   Rare: boolean;
   Epic: boolean;
@@ -58,6 +60,7 @@ interface Rarity {
 }
 
 interface Type {
+  All: boolean;
   normal: boolean;
   grass: boolean;
   bug: boolean;
@@ -79,6 +82,7 @@ interface Type {
 }
 
 interface Habitat {
+  "All": boolean;
   "grassland": boolean;
   "forest": boolean;
   "waters-edge": boolean;
@@ -104,17 +108,20 @@ export default function Pokedex({
     "Shiny": false
   });
   const [region, setRegion] = useState<Region>({
+    All: true,
     Kanto: true,
     Johto: true,
     Hoenn: true
   });
   const [rarity, setRarity] = useState<Rarity>({
+    All: true,
     Common: true,
     Rare: true,
     Epic: true,
     Legendary: true
   });
   const [type, setType] = useState<Type>({
+    All: true,
     normal: true,
     grass: true,
     bug: true,
@@ -135,6 +142,7 @@ export default function Pokedex({
     flying: true
   });
   const [habitat, setHabitat] = useState<Habitat>({
+    "All": true,
     "grassland": true,
     "forest": true,
     "waters-edge": true,
@@ -179,7 +187,14 @@ export default function Pokedex({
   const handleRegion = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
-    if (label === "Kanto") {
+    if (label === "Select All") {
+      setRegion({
+        All: checked,
+        Kanto: checked,
+        Johto: checked,
+        Hoenn: checked
+      });
+    } else if (label === "Kanto") {
       setRegion({ ...region, Kanto: checked });
     } else if (label === "Johto") {
       setRegion({ ...region, Johto: checked });
@@ -192,7 +207,15 @@ export default function Pokedex({
   const handleRarity = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
-    if (label === "Common") {
+    if (label === "Select All") {
+      setRarity({
+        All: checked,
+        Common: checked,
+        Rare: checked,
+        Epic: checked,
+        Legendary: checked
+      });
+    } else if (label === "Common") {
       setRarity({ ...rarity, Common: checked });
     } else if (label === "Rare") {
       setRarity({ ...rarity, Rare: checked });
@@ -207,7 +230,29 @@ export default function Pokedex({
   const handleType = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
-    if (label === "normal") {
+    if (label === "Select All") {
+      setType({
+        All: checked,
+        normal: checked,
+        grass: checked,
+        bug: checked,
+        fire: checked,
+        electric: checked,
+        ground: checked,
+        water: checked,
+        fighting: checked,
+        poison: checked,
+        rock: checked,
+        ice: checked,
+        ghost: checked,
+        psychic: checked,
+        fairy: checked,
+        dark: checked,
+        dragon: checked,
+        steel: checked,
+        flying: checked
+      });
+    } else if (label === "normal") {
       setType({ ...type, normal: checked });
     } else if (label === "grass") {
       setType({ ...type, grass: checked });
@@ -250,7 +295,20 @@ export default function Pokedex({
   const handleHabitat = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
-    if (label === "grassland") {
+    if (label === "Select All") {
+      setHabitat({
+        "All": checked,
+        "grassland": checked,
+        "forest": checked,
+        "waters-edge": checked,
+        "sea": checked,
+        "cave": checked,
+        "mountain": checked,
+        "rough-terrain": checked,
+        "urban": checked,
+        "rare": checked
+      });
+    } else if (label === "grassland") {
       setHabitat({ ...habitat, grassland: checked });
     } else if (label === "forest") {
       setHabitat({ ...habitat, forest: checked });
@@ -479,6 +537,14 @@ export default function Pokedex({
                   <ul>
                     <li>
                       <DrowpdownItem
+                        label="Select All"
+                        fn={handleRegion}
+                        checked={region.All}
+                        colour={"green"}
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
                         label={"Kanto"}
                         fn={handleRegion}
                         checked={region.Kanto}
@@ -512,6 +578,14 @@ export default function Pokedex({
                 </button>
                 {rarityOpen && (
                   <ul>
+                    <li>
+                      <DrowpdownItem
+                        label="Select All"
+                        fn={handleRarity}
+                        checked={rarity.All}
+                        colour="orange"
+                      />
+                    </li>
                     <li>
                       <DrowpdownItem
                         label={"Common"}
@@ -555,6 +629,14 @@ export default function Pokedex({
                 </button>
                 {typeOpen && (
                   <ul>
+                    <li>
+                      <DrowpdownItem
+                        label="Select All"
+                        fn={handleType}
+                        checked={type.All}
+                        colour="blue"
+                      />
+                    </li>
                     <li>
                       <DrowpdownItem
                         label={"normal"}
@@ -710,6 +792,14 @@ export default function Pokedex({
                 </button>
                 {habitatOpen && (
                   <ul>
+                    <li>
+                      <DrowpdownItem
+                        label="Select All"
+                        fn={handleHabitat}
+                        checked={habitat.All}
+                        colour="lime"
+                      />
+                    </li>
                     <li>
                       <DrowpdownItem
                         label={"grassland"}
