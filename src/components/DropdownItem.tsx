@@ -31,11 +31,11 @@ export default function DrowpdownItem({
         type="checkbox"
         checked={checked}
         className="hover:cursor-pointer"
-        id={label}
-        name={label}
+        id={label === "Select All" ? "all" + colour : label}
+        name={label === "Select All" ? "all" + colour : label}
       />
       <label
-        htmlFor={label}
+        htmlFor={label === "Select All" ? "all" + colour : label}
         className="inline-block w-32 pl-4 capitalize hover:cursor-pointer">
         {label}
       </label>

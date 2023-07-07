@@ -94,6 +94,14 @@ interface Habitat {
   "rare": boolean;
 }
 
+interface Dropdown {
+  shiny: false;
+  region: false;
+  rarity: false;
+  type: false;
+  habitat: false;
+}
+
 export default function Pokedex({
   user,
   species,
@@ -187,7 +195,7 @@ export default function Pokedex({
   const handleRegion = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
-    if (label === "Select All") {
+    if (label.startsWith("all")) {
       setRegion({
         All: checked,
         Kanto: checked,
@@ -207,7 +215,7 @@ export default function Pokedex({
   const handleRarity = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
-    if (label === "Select All") {
+    if (label.startsWith("all")) {
       setRarity({
         All: checked,
         Common: checked,
@@ -230,7 +238,7 @@ export default function Pokedex({
   const handleType = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
-    if (label === "Select All") {
+    if (label.startsWith("all")) {
       setType({
         All: checked,
         normal: checked,
@@ -295,7 +303,7 @@ export default function Pokedex({
   const handleHabitat = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
-    if (label === "Select All") {
+    if (label.startsWith("all")) {
       setHabitat({
         "All": checked,
         "grassland": checked,
