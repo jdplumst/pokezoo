@@ -25,7 +25,8 @@ export const authOptions: NextAuthOptions = {
           claimedDaily: false,
           claimedNightly: false,
           johtoStarter: true,
-          hoennStarter: true
+          hoennStarter: true,
+          sinnohStarter: true
         };
       }
     }),
@@ -45,7 +46,8 @@ export const authOptions: NextAuthOptions = {
           claimedDaily: false,
           claimedNightly: false,
           johtoStarter: true,
-          hoennStarter: true
+          hoennStarter: true,
+          sinnohStarter: true
         };
       }
     }),
@@ -65,7 +67,8 @@ export const authOptions: NextAuthOptions = {
           claimedDaily: false,
           claimedNightly: false,
           johtoStarter: true,
-          hoennStarter: true
+          hoennStarter: true,
+          sinnohStarter: true
         };
       }
     })
@@ -85,6 +88,7 @@ export const authOptions: NextAuthOptions = {
         session.user.claimedNightly = user.claimedNightly;
         session.user.johtoStarter = user.johtoStarter;
         session.user.hoennStarter = user.hoennStarter;
+        session.user.sinnohStarter = user.sinnohStarter;
       }
       return session;
     }

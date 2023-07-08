@@ -59,6 +59,7 @@ model User {
   instances       Instance[]
   johtoStarter    Boolean           @default(true)
   hoennStarter    Boolean           @default(true)
+  sinnohStarter   Boolean           @default(true)
   UserAchievement UserAchievement[]
 }
 
