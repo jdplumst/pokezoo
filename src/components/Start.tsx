@@ -19,25 +19,32 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
   const purchaseMutation = trpc.instance.purchaseInstance.useMutation();
   const johtoMutation = trpc.instance.getJohto.useMutation();
   const hoennMutation = trpc.instance.getHoenn.useMutation();
+  const sinnohMutation = trpc.instance.getSinnoh.useMutation();
 
   const grassStarter =
     region === "Kanto"
       ? "bulbasaur"
       : region === "Johto"
       ? "chikorita"
-      : "treecko";
+      : region === "Hoenn"
+      ? "treecko"
+      : "turtwig";
   const fireStarter =
     region === "Kanto"
       ? "charmander"
       : region === "Johto"
       ? "cyndaquil"
-      : "torchic";
+      : region === "Hoenn"
+      ? "torchic"
+      : "chimchar";
   const waterStarter =
     region === "Kanto"
       ? "squirtle"
       : region === "Johto"
       ? "totodile"
-      : "mudkip";
+      : region === "Hoenn"
+      ? "mudkip"
+      : "piplup";
 
   const handleClose = async () => {
     setDisabled(true);
@@ -82,6 +89,19 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
         );
       } else if (region === "Hoenn") {
         hoennMutation.mutate(
+          { userId: user.id, speciesId: speciesId, cost: 0 },
+          {
+            onSuccess(data, variables, context) {
+              addStarter(data.instance, region);
+            },
+            onError(error, variables, context) {
+              setError(error.message);
+              setDisabled(false);
+            }
+          }
+        );
+      } else if (region === "Sinnoh") {
+        sinnohMutation.mutate(
           { userId: user.id, speciesId: speciesId, cost: 0 },
           {
             onSuccess(data, variables, context) {

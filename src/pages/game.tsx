@@ -82,6 +82,7 @@ export default function Game({
   // Variables associated with starters
   const [claimedJohto, setClaimedJohto] = useState(user.johtoStarter);
   const [claimedHoenn, setClaimedHoenn] = useState(user.hoennStarter);
+  const [claimedSinnoh, setClaimedSinnoh] = useState(user.sinnohStarter);
 
   useEffect(() => {
     const today = new Date();
@@ -106,6 +107,8 @@ export default function Game({
       setClaimedJohto(true);
     } else if (r === "Hoenn") {
       setClaimedHoenn(true);
+    } else if (r === "Sinnoh") {
+      setClaimedSinnoh(true);
     }
   };
 
@@ -251,6 +254,16 @@ export default function Game({
           user={user}
           species={species}
           region="Hoenn"
+          addStarter={addStarter}
+        />
+      )}
+
+      {/* Modal for Sinnoh Starter */}
+      {!claimedSinnoh && (
+        <Start
+          user={user}
+          species={species}
+          region="Sinnoh"
           addStarter={addStarter}
         />
       )}
