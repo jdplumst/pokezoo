@@ -117,6 +117,61 @@ export default function Tutorial() {
               </li>
             </ul>
             <br></br>
+            <p>Achievement Tiers work as follows:</p>
+            <div className="grid grid-cols-4">
+              <div>
+                <p>Tier 1:</p>
+                <ul className="list-disc px-4">
+                  <li>Common Rarity</li>
+                  <li>Cave Habitat</li>
+                  <li>Rough-Terrain Habitat</li>
+                  <li>Normal Type</li>
+                  <li>Poison Type</li>
+                  <li>Ground Type</li>
+                  <li>Rock Type</li>
+                  <li>Ice Type</li>
+                  <li>Bug Type</li>
+                </ul>
+              </div>
+              <div>
+                <p>Tier 2:</p>
+                <ul className="list-disc px-4">
+                  <li>Rare Rarity</li>
+                  <li>Sea Habitat</li>
+                  <li>Mountain Habitat</li>
+                  <li>Urban Habitat</li>
+                  <li>Waters-Edge Habitat</li>
+                  <li>Fire Type</li>
+                  <li>Water Type</li>
+                  <li>Grass Type</li>
+                  <li>Electric Type</li>
+                  <li>Ghost Type</li>
+                  <li>Fairy Type</li>
+                  <li>Dark Type</li>
+                </ul>
+              </div>
+              <div>
+                <p>Tier 3:</p>
+                <ul className="list-disc px-4">
+                  <li>Epic Rarity</li>
+                  <li>Grassland Habitat</li>
+                  <li>Forest Habitat</li>
+                  <li>Fighting Type</li>
+                  <li>Flying Type</li>
+                </ul>
+              </div>
+              <div>
+                <p>Tier 4:</p>
+                <ul className="list-disc px-4">
+                  <li>Legendary Rarity</li>
+                  <li>Rare Habitat</li>
+                  <li>Psychic Type</li>
+                  <li>Dragon Type</li>
+                  <li>Steel Type</li>
+                </ul>
+              </div>
+            </div>
+            <br></br>
             <p>
               New Pokémon can be obtained through the shop page. There are
               different balls which each contain their own rarity chances. Each
