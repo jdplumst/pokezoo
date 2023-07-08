@@ -173,10 +173,13 @@ export default function Tutorial() {
             </div>
             <br></br>
             <p>
-              New Pokémon can be obtained through the shop page. There are
-              different balls which each contain their own rarity chances. Each
-              ball also has a 1 in 4096 chance of giving the user a shiny
-              Pokémon.
+              New Pokémon can be obtained through the{" "}
+              <a href="https://pokezoo.vercel.app/shop">
+                <span>shop page</span>
+              </a>
+              . There are different balls which each contain their own rarity
+              chances. Each ball also has a 1 in 4096 chance of giving the user
+              a shiny Pokémon.
             </p>
             <br></br>
             <p>
