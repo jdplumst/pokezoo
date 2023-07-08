@@ -49,6 +49,7 @@ interface Region {
   Kanto: boolean;
   Johto: boolean;
   Hoenn: boolean;
+  Sinnoh: boolean;
 }
 
 interface Rarity {
@@ -119,7 +120,8 @@ export default function Pokedex({
     All: true,
     Kanto: true,
     Johto: true,
-    Hoenn: true
+    Hoenn: true,
+    Sinnoh: true
   });
   const [rarity, setRarity] = useState<Rarity>({
     All: true,
@@ -200,7 +202,8 @@ export default function Pokedex({
         All: checked,
         Kanto: checked,
         Johto: checked,
-        Hoenn: checked
+        Hoenn: checked,
+        Sinnoh: checked
       });
     } else if (label === "Kanto") {
       setRegion({ ...region, Kanto: checked });
@@ -208,6 +211,8 @@ export default function Pokedex({
       setRegion({ ...region, Johto: checked });
     } else if (label === "Hoenn") {
       setRegion({ ...region, Hoenn: checked });
+    } else if (label === "Sinnoh") {
+      setRegion({ ...region, Sinnoh: checked });
     }
   };
 
@@ -572,6 +577,14 @@ export default function Pokedex({
                         label="Hoenn"
                         fn={handleRegion}
                         checked={region.Hoenn}
+                        colour={"green"}
+                      />
+                    </li>
+                    <li>
+                      <DrowpdownItem
+                        label="Sinnoh"
+                        fn={handleRegion}
+                        checked={region.Sinnoh}
                         colour={"green"}
                       />
                     </li>
