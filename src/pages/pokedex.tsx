@@ -21,7 +21,9 @@ export const getServerSideProps = async (
     };
   }
   const user = session.user;
-  const species = await prisma.species.findMany();
+  const species = await prisma.species.findMany({
+    orderBy: [{ pokedexNumber: "asc" }]
+  });
   const instances = await prisma.instance.findMany({
     where: { userId: user.id },
     distinct: ["speciesId"]
@@ -362,6 +364,9 @@ export default function Pokedex({
         }
         if (region.Hoenn) {
           generations.push(3);
+        }
+        if (region.Sinnoh) {
+          generations.push(4);
         }
         return generations.includes(s.generation);
       })
