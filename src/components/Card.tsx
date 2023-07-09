@@ -21,7 +21,7 @@ export default function Card({ species, instance, openDelete, caught }: ICard) {
           : species.rarity === Rarity.Legendary
           ? `bg-legendary-unfocus hover:bg-legendary-focus`
           : ``
-      } card-hover h-fit w-56 border-2 ${
+      } card-hover h-fit w-60 border-2 ${
         species.shiny ? `border-yellow-500` : `border-black`
       } p-2 text-black`}>
       {caught && (
@@ -39,8 +39,8 @@ export default function Card({ species, instance, openDelete, caught }: ICard) {
         <Image
           src={species.img}
           alt={species.name}
-          width={98}
-          height={98}
+          width={120}
+          height={120}
           className="pixelated"
         />
         <p className="font-bold capitalize">
