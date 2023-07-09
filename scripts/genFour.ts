@@ -3,7 +3,7 @@ import { Rarity } from "@prisma/client";
 
 // Script to populate Species collection
 const populateGenFourDB = async () => {
-  for (let i = 387; i <= 397; i++) {
+  for (let i = 387; i <= 493; i++) {
     const speciesResponse = await fetch(
       `https://pokeapi.co/api/v2/pokemon-species/${i}/`
     );
