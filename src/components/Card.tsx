@@ -39,8 +39,8 @@ export default function Card({ species, instance, openDelete, caught }: ICard) {
         <Image
           src={species.img}
           alt={species.name}
-          width={120}
-          height={120}
+          width={98}
+          height={98}
           className="pixelated"
         />
         <p className="font-bold capitalize">
