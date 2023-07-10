@@ -48,11 +48,19 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">4.01 (July 10, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Added Castform-Sunny, Castform-Rainy, and Castform-Snowy.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">4.00 (July 9, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
                 Added Sinnoh Pokémon! Start collecting Pokémon from Sinnoh
-                alongside Pokémon from Kanto, Johto and Hoenn.
+                alongside Pokémon from Kanto, Johto, and Hoenn.
               </p>
               <p className="px-4">
                 All exising users will get to choose a Sinnoh starter between
