@@ -95,6 +95,58 @@ export const instanceRouter = router({
       };
     }),
 
+  sellInstances: protectedProcedure
+    .input(
+      z.object({
+        ids: z.array(z.string())
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const result = [];
+      const currUser = await ctx.prisma.user.findUnique({
+        where: { id: ctx.session.user.id },
+        select: { totalYield: true, balance: true }
+      });
+      if (!currUser) {
+        throw Error("Not authorized to make this request");
+      }
+      for (let i of input.ids) {
+        const exists = await ctx.prisma.instance.findUnique({
+          where: { id: i },
+          select: { speciesId: true }
+        });
+        if (!exists) {
+          throw Error("Instance does not exist.");
+        }
+        const species = await ctx.prisma.species.findUnique({
+          where: { id: exists.speciesId }
+        });
+        if (!species) {
+          throw Error("Species does not exist.");
+        }
+        await ctx.prisma.user.update({
+          where: { id: ctx.session.user.id },
+          data: {
+            totalYield: currUser.totalYield - species.yield,
+            balance: currUser.balance + species.sellPrice
+          }
+        });
+        const instance = await ctx.prisma.instance.delete({
+          where: { id: i }
+        });
+        result.push(instance.id);
+      }
+      const user = await ctx.prisma.user.findUnique({
+        where: { id: ctx.session.user.id },
+        select: { totalYield: true, balance: true }
+      });
+      if (!user) throw Error("Not authorized to make this request");
+      return {
+        instances: result,
+        user: user
+      };
+    }),
+
   getJohto: protectedProcedure
     .input(
       z.object({

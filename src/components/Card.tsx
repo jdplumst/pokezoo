@@ -1,14 +1,22 @@
 import { Rarity, Species, Instance } from "@prisma/client";
 import Image from "next/image";
+import { useState } from "react";
 
 interface ICard {
   species: Species;
   instance?: Instance;
-  openDelete?: (species: Species, instance: Instance) => void;
+  modifyDeleteList?: (instance: Instance, sell: boolean) => void;
   caught?: Boolean;
 }
 
-export default function Card({ species, instance, openDelete, caught }: ICard) {
+export default function Card({
+  species,
+  instance,
+  modifyDeleteList,
+  caught
+}: ICard) {
+  const [beingDeleted, setBeingDeleted] = useState(false);
+
   return (
     <div
       className={`${
@@ -139,11 +147,24 @@ export default function Card({ species, instance, openDelete, caught }: ICard) {
         <p className="capitalize">Habitat: {species.habitat}</p>
         <p>Yield: P{species.yield.toLocaleString()}</p>
         <p>Sell Price: P{species.sellPrice.toLocaleString()}</p>
-        {instance && openDelete && (
+        {instance && modifyDeleteList && !beingDeleted && (
           <button
-            onClick={() => openDelete(species, instance)}
+            onClick={() => {
+              modifyDeleteList(instance, true);
+              setBeingDeleted(true);
+            }}
             className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold text-white hover:bg-red-btn-focus">
             Sell Pokémon
+          </button>
+        )}
+        {instance && modifyDeleteList && beingDeleted && (
+          <button
+            onClick={() => {
+              modifyDeleteList(instance, false);
+              setBeingDeleted(false);
+            }}
+            className="rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold text-white hover:bg-green-btn-focus">
+            Unsell Pokémon
           </button>
         )}
       </div>
