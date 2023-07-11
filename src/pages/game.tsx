@@ -48,7 +48,6 @@ export const getServerSideProps = async (
 };
 
 type Sort = "Oldest" | "Newest" | "Pokedex" | "Rarity";
-type JohtoStarter = "Chikorita" | "Cyndaquil" | "Totodile";
 
 export default function Game({
   user,
@@ -73,11 +72,9 @@ export default function Game({
   const [sort, setSort] = useState<Sort>("Oldest");
 
   // Variables associated with selling an instance
-  const [deleteModal, setDeleteModal] = useState(false);
-  const [deleteSpecies, setDeleteSpecies] = useState<Species>(species[0]);
-  const [deleteInstance, setDeleteInstance] = useState<Instance | null>(null);
+  const [deleteList, setDeleteList] = useState<string[]>([]);
   const [deleteDisabled, setDeleteDisabled] = useState(false);
-  const sellMutation = trpc.instance.sellInstance.useMutation();
+  const sellMutation = trpc.instance.sellInstances.useMutation();
 
   // Variables associated with starters
   const [claimedJohto, setClaimedJohto] = useState(user.johtoStarter);
@@ -186,29 +183,28 @@ export default function Game({
     }
   };
 
-  // Open Delete Modal
-  const openDelete = (species: Species, instance: Instance) => {
-    setDeleteModal(true);
-    window.scrollTo(0, 0);
-    setDeleteSpecies(species);
-    setDeleteInstance(instance);
-    setDeleteDisabled(false);
+  // Add or remove instances from array of instances to be deleted
+  const modifyDeleteList = (i: Instance, sell: boolean) => {
+    if (sell) {
+      setDeleteList([...deleteList, i.id]);
+    } else {
+      setDeleteList(deleteList.filter((x) => x !== i.id));
+    }
   };
 
-  // Delete an Instance
-  const confirmDelete = (i: Instance) => {
+  const handleDelete = () => {
     setDeleteDisabled(true);
     sellMutation.mutate(
-      { id: i.id },
+      { ids: deleteList },
       {
         onSuccess(data, variables, context) {
           setCards((prevCards) =>
-            prevCards.filter((c) => c.id !== data.instance.id)
+            prevCards.filter((c) => !data.instances.includes(c.id))
           );
           setTotalYield(data.user.totalYield);
           setBalance(data.user.balance);
           setError(null);
-          setDeleteModal(false);
+          setDeleteList([]);
         },
         onError(error, variables, context) {
           setError(error.message);
@@ -268,38 +264,24 @@ export default function Game({
         />
       )}
 
-      {/* Modal for Deleting */}
-      {deleteModal && (
-        <Modal>
-          <div className="text-center text-xl font-bold">
-            You are about to delete a Pokémon
-          </div>
-          <div className="pb-4">
-            Are you sure you want to delete{" "}
-            <span className="capitalize">{deleteSpecies.name}</span>?
-          </div>
-          <Card species={deleteSpecies} />
-          <div className="grid grid-cols-2 gap-5 pt-4">
-            <button
-              onClick={() => confirmDelete(deleteInstance as Instance)}
-              disabled={deleteDisabled}
-              className="mb-2 w-28 rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-              {sellMutation.isLoading ? <LoadingSpinner /> : "Yes"}
-            </button>
-            <button
-              onClick={() => setDeleteModal(false)}
-              disabled={deleteDisabled}
-              className="mb-2 w-28 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus ">
-              No
-            </button>
-          </div>
-        </Modal>
-      )}
-
       {/* Main Game Screen */}
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Game">
+          {deleteList.length > 0 && (
+            <div className="sticky top-0 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">
+              <span className="font-bold">
+                You have selected {deleteList.length} Pokémon to delete.
+              </span>
+
+              <button
+                onClick={() => handleDelete()}
+                disabled={deleteDisabled}
+                className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+                {sellMutation.isLoading ? <LoadingSpinner /> : "Confirm Delete"}
+              </button>
+            </div>
+          )}
           <main className="p-4">
             {user.admin && (
               <div className="flex justify-center bg-red-500">
@@ -391,7 +373,7 @@ export default function Game({
                   key={c.id}
                   instance={c}
                   species={species.filter((s) => s.id === c.speciesId)[0]}
-                  openDelete={openDelete}
+                  modifyDeleteList={modifyDeleteList}
                 />
               ))}
             </div>
