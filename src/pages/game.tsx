@@ -205,9 +205,11 @@ export default function Game({
           setBalance(data.user.balance);
           setError(null);
           setDeleteList([]);
+          setDeleteDisabled(false);
         },
         onError(error, variables, context) {
           setError(error.message);
+          setDeleteDisabled(false);
         }
       }
     );
