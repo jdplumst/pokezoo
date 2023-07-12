@@ -18,7 +18,7 @@ export default function Sidebar({ children, page }: ISidebar) {
       <nav
         className={`${
           open ? `w-1/5` : `w-1/12`
-        } sidebar sticky top-0 flex h-screen max-h-screen flex-col overflow-scroll p-4 shadow-lg`}>
+        } sidebar sticky top-0 flex h-screen max-h-screen flex-col overflow-auto p-4 shadow-lg`}>
         <div className="flex items-center pb-10">
           <h1
             className={`${
