@@ -51,7 +51,7 @@ export default function PatchNotes() {
               <h3 className="p-4 text-4xl font-bold">4.03 (July 12, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
-                Removed scrollbar showing on Sidebar for Chrome users.
+                Fixed scrollbar sometimes showing on Sidebar when not needed.
               </p>
             </section>
             <hr className="border-black pb-4"></hr>
