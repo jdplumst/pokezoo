@@ -117,8 +117,8 @@ export default function Tutorial() {
               </li>
             </ul>
             <br></br>
-            <p>Achievement Tiers work as follows:</p>
-            <div className="grid grid-cols-4">
+            <p>Achievement Tiers work as follows per region:</p>
+            <div className="grid grid-cols-5">
               <div>
                 <p>Tier 1:</p>
                 <ul className="list-disc px-4">
@@ -168,6 +168,12 @@ export default function Tutorial() {
                   <li>Psychic Type</li>
                   <li>Dragon Type</li>
                   <li>Steel Type</li>
+                </ul>
+              </div>
+              <div>
+                <p>Tier 5:</p>
+                <ul className="list-disc px-4">
+                  <li>All Pokémon</li>
                 </ul>
               </div>
             </div>
