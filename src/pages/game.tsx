@@ -295,7 +295,7 @@ export default function Game({
               </div>
             )}
             <div className="flex items-end justify-between px-4">
-              <span>Your current balance is P{balance}.</span>
+              <span>Your current balance is P{balance.toLocaleString()}.</span>
               {claimedDaily && time === "day" ? (
                 <span>You have already claimed your daily reward.</span>
               ) : !claimedDaily && time === "day" ? (
@@ -327,7 +327,10 @@ export default function Game({
               )}
             </div>
             <div className="flex items-center justify-between px-4">
-              <span>You will receive P{totalYield} on the next payout.</span>
+              <span>
+                You will receive P{totalYield.toLocaleString()} on the next
+                payout.
+              </span>
               <span>You have {cards.length} / 2000 Pokémon.</span>
             </div>
             {error && <p>{error}</p>}

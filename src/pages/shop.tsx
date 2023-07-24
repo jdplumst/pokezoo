@@ -234,8 +234,11 @@ export default function Shop({
                 </button>
               </div>
             )}
-            <p>Your current balance is P{balance}.</p>
-            <p>You will receive P{totalYield} on the next payout.</p>
+            <p>Your current balance is P{balance.toLocaleString()}.</p>
+            <p>
+              You will receive P{totalYield.toLocaleString()} on the next
+              payout.
+            </p>
             {error && <p className="font-bold text-red-500">{error}</p>}
             <div className="balls grid justify-center gap-10 pt-5">
               {balls.map((b) => (

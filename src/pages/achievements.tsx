@@ -200,8 +200,11 @@ export default function Achievements({
                 </button>
               </div>
             )}
-            <p>Your current balance is P{user.balance}.</p>
-            <p>You will receive P{totalYield} on the next payout.</p>
+            <p>Your current balance is P{user.balance.toLocaleString()}.</p>
+            <p>
+              You will receive P{totalYield.toLocaleString()} on the next
+              payout.
+            </p>
             <div className="flex justify-center pt-5">
               <ul className="w-3/4">
                 {fullAchievements.map((a) => (
