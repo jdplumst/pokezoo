@@ -71,7 +71,10 @@ export const userRouter = router({
       const exists = await ctx.prisma.user.findFirst({
         where: { username: input.username }
       });
-      if (exists) {
+      if (
+        exists &&
+        exists.username?.toLowerCase() === input.username.toLowerCase()
+      ) {
         throw new Error("Username is already taken");
       }
       const user = await ctx.prisma.user.update({
