@@ -3,7 +3,7 @@ import { getServerSession } from "next-auth";
 import Head from "next/head";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { prisma } from "../server/db";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Ball, Rarity, Species } from "@prisma/client";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
@@ -39,6 +39,14 @@ export const getServerSideProps = async (
   };
 };
 
+enum region {
+  None,
+  Kanto,
+  Johto,
+  Hoenn,
+  Sinnoh
+}
+
 export default function Shop({
   user,
   balls,
@@ -57,6 +65,12 @@ export default function Shop({
   const [openModal, setOpenModal] = useState(false);
   const [newSpecies, setNewSpecies] = useState<Species>(species[0]);
 
+  // Premier Ball
+  const [regionOpen, setRegionOpen] = useState(false);
+  const [regionCurr, setRegionCurr] = useState<region>(region.None);
+  const [regionError, setRegionError] = useState(false);
+  const premierRef = useRef<HTMLButtonElement>(null);
+
   useEffect(() => {
     const today = new Date();
     const hour = today.getHours();
@@ -71,6 +85,14 @@ export default function Shop({
   const purchaseBall = async (ball: Ball) => {
     // Disable all purchase buttons
     setDisabled(true);
+
+    if (ball.name === "Premier" && !regionCurr) {
+      setRegionError(true);
+      setDisabled(false);
+      return;
+    }
+
+    setRegionError(false);
 
     // Determine if shiny
     const shinyRandomizer = Math.floor(Math.random() * 4096) + 1;
@@ -220,7 +242,6 @@ export default function Shop({
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-
       <div
         className={`z-0 min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Shop">
@@ -258,16 +279,31 @@ export default function Shop({
                       <p className="text-center text-2xl font-bold">
                         P{b.cost.toLocaleString()}
                       </p>
-                      <button
-                        onClick={() => purchaseBall(b)}
-                        disabled={disabled}
-                        className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
-                        {purchaseMutation.isLoading ? (
-                          <LoadingSpinner />
-                        ) : (
-                          "Buy"
+                      <div className="flex gap-5">
+                        {b.name === "Premier" && (
+                          <button
+                            ref={premierRef}
+                            onClick={() => {
+                              setRegionOpen((p) => !p);
+                              window.scrollTo(0, 0);
+                            }}
+                            className={`w-24 rounded-lg border-2 ${
+                              regionError ? "border-red-500" : "border-black"
+                            } bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus`}>
+                            {regionCurr ? region[regionCurr!] : "Region"}
+                          </button>
                         )}
-                      </button>
+                        <button
+                          onClick={() => purchaseBall(b)}
+                          disabled={disabled}
+                          className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          {purchaseMutation.isLoading ? (
+                            <LoadingSpinner />
+                          ) : (
+                            "Buy"
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </Tooltip>
@@ -277,6 +313,7 @@ export default function Shop({
         </Sidebar>
       </div>
 
+      {/* Modal for Bought Instance */}
       {openModal && (
         <Modal>
           {"aeiou".includes(newSpecies.name[0]) ? (
@@ -300,6 +337,51 @@ export default function Shop({
               onClick={() => setOpenModal(false)}
               className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
               Got it!
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Modal for Premier Ball */}
+      {regionOpen && (
+        <Modal>
+          <p className="text-xl font-bold">Select a Region</p>
+          <div className="flex gap-5 pt-5">
+            <button
+              onClick={() => {
+                setRegionCurr(region.Kanto);
+                setRegionOpen(false);
+                premierRef.current!.scrollIntoView();
+              }}
+              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+              Kanto
+            </button>
+            <button
+              onClick={() => {
+                setRegionCurr(region.Johto);
+                setRegionOpen(false);
+                premierRef.current!.scrollIntoView();
+              }}
+              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+              Johto
+            </button>
+            <button
+              onClick={() => {
+                setRegionCurr(region.Hoenn);
+                setRegionOpen(false);
+                premierRef.current!.scrollIntoView();
+              }}
+              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+              Hoenn
+            </button>
+            <button
+              onClick={() => {
+                setRegionCurr(region.Sinnoh);
+                setRegionOpen(false);
+                premierRef.current!.scrollIntoView();
+              }}
+              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+              Sinnoh
             </button>
           </div>
         </Modal>
