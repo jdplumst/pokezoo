@@ -137,6 +137,8 @@ export default function Shop({
       filteredSpecies = timeSpecies.filter(
         (s) => s.habitat === "mountain" || s.habitat === "rough-terrain"
       );
+    } else if (ball.name === "Premier") {
+      filteredSpecies = timeSpecies.filter((s) => s.generation === regionCurr);
     }
 
     // Determine rarity
