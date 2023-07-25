@@ -81,6 +81,15 @@ export default function Game({
   const [claimedHoenn, setClaimedHoenn] = useState(user.hoennStarter);
   const [claimedSinnoh, setClaimedSinnoh] = useState(user.sinnohStarter);
 
+  // Variables associated with setting username
+  const [usernameModal, setUsernameModal] = useState(
+    user.username ? false : true
+  );
+  const [username, setUsername] = useState("");
+  const [usernameDisabled, setUsernameDisabled] = useState(false);
+  const [usernameError, setUsernameError] = useState<null | string>(null);
+  const usernameMutation = trpc.user.selectUsername.useMutation();
+
   useEffect(() => {
     const today = new Date();
     const hour = today.getHours();
@@ -192,6 +201,7 @@ export default function Game({
     }
   };
 
+  // Sell instance
   const handleDelete = () => {
     setDeleteDisabled(true);
     sellMutation.mutate(
@@ -210,6 +220,23 @@ export default function Game({
         onError(error, variables, context) {
           setError(error.message);
           setDeleteDisabled(false);
+        }
+      }
+    );
+  };
+
+  // Set username
+  const handleUsername = () => {
+    setUsernameDisabled(true);
+    usernameMutation.mutate(
+      { username: username },
+      {
+        onSuccess(data, variables, context) {
+          setUsernameModal(false);
+        },
+        onError(error, variables, context) {
+          setUsernameError(error.message);
+          setUsernameDisabled(false);
         }
       }
     );
@@ -234,6 +261,29 @@ export default function Game({
           region="Kanto"
           addStarter={addStarter}
         />
+      )}
+
+      {/* Modal for Username */}
+      {usernameModal && (
+        <Modal>
+          <div className="flex w-full flex-col items-center gap-5">
+            <p className="text-xl font-bold">Enter a Username</p>
+            <input
+              onChange={(e) => setUsername(e.target.value)}
+              className="p-2 text-black"></input>
+            <button
+              onClick={() => handleUsername()}
+              disabled={usernameDisabled}
+              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 text-xl font-bold hover:bg-red-btn-focus">
+              {usernameMutation.isLoading ? <LoadingSpinner /> : "Confirm"}
+            </button>
+            {usernameError && (
+              <div className="flex justify-center text-red-500">
+                {usernameError}
+              </div>
+            )}
+          </div>
+        </Modal>
       )}
 
       {/* Modal for Johto Starter */}
