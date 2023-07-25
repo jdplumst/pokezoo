@@ -48,6 +48,12 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">4.07 (July 25, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">Added Premier Ball.</p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">4.06 (July 24, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
