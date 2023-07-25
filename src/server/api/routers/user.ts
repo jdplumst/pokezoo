@@ -48,5 +48,36 @@ export const userRouter = router({
       return {
         user: user
       };
+    }),
+
+  selectUsername: protectedProcedure
+    .input(z.object({ username: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const currUser = await ctx.prisma.user.findFirst({
+        where: { id: ctx.session.user.id },
+        select: {
+          balance: true,
+          claimedDaily: true,
+          claimedNightly: true,
+          totalYield: true
+        }
+      });
+      if (!currUser) {
+        throw new Error("Not authorized to make this request");
+      }
+      if (input.username.length === 0 || input.username.length > 20) {
+        throw new Error("Username must be between 1 and 20 characters long");
+      }
+      const exists = await ctx.prisma.user.findFirst({
+        where: { username: input.username }
+      });
+      if (exists) {
+        throw new Error("Username is already taken");
+      }
+      const user = await ctx.prisma.user.update({
+        where: { id: ctx.session.user.id },
+        data: { username: input.username }
+      });
+      return { user: user };
     })
 });
