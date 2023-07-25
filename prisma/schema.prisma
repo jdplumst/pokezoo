@@ -52,6 +52,7 @@ model User {
   accounts        Account[]
   sessions        Session[]
   admin           Boolean           @default(false)
+  username        String?
   totalYield      Int
   balance         Int
   claimedDaily    Boolean           @default(false)
