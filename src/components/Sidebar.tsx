@@ -2,8 +2,8 @@ import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import { ReactNode, useState } from "react";
-import { AiOutlineMenu } from "react-icons/ai";
-import { GoMarkGithub, GoSignOut } from "react-icons/go";
+import { AiOutlineMenu, AiOutlineGithub } from "react-icons/ai";
+import { GoSignOut } from "react-icons/go";
 
 interface ISidebar {
   children: ReactNode;
@@ -154,7 +154,7 @@ export default function Sidebar({ children, page }: ISidebar) {
           </a>
           <a href="https://github.com/jdplumst/pokezoo" target="_blank">
             <div className="mb-2 flex items-center py-2 hover:bg-sidebar-unfocus">
-              <GoMarkGithub
+              <AiOutlineGithub
                 size={30}
                 className={`${open ? `ml-3` : `ml-auto mr-auto`} pixelated`}
               />

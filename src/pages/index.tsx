@@ -1,7 +1,7 @@
 import { GetServerSidePropsContext } from "next";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
-import { GoMarkGithub } from "react-icons/go";
+import { AiOutlineGithub } from "react-icons/ai";
 import { FaTwitch } from "react-icons/fa";
 import { BsGoogle } from "react-icons/bs";
 import { getServerSession } from "next-auth";
@@ -43,7 +43,7 @@ export default function Home() {
             className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-green-500">
             <span className="flex items-center justify-center gap-2">
               Sign in with GitHub
-              <GoMarkGithub />
+              <AiOutlineGithub />
             </span>
           </button>
           <button
