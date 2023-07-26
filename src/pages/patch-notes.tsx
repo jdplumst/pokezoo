@@ -48,7 +48,7 @@ export default function PatchNotes() {
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="PatchNotes">
           <Topbar
-            user={session.user}
+            username={session.user.username}
             balance={session.user.balance}
             totalYield={session.user.totalYield}
             totalCards={countData?.count!}

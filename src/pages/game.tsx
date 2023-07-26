@@ -322,7 +322,7 @@ export default function Game({
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Game">
           <Topbar
-            user={user}
+            username={username}
             balance={balance}
             totalYield={totalYield}
             totalCards={cards.length}

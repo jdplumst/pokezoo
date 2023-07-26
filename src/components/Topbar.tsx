@@ -1,14 +1,12 @@
-import { User } from "next-auth";
-
 interface ITopbar {
-  user: User;
+  username: string | null;
   balance: number;
   totalYield: number;
   totalCards: number;
 }
 
 export default function Topbar({
-  user,
+  username,
   balance,
   totalYield,
   totalCards
@@ -17,7 +15,7 @@ export default function Topbar({
     <nav className="relative w-full py-4 shadow-lg">
       <div className="flex justify-between px-4">
         <div className="flex flex-col">
-          <p>Hi {user.username}!</p>
+          <p>Hi {username}!</p>
           <p>You have {totalCards.toLocaleString()} / 2,000 Pokémon.</p>
         </div>
         <div className="flex flex-col text-right">

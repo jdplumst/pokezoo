@@ -192,7 +192,7 @@ export default function Achievements({
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Achievements">
           <Topbar
-            user={user}
+            username={user.username}
             balance={user.balance}
             totalYield={totalYield}
             totalCards={instances.length}

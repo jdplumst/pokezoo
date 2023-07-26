@@ -257,7 +257,7 @@ export default function Shop({
         className={`z-0 min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Shop">
           <Topbar
-            user={user}
+            username={user.username}
             balance={balance}
             totalYield={totalYield}
             totalCards={totalCards}
