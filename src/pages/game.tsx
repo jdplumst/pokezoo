@@ -227,7 +227,8 @@ export default function Game({
   };
 
   // Set username
-  const handleUsername = () => {
+  const handleUsername = (e: React.FormEvent) => {
+    e.preventDefault();
     setUsernameDisabled(true);
     usernameMutation.mutate(
       { username: username },
@@ -267,23 +268,24 @@ export default function Game({
       {/* Modal for Username */}
       {usernameModal && (
         <Modal>
-          <div className="flex w-full flex-col items-center gap-5">
+          <form
+            onSubmit={(e) => handleUsername(e)}
+            className="flex w-full flex-col items-center gap-5">
             <p className="text-xl font-bold">Enter a Username</p>
             <input
               onChange={(e) => setUsername(e.target.value)}
               className="p-2 text-black"></input>
             <button
-              onClick={() => handleUsername()}
               disabled={usernameDisabled}
               className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 text-xl font-bold hover:bg-red-btn-focus">
               {usernameMutation.isLoading ? <LoadingSpinner /> : "Confirm"}
             </button>
-            {usernameError && (
-              <div className="flex justify-center text-red-500">
-                {usernameError}
-              </div>
-            )}
-          </div>
+          </form>
+          {usernameError && (
+            <div className="flex justify-center font-bold text-red-500">
+              {usernameError}
+            </div>
+          )}
         </Modal>
       )}
 
