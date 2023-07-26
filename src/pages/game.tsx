@@ -12,6 +12,7 @@ import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
 import Loading from "../components/Loading";
 import LoadingSpinner from "../components/LoadingSpinner";
+import Topbar from "../components/Topbar";
 
 enum Rarity {
   Common = 1,
@@ -57,19 +58,19 @@ export default function Game({
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
 
-  // Variables associated with daily and nightly rewards
-  const [claimedDaily, setClaimedDaily] = useState(user.claimedDaily);
-  const [dailyDisabled, setDailyDisabled] = useState(false);
-  const [claimedNightly, setClaimedNightly] = useState(user.claimedNightly);
-  const [nightlyDisabled, setNightlyDisabled] = useState(false);
-  const rewardMutation = trpc.user.claimReward.useMutation();
-
   // Variables associated with cards
   const [cards, setCards] = useState(instances.slice());
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
   const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<Sort>("Oldest");
+
+  // Variables associated with daily/night rewards
+  const [claimedDaily, setClaimedDaily] = useState(user.claimedDaily);
+  const [dailyDisabled, setDailyDisabled] = useState(false);
+  const [claimedNightly, setClaimedNightly] = useState(user.claimedNightly);
+  const [nightlyDisabled, setNightlyDisabled] = useState(false);
+  const rewardMutation = trpc.user.claimReward.useMutation();
 
   // Variables associated with selling an instance
   const [deleteList, setDeleteList] = useState<string[]>([]);
@@ -320,6 +321,12 @@ export default function Game({
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Game">
+          <Topbar
+            user={user}
+            balance={balance}
+            totalYield={totalYield}
+            totalCards={cards.length}
+          />
           {deleteList.length > 0 && (
             <div className="sticky top-0 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">
               <span className="font-bold">
@@ -344,45 +351,35 @@ export default function Game({
                 </button>
               </div>
             )}
-            <div className="flex items-end justify-between px-4">
-              <span>Your current balance is P{balance.toLocaleString()}.</span>
-              {claimedDaily && time === "day" ? (
-                <span>You have already claimed your daily reward.</span>
-              ) : !claimedDaily && time === "day" ? (
-                <button
-                  onClick={() => claimReward()}
-                  disabled={dailyDisabled}
-                  className="w-48 rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
-                  {rewardMutation.isLoading ? (
-                    <LoadingSpinner />
-                  ) : (
-                    "Claim Daily Reward"
-                  )}
-                </button>
-              ) : claimedNightly && time === "night" ? (
-                <span>You have already claimed your nightly reward.</span>
-              ) : !claimedNightly && time === "night" ? (
-                <button
-                  onClick={() => claimReward()}
-                  disabled={nightlyDisabled}
-                  className="w-48 rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
-                  {rewardMutation.isLoading ? (
-                    <LoadingSpinner />
-                  ) : (
-                    "Claim Nightly Reward"
-                  )}
-                </button>
-              ) : (
-                <></>
-              )}
-            </div>
-            <div className="flex items-center justify-between px-4">
-              <span>
-                You will receive P{totalYield.toLocaleString()} on the next
-                payout.
-              </span>
-              <span>You have {cards.length} / 2000 Pokémon.</span>
-            </div>
+            {claimedDaily && time === "day" ? (
+              <span>You have already claimed your daily reward.</span>
+            ) : !claimedDaily && time === "day" ? (
+              <button
+                onClick={() => claimReward()}
+                disabled={dailyDisabled}
+                className="w-48 rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
+                {rewardMutation.isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  "Claim Daily Reward"
+                )}
+              </button>
+            ) : claimedNightly && time === "night" ? (
+              <span>You have already claimed your nightly reward.</span>
+            ) : !claimedNightly && time === "night" ? (
+              <button
+                onClick={() => claimReward()}
+                disabled={nightlyDisabled}
+                className="w-48 rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
+                {rewardMutation.isLoading ? (
+                  <LoadingSpinner />
+                ) : (
+                  "Claim Nightly Reward"
+                )}
+              </button>
+            ) : (
+              <></>
+            )}
             {error && <p>{error}</p>}
             <div className="flex justify-center gap-5">
               <button

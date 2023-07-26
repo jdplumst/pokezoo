@@ -4,7 +4,7 @@ import Head from "next/head";
 import { authOptions } from "./api/auth/[...nextauth]";
 import { prisma } from "../server/db";
 import { useEffect, useRef, useState } from "react";
-import { Ball, Rarity, Species } from "@prisma/client";
+import { Ball, Instance, Rarity, Species } from "@prisma/client";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
 import Modal from "@/src/components/Modal";
@@ -13,6 +13,7 @@ import Loading from "../components/Loading";
 import Tooltip from "../components/Tooltip";
 import Image from "next/image";
 import LoadingSpinner from "../components/LoadingSpinner";
+import Topbar from "../components/Topbar";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -29,12 +30,17 @@ export const getServerSideProps = async (
   const user = session.user;
   const balls = await prisma.ball.findMany();
   const species = await prisma.species.findMany();
+  const instances = await prisma.instance.findMany({
+    where: { userId: user.id.toString() }
+  });
+  let parsedInstances: Instance[] = JSON.parse(JSON.stringify(instances));
 
   return {
     props: {
       user,
       balls,
-      species
+      species,
+      instances: parsedInstances
     }
   };
 };
@@ -50,13 +56,15 @@ enum region {
 export default function Shop({
   user,
   balls,
-  species
+  species,
+  instances
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
 
   const [balance, setBalance] = useState(user.balance);
   const [totalYield, setTotalYield] = useState(user.totalYield);
+  const [totalCards, setTotalCards] = useState(instances.length);
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const purchaseMutation = trpc.instance.purchaseInstance.useMutation();
@@ -225,6 +233,7 @@ export default function Shop({
           window.scrollTo(0, 0);
           setDisabled(false);
           setError(null);
+          setTotalCards((p) => p + 1);
         },
         onError(error, variables, context) {
           setDisabled(false);
@@ -247,6 +256,12 @@ export default function Shop({
       <div
         className={`z-0 min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Shop">
+          <Topbar
+            user={user}
+            balance={balance}
+            totalYield={totalYield}
+            totalCards={totalCards}
+          />
           <main className="p-4">
             {user.admin && (
               <div className="flex justify-center bg-red-500">
@@ -257,11 +272,6 @@ export default function Shop({
                 </button>
               </div>
             )}
-            <p>Your current balance is P{balance.toLocaleString()}.</p>
-            <p>
-              You will receive P{totalYield.toLocaleString()} on the next
-              payout.
-            </p>
             {error && <p className="font-bold text-red-500">{error}</p>}
             <div className="balls grid justify-center gap-10 pt-5">
               {balls.map((b) => (

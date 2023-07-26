@@ -8,6 +8,7 @@ import Loading from "../components/Loading";
 import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 import DrowpdownItem from "../components/DropdownItem";
+import Topbar from "../components/Topbar";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -31,12 +32,16 @@ export const getServerSideProps = async (
   const parsedInstances: typeof instances = JSON.parse(
     JSON.stringify(instances)
   );
+  const totalCards = await prisma.instance.count({
+    where: { userId: user.id }
+  });
 
   return {
     props: {
       user,
       species,
-      instances: parsedInstances
+      instances: parsedInstances,
+      totalCards
     }
   };
 };
@@ -108,7 +113,8 @@ interface Dropdown {
 export default function Pokedex({
   user,
   species,
-  instances
+  instances,
+  totalCards
 }: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
@@ -507,6 +513,12 @@ export default function Pokedex({
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Pokedex">
+          <Topbar
+            user={user}
+            balance={user.balance}
+            totalYield={user.totalYield}
+            totalCards={totalCards}
+          />
           <main className="p-4">
             {user?.admin && (
               <div className="flex justify-center bg-red-500">

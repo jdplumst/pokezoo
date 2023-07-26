@@ -3,10 +3,22 @@ import Sidebar from "../components/Sidebar";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
+import Topbar from "../components/Topbar";
+import { useRouter } from "next/router";
+import { trpc } from "../utils/trpc";
 
 export default function Tutorial() {
-  const { data: session } = useSession();
-  const user = session?.user;
+  const router = useRouter();
+
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push("/");
+    }
+  });
+
+  const { data: countData, isLoading: countLoading } =
+    trpc.instance.getCount.useQuery();
 
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
@@ -22,7 +34,7 @@ export default function Tutorial() {
     setLoading(false);
   }, []);
 
-  if (loading) return <Loading />;
+  if (loading || status === "loading" || countLoading) return <Loading />;
 
   return (
     <>
@@ -35,8 +47,14 @@ export default function Tutorial() {
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Tutorial">
+          <Topbar
+            user={session.user}
+            balance={session.user.balance}
+            totalYield={session.user.totalYield}
+            totalCards={countData?.count!}
+          />
           <main className="px-8">
-            {user?.admin && (
+            {session.user.admin && (
               <div className="flex justify-center bg-red-500">
                 <button
                   onClick={() => setTime(time === "day" ? "night" : "day")}

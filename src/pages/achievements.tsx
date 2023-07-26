@@ -8,6 +8,7 @@ import { prisma } from "../server/db";
 import Loading from "../components/Loading";
 import ProgressBar from "../components/ProgressBar";
 import { FullAchievement } from "../components/ProgressBar";
+import Topbar from "../components/Topbar";
 
 export const getServerSideProps = async (
   context: GetServerSidePropsContext
@@ -173,7 +174,7 @@ export default function Achievements({
     setLoading(false);
   }, []);
 
-  const updateBalance = (x: number) => {
+  const updateYield = (x: number) => {
     setTotalYield((prevTotalYield) => prevTotalYield + x);
   };
 
@@ -190,6 +191,12 @@ export default function Achievements({
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Achievements">
+          <Topbar
+            user={user}
+            balance={user.balance}
+            totalYield={totalYield}
+            totalCards={instances.length}
+          />
           <main className="p-4">
             {user?.admin && (
               <div className="flex justify-center bg-red-500">
@@ -200,11 +207,6 @@ export default function Achievements({
                 </button>
               </div>
             )}
-            <p>Your current balance is P{user.balance.toLocaleString()}.</p>
-            <p>
-              You will receive P{totalYield.toLocaleString()} on the next
-              payout.
-            </p>
             <div className="flex justify-center pt-5">
               <ul className="w-3/4">
                 {fullAchievements.map((a) => (
@@ -221,7 +223,7 @@ export default function Achievements({
                         species={species}
                         instances={instances}
                         fullAchievement={a}
-                        updateBalance={updateBalance}
+                        updateYield={updateYield}
                       />
                     </div>
                   </li>

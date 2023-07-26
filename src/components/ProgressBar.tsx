@@ -27,7 +27,7 @@ interface IProgressBar {
     };
   })[];
   fullAchievement: FullAchievement;
-  updateBalance: (x: number) => void;
+  updateYield: (x: number) => void;
 }
 
 export default function ProgressBar({
@@ -35,7 +35,7 @@ export default function ProgressBar({
   species,
   instances,
   fullAchievement,
-  updateBalance
+  updateYield
 }: IProgressBar) {
   const [disabled, setDisabled] = useState(false);
   const [isAchieved, setIsAchieved] = useState(fullAchievement.achieved);
@@ -51,7 +51,7 @@ export default function ProgressBar({
       },
       {
         onSuccess(data, variables, context) {
-          updateBalance(fullAchievement.achievement.yield);
+          updateYield(fullAchievement.achievement.yield);
           setIsAchieved(true);
           setError(null);
         },
