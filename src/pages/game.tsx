@@ -86,7 +86,7 @@ export default function Game({
   const [usernameModal, setUsernameModal] = useState(
     user.username ? false : true
   );
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(user.username ? user.username : "");
   const [usernameDisabled, setUsernameDisabled] = useState(false);
   const [usernameError, setUsernameError] = useState<null | string>(null);
   const usernameMutation = trpc.user.selectUsername.useMutation();
