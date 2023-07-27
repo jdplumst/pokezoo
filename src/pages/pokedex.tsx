@@ -1,51 +1,15 @@
 import Head from "next/head";
 import Sidebar from "../components/Sidebar";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { prisma } from "../server/db";
 import Card from "../components/Card";
 import React, { useEffect, useState } from "react";
 import Loading from "../components/Loading";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]";
 import DrowpdownItem from "../components/DropdownItem";
 import Topbar from "../components/Topbar";
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session || !session.user) {
-    return {
-      redirect: {
-        destination: "/"
-      }
-    };
-  }
-  const user = session.user;
-  const species = await prisma.species.findMany({
-    orderBy: [{ pokedexNumber: "asc" }]
-  });
-  const instances = await prisma.instance.findMany({
-    where: { userId: user.id },
-    distinct: ["speciesId"]
-  });
-  const parsedInstances: typeof instances = JSON.parse(
-    JSON.stringify(instances)
-  );
-  const totalCards = await prisma.instance.count({
-    where: { userId: user.id }
-  });
-
-  return {
-    props: {
-      user,
-      species,
-      instances: parsedInstances,
-      totalCards
-    }
-  };
-};
-
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
+import { trpc } from "../utils/trpc";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { Species } from "@prisma/client";
 interface Shiny {
   "Not Shiny": boolean;
   "Shiny": boolean;
@@ -102,24 +66,34 @@ interface Habitat {
   "rare": boolean;
 }
 
-interface Dropdown {
-  shiny: false;
-  region: false;
-  rarity: false;
-  type: false;
-  habitat: false;
-}
+export default function Pokedex() {
+  const router = useRouter();
 
-export default function Pokedex({
-  user,
-  species,
-  instances,
-  totalCards
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push("/");
+    }
+  });
+
+  const { data: countData, isLoading: countLoading } =
+    trpc.instance.getCount.useQuery();
+
+  const { data: speciesData } = trpc.species.getSpecies.useQuery({
+    order: "pokedex"
+  });
+
+  const { data: instanceData, isLoading: instanceLoading } =
+    trpc.instance.getInstances.useQuery({
+      distinct: true
+    });
+
   const [time, setTime] = useState<Time>("night");
-  const [loading, setLoading] = useState(true);
+  const [timeLoading, setTimeLoading] = useState(true);
 
-  const [cards, setCards] = useState(species.filter((s) => !s.shiny));
+  const [cards, setCards] = useState<Species[]>();
+  const [cardsLoading, setCardsLoading] = useState(true);
+
   const [shiny, setShiny] = useState<Shiny>({
     "Not Shiny": true,
     "Shiny": false
@@ -179,6 +153,7 @@ export default function Pokedex({
   const [typeOpen, setTypeOpen] = useState(false);
   const [habitatOpen, setHabitatOpen] = useState(false);
 
+  // Set time
   useEffect(() => {
     const today = new Date();
     const hour = today.getHours();
@@ -187,8 +162,15 @@ export default function Pokedex({
     } else {
       setTime("night");
     }
-    setLoading(false);
+    setTimeLoading(false);
   }, []);
+
+  // Set intitial cards
+  useEffect(() => {
+    if (!speciesData) return;
+    setCards(speciesData!.species!.filter((s) => !s.shiny));
+    setCardsLoading(false);
+  }, [speciesData]);
 
   // Handle Shiny State
   const handleShiny = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -353,14 +335,14 @@ export default function Pokedex({
   const filterSpecies = () => {
     // Filter based on shiny
     if (shiny.Shiny) {
-      setCards(species.filter((s) => s.shiny));
+      setCards(speciesData?.species.filter((s) => s.shiny));
     } else if (shiny["Not Shiny"]) {
-      setCards(species.filter((s) => !s.shiny));
+      setCards(speciesData?.species.filter((s) => !s.shiny));
     }
 
     // Filter based on region
     setCards((p) =>
-      p.filter((s) => {
+      p?.filter((s) => {
         let generations = [];
         if (region.Kanto) {
           generations.push(1);
@@ -380,7 +362,7 @@ export default function Pokedex({
 
     // Filter based on rarity
     setCards((p) =>
-      p.filter((s) => {
+      p?.filter((s) => {
         let rarities = [];
         if (rarity.Common) {
           rarities.push("Common");
@@ -400,7 +382,7 @@ export default function Pokedex({
 
     // Filter based on type
     setCards((p) =>
-      p.filter((s) => {
+      p?.filter((s) => {
         let types = [];
         if (type.normal) {
           types.push("normal");
@@ -462,7 +444,7 @@ export default function Pokedex({
 
     // Filter based on habitat
     setCards((p) =>
-      p.filter((s) => {
+      p?.filter((s) => {
         let habitats = [];
         if (habitat.grassland) {
           habitats.push("grassland");
@@ -496,11 +478,12 @@ export default function Pokedex({
     );
   };
 
+  // Apply filters
   useEffect(() => {
     filterSpecies();
   }, [shiny, region, rarity, type, habitat]);
 
-  if (loading) return <Loading />;
+  if (status === "loading" || timeLoading || countLoading) return <Loading />;
 
   return (
     <>
@@ -514,13 +497,13 @@ export default function Pokedex({
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Pokedex">
           <Topbar
-            username={user.username}
-            balance={user.balance}
-            totalYield={user.totalYield}
-            totalCards={totalCards}
+            username={session.user.username}
+            balance={session.user.balance}
+            totalYield={session.user.totalYield}
+            totalCards={countData?.count!}
           />
           <main className="p-4">
-            {user?.admin && (
+            {session.user?.admin && (
               <div className="flex justify-center bg-red-500">
                 <button
                   onClick={() => setTime(time === "day" ? "night" : "day")}
@@ -914,15 +897,23 @@ export default function Pokedex({
                 )}
               </div>
             </div>
-            <div className="cards grid justify-center gap-5 pt-5">
-              {cards.map((c) => (
-                <Card
-                  key={c.id}
-                  species={c}
-                  caught={instances.some((i) => i.speciesId === c.id)}
-                />
-              ))}
-            </div>
+            {instanceLoading || cardsLoading ? (
+              <div className="flex items-center justify-center pt-5">
+                <LoadingSpinner />
+              </div>
+            ) : (
+              <div className="cards grid justify-center gap-5 pt-5">
+                {cards?.map((c) => (
+                  <Card
+                    key={c.id}
+                    species={c}
+                    caught={instanceData?.instances.some(
+                      (i) => i.speciesId === c.id
+                    )}
+                  />
+                ))}
+              </div>
+            )}
           </main>
         </Sidebar>
       </div>
