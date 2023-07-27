@@ -5,7 +5,7 @@ export const speciesRouter = router({
   getSpecies: protectedProcedure
     .input(
       z.object({
-        order: z.string()
+        order: z.union([z.string(), z.null()])
       })
     )
     .query(async ({ ctx, input }) => {
