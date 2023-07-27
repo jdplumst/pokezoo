@@ -13,7 +13,7 @@ export default function DrowpdownItem({
 }: IDropdownItem) {
   return (
     <div
-      className={`w-full border-x-2 border-b-2 border-black ${
+      className={`w-full border-x-2 border-black ${
         colour === "purple"
           ? `bg-purple-btn-unfocus`
           : colour === `green`
@@ -25,18 +25,18 @@ export default function DrowpdownItem({
           : colour === "lime"
           ? `bg-lime-btn-unfocus`
           : `bg-white`
-      } p-2 font-bold`}>
+      } flex px-2 py-[1px] font-bold`}>
       <input
         onChange={fn}
         type="checkbox"
         checked={checked}
-        className="hover:cursor-pointer"
+        className="flex-none hover:cursor-pointer"
         id={label === "Select All" ? "all" + colour : label}
         name={label === "Select All" ? "all" + colour : label}
       />
       <label
         htmlFor={label === "Select All" ? "all" + colour : label}
-        className="inline-block w-32 pl-4 capitalize hover:cursor-pointer">
+        className="inline-block w-32 flex-auto pl-4 capitalize hover:cursor-pointer">
         {label}
       </label>
     </div>

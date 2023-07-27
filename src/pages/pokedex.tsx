@@ -516,11 +516,11 @@ export default function Pokedex() {
               <div className="w-48">
                 <button
                   onClick={() => setShinyOpen((p) => !p)}
-                  className="w-full border-2 border-black bg-purple-btn-unfocus p-2 font-bold">
+                  className="w-full border-2 border-black bg-purple-btn-unfocus p-2 font-bold outline-none">
                   Select Shiny
                 </button>
                 {shinyOpen && (
-                  <ul>
+                  <ul className="absolute z-10 w-48">
                     <li>
                       <DrowpdownItem
                         label={"Not Shiny"}
@@ -529,7 +529,7 @@ export default function Pokedex() {
                         colour="purple"
                       />
                     </li>
-                    <li>
+                    <li className="border-b-2 border-black">
                       <DrowpdownItem
                         label="Shiny"
                         fn={handleShiny}
@@ -543,12 +543,12 @@ export default function Pokedex() {
               <div className="w-48">
                 <button
                   onClick={() => setRegionOpen((p) => !p)}
-                  className="w-full border-2 border-black bg-green-btn-unfocus p-2 font-bold">
+                  className="w-full border-2 border-black bg-green-btn-unfocus p-2 font-bold outline-none">
                   Select Region
                 </button>
                 {regionOpen && (
-                  <ul>
-                    <li>
+                  <ul className="absolute z-10 w-48">
+                    <li className="border-b-2 border-black">
                       <DrowpdownItem
                         label="Select All"
                         fn={handleRegion}
@@ -580,7 +580,7 @@ export default function Pokedex() {
                         colour={"green"}
                       />
                     </li>
-                    <li>
+                    <li className="border-b-2 border-black">
                       <DrowpdownItem
                         label="Sinnoh"
                         fn={handleRegion}
@@ -594,12 +594,12 @@ export default function Pokedex() {
               <div className="w-48">
                 <button
                   onClick={() => setRarityOpen((p) => !p)}
-                  className="w-full border-2 border-black bg-orange-btn-unfocus p-2 font-bold">
+                  className="w-full border-2 border-black bg-orange-btn-unfocus p-2 font-bold outline-none">
                   Select Rarity
                 </button>
                 {rarityOpen && (
-                  <ul>
-                    <li>
+                  <ul className="absolute z-10 w-48">
+                    <li className="border-b-2 border-black">
                       <DrowpdownItem
                         label="Select All"
                         fn={handleRarity}
@@ -631,7 +631,7 @@ export default function Pokedex() {
                         colour="orange"
                       />
                     </li>
-                    <li>
+                    <li className="border-b-2 border-black">
                       <DrowpdownItem
                         label="Legendary"
                         fn={handleRarity}
@@ -645,12 +645,12 @@ export default function Pokedex() {
               <div className="w-48">
                 <button
                   onClick={() => setTypeOpen((p) => !p)}
-                  className="w-full border-2 border-black bg-blue-btn-unfocus p-2 font-bold">
+                  className="w-full border-2 border-black bg-blue-btn-unfocus p-2 font-bold outline-none">
                   Select Type
                 </button>
                 {typeOpen && (
-                  <ul>
-                    <li>
+                  <ul className="absolute z-10 w-48">
+                    <li className="border-b-2 border-black">
                       <DrowpdownItem
                         label="Select All"
                         fn={handleType}
@@ -794,7 +794,7 @@ export default function Pokedex() {
                         colour="blue"
                       />
                     </li>
-                    <li>
+                    <li className="border-b-2 border-black">
                       <DrowpdownItem
                         label="flying"
                         fn={handleType}
@@ -808,12 +808,12 @@ export default function Pokedex() {
               <div className="w-48">
                 <button
                   onClick={() => setHabitatOpen((p) => !p)}
-                  className="w-full border-2 border-black bg-lime-btn-unfocus p-2 font-bold">
+                  className="w-full border-2 border-black bg-lime-btn-unfocus p-2 font-bold outline-none">
                   Select Habitat
                 </button>
                 {habitatOpen && (
-                  <ul>
-                    <li>
+                  <ul className="absolute z-10 w-48">
+                    <li className="border-b-2 border-black">
                       <DrowpdownItem
                         label="Select All"
                         fn={handleHabitat}
@@ -885,7 +885,7 @@ export default function Pokedex() {
                         colour="lime"
                       />
                     </li>
-                    <li>
+                    <li className="border-b-2 border-black">
                       <DrowpdownItem
                         label="rare"
                         fn={handleHabitat}
