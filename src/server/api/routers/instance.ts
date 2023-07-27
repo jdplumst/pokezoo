@@ -2,6 +2,29 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
 export const instanceRouter = router({
+  getInstances: protectedProcedure
+    .input(
+      z.object({
+        distinct: z.boolean()
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      let instances;
+
+      if (input.distinct) {
+        instances = await ctx.prisma.instance.findMany({
+          where: { userId: ctx.session.user.id },
+          distinct: ["speciesId"]
+        });
+      } else {
+        instances = await ctx.prisma.instance.findMany({
+          where: { userId: ctx.session.user.id }
+        });
+      }
+
+      return { instances: instances };
+    }),
+
   purchaseInstance: protectedProcedure
     .input(
       z.object({
