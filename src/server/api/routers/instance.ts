@@ -25,6 +25,27 @@ export const instanceRouter = router({
       return { instances: instances };
     }),
 
+  getInstanceSpecies: protectedProcedure.query(async ({ ctx }) => {
+    const instances = await ctx.prisma.instance.findMany({
+      where: { userId: ctx.session.user.id.toString() },
+      distinct: ["speciesId"],
+      include: {
+        species: {
+          select: {
+            rarity: true,
+            habitat: true,
+            typeOne: true,
+            typeTwo: true,
+            generation: true,
+            shiny: true
+          }
+        }
+      }
+    });
+
+    return { instances: instances };
+  }),
+
   purchaseInstance: protectedProcedure
     .input(
       z.object({
