@@ -66,6 +66,14 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">4.10 (July 28, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Fixed Achievements page displaying incorrect Pokémon count.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">4.09 (July 27, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
@@ -81,6 +89,10 @@ export default function PatchNotes() {
                 Added usernames! Users can now select a username. Usernames will
                 also be displayed on every page (except login page) along with
                 balance, total yield and total number of Pokémon.
+              </p>
+              <p className="px-4">
+                Tutorial and Patch Notes pages now require users to be signed in
+                for access.
               </p>
             </section>
             <hr className="border-black pb-4"></hr>
