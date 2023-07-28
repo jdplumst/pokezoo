@@ -2,6 +2,11 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
 export const achievementRouter = router({
+  getAchievements: protectedProcedure.query(async ({ ctx }) => {
+    const achievements = await ctx.prisma.achievement.findMany();
+    return { achievements: achievements };
+  }),
+
   claimAchievement: protectedProcedure
     .input(z.object({ userId: z.string(), achievementId: z.string() }))
     .mutation(async ({ ctx, input }) => {
