@@ -48,6 +48,7 @@ export default function Shop() {
   const [totalCards, setTotalCards] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
+  const [boughtBall, setBoughtBall] = useState<Ball>();
   const purchaseMutation = trpc.instance.purchaseInstance.useMutation();
 
   // Modal variables
@@ -79,6 +80,7 @@ export default function Shop() {
   const purchaseBall = async (ball: Ball) => {
     // Disable all purchase buttons
     setDisabled(true);
+    setBoughtBall(ball);
 
     if (ball.name === "Premier" && !regionCurr) {
       setRegionError(true);
@@ -272,7 +274,7 @@ export default function Shop() {
             ) : (
               <div className="balls grid justify-center gap-10 pt-5">
                 {ballData?.balls.map((b) => (
-                  <Tooltip ball={b}>
+                  <Tooltip ball={b} key={b.id}>
                     <div className="h-72 w-72 border-2 border-black bg-ball p-2">
                       <div className="flex h-full flex-col items-center justify-around">
                         <Image
@@ -306,7 +308,7 @@ export default function Shop() {
                             onClick={() => purchaseBall(b)}
                             disabled={disabled}
                             className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
-                            {purchaseMutation.isLoading ? (
+                            {purchaseMutation.isLoading && boughtBall === b ? (
                               <LoadingSpinner />
                             ) : (
                               "Buy"
@@ -345,7 +347,7 @@ export default function Shop() {
           <div className="flex justify-center pt-4">
             <button
               onClick={() => setOpenModal(false)}
-              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
               Got it!
             </button>
           </div>
