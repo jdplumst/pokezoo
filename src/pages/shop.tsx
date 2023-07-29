@@ -1,10 +1,6 @@
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
-import { getServerSession } from "next-auth";
 import Head from "next/head";
-import { authOptions } from "./api/auth/[...nextauth]";
-import { prisma } from "../server/db";
 import { useEffect, useRef, useState } from "react";
-import { Ball, Instance, Rarity, Species } from "@prisma/client";
+import { Ball, Rarity, Species } from "@prisma/client";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
 import Modal from "@/src/components/Modal";
@@ -14,36 +10,8 @@ import Tooltip from "../components/Tooltip";
 import Image from "next/image";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Topbar from "../components/Topbar";
-
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session || !session.user) {
-    return {
-      redirect: {
-        destination: "/"
-      }
-    };
-  }
-
-  const user = session.user;
-  const balls = await prisma.ball.findMany();
-  const species = await prisma.species.findMany();
-  const instances = await prisma.instance.findMany({
-    where: { userId: user.id.toString() }
-  });
-  let parsedInstances: Instance[] = JSON.parse(JSON.stringify(instances));
-
-  return {
-    props: {
-      user,
-      balls,
-      species,
-      instances: parsedInstances
-    }
-  };
-};
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 enum region {
   None,
@@ -53,25 +21,38 @@ enum region {
   Sinnoh
 }
 
-export default function Shop({
-  user,
-  balls,
-  species,
-  instances
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Shop() {
+  const router = useRouter();
+
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push("/");
+    }
+  });
+
+  const { data: speciesData } = trpc.species.getSpecies.useQuery({
+    order: null
+  });
+
+  const { data: instanceData } = trpc.instance.getInstanceSpecies.useQuery();
+
+  const { data: ballData, isLoading: ballLoading } =
+    trpc.ball.getBalls.useQuery();
+
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
 
-  const [balance, setBalance] = useState(user.balance);
-  const [totalYield, setTotalYield] = useState(user.totalYield);
-  const [totalCards, setTotalCards] = useState(instances.length);
+  const [balance, setBalance] = useState(0);
+  const [totalYield, setTotalYield] = useState(0);
+  const [totalCards, setTotalCards] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const purchaseMutation = trpc.instance.purchaseInstance.useMutation();
 
   // Modal variables
   const [openModal, setOpenModal] = useState(false);
-  const [newSpecies, setNewSpecies] = useState<Species>(species[0]);
+  const [newSpecies, setNewSpecies] = useState<Species>();
 
   // Premier Ball
   const [regionOpen, setRegionOpen] = useState(false);
@@ -87,8 +68,13 @@ export default function Shop({
     } else {
       setTime("night");
     }
+
+    if (status !== "authenticated" || !instanceData) return;
+    setBalance(session.user.balance);
+    setTotalYield(session.user.totalYield);
+    setTotalCards(instanceData.instances.length);
     setLoading(false);
-  }, []);
+  }, [session, instanceData]);
 
   const purchaseBall = async (ball: Ball) => {
     // Disable all purchase buttons
@@ -110,19 +96,21 @@ export default function Shop({
     }
 
     // Filter species based on time
-    let timeSpecies = species.slice();
+    let timeSpecies = speciesData?.species.slice();
     if (time === "day") {
-      timeSpecies = species.filter(
+      timeSpecies = speciesData?.species.filter(
         (s) => s.habitat !== "cave" && s.habitat !== "forest"
       );
     } else if (time === "night") {
-      timeSpecies = species.filter((s) => s.habitat !== "grassland");
+      timeSpecies = speciesData?.species.filter(
+        (s) => s.habitat !== "grassland"
+      );
     }
 
     // Filter species based on ball
-    let filteredSpecies = timeSpecies.slice();
+    let filteredSpecies = timeSpecies?.slice();
     if (ball.name === "Net") {
-      filteredSpecies = timeSpecies.filter(
+      filteredSpecies = timeSpecies?.filter(
         (s) =>
           s.typeOne === "water" ||
           s.typeTwo === "water" ||
@@ -130,7 +118,7 @@ export default function Shop({
           s.typeTwo === "bug"
       );
     } else if (ball.name === "Dusk") {
-      filteredSpecies = timeSpecies.filter(
+      filteredSpecies = timeSpecies?.filter(
         (s) =>
           s.typeOne === "dark" ||
           s.typeTwo === "dark" ||
@@ -138,15 +126,15 @@ export default function Shop({
           s.typeTwo === "ghost"
       );
     } else if (ball.name === "Dive") {
-      filteredSpecies = timeSpecies.filter(
+      filteredSpecies = timeSpecies?.filter(
         (s) => s.habitat === "waters-edge" || s.habitat === "sea"
       );
     } else if (ball.name === "Safari") {
-      filteredSpecies = timeSpecies.filter(
+      filteredSpecies = timeSpecies?.filter(
         (s) => s.habitat === "mountain" || s.habitat === "rough-terrain"
       );
     } else if (ball.name === "Premier") {
-      filteredSpecies = timeSpecies.filter((s) => s.generation === regionCurr);
+      filteredSpecies = timeSpecies?.filter((s) => s.generation === regionCurr);
     }
 
     // Determine rarity
@@ -166,74 +154,78 @@ export default function Shop({
     const rarity = randomizer[Math.floor(Math.random() * 100)];
 
     // Determine the new species the user gets
-    let newInstance = species[0];
+    let newInstance = speciesData?.species[0];
     if (rarity === "Common" && !shiny) {
-      const commonSpecies = filteredSpecies.filter(
+      const commonSpecies = filteredSpecies?.filter(
         (s) => s.rarity === Rarity.Common && !s.shiny
       );
       newInstance =
-        commonSpecies[Math.floor(Math.random() * commonSpecies.length)];
+        commonSpecies![Math.floor(Math.random() * commonSpecies!.length)];
     } else if (rarity === "Rare" && !shiny) {
-      const rareSpecies = filteredSpecies.filter(
+      const rareSpecies = filteredSpecies?.filter(
         (s) => s.rarity === Rarity.Rare && !s.shiny
       );
-      newInstance = rareSpecies[Math.floor(Math.random() * rareSpecies.length)];
+      newInstance =
+        rareSpecies![Math.floor(Math.random() * rareSpecies!.length)];
     } else if (rarity === "Epic" && !shiny) {
-      const epicSpecies = filteredSpecies.filter(
+      const epicSpecies = filteredSpecies?.filter(
         (s) => s.rarity === Rarity.Epic && !s.shiny
       );
-      newInstance = epicSpecies[Math.floor(Math.random() * epicSpecies.length)];
+      newInstance =
+        epicSpecies![Math.floor(Math.random() * epicSpecies!.length)];
     } else if (rarity === "Legendary" && !shiny) {
-      const legendarySpecies = filteredSpecies.filter(
+      const legendarySpecies = filteredSpecies?.filter(
         (s) => s.rarity === Rarity.Legendary && !s.shiny
       );
       newInstance =
-        legendarySpecies[Math.floor(Math.random() * legendarySpecies.length)];
+        legendarySpecies![Math.floor(Math.random() * legendarySpecies!.length)];
     } else if (rarity === "Common" && shiny) {
-      const commonShinySpecies = filteredSpecies.filter(
+      const commonShinySpecies = filteredSpecies?.filter(
         (s) => s.rarity === Rarity.Common && s.shiny
       );
       newInstance =
-        commonShinySpecies[
-          Math.floor(Math.random() * commonShinySpecies.length)
+        commonShinySpecies![
+          Math.floor(Math.random() * commonShinySpecies!.length)
         ];
     } else if (rarity === "Rare" && shiny) {
-      const rareShinySpecies = filteredSpecies.filter(
+      const rareShinySpecies = filteredSpecies?.filter(
         (s) => s.rarity === Rarity.Rare && s.shiny
       );
       newInstance =
-        rareShinySpecies[Math.floor(Math.random() * rareShinySpecies.length)];
+        rareShinySpecies![Math.floor(Math.random() * rareShinySpecies!.length)];
     } else if (rarity === "Epic" && shiny) {
-      const epicShinySpecies = filteredSpecies.filter(
+      const epicShinySpecies = filteredSpecies?.filter(
         (s) => s.rarity === Rarity.Epic && s.shiny
       );
       newInstance =
-        epicShinySpecies[Math.floor(Math.random() * epicShinySpecies.length)];
+        epicShinySpecies![Math.floor(Math.random() * epicShinySpecies!.length)];
     } else if (rarity === "Legendary" && shiny) {
-      const legendaryShinySpecies = filteredSpecies.filter(
+      const legendaryShinySpecies = filteredSpecies?.filter(
         (s) => s.rarity === Rarity.Legendary && s.shiny
       );
       newInstance =
-        legendaryShinySpecies[
-          Math.floor(Math.random() * legendaryShinySpecies.length)
+        legendaryShinySpecies![
+          Math.floor(Math.random() * legendaryShinySpecies!.length)
         ];
     }
 
     // Create new instance
     purchaseMutation.mutate(
-      { speciesId: newInstance.id, cost: ball.cost },
+      { speciesId: newInstance!.id, cost: ball.cost },
       {
         onSuccess(data, variables, context) {
           setBalance(data.user.balance);
           setTotalYield(data.user.totalYield);
           setNewSpecies(
-            species.filter((s) => s.id === data.instance.speciesId)[0]
+            speciesData?.species.filter(
+              (s) => s.id === data.instance.speciesId
+            )[0]
           );
           setOpenModal(true);
           window.scrollTo(0, 0);
           setDisabled(false);
           setError(null);
-          setTotalCards((p) => p + 1);
+          setTotalCards((p: number) => p + 1);
         },
         onError(error, variables, context) {
           setDisabled(false);
@@ -243,7 +235,7 @@ export default function Shop({
     );
   };
 
-  if (loading) return <Loading />;
+  if (loading || status === "loading") return <Loading />;
 
   return (
     <>
@@ -257,13 +249,13 @@ export default function Shop({
         className={`z-0 min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Shop">
           <Topbar
-            username={user.username}
+            username={session.user.username}
             balance={balance}
             totalYield={totalYield}
             totalCards={totalCards}
           />
           <main className="p-4">
-            {user.admin && (
+            {session.user.admin && (
               <div className="flex justify-center bg-red-500">
                 <button
                   onClick={() => setTime(time === "day" ? "night" : "day")}
@@ -273,60 +265,66 @@ export default function Shop({
               </div>
             )}
             {error && <p className="font-bold text-red-500">{error}</p>}
-            <div className="balls grid justify-center gap-10 pt-5">
-              {balls.map((b) => (
-                <Tooltip ball={b}>
-                  <div className="h-72 w-72 border-2 border-black bg-ball p-2">
-                    <div className="flex h-full flex-col items-center justify-around">
-                      <Image
-                        src={b.img}
-                        alt={b.name}
-                        width={112}
-                        height={112}
-                        className="pixelated"
-                      />
-                      <p className="text-center text-3xl font-bold">
-                        {b.name} Ball
-                      </p>
-                      <p className="text-center text-2xl font-bold">
-                        P{b.cost.toLocaleString()}
-                      </p>
-                      <div className="flex gap-5">
-                        {b.name === "Premier" && (
-                          <button
-                            ref={premierRef}
-                            onClick={() => {
-                              setRegionOpen((p) => !p);
-                              window.scrollTo(0, 0);
-                            }}
-                            className={`w-24 rounded-lg border-2 ${
-                              regionError ? "border-red-500" : "border-black"
-                            } bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus`}>
-                            {regionCurr ? region[regionCurr!] : "Region"}
-                          </button>
-                        )}
-                        <button
-                          onClick={() => purchaseBall(b)}
-                          disabled={disabled}
-                          className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
-                          {purchaseMutation.isLoading ? (
-                            <LoadingSpinner />
-                          ) : (
-                            "Buy"
+            {ballLoading ? (
+              <div className="flex items-center justify-center pt-5">
+                <LoadingSpinner />
+              </div>
+            ) : (
+              <div className="balls grid justify-center gap-10 pt-5">
+                {ballData?.balls.map((b) => (
+                  <Tooltip ball={b}>
+                    <div className="h-72 w-72 border-2 border-black bg-ball p-2">
+                      <div className="flex h-full flex-col items-center justify-around">
+                        <Image
+                          src={b.img}
+                          alt={b.name}
+                          width={112}
+                          height={112}
+                          className="pixelated"
+                        />
+                        <p className="text-center text-3xl font-bold">
+                          {b.name} Ball
+                        </p>
+                        <p className="text-center text-2xl font-bold">
+                          P{b.cost.toLocaleString()}
+                        </p>
+                        <div className="flex gap-5">
+                          {b.name === "Premier" && (
+                            <button
+                              ref={premierRef}
+                              onClick={() => {
+                                setRegionOpen((p) => !p);
+                                window.scrollTo(0, 0);
+                              }}
+                              className={`w-24 rounded-lg border-2 ${
+                                regionError ? "border-red-500" : "border-black"
+                              } bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus`}>
+                              {regionCurr ? region[regionCurr!] : "Region"}
+                            </button>
                           )}
-                        </button>
+                          <button
+                            onClick={() => purchaseBall(b)}
+                            disabled={disabled}
+                            className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                            {purchaseMutation.isLoading ? (
+                              <LoadingSpinner />
+                            ) : (
+                              "Buy"
+                            )}
+                          </button>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </Tooltip>
-              ))}
-            </div>
+                  </Tooltip>
+                ))}
+              </div>
+            )}
           </main>
         </Sidebar>
       </div>
 
       {/* Modal for Bought Instance */}
-      {openModal && (
+      {openModal && newSpecies && (
         <Modal>
           {"aeiou".includes(newSpecies.name[0]) ? (
             <div className="text-center text-xl font-bold">
