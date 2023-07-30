@@ -32,7 +32,7 @@ const App: AppType = ({
       {loading ? (
         <Loading />
       ) : (
-        <SessionProvider session={session}>
+        <SessionProvider session={session} refetchOnWindowFocus={false}>
           <Component {...pageProps} />
         </SessionProvider>
       )}
