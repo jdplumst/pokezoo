@@ -9,21 +9,52 @@ export const instanceRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      let instances;
-
-      if (input.distinct) {
-        instances = await ctx.prisma.instance.findMany({
-          where: { userId: ctx.session.user.id },
-          distinct: ["speciesId"]
-        });
-      } else {
-        instances = await ctx.prisma.instance.findMany({
-          where: { userId: ctx.session.user.id }
-        });
-      }
+      const instances = await ctx.prisma.instance.findMany({
+        where: { userId: ctx.session.user.id },
+        distinct: input.distinct ? ["speciesId"] : undefined
+      });
 
       return { instances: instances };
     }),
+
+  // getInfiniteInstances: protectedProcedure
+  //   .input(
+  //     z.object({
+  //       limit: z.number().min(1).max(100),
+  //       cursor: z.string().nullish(),
+  //       order: z.string()
+  //     })
+  //   )
+  //   .query(async ({ ctx, input }) => {
+  //     const instances = await ctx.prisma.instance.findMany({
+  //       take: input.limit + 1,
+  //       where: { userId: ctx.session.user.id },
+  //       cursor: { id: input.cursor ? input.cursor : undefined },
+  // orderBy: [
+  //   {
+  //     createDate:
+  //       input.order === "oldest"
+  //         ? "asc"
+  //         : input.order === "newest"
+  //         ? "desc"
+  //         : undefined
+  //   },
+  //   {
+  //     species: {
+  //       pokedexNumber: input.order === "pokdex" ? "asc" : undefined,
+  //       rarity: input.order === "rarity" ? "asc" : undefined
+  //     }
+  //   }
+  // ]
+  //     });
+
+  //     let nextCursor: typeof input.cursor | undefined = undefined;
+  //     if (instances.length > input.limit) {
+  //       const nextItem = instances.pop();
+  //       nextCursor = nextItem!.id;
+  //     }
+  //     return { instances: instances, nextCursor: nextCursor };
+  //   }),
 
   getInstanceSpecies: protectedProcedure.query(async ({ ctx }) => {
     const instances = await ctx.prisma.instance.findMany({
