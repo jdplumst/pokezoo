@@ -327,7 +327,7 @@ export default function Shop() {
 
       {/* Modal for Bought Instance */}
       {openModal && newSpecies && (
-        <Modal shop={true}>
+        <Modal>
           {"aeiou".includes(newSpecies.name[0]) ? (
             <div className="text-center text-xl font-bold">
               You got an{" "}
@@ -356,7 +356,7 @@ export default function Shop() {
 
       {/* Modal for Premier Ball */}
       {regionOpen && (
-        <Modal shop={false}>
+        <Modal>
           <p className="text-xl font-bold">Select a Region</p>
           <div className="flex gap-5 pt-5">
             <button

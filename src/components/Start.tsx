@@ -121,7 +121,7 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
   };
 
   return (
-    <Modal shop={false}>
+    <Modal>
       {region === "Kanto" ? (
         <>
           <div className="text-center text-xl font-bold">
@@ -139,7 +139,9 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
       )}
       <div className="flex gap-5 pt-4">
         <div
-          className={`${starter === "Grass" && `border-4 border-green-500`}`}>
+          className={`${
+            starter === "Grass" && `border-4 border-green-500`
+          } pointer-events-auto`}>
           <button onClick={() => setStarter("Grass")}>
             <Card
               species={
@@ -149,7 +151,10 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
             />
           </button>
         </div>
-        <div className={`${starter === "Fire" && `border-4 border-green-500`}`}>
+        <div
+          className={`${
+            starter === "Fire" && `border-4 border-green-500`
+          } pointer-events-auto`}>
           <button onClick={() => setStarter("Fire")}>
             <Card
               species={
@@ -160,7 +165,9 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
           </button>
         </div>
         <div
-          className={`${starter === "Water" && `border-4 border-green-500`}`}>
+          className={`${
+            starter === "Water" && `border-4 border-green-500`
+          } pointer-events-auto`}>
           <button onClick={() => setStarter("Water")}>
             <Card
               species={
@@ -175,7 +182,7 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
         <button
           onClick={() => handleClose()}
           disabled={disabled}
-          className="rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+          className="pointer-events-auto rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
           Confirm Selection
         </button>
       </div>

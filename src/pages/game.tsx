@@ -401,7 +401,7 @@ export default function Game() {
 
       {/* Modal for Username */}
       {usernameModal && (
-        <Modal shop={false}>
+        <Modal>
           <form
             onSubmit={(e) => handleUsername(e)}
             className="flex w-full flex-col items-center gap-5">
