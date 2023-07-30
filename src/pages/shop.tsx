@@ -31,11 +31,11 @@ export default function Shop() {
     }
   });
 
+  const { data: countData } = trpc.instance.getCount.useQuery();
+
   const { data: speciesData } = trpc.species.getSpecies.useQuery({
     order: null
   });
-
-  const { data: instanceData } = trpc.instance.getInstanceSpecies.useQuery();
 
   const { data: ballData, isLoading: ballLoading } =
     trpc.ball.getBalls.useQuery();
@@ -70,12 +70,12 @@ export default function Shop() {
       setTime("night");
     }
 
-    if (status !== "authenticated" || !instanceData) return;
+    if (status !== "authenticated" || !countData) return;
     setBalance(session.user.balance);
     setTotalYield(session.user.totalYield);
-    setTotalCards(instanceData.instances.length);
+    setTotalCards(countData.count);
     setLoading(false);
-  }, [session, instanceData]);
+  }, [session, countData]);
 
   const purchaseBall = async (ball: Ball) => {
     // Disable all purchase buttons
