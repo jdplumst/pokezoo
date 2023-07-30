@@ -121,7 +121,7 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
   };
 
   return (
-    <Modal>
+    <Modal shop={false}>
       {region === "Kanto" ? (
         <>
           <div className="text-center text-xl font-bold">

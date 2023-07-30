@@ -1,18 +1,16 @@
-import { prisma } from "../server/db";
-import { GetServerSidePropsContext, InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import Card from "@/src/components/Card";
 import Start from "@/src/components/Start";
-import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]";
 import { useEffect, useState } from "react";
-import { Instance, Species } from "@prisma/client";
+import { Instance } from "@prisma/client";
 import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
 import Loading from "../components/Loading";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Topbar from "../components/Topbar";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 enum Rarity {
   Common = 1,
@@ -21,54 +19,42 @@ enum Rarity {
   Legendary = 4
 }
 
-export const getServerSideProps = async (
-  context: GetServerSidePropsContext
-) => {
-  const session = await getServerSession(context.req, context.res, authOptions);
-  if (!session || !session.user) {
-    return {
-      redirect: {
-        destination: "/"
-      }
-    };
-  }
-
-  const user = session.user;
-  const instances = await prisma.instance.findMany({
-    where: { userId: user.id.toString() }
-  });
-  const species = await prisma.species.findMany();
-  let parsedInstances: Instance[] = JSON.parse(JSON.stringify(instances));
-  return {
-    props: {
-      user,
-      species,
-      instances: parsedInstances
-    }
-  };
-};
-
 type Sort = "Oldest" | "Newest" | "Pokedex" | "Rarity";
 
-export default function Game({
-  user,
-  species,
-  instances
-}: InferGetServerSidePropsType<typeof getServerSideProps>) {
+export default function Game() {
+  const router = useRouter();
+
+  const { data: session, status } = useSession({
+    required: true,
+    onUnauthenticated() {
+      router.push("/");
+    }
+  });
+
+  const { data: speciesData, isLoading: speciesLoading } =
+    trpc.species.getSpecies.useQuery({
+      order: null
+    });
+
+  const { data: instanceData, isLoading: instanceLoading } =
+    trpc.instance.getInstances.useQuery({
+      distinct: false
+    });
+
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
 
   // Variables associated with cards
-  const [cards, setCards] = useState(instances.slice());
-  const [balance, setBalance] = useState(user.balance);
-  const [totalYield, setTotalYield] = useState(user.totalYield);
+  const [cards, setCards] = useState<Instance[]>();
+  const [balance, setBalance] = useState(0);
+  const [totalYield, setTotalYield] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<Sort>("Oldest");
 
   // Variables associated with daily/night rewards
-  const [claimedDaily, setClaimedDaily] = useState(user.claimedDaily);
+  const [claimedDaily, setClaimedDaily] = useState(true);
   const [dailyDisabled, setDailyDisabled] = useState(false);
-  const [claimedNightly, setClaimedNightly] = useState(user.claimedNightly);
+  const [claimedNightly, setClaimedNightly] = useState(true);
   const [nightlyDisabled, setNightlyDisabled] = useState(false);
   const rewardMutation = trpc.user.claimReward.useMutation();
 
@@ -78,19 +64,18 @@ export default function Game({
   const sellMutation = trpc.instance.sellInstances.useMutation();
 
   // Variables associated with starters
-  const [claimedJohto, setClaimedJohto] = useState(user.johtoStarter);
-  const [claimedHoenn, setClaimedHoenn] = useState(user.hoennStarter);
-  const [claimedSinnoh, setClaimedSinnoh] = useState(user.sinnohStarter);
+  const [claimedJohto, setClaimedJohto] = useState(true);
+  const [claimedHoenn, setClaimedHoenn] = useState(true);
+  const [claimedSinnoh, setClaimedSinnoh] = useState(true);
 
   // Variables associated with setting username
-  const [usernameModal, setUsernameModal] = useState(
-    user.username ? false : true
-  );
-  const [username, setUsername] = useState(user.username ? user.username : "");
+  const [usernameModal, setUsernameModal] = useState(false);
+  const [username, setUsername] = useState("");
   const [usernameDisabled, setUsernameDisabled] = useState(false);
   const [usernameError, setUsernameError] = useState<null | string>(null);
   const usernameMutation = trpc.user.selectUsername.useMutation();
 
+  // Set time and user data
   useEffect(() => {
     const today = new Date();
     const hour = today.getHours();
@@ -99,15 +84,30 @@ export default function Game({
     } else {
       setTime("night");
     }
-    setLoading(false);
 
-    // For when cards are added and deleted
-    changeSort(sort);
-  }, [cards]);
+    if (status !== "authenticated") return;
+    setBalance(session.user.balance);
+    setTotalYield(session.user.totalYield);
+    setClaimedDaily(session.user.claimedDaily);
+    setClaimedNightly(session.user.claimedNightly);
+    setClaimedJohto(session.user.johtoStarter);
+    setClaimedHoenn(session.user.hoennStarter);
+    setClaimedSinnoh(session.user.sinnohStarter);
+    setUsernameModal(session.user.username ? false : true);
+    setUsername(session.user.username ? session.user.username : "");
+
+    setLoading(false);
+  }, [session]);
+
+  // Set cards
+  useEffect(() => {
+    if (!instanceData) return;
+    setCards(instanceData.instances);
+  }, [instanceData]);
 
   // Display starter and updated yield
   const addStarter = (i: Instance, r: Region) => {
-    setCards((prevCards) => [...prevCards, i]);
+    setCards((p) => [...p!, i]);
     setTotalYield((prevTotalYield) => prevTotalYield + 50);
 
     if (r === "Johto") {
@@ -155,37 +155,47 @@ export default function Game({
   const changeSort = (s: Sort) => {
     if (s === "Oldest") {
       setSort("Oldest");
-      setCards((prevCards) =>
-        prevCards.sort((a, b) => (a.createDate > b.createDate ? 1 : -1))
+      setCards((p) =>
+        p?.sort((a, b) => (a.createDate > b.createDate ? 1 : -1))
       );
     } else if (s === "Newest") {
       setSort("Newest");
-      setCards((prevCards) =>
-        prevCards.sort((a, b) => (a.createDate < b.createDate ? 1 : -1))
+      setCards((p) =>
+        p?.sort((a, b) => (a.createDate < b.createDate ? 1 : -1))
       );
     } else if (s === "Pokedex") {
       setSort("Pokedex");
-      setCards((prevCards) =>
-        prevCards.sort((a, b) =>
-          (species.find((s) => s.id === a.speciesId)?.pokedexNumber || 1) >=
-          (species.find((s) => s.id === b.speciesId)?.pokedexNumber || 1)
+      setCards((p) =>
+        p?.sort((a, b) =>
+          (speciesData?.species.find((s) => s.id === a.speciesId)
+            ?.pokedexNumber || 1) >=
+          (speciesData?.species.find((s) => s.id === b.speciesId)
+            ?.pokedexNumber || 1)
             ? 1
             : -1
         )
       );
     } else if (s === "Rarity") {
       setSort("Rarity");
-      setCards((prevCards) =>
-        prevCards
-          .sort((a, b) =>
-            (species.find((s) => s.id === a.speciesId)?.pokedexNumber || 1) <=
-            (species.find((s) => s.id === b.speciesId)?.pokedexNumber || 1)
+      setCards((p) =>
+        p
+          ?.sort((a, b) =>
+            (speciesData?.species.find((s) => s.id === a.speciesId)
+              ?.pokedexNumber || 1) <=
+            (speciesData?.species.find((s) => s.id === b.speciesId)
+              ?.pokedexNumber || 1)
               ? 1
               : -1
           )
           .sort((a, b) =>
-            Rarity[species.find((s) => s.id === a.speciesId)?.rarity || 1] >=
-            Rarity[species.find((s) => s.id === b.speciesId)?.rarity || 1]
+            Rarity[
+              speciesData?.species.find((s) => s.id === a.speciesId)?.rarity ||
+                1
+            ] >=
+            Rarity[
+              speciesData?.species.find((s) => s.id === b.speciesId)?.rarity ||
+                1
+            ]
               ? 1
               : -1
           )
@@ -209,9 +219,7 @@ export default function Game({
       { ids: deleteList },
       {
         onSuccess(data, variables, context) {
-          setCards((prevCards) =>
-            prevCards.filter((c) => !data.instances.includes(c.id))
-          );
+          setCards((p) => p?.filter((c) => !data.instances.includes(c.id)));
           setTotalYield(data.user.totalYield);
           setBalance(data.user.balance);
           setError(null);
@@ -244,7 +252,7 @@ export default function Game({
     );
   };
 
-  if (loading) return <Loading />;
+  if (loading || status === "loading") return <Loading />;
 
   return (
     <>
@@ -255,70 +263,6 @@ export default function Game({
         <link rel="icon" href="/favicon.png" />
       </Head>
 
-      {/* Modal for New Players */}
-      {cards.length === 0 && (
-        <Start
-          user={user}
-          species={species}
-          region="Kanto"
-          addStarter={addStarter}
-        />
-      )}
-
-      {/* Modal for Username */}
-      {usernameModal && (
-        <Modal>
-          <form
-            onSubmit={(e) => handleUsername(e)}
-            className="flex w-full flex-col items-center gap-5">
-            <p className="text-xl font-bold">Enter a Username</p>
-            <input
-              onChange={(e) => setUsername(e.target.value)}
-              className="p-2 text-black"></input>
-            <button
-              disabled={usernameDisabled}
-              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 text-xl font-bold hover:bg-red-btn-focus">
-              {usernameMutation.isLoading ? <LoadingSpinner /> : "Confirm"}
-            </button>
-          </form>
-          {usernameError && (
-            <div className="flex justify-center font-bold text-red-500">
-              {usernameError}
-            </div>
-          )}
-        </Modal>
-      )}
-
-      {/* Modal for Johto Starter */}
-      {!claimedJohto && (
-        <Start
-          user={user}
-          species={species}
-          region="Johto"
-          addStarter={addStarter}
-        />
-      )}
-
-      {/* Modal for Hoenn Starter */}
-      {!claimedHoenn && (
-        <Start
-          user={user}
-          species={species}
-          region="Hoenn"
-          addStarter={addStarter}
-        />
-      )}
-
-      {/* Modal for Sinnoh Starter */}
-      {!claimedSinnoh && (
-        <Start
-          user={user}
-          species={species}
-          region="Sinnoh"
-          addStarter={addStarter}
-        />
-      )}
-
       {/* Main Game Screen */}
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
@@ -327,7 +271,7 @@ export default function Game({
             username={username}
             balance={balance}
             totalYield={totalYield}
-            totalCards={cards.length}
+            totalCards={instanceData?.instances.length ?? 0}
           />
           {deleteList.length > 0 && (
             <div className="sticky top-0 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">
@@ -344,7 +288,7 @@ export default function Game({
             </div>
           )}
           <main className="p-4">
-            {user.admin && (
+            {session.user.admin && (
               <div className="flex justify-center bg-red-500">
                 <button
                   onClick={() => setTime(time === "day" ? "night" : "day")}
@@ -421,19 +365,93 @@ export default function Game({
                 Rarity
               </button>
             </div>
-            <div className="cards grid justify-center gap-5 pt-5">
-              {cards.map((c) => (
-                <Card
-                  key={c.id}
-                  instance={c}
-                  species={species.filter((s) => s.id === c.speciesId)[0]}
-                  modifyDeleteList={modifyDeleteList}
-                />
-              ))}
-            </div>
+            {instanceLoading || speciesLoading ? (
+              <div className="flex items-center justify-center pt-5">
+                <LoadingSpinner />
+              </div>
+            ) : (
+              <div className="cards grid justify-center gap-5 pt-5">
+                {instanceData?.instances.map((c) => (
+                  <Card
+                    key={c.id}
+                    instance={c}
+                    species={
+                      speciesData?.species.filter(
+                        (s) => s.id === c.speciesId
+                      )[0]!
+                    }
+                    modifyDeleteList={modifyDeleteList}
+                  />
+                ))}
+              </div>
+            )}
           </main>
         </Sidebar>
       </div>
+
+      {/* Modal for New Players */}
+      {speciesData && instanceData?.instances.length === 0 && (
+        <Start
+          user={session.user}
+          species={speciesData.species}
+          region="Kanto"
+          addStarter={addStarter}
+        />
+      )}
+
+      {/* Modal for Username */}
+      {usernameModal && (
+        <Modal shop={false}>
+          <form
+            onSubmit={(e) => handleUsername(e)}
+            className="flex w-full flex-col items-center gap-5">
+            <p className="text-xl font-bold">Enter a Username</p>
+            <input
+              onChange={(e) => setUsername(e.target.value)}
+              className="p-2 text-black"></input>
+            <button
+              disabled={usernameDisabled}
+              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 text-xl font-bold hover:bg-red-btn-focus">
+              {usernameMutation.isLoading ? <LoadingSpinner /> : "Confirm"}
+            </button>
+          </form>
+          {usernameError && (
+            <div className="flex justify-center font-bold text-red-500">
+              {usernameError}
+            </div>
+          )}
+        </Modal>
+      )}
+
+      {/* Modal for Johto Starter */}
+      {speciesData && !claimedJohto && (
+        <Start
+          user={session.user}
+          species={speciesData.species}
+          region="Johto"
+          addStarter={addStarter}
+        />
+      )}
+
+      {/* Modal for Hoenn Starter */}
+      {speciesData && !claimedHoenn && (
+        <Start
+          user={session.user}
+          species={speciesData.species}
+          region="Hoenn"
+          addStarter={addStarter}
+        />
+      )}
+
+      {/* Modal for Sinnoh Starter */}
+      {speciesData && !claimedSinnoh && (
+        <Start
+          user={session.user}
+          species={speciesData.species}
+          region="Sinnoh"
+          addStarter={addStarter}
+        />
+      )}
     </>
   );
 }
