@@ -73,7 +73,7 @@ model VerificationToken {
 }
 
 model Species {
-  id            String     @id @default(cuid())
+  id            String       @id @default(cuid())
   pokedexNumber Int
   name          String
   rarity        Rarity
@@ -82,11 +82,11 @@ model Species {
   instances     Instance[]
   sellPrice     Int
   shiny         Boolean
-  typeOne       String
-  typeTwo       String?
+  typeOne       SpeciesType
+  typeTwo       SpeciesType?
   generation    Int
   region        Region
-  habitat       String
+  habitat       Habitat
 }
 
 model Instance {
@@ -116,8 +116,9 @@ model Achievement {
   id              String            @id @default(cuid())
   description     String
   generation      Int
+  region          Region            @default(Kanto)
   type            AchievementType
-  attribute       String
+  attribute       Attribute
   shiny           Boolean
   tier            Int
   yield           Int
@@ -143,16 +144,83 @@ enum Rarity {
   Legendary
 }
 
-enum AchievementType {
-  Rarity
-  Habitat
-  Type
-  All
-}
-
 enum Region {
   Kanto
   Johto
   Hoenn
   Sinnoh
+}
+
+enum SpeciesType {
+  Normal
+  Grass
+  Bug
+  Fire
+  Electric
+  Ground
+  Water
+  Fighting
+  Poison
+  Rock
+  Ice
+  Ghost
+  Psychic
+  Fairy
+  Dark
+  Dragon
+  Steel
+  Flying
+}
+
+enum Habitat {
+  Grassland
+  Forest
+  WatersEdge
+  Sea
+  Cave
+  Mountain
+  RoughTerrain
+  Urban
+  Rare
+}
+
+enum Attribute {
+  Common
+  Rare
+  Epic
+  Legendary
+  Grassland
+  Forest
+  WatersEdge
+  Sea
+  Cave
+  Mountain
+  RoughTerrain
+  Urban
+  Normal
+  Fire
+  Fighting
+  Water
+  Flying
+  Grass
+  Poison
+  Electric
+  Ground
+  Psychic
+  Rock
+  Ice
+  Bug
+  Dragon
+  Ghost
+  Steel
+  Fairy
+  Dark
+  All
+}
+
+enum AchievementType {
+  Rarity
+  Habitat
+  Type
+  All
 }
