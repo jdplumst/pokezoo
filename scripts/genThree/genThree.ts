@@ -1,9 +1,9 @@
-import { prisma } from "../src/server/db";
+import { prisma } from "../../src/server/db";
 import { Rarity } from "@prisma/client";
 
 // Script to populate Species collection
-const populateGenFourDB = async () => {
-  for (let i = 387; i <= 493; i++) {
+const populateGenThreeDB = async () => {
+  for (let i = 252; i <= 386; i++) {
     const speciesResponse = await fetch(
       `https://pokeapi.co/api/v2/pokemon-species/${i}/`
     );
@@ -51,8 +51,8 @@ const populateGenFourDB = async () => {
           shiny: false,
           typeOne: pokemonData.types[0].type.name,
           typeTwo: pokemonData.types[1].type.name,
-          generation: 4,
-          habitat: "null"
+          generation: 3,
+          habitat: speciesData.habitat.name
         }
       });
       const shinySpecies = await prisma.species.create({
@@ -66,8 +66,8 @@ const populateGenFourDB = async () => {
           shiny: true,
           typeOne: pokemonData.types[0].type.name,
           typeTwo: pokemonData.types[1].type.name,
-          generation: 4,
-          habitat: "null"
+          generation: 3,
+          habitat: speciesData.habitat.name
         }
       });
       console.log(species);
@@ -83,8 +83,8 @@ const populateGenFourDB = async () => {
           sellPrice: sell,
           shiny: false,
           typeOne: pokemonData.types[0].type.name,
-          generation: 4,
-          habitat: "null"
+          generation: 3,
+          habitat: speciesData.habitat.name
         }
       });
       const shinySpecies = await prisma.species.create({
@@ -97,8 +97,8 @@ const populateGenFourDB = async () => {
           sellPrice: sell * 2,
           shiny: true,
           typeOne: pokemonData.types[0].type.name,
-          generation: 4,
-          habitat: "null"
+          generation: 3,
+          habitat: speciesData.habitat.name
         }
       });
       console.log(species);
@@ -107,4 +107,4 @@ const populateGenFourDB = async () => {
   }
 };
 
-populateGenFourDB();
+populateGenThreeDB();
