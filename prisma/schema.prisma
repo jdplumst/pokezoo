@@ -51,16 +51,16 @@ model User {
   image           String?
   accounts        Account[]
   sessions        Session[]
-  admin           Boolean           @default(false)
+  admin           Boolean
   username        String?
   totalYield      Int
   balance         Int
-  claimedDaily    Boolean           @default(false)
-  claimedNightly  Boolean           @default(false)
+  claimedDaily    Boolean
+  claimedNightly  Boolean
   instances       Instance[]
-  johtoStarter    Boolean           @default(true)
-  hoennStarter    Boolean           @default(true)
-  sinnohStarter   Boolean           @default(true)
+  johtoStarter    Boolean
+  hoennStarter    Boolean
+  sinnohStarter   Boolean
   UserAchievement UserAchievement[]
 }
 
@@ -80,12 +80,13 @@ model Species {
   yield         Int
   img           String
   instances     Instance[]
-  sellPrice     Int        @default(0)
-  shiny         Boolean    @default(false)
-  typeOne       String     @default("null")
+  sellPrice     Int
+  shiny         Boolean
+  typeOne       String
   typeTwo       String?
-  generation    Int        @default(1)
-  habitat       String     @default("null")
+  generation    Int
+  region        Region
+  habitat       String
 }
 
 model Instance {
@@ -114,10 +115,10 @@ model Ball {
 model Achievement {
   id              String            @id @default(cuid())
   description     String
-  generation      Int               @default(1)
-  type            AchievementType   @default(Rarity)
-  attribute       String            @default("Common")
-  shiny           Boolean           @default(false)
+  generation      Int
+  type            AchievementType
+  attribute       String
+  shiny           Boolean
   tier            Int
   yield           Int
   UserAchievement UserAchievement[]
@@ -147,4 +148,11 @@ enum AchievementType {
   Habitat
   Type
   All
+}
+
+enum Region {
+  Kanto
+  Johto
+  Hoenn
+  Sinnoh
 }
