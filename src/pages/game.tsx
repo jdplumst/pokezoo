@@ -2,7 +2,7 @@ import Head from "next/head";
 import Card from "@/src/components/Card";
 import Start from "@/src/components/Start";
 import { useEffect, useState } from "react";
-import { Instance } from "@prisma/client";
+import { Instance, Region } from "@prisma/client";
 import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";

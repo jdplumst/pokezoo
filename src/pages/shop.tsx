@@ -101,11 +101,11 @@ export default function Shop() {
     let timeSpecies = speciesData?.species.slice();
     if (time === "day") {
       timeSpecies = speciesData?.species.filter(
-        (s) => s.habitat !== "cave" && s.habitat !== "forest"
+        (s) => s.habitat !== "Cave" && s.habitat !== "Forest"
       );
     } else if (time === "night") {
       timeSpecies = speciesData?.species.filter(
-        (s) => s.habitat !== "grassland"
+        (s) => s.habitat !== "Grassland"
       );
     }
 
@@ -114,26 +114,26 @@ export default function Shop() {
     if (ball.name === "Net") {
       filteredSpecies = timeSpecies?.filter(
         (s) =>
-          s.typeOne === "water" ||
-          s.typeTwo === "water" ||
-          s.typeOne === "bug" ||
-          s.typeTwo === "bug"
+          s.typeOne === "Water" ||
+          s.typeTwo === "Water" ||
+          s.typeOne === "Bug" ||
+          s.typeTwo === "Bug"
       );
     } else if (ball.name === "Dusk") {
       filteredSpecies = timeSpecies?.filter(
         (s) =>
-          s.typeOne === "dark" ||
-          s.typeTwo === "dark" ||
-          s.typeOne === "ghost" ||
-          s.typeTwo === "ghost"
+          s.typeOne === "Dark" ||
+          s.typeTwo === "Dark" ||
+          s.typeOne === "Ghost" ||
+          s.typeTwo === "Ghost"
       );
     } else if (ball.name === "Dive") {
       filteredSpecies = timeSpecies?.filter(
-        (s) => s.habitat === "waters-edge" || s.habitat === "sea"
+        (s) => s.habitat === "WatersEdge" || s.habitat === "Sea"
       );
     } else if (ball.name === "Safari") {
       filteredSpecies = timeSpecies?.filter(
-        (s) => s.habitat === "mountain" || s.habitat === "rough-terrain"
+        (s) => s.habitat === "Mountain" || s.habitat === "RoughTerrain"
       );
     } else if (ball.name === "Premier") {
       filteredSpecies = timeSpecies?.filter((s) => s.generation === regionCurr);

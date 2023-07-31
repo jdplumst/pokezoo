@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Card from "./Card";
-import { Species, Instance } from "@prisma/client";
+import { Species, Instance, Region } from "@prisma/client";
 import Modal from "./Modal";
 import { trpc } from "../utils/trpc";
 import { User } from "next-auth";
