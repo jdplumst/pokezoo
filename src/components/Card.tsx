@@ -58,41 +58,41 @@ export default function Card({
         <div className="py-4 capitalize">
           <span
             className={`${
-              species.typeOne === `normal`
+              species.typeOne === `Normal`
                 ? `bg-normal`
-                : species.typeOne === `grass`
+                : species.typeOne === `Grass`
                 ? `bg-grass`
-                : species.typeOne === `bug`
+                : species.typeOne === `Bug`
                 ? `bg-bug`
-                : species.typeOne === `fire`
+                : species.typeOne === `Fire`
                 ? `bg-fire`
-                : species.typeOne === `electric`
+                : species.typeOne === `Electric`
                 ? `bg-electric`
-                : species.typeOne === `ground`
+                : species.typeOne === `Ground`
                 ? `bg-ground`
-                : species.typeOne === `water`
+                : species.typeOne === `Water`
                 ? `bg-water`
-                : species.typeOne === `fighting`
+                : species.typeOne === `Fighting`
                 ? `bg-fighting`
-                : species.typeOne === `poison`
+                : species.typeOne === `Poison`
                 ? `bg-poison`
-                : species.typeOne === `rock`
+                : species.typeOne === `Rock`
                 ? `bg-rock`
-                : species.typeOne === `ice`
+                : species.typeOne === `Ice`
                 ? `bg-ice`
-                : species.typeOne === `ghost`
+                : species.typeOne === `Ghost`
                 ? `bg-ghost`
-                : species.typeOne === `psychic`
+                : species.typeOne === `Psychic`
                 ? `bg-psychic`
-                : species.typeOne === `fairy`
+                : species.typeOne === `Fairy`
                 ? `bg-fairy`
-                : species.typeOne === `dark`
+                : species.typeOne === `Dark`
                 ? `bg-dark`
-                : species.typeOne === `dragon`
+                : species.typeOne === `Dragon`
                 ? `bg-dragon`
-                : species.typeOne === `steel`
+                : species.typeOne === `Steel`
                 ? `bg-steel`
-                : species.typeOne === `flying`
+                : species.typeOne === `Flying`
                 ? `bg-flying`
                 : ``
             } rounded-lg border-2 border-black p-2 font-bold text-white`}>
@@ -101,41 +101,41 @@ export default function Card({
           {species.typeTwo && (
             <span
               className={`${
-                species.typeTwo === `normal`
+                species.typeTwo === `Normal`
                   ? `bg-normal`
-                  : species.typeTwo === `grass`
+                  : species.typeTwo === `Grass`
                   ? `bg-grass`
-                  : species.typeTwo === `bug`
+                  : species.typeTwo === `Bug`
                   ? `bg-bug`
-                  : species.typeTwo === `fire`
+                  : species.typeTwo === `Fire`
                   ? `bg-fire`
-                  : species.typeTwo === `electric`
+                  : species.typeTwo === `Electric`
                   ? `bg-electric`
-                  : species.typeTwo === `ground`
+                  : species.typeTwo === `Ground`
                   ? `bg-ground`
-                  : species.typeTwo === `water`
+                  : species.typeTwo === `Water`
                   ? `bg-water`
-                  : species.typeTwo === `fighting`
+                  : species.typeTwo === `Fighting`
                   ? `bg-fighting`
-                  : species.typeTwo === `poison`
+                  : species.typeTwo === `Poison`
                   ? `bg-poison`
-                  : species.typeTwo === `rock`
+                  : species.typeTwo === `Rock`
                   ? `bg-rock`
-                  : species.typeTwo === `ice`
+                  : species.typeTwo === `Ice`
                   ? `bg-ice`
-                  : species.typeTwo === `ghost`
+                  : species.typeTwo === `Ghost`
                   ? `bg-ghost`
-                  : species.typeTwo === `psychic`
+                  : species.typeTwo === `Psychic`
                   ? `bg-psychic`
-                  : species.typeTwo === `fairy`
+                  : species.typeTwo === `Fairy`
                   ? `bg-fairy`
-                  : species.typeTwo === `dark`
+                  : species.typeTwo === `Dark`
                   ? `bg-dark`
-                  : species.typeTwo === `dragon`
+                  : species.typeTwo === `Dragon`
                   ? `bg-dragon`
-                  : species.typeTwo === `steel`
+                  : species.typeTwo === `Steel`
                   ? `bg-steel`
-                  : species.typeTwo === `flying`
+                  : species.typeTwo === `Flying`
                   ? `bg-flying`
                   : ``
               } rounded-lg border-2 border-black p-2 font-bold text-white`}>
