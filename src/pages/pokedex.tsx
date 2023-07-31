@@ -9,13 +9,13 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { Species } from "@prisma/client";
-interface Shiny {
+import { Habitat, Rarity, Region, Species, SpeciesType } from "@prisma/client";
+interface IShiny {
   "Not Shiny": boolean;
   "Shiny": boolean;
 }
 
-interface Region {
+interface IRegion {
   All: boolean;
   Kanto: boolean;
   Johto: boolean;
@@ -23,7 +23,7 @@ interface Region {
   Sinnoh: boolean;
 }
 
-interface Rarity {
+interface IRarity {
   All: boolean;
   Common: boolean;
   Rare: boolean;
@@ -31,39 +31,39 @@ interface Rarity {
   Legendary: boolean;
 }
 
-interface Type {
+interface IType {
   All: boolean;
-  normal: boolean;
-  grass: boolean;
-  bug: boolean;
-  fire: boolean;
-  electric: boolean;
-  ground: boolean;
-  water: boolean;
-  fighting: boolean;
-  poison: boolean;
-  rock: boolean;
-  ice: boolean;
-  ghost: boolean;
-  psychic: boolean;
-  fairy: boolean;
-  dark: boolean;
-  dragon: boolean;
-  steel: boolean;
-  flying: boolean;
+  Normal: boolean;
+  Grass: boolean;
+  Bug: boolean;
+  Fire: boolean;
+  Electric: boolean;
+  Ground: boolean;
+  Water: boolean;
+  Fighting: boolean;
+  Poison: boolean;
+  Rock: boolean;
+  Ice: boolean;
+  Ghost: boolean;
+  Psychic: boolean;
+  Fairy: boolean;
+  Dark: boolean;
+  Dragon: boolean;
+  Steel: boolean;
+  Flying: boolean;
 }
 
-interface Habitat {
-  "All": boolean;
-  "grassland": boolean;
-  "forest": boolean;
-  "waters-edge": boolean;
-  "sea": boolean;
-  "cave": boolean;
-  "mountain": boolean;
-  "rough-terrain": boolean;
-  "urban": boolean;
-  "rare": boolean;
+interface IHabitat {
+  All: boolean;
+  Grassland: boolean;
+  Forest: boolean;
+  WatersEdge: boolean;
+  Sea: boolean;
+  Cave: boolean;
+  Mountain: boolean;
+  RoughTerrain: boolean;
+  Urban: boolean;
+  Rare: boolean;
 }
 
 export default function Pokedex() {
@@ -94,56 +94,56 @@ export default function Pokedex() {
   const [cards, setCards] = useState<Species[]>();
   const [cardsLoading, setCardsLoading] = useState(true);
 
-  const [shiny, setShiny] = useState<Shiny>({
+  const [shiny, setShiny] = useState<IShiny>({
     "Not Shiny": true,
     "Shiny": false
   });
-  const [region, setRegion] = useState<Region>({
+  const [regions, setRegions] = useState<IRegion>({
     All: true,
     Kanto: true,
     Johto: true,
     Hoenn: true,
     Sinnoh: true
   });
-  const [rarity, setRarity] = useState<Rarity>({
+  const [rarities, setRarities] = useState<IRarity>({
     All: true,
     Common: true,
     Rare: true,
     Epic: true,
     Legendary: true
   });
-  const [type, setType] = useState<Type>({
+  const [types, setTypes] = useState<IType>({
     All: true,
-    normal: true,
-    grass: true,
-    bug: true,
-    fire: true,
-    electric: true,
-    ground: true,
-    water: true,
-    fighting: true,
-    poison: true,
-    rock: true,
-    ice: true,
-    ghost: true,
-    psychic: true,
-    fairy: true,
-    dark: true,
-    dragon: true,
-    steel: true,
-    flying: true
+    Normal: true,
+    Grass: true,
+    Bug: true,
+    Fire: true,
+    Electric: true,
+    Ground: true,
+    Water: true,
+    Fighting: true,
+    Poison: true,
+    Rock: true,
+    Ice: true,
+    Ghost: true,
+    Psychic: true,
+    Fairy: true,
+    Dark: true,
+    Dragon: true,
+    Steel: true,
+    Flying: true
   });
-  const [habitat, setHabitat] = useState<Habitat>({
-    "All": true,
-    "grassland": true,
-    "forest": true,
-    "waters-edge": true,
-    "sea": true,
-    "cave": true,
-    "mountain": true,
-    "rough-terrain": true,
-    "urban": true,
-    "rare": true
+  const [habitats, setHabitats] = useState<IHabitat>({
+    All: true,
+    Grassland: true,
+    Forest: true,
+    WatersEdge: true,
+    Sea: true,
+    Cave: true,
+    Mountain: true,
+    RoughTerrain: true,
+    Urban: true,
+    Rare: true
   });
 
   // Dropdown open states
@@ -188,21 +188,15 @@ export default function Pokedex() {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
     if (label.startsWith("all")) {
-      setRegion({
+      setRegions({
         All: checked,
         Kanto: checked,
         Johto: checked,
         Hoenn: checked,
         Sinnoh: checked
       });
-    } else if (label === "Kanto") {
-      setRegion({ ...region, Kanto: checked });
-    } else if (label === "Johto") {
-      setRegion({ ...region, Johto: checked });
-    } else if (label === "Hoenn") {
-      setRegion({ ...region, Hoenn: checked });
-    } else if (label === "Sinnoh") {
-      setRegion({ ...region, Sinnoh: checked });
+    } else {
+      setRegions({ ...regions, [label]: checked });
     }
   };
 
@@ -211,21 +205,15 @@ export default function Pokedex() {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
     if (label.startsWith("all")) {
-      setRarity({
+      setRarities({
         All: checked,
         Common: checked,
         Rare: checked,
         Epic: checked,
         Legendary: checked
       });
-    } else if (label === "Common") {
-      setRarity({ ...rarity, Common: checked });
-    } else if (label === "Rare") {
-      setRarity({ ...rarity, Rare: checked });
-    } else if (label === "Epic") {
-      setRarity({ ...rarity, Epic: checked });
-    } else if (label === "Legendary") {
-      setRarity({ ...rarity, Legendary: checked });
+    } else {
+      setRarities({ ...rarities, [label]: checked });
     }
   };
 
@@ -234,63 +222,29 @@ export default function Pokedex() {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
     if (label.startsWith("all")) {
-      setType({
+      setTypes({
         All: checked,
-        normal: checked,
-        grass: checked,
-        bug: checked,
-        fire: checked,
-        electric: checked,
-        ground: checked,
-        water: checked,
-        fighting: checked,
-        poison: checked,
-        rock: checked,
-        ice: checked,
-        ghost: checked,
-        psychic: checked,
-        fairy: checked,
-        dark: checked,
-        dragon: checked,
-        steel: checked,
-        flying: checked
+        Normal: checked,
+        Grass: checked,
+        Bug: checked,
+        Fire: checked,
+        Electric: checked,
+        Ground: checked,
+        Water: checked,
+        Fighting: checked,
+        Poison: checked,
+        Rock: checked,
+        Ice: checked,
+        Ghost: checked,
+        Psychic: checked,
+        Fairy: checked,
+        Dark: checked,
+        Dragon: checked,
+        Steel: checked,
+        Flying: checked
       });
-    } else if (label === "normal") {
-      setType({ ...type, normal: checked });
-    } else if (label === "grass") {
-      setType({ ...type, grass: checked });
-    } else if (label === "bug") {
-      setType({ ...type, bug: checked });
-    } else if (label === "fire") {
-      setType({ ...type, fire: checked });
-    } else if (label === "electric") {
-      setType({ ...type, electric: checked });
-    } else if (label === "ground") {
-      setType({ ...type, ground: checked });
-    } else if (label === "water") {
-      setType({ ...type, water: checked });
-    } else if (label === "fighting") {
-      setType({ ...type, fighting: checked });
-    } else if (label === "poison") {
-      setType({ ...type, poison: checked });
-    } else if (label === "rock") {
-      setType({ ...type, rock: checked });
-    } else if (label === "ice") {
-      setType({ ...type, ice: checked });
-    } else if (label === "ghost") {
-      setType({ ...type, ghost: checked });
-    } else if (label === "psychic") {
-      setType({ ...type, psychic: checked });
-    } else if (label === "fairy") {
-      setType({ ...type, fairy: checked });
-    } else if (label === "dark") {
-      setType({ ...type, dark: checked });
-    } else if (label === "dragon") {
-      setType({ ...type, dragon: checked });
-    } else if (label === "steel") {
-      setType({ ...type, steel: checked });
-    } else if (label === "flying") {
-      setType({ ...type, flying: checked });
+    } else {
+      setTypes({ ...types, [label]: checked });
     }
   };
 
@@ -299,36 +253,20 @@ export default function Pokedex() {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
     if (label.startsWith("all")) {
-      setHabitat({
-        "All": checked,
-        "grassland": checked,
-        "forest": checked,
-        "waters-edge": checked,
-        "sea": checked,
-        "cave": checked,
-        "mountain": checked,
-        "rough-terrain": checked,
-        "urban": checked,
-        "rare": checked
+      setHabitats({
+        All: checked,
+        Grassland: checked,
+        Forest: checked,
+        WatersEdge: checked,
+        Sea: checked,
+        Cave: checked,
+        Mountain: checked,
+        RoughTerrain: checked,
+        Urban: checked,
+        Rare: checked
       });
-    } else if (label === "grassland") {
-      setHabitat({ ...habitat, grassland: checked });
-    } else if (label === "forest") {
-      setHabitat({ ...habitat, forest: checked });
-    } else if (label === "waters-edge") {
-      setHabitat({ ...habitat, "waters-edge": checked });
-    } else if (label === "sea") {
-      setHabitat({ ...habitat, sea: checked });
-    } else if (label === "cave") {
-      setHabitat({ ...habitat, cave: checked });
-    } else if (label === "mountain") {
-      setHabitat({ ...habitat, mountain: checked });
-    } else if (label === "rough-terrain") {
-      setHabitat({ ...habitat, "rough-terrain": checked });
-    } else if (label === "urban") {
-      setHabitat({ ...habitat, urban: checked });
-    } else if (label === "rare") {
-      setHabitat({ ...habitat, rare: checked });
+    } else {
+      setHabitats({ ...habitats, [label]: checked });
     }
   };
 
@@ -343,137 +281,48 @@ export default function Pokedex() {
     // Filter based on region
     setCards((p) =>
       p?.filter((s) => {
-        let generations = [];
-        if (region.Kanto) {
-          generations.push(1);
+        let r = [];
+        let key: keyof IRegion;
+        for (key in regions) {
+          if (regions[key]) r.push(key);
         }
-        if (region.Johto) {
-          generations.push(2);
-        }
-        if (region.Hoenn) {
-          generations.push(3);
-        }
-        if (region.Sinnoh) {
-          generations.push(4);
-        }
-        return generations.includes(s.generation);
+        return r.includes(s.region);
       })
     );
 
     // Filter based on rarity
     setCards((p) =>
       p?.filter((s) => {
-        let rarities = [];
-        if (rarity.Common) {
-          rarities.push("Common");
+        let r = [];
+        let key: keyof IRarity;
+        for (key in rarities) {
+          if (rarities[key]) r.push(key);
         }
-        if (rarity.Rare) {
-          rarities.push("Rare");
-        }
-        if (rarity.Epic) {
-          rarities.push("Epic");
-        }
-        if (rarity.Legendary) {
-          rarities.push("Legendary");
-        }
-        return rarities.includes(s.rarity);
+        return r.includes(s.rarity);
       })
     );
 
     // Filter based on type
     setCards((p) =>
       p?.filter((s) => {
-        let types = [];
-        if (type.normal) {
-          types.push("normal");
+        let t = [];
+        let key: keyof IType;
+        for (key in types) {
+          if (types[key]) t.push(key);
         }
-        if (type.grass) {
-          types.push("grass");
-        }
-        if (type.bug) {
-          types.push("bug");
-        }
-        if (type.fire) {
-          types.push("fire");
-        }
-        if (type.electric) {
-          types.push("electric");
-        }
-        if (type.ground) {
-          types.push("ground");
-        }
-        if (type.water) {
-          types.push("water");
-        }
-        if (type.fighting) {
-          types.push("fighting");
-        }
-        if (type.poison) {
-          types.push("poison");
-        }
-        if (type.rock) {
-          types.push("rock");
-        }
-        if (type.ice) {
-          types.push("ice");
-        }
-        if (type.ghost) {
-          types.push("ghost");
-        }
-        if (type.psychic) {
-          types.push("psychic");
-        }
-        if (type.fairy) {
-          types.push("fairy");
-        }
-        if (type.dark) {
-          types.push("dark");
-        }
-        if (type.dragon) {
-          types.push("dragon");
-        }
-        if (type.steel) {
-          types.push("steel");
-        }
-        if (type.flying) {
-          types.push("flying");
-        }
-        return types.includes(s.typeOne) || types.includes(s.typeTwo!);
+        return t.includes(s.typeOne) || t.includes(s.typeTwo!);
       })
     );
 
     // Filter based on habitat
     setCards((p) =>
       p?.filter((s) => {
-        let habitats = [];
-        if (habitat.grassland) {
-          habitats.push("grassland");
+        let h = [];
+        let key: keyof IHabitat;
+        for (key in habitats) {
+          if (habitats[key]) h.push(key);
         }
-        if (habitat.forest) {
-          habitats.push("forest");
-        }
-        if (habitat["waters-edge"]) {
-          habitats.push("waters-edge");
-        }
-        if (habitat.sea) {
-          habitats.push("sea");
-        }
-        if (habitat.cave) {
-          habitats.push("cave");
-        }
-        if (habitat.mountain) {
-          habitats.push("mountain");
-        }
-        if (habitat["rough-terrain"]) {
-          habitats.push("rough-terrain");
-        }
-        if (habitat.urban) {
-          habitats.push("urban");
-        }
-        if (habitat.rare) {
-          habitats.push("rare");
-        }
-        return habitats.includes(s.habitat);
+        return h.includes(s.habitat);
       })
     );
   };
@@ -481,7 +330,7 @@ export default function Pokedex() {
   // Apply filters
   useEffect(() => {
     filterSpecies();
-  }, [shiny, region, rarity, type, habitat]);
+  }, [shiny, regions, rarities, types, habitats]);
 
   if (status === "loading" || timeLoading || countLoading) return <Loading />;
 
@@ -552,42 +401,24 @@ export default function Pokedex() {
                       <DrowpdownItem
                         label="Select All"
                         fn={handleRegion}
-                        checked={region.All}
+                        checked={regions["All"]}
                         colour={"green"}
                       />
                     </li>
-                    <li>
-                      <DrowpdownItem
-                        label={"Kanto"}
-                        fn={handleRegion}
-                        checked={region.Kanto}
-                        colour={"green"}
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="Johto"
-                        fn={handleRegion}
-                        checked={region.Johto}
-                        colour={"green"}
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="Hoenn"
-                        fn={handleRegion}
-                        checked={region.Hoenn}
-                        colour={"green"}
-                      />
-                    </li>
-                    <li className="border-b-2 border-black">
-                      <DrowpdownItem
-                        label="Sinnoh"
-                        fn={handleRegion}
-                        checked={region.Sinnoh}
-                        colour={"green"}
-                      />
-                    </li>
+                    {Object.values(Region).map((r, index) => (
+                      <li
+                        className={`${
+                          index === Object.values(Region).length - 1 &&
+                          `border-b-2`
+                        } border-black`}>
+                        <DrowpdownItem
+                          label={r}
+                          fn={handleRegion}
+                          checked={regions[r]}
+                          colour={"green"}
+                        />
+                      </li>
+                    ))}
                   </ul>
                 )}
               </div>
@@ -603,42 +434,24 @@ export default function Pokedex() {
                       <DrowpdownItem
                         label="Select All"
                         fn={handleRarity}
-                        checked={rarity.All}
+                        checked={rarities.All}
                         colour="orange"
                       />
                     </li>
-                    <li>
-                      <DrowpdownItem
-                        label={"Common"}
-                        fn={handleRarity}
-                        checked={rarity.Common}
-                        colour="orange"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="Rare"
-                        fn={handleRarity}
-                        checked={rarity.Rare}
-                        colour="orange"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="Epic"
-                        fn={handleRarity}
-                        checked={rarity.Epic}
-                        colour="orange"
-                      />
-                    </li>
-                    <li className="border-b-2 border-black">
-                      <DrowpdownItem
-                        label="Legendary"
-                        fn={handleRarity}
-                        checked={rarity.Legendary}
-                        colour="orange"
-                      />
-                    </li>
+                    {Object.values(Rarity).map((r, index) => (
+                      <li
+                        className={`${
+                          index === Object.values(Rarity).length - 1 &&
+                          `border-b-2 border-black`
+                        }`}>
+                        <DrowpdownItem
+                          label={r}
+                          fn={handleRarity}
+                          checked={rarities[r]}
+                          colour="orange"
+                        />
+                      </li>
+                    ))}
                   </ul>
                 )}
               </div>
@@ -654,154 +467,24 @@ export default function Pokedex() {
                       <DrowpdownItem
                         label="Select All"
                         fn={handleType}
-                        checked={type.All}
+                        checked={types.All}
                         colour="blue"
                       />
                     </li>
-                    <li>
-                      <DrowpdownItem
-                        label={"normal"}
-                        fn={handleType}
-                        checked={type.normal}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="grass"
-                        fn={handleType}
-                        checked={type.grass}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="bug"
-                        fn={handleType}
-                        checked={type.bug}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="fire"
-                        fn={handleType}
-                        checked={type.fire}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="electric"
-                        fn={handleType}
-                        checked={type.electric}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="ground"
-                        fn={handleType}
-                        checked={type.ground}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="water"
-                        fn={handleType}
-                        checked={type.water}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="fighting"
-                        fn={handleType}
-                        checked={type.fighting}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="poison"
-                        fn={handleType}
-                        checked={type.poison}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="rock"
-                        fn={handleType}
-                        checked={type.rock}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="ice"
-                        fn={handleType}
-                        checked={type.ice}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="ghost"
-                        fn={handleType}
-                        checked={type.ghost}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="psychic"
-                        fn={handleType}
-                        checked={type.psychic}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="fairy"
-                        fn={handleType}
-                        checked={type.fairy}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="dark"
-                        fn={handleType}
-                        checked={type.dark}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="dragon"
-                        fn={handleType}
-                        checked={type.dragon}
-                        colour="blue"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="steel"
-                        fn={handleType}
-                        checked={type.steel}
-                        colour="blue"
-                      />
-                    </li>
-                    <li className="border-b-2 border-black">
-                      <DrowpdownItem
-                        label="flying"
-                        fn={handleType}
-                        checked={type.flying}
-                        colour="blue"
-                      />
-                    </li>
+                    {Object.values(SpeciesType).map((t, index) => (
+                      <li
+                        className={`${
+                          index === Object.values(SpeciesType).length - 1 &&
+                          `border-b-2 border-black`
+                        }`}>
+                        <DrowpdownItem
+                          label={t}
+                          fn={handleType}
+                          checked={types[t]}
+                          colour="blue"
+                        />
+                      </li>
+                    ))}
                   </ul>
                 )}
               </div>
@@ -817,82 +500,24 @@ export default function Pokedex() {
                       <DrowpdownItem
                         label="Select All"
                         fn={handleHabitat}
-                        checked={habitat.All}
+                        checked={habitats.All}
                         colour="lime"
                       />
                     </li>
-                    <li>
-                      <DrowpdownItem
-                        label={"grassland"}
-                        fn={handleHabitat}
-                        checked={habitat.grassland}
-                        colour="lime"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="forest"
-                        fn={handleHabitat}
-                        checked={habitat.forest}
-                        colour="lime"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="waters-edge"
-                        fn={handleHabitat}
-                        checked={habitat["waters-edge"]}
-                        colour="lime"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="sea"
-                        fn={handleHabitat}
-                        checked={habitat.sea}
-                        colour="lime"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="cave"
-                        fn={handleHabitat}
-                        checked={habitat.cave}
-                        colour="lime"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="mountain"
-                        fn={handleHabitat}
-                        checked={habitat.mountain}
-                        colour="lime"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="rough-terrain"
-                        fn={handleHabitat}
-                        checked={habitat["rough-terrain"]}
-                        colour="lime"
-                      />
-                    </li>
-                    <li>
-                      <DrowpdownItem
-                        label="urban"
-                        fn={handleHabitat}
-                        checked={habitat.urban}
-                        colour="lime"
-                      />
-                    </li>
-                    <li className="border-b-2 border-black">
-                      <DrowpdownItem
-                        label="rare"
-                        fn={handleHabitat}
-                        checked={habitat.rare}
-                        colour="lime"
-                      />
-                    </li>
+                    {Object.values(Habitat).map((h, index) => (
+                      <li
+                        className={`${
+                          index === Object.values(SpeciesType).length - 1 &&
+                          `border-b-2 border-black`
+                        }`}>
+                        <DrowpdownItem
+                          label={h}
+                          fn={handleHabitat}
+                          checked={habitats[h]}
+                          colour="lime"
+                        />
+                      </li>
+                    ))}
                   </ul>
                 )}
               </div>

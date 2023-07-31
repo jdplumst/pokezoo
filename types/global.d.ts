@@ -2,6 +2,9 @@ export {};
 
 declare global {
   type Time = "day" | "night";
-  type Region = "All" | "Kanto" | "Johto" | "Hoenn" | "Sinnoh";
+
+  // const Regions = ["All", "Kanto", "Johto", "Hoenn", "Sinnoh"] as const;
+  // type Region = (typeof Regions)[number];
+
   type Starter = "Grass" | "Fire" | "Water";
 }
