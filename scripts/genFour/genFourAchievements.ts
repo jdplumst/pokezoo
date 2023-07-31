@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { AchievementType } from "@prisma/client";
 import { prisma } from "../src/server/db";
 

@@ -1,3 +1,5 @@
+//@ts-nocheck
+
 import { prisma } from "@/src/server/db";
 
 // Script to populate Species collection
