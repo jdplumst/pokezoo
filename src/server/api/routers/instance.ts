@@ -223,10 +223,10 @@ export const instanceRouter = router({
     }),
 
   getCount: protectedProcedure.query(async ({ ctx }) => {
-    const count = await ctx.prisma.instance.count({
+    const instances = await ctx.prisma.instance.findMany({
       where: { userId: ctx.session.user.id }
     });
-    return { count: count };
+    return { count: instances.length };
   }),
 
   getJohto: protectedProcedure
