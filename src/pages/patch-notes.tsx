@@ -66,6 +66,14 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">4.13 (August 5, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Fixed horizontal scrollbar showing when modal is open.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">4.12 (July 30, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
