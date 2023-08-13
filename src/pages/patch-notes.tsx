@@ -66,6 +66,22 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">4.14 (August 13, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Changed modal to cover whole screen so that screen is not forced
+                to scroll up.
+              </p>
+              <p className="px-4">
+                Fixed Waters-Edge and Rough-Terrain not displaying hyphens.
+              </p>
+              <p className="px-4">
+                Fixed habitat dropdown on Pokédex page not having a bottom
+                border.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">4.13 (August 5, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
