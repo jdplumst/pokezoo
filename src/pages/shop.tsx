@@ -224,7 +224,6 @@ export default function Shop() {
             )[0]
           );
           setOpenModal(true);
-          window.scrollTo(0, 0);
           setDisabled(false);
           setError(null);
           setTotalCards((p: number) => p + 1);
@@ -296,7 +295,6 @@ export default function Shop() {
                               ref={premierRef}
                               onClick={() => {
                                 setRegionOpen((p) => !p);
-                                window.scrollTo(0, 0);
                               }}
                               className={`w-24 rounded-lg border-2 ${
                                 regionError ? "border-red-500" : "border-black"
