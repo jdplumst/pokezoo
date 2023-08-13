@@ -507,11 +507,17 @@ export default function Pokedex() {
                     {Object.values(Habitat).map((h, index) => (
                       <li
                         className={`${
-                          index === Object.values(SpeciesType).length - 1 &&
+                          index === Object.values(SpeciesType).length - 10 &&
                           `border-b-2 border-black`
                         }`}>
                         <DrowpdownItem
-                          label={h}
+                          label={
+                            h === "WatersEdge"
+                              ? "Waters-Edge"
+                              : h === "RoughTerrain"
+                              ? "Rough-Terrain"
+                              : h
+                          }
                           fn={handleHabitat}
                           checked={habitats[h]}
                           colour="lime"

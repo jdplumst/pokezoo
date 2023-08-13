@@ -144,7 +144,14 @@ export default function Card({
           )}
         </div>
         <p>Rarity: {species.rarity}</p>
-        <p className="capitalize">Habitat: {species.habitat}</p>
+        <p className="capitalize">
+          Habitat:{" "}
+          {species.habitat === "WatersEdge"
+            ? "Waters-Edge"
+            : species.habitat === "RoughTerrain"
+            ? "Rough-Terrain"
+            : species.habitat}
+        </p>
         <p>Yield: P{species.yield.toLocaleString()}</p>
         <p>Sell Price: P{species.sellPrice.toLocaleString()}</p>
         {instance && modifyDeleteList && !beingDeleted && (
