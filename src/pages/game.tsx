@@ -181,7 +181,7 @@ export default function Game() {
         p
           ?.sort((a, b) =>
             (speciesData?.species.find((s) => s.id === a.speciesId)
-              ?.pokedexNumber || 1) <=
+              ?.pokedexNumber || 1) >=
             (speciesData?.species.find((s) => s.id === b.speciesId)
               ?.pokedexNumber || 1)
               ? 1
