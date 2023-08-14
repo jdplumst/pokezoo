@@ -66,6 +66,16 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">4.15 (August 14, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Fixed rarity sorting on Game page also sorting by reverse
+                Pokédex numbers. Rarity sorting now also sorts by Pokédex number
+                from lowest to highest.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">4.14 (August 13, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
