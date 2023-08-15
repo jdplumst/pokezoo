@@ -76,9 +76,6 @@ export default function Pokedex() {
     }
   });
 
-  const { data: countData, isLoading: countLoading } =
-    trpc.instance.getCount.useQuery();
-
   const { data: speciesData } = trpc.species.getSpecies.useQuery({
     order: "pokedex"
   });
@@ -332,7 +329,7 @@ export default function Pokedex() {
     filterSpecies();
   }, [shiny, regions, rarities, types, habitats]);
 
-  if (status === "loading" || timeLoading || countLoading) return <Loading />;
+  if (status === "loading" || timeLoading) return <Loading />;
 
   return (
     <>
@@ -349,7 +346,7 @@ export default function Pokedex() {
             username={session.user.username}
             balance={session.user.balance}
             totalYield={session.user.totalYield}
-            totalCards={countData?.count!}
+            totalCards={session.user.instanceCount}
           />
           <main className="p-4">
             {session.user?.admin && (

@@ -271,7 +271,7 @@ export default function Game() {
             username={username}
             balance={balance}
             totalYield={totalYield}
-            totalCards={instanceData?.instances.length ?? 0}
+            totalCards={session.user.instanceCount}
           />
           {deleteList.length > 0 && (
             <div className="sticky top-0 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">

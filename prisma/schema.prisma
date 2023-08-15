@@ -54,6 +54,7 @@ model User {
   username        String?
   totalYield      Int
   balance         Int
+  instanceCount   Int
   claimedDaily    Boolean
   claimedNightly  Boolean
   instances       Instance[]

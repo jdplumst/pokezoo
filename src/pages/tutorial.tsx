@@ -17,9 +17,6 @@ export default function Tutorial() {
     }
   });
 
-  const { data: countData, isLoading: countLoading } =
-    trpc.instance.getCount.useQuery();
-
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
 
@@ -34,7 +31,7 @@ export default function Tutorial() {
     setLoading(false);
   }, []);
 
-  if (loading || status === "loading" || countLoading) return <Loading />;
+  if (loading || status === "loading") return <Loading />;
 
   return (
     <>
@@ -51,7 +48,7 @@ export default function Tutorial() {
             username={session.user.username}
             balance={session.user.balance}
             totalYield={session.user.totalYield}
-            totalCards={countData?.count!}
+            totalCards={session.user.instanceCount}
           />
           <main className="px-8">
             {session.user.admin && (

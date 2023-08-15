@@ -18,6 +18,7 @@ declare module "next-auth" {
     username: string | null;
     totalYield: number;
     balance: number;
+    instanceCount: number;
     claimedDaily: boolean;
     claimedNightly: boolean;
     johtoStarter: boolean;

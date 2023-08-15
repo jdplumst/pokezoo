@@ -31,8 +31,6 @@ export default function Shop() {
     }
   });
 
-  const { data: countData } = trpc.instance.getCount.useQuery();
-
   const { data: speciesData } = trpc.species.getSpecies.useQuery({
     order: null
   });
@@ -70,12 +68,12 @@ export default function Shop() {
       setTime("night");
     }
 
-    if (status !== "authenticated" || !countData) return;
+    if (status !== "authenticated") return;
     setBalance(session.user.balance);
     setTotalYield(session.user.totalYield);
-    setTotalCards(countData.count);
+    setTotalCards(session.user.instanceCount);
     setLoading(false);
-  }, [session, countData]);
+  }, [session]);
 
   const purchaseBall = async (ball: Ball) => {
     // Disable all purchase buttons

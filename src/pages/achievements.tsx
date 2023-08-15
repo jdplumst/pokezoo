@@ -20,9 +20,6 @@ export default function Achievements() {
     }
   });
 
-  const { data: countData, isLoading: countLoading } =
-    trpc.instance.getCount.useQuery();
-
   const { data: speciesData } = trpc.species.getSpecies.useQuery({
     order: null
   });
@@ -159,7 +156,7 @@ export default function Achievements() {
     setTotalYield((prevTotalYield) => prevTotalYield + x);
   };
 
-  if (loading || status === "loading" || countLoading) return <Loading />;
+  if (loading || status === "loading") return <Loading />;
 
   return (
     <>
@@ -176,7 +173,7 @@ export default function Achievements() {
             username={session.user.username}
             balance={session.user.balance}
             totalYield={totalYield}
-            totalCards={countData?.count!}
+            totalCards={session.user.instanceCount}
           />
           <main className="p-4">
             {session.user?.admin && (

@@ -23,6 +23,7 @@ export const authOptions: NextAuthOptions = {
           username: null,
           totalYield: 0,
           balance: 500,
+          instanceCount: 0,
           claimedDaily: false,
           claimedNightly: false,
           johtoStarter: true,
@@ -45,6 +46,7 @@ export const authOptions: NextAuthOptions = {
           username: null,
           totalYield: 0,
           balance: 500,
+          instanceCount: 0,
           claimedDaily: false,
           claimedNightly: false,
           johtoStarter: true,
@@ -67,6 +69,7 @@ export const authOptions: NextAuthOptions = {
           username: null,
           totalYield: 0,
           balance: 500,
+          instanceCount: 0,
           claimedDaily: false,
           claimedNightly: false,
           johtoStarter: true,
@@ -88,6 +91,7 @@ export const authOptions: NextAuthOptions = {
         session.user.username = user.username;
         session.user.totalYield = user.totalYield;
         session.user.balance = user.balance;
+        session.user.instanceCount = user.instanceCount;
         session.user.claimedDaily = user.claimedDaily;
         session.user.claimedNightly = user.claimedNightly;
         session.user.johtoStarter = user.johtoStarter;

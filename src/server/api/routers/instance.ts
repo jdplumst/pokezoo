@@ -87,7 +87,7 @@ export const instanceRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currUser = await ctx.prisma.user.findUnique({
         where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true }
+        select: { totalYield: true, balance: true, instanceCount: true }
       });
       if (!currUser) {
         throw Error("Not authorized to make this request");
@@ -103,10 +103,7 @@ export const instanceRouter = router({
       if (!species) {
         throw Error("Species does not exist.");
       }
-      const numInstances = await ctx.prisma.instance.count({
-        where: { userId: ctx.session.user.id }
-      });
-      if (numInstances >= 2000) {
+      if (currUser.instanceCount >= 2000) {
         throw Error(
           "You have reached your limit. Sell Pokémon if you want to buy more."
         );
@@ -115,7 +112,8 @@ export const instanceRouter = router({
         where: { id: ctx.session.user.id },
         data: {
           totalYield: currUser.totalYield + species.yield,
-          balance: currUser.balance - input.cost
+          balance: currUser.balance - input.cost,
+          instanceCount: currUser.instanceCount + 1
         }
       });
       const instance = await ctx.prisma.instance.create({
@@ -136,7 +134,7 @@ export const instanceRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currUser = await ctx.prisma.user.findUnique({
         where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true }
+        select: { totalYield: true, balance: true, instanceCount: true }
       });
       if (!currUser) {
         throw Error("Not authorized to make this request");
@@ -158,7 +156,8 @@ export const instanceRouter = router({
         where: { id: ctx.session.user.id },
         data: {
           totalYield: currUser.totalYield - species.yield,
-          balance: currUser.balance + species.sellPrice
+          balance: currUser.balance + species.sellPrice,
+          instanceCount: currUser.instanceCount - 1
         }
       });
       const instance = await ctx.prisma.instance.delete({
@@ -180,7 +179,7 @@ export const instanceRouter = router({
       const result = [];
       const currUser = await ctx.prisma.user.findUnique({
         where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true }
+        select: { totalYield: true, balance: true, instanceCount: true }
       });
       if (!currUser) {
         throw Error("Not authorized to make this request");
@@ -203,7 +202,8 @@ export const instanceRouter = router({
           where: { id: ctx.session.user.id },
           data: {
             totalYield: currUser.totalYield - species.yield,
-            balance: currUser.balance + species.sellPrice
+            balance: currUser.balance + species.sellPrice,
+            instanceCount: currUser.instanceCount - input.ids.length
           }
         });
         const instance = await ctx.prisma.instance.delete({
@@ -213,7 +213,7 @@ export const instanceRouter = router({
       }
       const user = await ctx.prisma.user.findUnique({
         where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true }
+        select: { totalYield: true, balance: true, instanceCount: true }
       });
       if (!user) throw Error("Not authorized to make this request");
       return {
@@ -221,13 +221,6 @@ export const instanceRouter = router({
         user: user
       };
     }),
-
-  getCount: protectedProcedure.query(async ({ ctx }) => {
-    const instances = await ctx.prisma.instance.findMany({
-      where: { userId: ctx.session.user.id }
-    });
-    return { count: instances.length };
-  }),
 
   getJohto: protectedProcedure
     .input(
@@ -240,7 +233,12 @@ export const instanceRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currUser = await ctx.prisma.user.findUnique({
         where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true, johtoStarter: true }
+        select: {
+          totalYield: true,
+          balance: true,
+          instanceCount: true,
+          johtoStarter: true
+        }
       });
       if (!currUser) {
         throw Error("Not authorized to make this request");
@@ -256,19 +254,12 @@ export const instanceRouter = router({
       if (!species) {
         throw Error("Species does not exist.");
       }
-      const numInstances = await ctx.prisma.instance.count({
-        where: { userId: ctx.session.user.id }
-      });
-      if (numInstances >= 2000) {
-        throw Error(
-          "You have reached your limit. Sell Pokémon if you want to buy more."
-        );
-      }
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
         data: {
           totalYield: currUser.totalYield + species.yield,
           balance: currUser.balance - input.cost,
+          instanceCount: currUser.instanceCount + 1,
           johtoStarter: true
         }
       });
@@ -292,7 +283,12 @@ export const instanceRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currUser = await ctx.prisma.user.findUnique({
         where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true, hoennStarter: true }
+        select: {
+          totalYield: true,
+          balance: true,
+          instanceCount: true,
+          hoennStarter: true
+        }
       });
       if (!currUser) {
         throw Error("Not authorized to make this request");
@@ -308,19 +304,12 @@ export const instanceRouter = router({
       if (!species) {
         throw Error("Species does not exist.");
       }
-      const numInstances = await ctx.prisma.instance.count({
-        where: { userId: ctx.session.user.id }
-      });
-      if (numInstances >= 2000) {
-        throw Error(
-          "You have reached your limit. Sell Pokémon if you want to buy more."
-        );
-      }
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
         data: {
           totalYield: currUser.totalYield + species.yield,
           balance: currUser.balance - input.cost,
+          instanceCount: currUser.instanceCount + 1,
           hoennStarter: true
         }
       });
@@ -344,7 +333,12 @@ export const instanceRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currUser = await ctx.prisma.user.findUnique({
         where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true, sinnohStarter: true }
+        select: {
+          totalYield: true,
+          balance: true,
+          instanceCount: true,
+          sinnohStarter: true
+        }
       });
       if (!currUser) {
         throw Error("Not authorized to make this request");
@@ -360,19 +354,12 @@ export const instanceRouter = router({
       if (!species) {
         throw Error("Species does not exist.");
       }
-      const numInstances = await ctx.prisma.instance.count({
-        where: { userId: ctx.session.user.id }
-      });
-      if (numInstances >= 2000) {
-        throw Error(
-          "You have reached your limit. Sell Pokémon if you want to buy more."
-        );
-      }
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
         data: {
           totalYield: currUser.totalYield + species.yield,
           balance: currUser.balance - input.cost,
+          instanceCount: currUser.instanceCount + 1,
           sinnohStarter: true
         }
       });
