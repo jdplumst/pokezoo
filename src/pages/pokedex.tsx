@@ -10,6 +10,11 @@ import { useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Habitat, Rarity, Region, Species, SpeciesType } from "@prisma/client";
+
+interface ICaught {
+  Caught: boolean;
+  Uncaught: boolean;
+}
 interface IShiny {
   "Not Shiny": boolean;
   "Shiny": boolean;
@@ -91,6 +96,10 @@ export default function Pokedex() {
   const [cards, setCards] = useState<Species[]>();
   const [cardsLoading, setCardsLoading] = useState(true);
 
+  const [caught, setCaught] = useState<ICaught>({
+    Caught: true,
+    Uncaught: true
+  });
   const [shiny, setShiny] = useState<IShiny>({
     "Not Shiny": true,
     "Shiny": false
@@ -144,6 +153,7 @@ export default function Pokedex() {
   });
 
   // Dropdown open states
+  const [caughtOpen, setCaughtOpen] = useState(false);
   const [shinyOpen, setShinyOpen] = useState(false);
   const [regionOpen, setRegionOpen] = useState(false);
   const [rarityOpen, setRarityOpen] = useState(false);
@@ -168,6 +178,13 @@ export default function Pokedex() {
     setCards(speciesData!.species!.filter((s) => !s.shiny));
     setCardsLoading(false);
   }, [speciesData]);
+
+  // Handle Caught State
+  const handleCaught = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.labels![0].htmlFor;
+    const checked = e.target.checked;
+    setCaught({ ...caught, [label]: checked });
+  };
 
   // Handle Shiny State
   const handleShiny = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -275,6 +292,23 @@ export default function Pokedex() {
       setCards(speciesData?.species.filter((s) => !s.shiny));
     }
 
+    // Filter based on caught
+    if (caught.Caught && caught.Uncaught) {
+      setCards((p) => p);
+    } else if (caught.Caught) {
+      const instanceMap = instanceData?.instances.map((i) => i.speciesId);
+      setCards((p) => {
+        return p?.filter((item) => instanceMap?.includes(item.id));
+      });
+    } else if (caught.Uncaught) {
+      const instanceMap = instanceData?.instances.map((i) => i.speciesId);
+      setCards((p) => {
+        return p?.filter((item) => !instanceMap?.includes(item.id));
+      });
+    } else if (!caught.Caught && !caught.Uncaught) {
+      setCards([]);
+    }
+
     // Filter based on region
     setCards((p) =>
       p?.filter((s) => {
@@ -327,7 +361,7 @@ export default function Pokedex() {
   // Apply filters
   useEffect(() => {
     filterSpecies();
-  }, [shiny, regions, rarities, types, habitats]);
+  }, [caught, shiny, regions, rarities, types, habitats]);
 
   if (status === "loading" || timeLoading) return <Loading />;
 
@@ -359,6 +393,33 @@ export default function Pokedex() {
               </div>
             )}
             <div className="flex justify-center gap-5">
+              <div className="w-48">
+                <button
+                  onClick={() => setCaughtOpen((p) => !p)}
+                  className="w-full border-2 border-black bg-red-btn-unfocus p-2 font-bold outline-none">
+                  Select Caught
+                </button>
+                {caughtOpen && (
+                  <ul className="absolute z-10 w-48">
+                    <li>
+                      <DrowpdownItem
+                        label="Caught"
+                        fn={handleCaught}
+                        checked={caught.Caught}
+                        colour="red"
+                      />
+                    </li>
+                    <li className="border-b-2 border-black">
+                      <DrowpdownItem
+                        label="Uncaught"
+                        fn={handleCaught}
+                        checked={caught.Uncaught}
+                        colour="red"
+                      />
+                    </li>
+                  </ul>
+                )}
+              </div>
               <div className="w-48">
                 <button
                   onClick={() => setShinyOpen((p) => !p)}

@@ -24,6 +24,8 @@ export default function DrowpdownItem({
           ? `bg-blue-btn-unfocus`
           : colour === "lime"
           ? `bg-lime-btn-unfocus`
+          : colour === "red"
+          ? `bg-red-btn-unfocus`
           : `bg-white`
       } flex px-2 py-[1px] font-bold`}>
       <input
