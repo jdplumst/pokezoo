@@ -63,6 +63,18 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">4.17 (August 22, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Fixed balance and total yield not updating correctly when
+                selling multiple Pokémon at once.
+              </p>
+              <p className="px-4">
+                Updated all user's total yields to be their correct total yield.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">4.16 (August 16, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">Added Caught filter to Pokédex page.</p>
