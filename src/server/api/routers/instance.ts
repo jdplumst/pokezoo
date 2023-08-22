@@ -184,7 +184,11 @@ export const instanceRouter = router({
       if (!currUser) {
         throw Error("Not authorized to make this request");
       }
+      let sumYield = 0;
+      let sumSellPrice = 0;
       for (let i of input.ids) {
+        console.log("-----------------------");
+        console.log(i);
         const exists = await ctx.prisma.instance.findUnique({
           where: { id: i },
           select: { speciesId: true }
@@ -198,24 +202,21 @@ export const instanceRouter = router({
         if (!species) {
           throw Error("Species does not exist.");
         }
-        await ctx.prisma.user.update({
-          where: { id: ctx.session.user.id },
-          data: {
-            totalYield: currUser.totalYield - species.yield,
-            balance: currUser.balance + species.sellPrice,
-            instanceCount: currUser.instanceCount - input.ids.length
-          }
-        });
+        sumYield += species.yield;
+        sumSellPrice += species.sellPrice;
         const instance = await ctx.prisma.instance.delete({
           where: { id: i }
         });
         result.push(instance.id);
       }
-      const user = await ctx.prisma.user.findUnique({
+      const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true, instanceCount: true }
+        data: {
+          totalYield: currUser.totalYield - sumYield,
+          balance: currUser.balance + sumSellPrice,
+          instanceCount: currUser.instanceCount - input.ids.length
+        }
       });
-      if (!user) throw Error("Not authorized to make this request");
       return {
         instances: result,
         user: user
