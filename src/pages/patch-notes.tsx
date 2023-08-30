@@ -63,6 +63,15 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">4.18 (August 30, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Fixed Waters-Edge and Rough-Terrain not being selectable in the
+                Habitat dropdown on the Pokédex page.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">4.17 (August 22, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
