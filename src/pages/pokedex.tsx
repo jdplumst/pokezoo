@@ -59,16 +59,16 @@ interface IType {
 }
 
 interface IHabitat {
-  All: boolean;
-  Grassland: boolean;
-  Forest: boolean;
-  WatersEdge: boolean;
-  Sea: boolean;
-  Cave: boolean;
-  Mountain: boolean;
-  RoughTerrain: boolean;
-  Urban: boolean;
-  Rare: boolean;
+  "All": boolean;
+  "Grassland": boolean;
+  "Forest": boolean;
+  "Waters-Edge": boolean;
+  "Sea": boolean;
+  "Cave": boolean;
+  "Mountain": boolean;
+  "Rough-Terrain": boolean;
+  "Urban": boolean;
+  "Rare": boolean;
 }
 
 export default function Pokedex() {
@@ -140,16 +140,16 @@ export default function Pokedex() {
     Flying: true
   });
   const [habitats, setHabitats] = useState<IHabitat>({
-    All: true,
-    Grassland: true,
-    Forest: true,
-    WatersEdge: true,
-    Sea: true,
-    Cave: true,
-    Mountain: true,
-    RoughTerrain: true,
-    Urban: true,
-    Rare: true
+    "All": true,
+    "Grassland": true,
+    "Forest": true,
+    "Waters-Edge": true,
+    "Sea": true,
+    "Cave": true,
+    "Mountain": true,
+    "Rough-Terrain": true,
+    "Urban": true,
+    "Rare": true
   });
 
   // Dropdown open states
@@ -268,16 +268,16 @@ export default function Pokedex() {
     const checked = e.target.checked;
     if (label.startsWith("all")) {
       setHabitats({
-        All: checked,
-        Grassland: checked,
-        Forest: checked,
-        WatersEdge: checked,
-        Sea: checked,
-        Cave: checked,
-        Mountain: checked,
-        RoughTerrain: checked,
-        Urban: checked,
-        Rare: checked
+        "All": checked,
+        "Grassland": checked,
+        "Forest": checked,
+        "Waters-Edge": checked,
+        "Sea": checked,
+        "Cave": checked,
+        "Mountain": checked,
+        "Rough-Terrain": checked,
+        "Urban": checked,
+        "Rare": checked
       });
     } else {
       setHabitats({ ...habitats, [label]: checked });
@@ -351,7 +351,12 @@ export default function Pokedex() {
         let h = [];
         let key: keyof IHabitat;
         for (key in habitats) {
-          if (habitats[key]) h.push(key);
+          if (habitats[key])
+            key === "Waters-Edge"
+              ? h.push("WatersEdge")
+              : key === "Rough-Terrain"
+              ? h.push("RoughTerrain")
+              : h.push(key);
         }
         return h.includes(s.habitat);
       })
@@ -577,7 +582,13 @@ export default function Pokedex() {
                               : h
                           }
                           fn={handleHabitat}
-                          checked={habitats[h]}
+                          checked={
+                            h === "WatersEdge"
+                              ? habitats["Waters-Edge"]
+                              : h === "RoughTerrain"
+                              ? habitats["Rough-Terrain"]
+                              : habitats[h]
+                          }
                           colour="lime"
                         />
                       </li>
