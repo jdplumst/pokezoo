@@ -16,5 +16,20 @@ export const tradeRouter = router({
         }
       });
       return { trade: trade };
+    }),
+
+  cancelTrade: protectedProcedure
+    .input(z.object({ tradeId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const trade = await ctx.prisma.trade.findFirst({
+        where: { id: input.tradeId }
+      });
+      if (!trade) {
+        throw Error(`Trade with id ${input.tradeId} does not exist`);
+      }
+      if (trade.initiatorId !== ctx.session.user.id) {
+        throw Error("You are not authorized to delete this trade");
+      }
+      await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
     })
 });
