@@ -53,5 +53,23 @@ export const tradeRouter = router({
         }
       });
       return { trade: newTrade };
+    }),
+
+  withdrawTrade: protectedProcedure
+    .input(z.object({ tradeId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const trade = await ctx.prisma.trade.findFirst({
+        where: { id: input.tradeId }
+      });
+      if (!trade) {
+        throw Error(`Trade with id ${input.tradeId} does not exist`);
+      }
+      if (trade.offererId !== ctx.session.user.id) {
+        throw Error("You are not the offerer for this trade");
+      }
+      await ctx.prisma.trade.update({
+        where: { id: input.tradeId },
+        data: { offererId: null, offererSpeciesId: null }
+      });
     })
 });
