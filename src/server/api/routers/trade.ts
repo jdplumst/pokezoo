@@ -4,14 +4,14 @@ import { protectedProcedure, router } from "../trpc";
 export const tradeRouter = router({
   initiateTrade: protectedProcedure
     .input(
-      z.object({ speciesId: z.string(), description: z.string().nullish() })
+      z.object({ instanceId: z.string(), description: z.string().nullish() })
     )
     .mutation(async ({ ctx, input }) => {
       const initiatorId = ctx.session.user.id;
       const trade = await ctx.prisma.trade.create({
         data: {
           initiatorId: initiatorId,
-          initiatorSpeciesId: input.speciesId,
+          initiatorInstanceId: input.instanceId,
           description: input.description
         }
       });
@@ -34,7 +34,7 @@ export const tradeRouter = router({
     }),
 
   offerTrade: protectedProcedure
-    .input(z.object({ tradeId: z.string(), speciesId: z.string() }))
+    .input(z.object({ tradeId: z.string(), instanceId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const trade = await ctx.prisma.trade.findFirst({
         where: { id: input.tradeId }
@@ -49,7 +49,7 @@ export const tradeRouter = router({
         where: { id: input.tradeId },
         data: {
           offererId: ctx.session.user.id,
-          offererSpeciesId: input.speciesId
+          offererInstanceId: input.instanceId
         }
       });
       return { trade: newTrade };
@@ -69,7 +69,7 @@ export const tradeRouter = router({
       }
       await ctx.prisma.trade.update({
         where: { id: input.tradeId },
-        data: { offererId: null, offererSpeciesId: null }
+        data: { offererId: null, offererInstanceId: null }
       });
     })
 });

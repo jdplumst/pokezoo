@@ -75,31 +75,31 @@ model VerificationToken {
 }
 
 model Species {
-  id             String       @id @default(cuid())
-  pokedexNumber  Int
-  name           String
-  rarity         Rarity
-  yield          Int
-  img            String
-  instances      Instance[]
-  sellPrice      Int
-  shiny          Boolean
-  typeOne        SpeciesType
-  typeTwo        SpeciesType?
-  generation     Int
-  region         Region
-  habitat        Habitat
-  TradeInitiator Trade[]      @relation("initiatorSpecies")
-  TradeOfferer   Trade[]      @relation("offererSpecies")
+  id            String       @id @default(cuid())
+  pokedexNumber Int
+  name          String
+  rarity        Rarity
+  yield         Int
+  img           String
+  instances     Instance[]
+  sellPrice     Int
+  shiny         Boolean
+  typeOne       SpeciesType
+  typeTwo       SpeciesType?
+  generation    Int
+  region        Region
+  habitat       Habitat
 }
 
 model Instance {
-  id         String   @id @default(cuid())
-  userId     String
-  speciesId  String
-  createDate DateTime @default(now())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  species    Species  @relation(fields: [speciesId], references: [id], onDelete: Cascade)
+  id             String   @id @default(cuid())
+  userId         String
+  speciesId      String
+  createDate     DateTime @default(now())
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  species        Species  @relation(fields: [speciesId], references: [id], onDelete: Cascade)
+  TradeInitiator Trade[]  @relation("initiatorInstance")
+  TradeOfferer   Trade[]  @relation("offererInstance")
 
   @@index([userId])
   @@index([speciesId])
@@ -142,23 +142,23 @@ model UserAchievement {
 }
 
 model Trade {
-  id                 String   @id @default(cuid())
-  initiatorId        String
-  offererId          String?
-  initiatorSpeciesId String
-  offererSpeciesId   String?
-  description        String?
-  createDate         DateTime @default(now())
-  modifyDate         DateTime @default(now())
-  initiator          User     @relation("initiator", fields: [initiatorId], references: [id])
-  offerer            User?    @relation("offerer", fields: [offererId], references: [id])
-  initiatorSpecies   Species  @relation("initiatorSpecies", fields: [initiatorSpeciesId], references: [id])
-  offererSpecies     Species? @relation("offererSpecies", fields: [offererSpeciesId], references: [id])
+  id                  String    @id @default(cuid())
+  initiatorId         String
+  offererId           String?
+  initiatorInstanceId String
+  offererInstanceId   String?
+  description         String?
+  createDate          DateTime  @default(now())
+  modifyDate          DateTime  @default(now())
+  initiator           User      @relation("initiator", fields: [initiatorId], references: [id])
+  offerer             User?     @relation("offerer", fields: [offererId], references: [id])
+  initiatorInstance   Instance  @relation("initiatorInstance", fields: [initiatorInstanceId], references: [id])
+  offererInstance     Instance? @relation("offererInstance", fields: [offererInstanceId], references: [id])
 
   @@index([initiatorId])
   @@index([offererId])
-  @@index([initiatorSpeciesId])
-  @@index([offererSpeciesId])
+  @@index([initiatorInstanceId])
+  @@index([offererInstanceId])
 }
 
 enum Rarity {
