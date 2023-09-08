@@ -8,6 +8,17 @@ export const tradeRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const initiatorId = ctx.session.user.id;
+      const instance = await ctx.prisma.instance.findFirst({
+        where: { id: input.instanceId }
+      });
+      if (!instance) {
+        throw Error(`Instance with id ${input.instanceId} does not exist`);
+      }
+      if (instance?.userId !== initiatorId) {
+        throw Error(
+          `Instance with id ${input.instanceId} does not belong to you`
+        );
+      }
       const trade = await ctx.prisma.trade.create({
         data: {
           initiatorId: initiatorId,
@@ -36,6 +47,18 @@ export const tradeRouter = router({
   offerTrade: protectedProcedure
     .input(z.object({ tradeId: z.string(), instanceId: z.string() }))
     .mutation(async ({ ctx, input }) => {
+      const offererId = ctx.session.user.id;
+      const instance = await ctx.prisma.instance.findFirst({
+        where: { id: input.instanceId }
+      });
+      if (!instance) {
+        throw Error(`Instance with id ${input.instanceId} does not exist`);
+      }
+      if (instance?.userId !== offererId) {
+        throw Error(
+          `Instance with id ${input.instanceId} does not belong to you`
+        );
+      }
       const trade = await ctx.prisma.trade.findFirst({
         where: { id: input.tradeId }
       });
