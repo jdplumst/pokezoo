@@ -147,6 +147,7 @@ model Trade {
   offererId          String?
   initiatorSpeciesId String
   offererSpeciesId   String?
+  description        String?
   createDate         DateTime @default(now())
   modifyDate         DateTime @default(now())
   initiator          User     @relation("initiator", fields: [initiatorId], references: [id])
