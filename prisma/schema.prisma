@@ -62,6 +62,8 @@ model User {
   hoennStarter    Boolean
   sinnohStarter   Boolean
   UserAchievement UserAchievement[]
+  TradeInitiator  Trade[]           @relation("initiator")
+  TradeOfferer    Trade[]           @relation("offerer")
 }
 
 model VerificationToken {
@@ -73,20 +75,22 @@ model VerificationToken {
 }
 
 model Species {
-  id            String       @id @default(cuid())
-  pokedexNumber Int
-  name          String
-  rarity        Rarity
-  yield         Int
-  img           String
-  instances     Instance[]
-  sellPrice     Int
-  shiny         Boolean
-  typeOne       SpeciesType
-  typeTwo       SpeciesType?
-  generation    Int
-  region        Region
-  habitat       Habitat
+  id             String       @id @default(cuid())
+  pokedexNumber  Int
+  name           String
+  rarity         Rarity
+  yield          Int
+  img            String
+  instances      Instance[]
+  sellPrice      Int
+  shiny          Boolean
+  typeOne        SpeciesType
+  typeTwo        SpeciesType?
+  generation     Int
+  region         Region
+  habitat        Habitat
+  TradeInitiator Trade[]      @relation("initiatorSpecies")
+  TradeOfferer   Trade[]      @relation("offererSpecies")
 }
 
 model Instance {
@@ -135,6 +139,25 @@ model UserAchievement {
 
   @@index([userId])
   @@index([achievementId])
+}
+
+model Trade {
+  id                 String   @id @default(cuid())
+  initiatorId        String
+  offererId          String?
+  initiatorSpeciesId String
+  offererSpeciesId   String?
+  createDate         DateTime @default(now())
+  modifyDate         DateTime @default(now())
+  initiator          User     @relation("initiator", fields: [initiatorId], references: [id])
+  offerer            User?    @relation("offerer", fields: [offererId], references: [id])
+  initiatorSpecies   Species  @relation("initiatorSpecies", fields: [initiatorSpeciesId], references: [id])
+  offererSpecies     Species? @relation("offererSpecies", fields: [offererSpeciesId], references: [id])
+
+  @@index([initiatorId])
+  @@index([offererId])
+  @@index([initiatorSpeciesId])
+  @@index([offererSpeciesId])
 }
 
 enum Rarity {
