@@ -5,6 +5,7 @@ import { achievementRouter } from "./routers/achievement";
 import { speciesRouter } from "./routers/species";
 import { userAchievementRouter } from "./routers/userAchievement";
 import { ballRouter } from "./routers/ball";
+import { tradeRouter } from "./routers/trade";
 
 // Primary Router
 // All routers in routers folder should be added here
@@ -15,7 +16,8 @@ export const appRouter = router({
   user: userRouter,
   achievement: achievementRouter,
   userAchievement: userAchievementRouter,
-  ball: ballRouter
+  ball: ballRouter,
+  trade: tradeRouter
 });
 
 // export type definition of API
