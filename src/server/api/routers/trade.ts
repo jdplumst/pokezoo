@@ -39,7 +39,7 @@ export const tradeRouter = router({
         throw Error(`Trade with id ${input.tradeId} does not exist`);
       }
       if (trade.initiatorId !== ctx.session.user.id) {
-        throw Error("You are not authorized to delete this trade");
+        throw Error("You are not authorized to cancel this trade");
       }
       await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
     }),
@@ -94,5 +94,31 @@ export const tradeRouter = router({
         where: { id: input.tradeId },
         data: { offererId: null, offererInstanceId: null }
       });
+    }),
+
+  acceptTrade: protectedProcedure
+    .input(z.object({ tradeId: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      const trade = await ctx.prisma.trade.findFirst({
+        where: { id: input.tradeId }
+      });
+      if (!trade) {
+        throw Error(`Trade with id ${input.tradeId} does not exist`);
+      }
+      if (trade.initiatorId !== ctx.session.user.id) {
+        throw Error("You are not the initiator for this trade");
+      }
+      if (!trade.offererId || !trade.offererInstanceId) {
+        throw Error("There is no offer for this trade");
+      }
+      await ctx.prisma.instance.update({
+        where: { id: trade.initiatorInstanceId },
+        data: { userId: trade.offererId }
+      });
+      await ctx.prisma.instance.update({
+        where: { id: trade.offererInstanceId },
+        data: { userId: trade.initiatorId }
+      });
+      await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
     })
 });
