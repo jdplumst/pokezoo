@@ -33,6 +33,9 @@ export default function Trades() {
 
   const offerMutation = trpc.trade.offerTrade.useMutation();
   const [offerModal, setOfferModal] = useState(false);
+
+  const cancelMutation = trpc.trade.cancelTrade.useMutation();
+
   const [tradeId, setTradeId] = useState("-1");
 
   const [time, setTime] = useState<Time>("night");
@@ -127,8 +130,17 @@ export default function Trades() {
                         )}
                         {t.initiatorId === session.user.id ? (
                           <button
-                            // onClick={() => purchaseBall(b)}
-                            // disabled={disabled}
+                            onClick={() =>
+                              cancelMutation.mutate(
+                                { tradeId: t.id },
+                                {
+                                  onSuccess(data, variables, context) {
+                                    utils.trade.getTrades.invalidate();
+                                  }
+                                }
+                              )
+                            }
+                            disabled={cancelMutation.isLoading}
                             className="w-24 rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
                             Cancel
                           </button>
