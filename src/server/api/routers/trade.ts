@@ -44,6 +44,19 @@ export const tradeRouter = router({
           `Instance with id ${input.instanceId} does not belong to you`
         );
       }
+      const exists = await ctx.prisma.trade.findFirst({
+        where: {
+          OR: [
+            { initiatorInstanceId: input.instanceId },
+            { offererInstanceId: input.instanceId }
+          ]
+        }
+      });
+      if (exists) {
+        throw Error(
+          `Instance with id ${input.instanceId} is already in a trade`
+        );
+      }
       const trade = await ctx.prisma.trade.create({
         data: {
           initiatorId: initiatorId,
@@ -92,6 +105,19 @@ export const tradeRouter = router({
       }
       if (trade.offererId) {
         throw Error("There is already an offer for this trade");
+      }
+      const exists = await ctx.prisma.trade.findFirst({
+        where: {
+          OR: [
+            { initiatorInstanceId: input.instanceId },
+            { offererInstanceId: input.instanceId }
+          ]
+        }
+      });
+      if (exists) {
+        throw Error(
+          `Instance with id ${input.instanceId} is already in a trade`
+        );
       }
       const newTrade = await ctx.prisma.trade.update({
         where: { id: input.tradeId },
