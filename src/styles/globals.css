@@ -95,15 +95,18 @@ html .night {
 }
 
 /* Scrollbar */
-html::-webkit-scrollbar {
+html::-webkit-scrollbar,
+div::-webkit-scrollbar {
   width: 8px;
 }
 
-html::-webkit-scrollbar-track {
+html::-webkit-scrollbar-track,
+div::-webkit-scrollbar-track {
   background-color: rgba(0, 0, 0, 0);
 }
 
-html::-webkit-scrollbar-thumb {
+html::-webkit-scrollbar-thumb,
+div::-webkit-scrollbar-thumb {
   background-color: #d946ef;
 }
 
