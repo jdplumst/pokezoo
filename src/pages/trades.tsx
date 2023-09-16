@@ -35,6 +35,7 @@ export default function Trades() {
   const [offerModal, setOfferModal] = useState(false);
 
   const cancelMutation = trpc.trade.cancelTrade.useMutation();
+  const withdrawMutation = trpc.trade.withdrawTrade.useMutation();
 
   const acceptMutation = trpc.trade.acceptTrade.useMutation();
   const rejectMutation = trpc.trade.rejectTrade.useMutation();
@@ -181,8 +182,17 @@ export default function Trades() {
                           )}
                           {t.offererId === session.user.id ? (
                             <button
-                              // onClick={() => purchaseBall(b)}
-                              // disabled={disabled}
+                              onClick={() =>
+                                withdrawMutation.mutate(
+                                  { tradeId: t.id },
+                                  {
+                                    onSuccess(data, variables, context) {
+                                      utils.trade.getTrades.invalidate();
+                                    }
+                                  }
+                                )
+                              }
+                              disabled={withdrawMutation.isLoading}
                               className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
                               Withdraw
                             </button>
