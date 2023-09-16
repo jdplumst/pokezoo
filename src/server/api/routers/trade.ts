@@ -106,6 +106,9 @@ export const tradeRouter = router({
       if (trade.offererId) {
         throw Error("There is already an offer for this trade");
       }
+      if (trade.initiatorId === ctx.session.user.id) {
+        throw Error("You can't give an offer for your own trade");
+      }
       const exists = await ctx.prisma.trade.findFirst({
         where: {
           OR: [
