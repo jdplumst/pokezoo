@@ -303,7 +303,7 @@ export default function Game() {
               <button
                 onClick={() => claimReward()}
                 disabled={dailyDisabled}
-                className="w-48 rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
+                className="w-48 rounded-lg border-2 border-black bg-yellow-btn-unfocus p-2 font-bold hover:bg-yellow-btn-focus">
                 {rewardMutation.isLoading ? (
                   <LoadingSpinner />
                 ) : (
@@ -401,7 +401,7 @@ export default function Game() {
 
       {/* Modal for Username */}
       {usernameModal && (
-        <Modal>
+        <Modal size="Small">
           <form
             onSubmit={(e) => handleUsername(e)}
             className="flex w-full flex-col items-center gap-5">

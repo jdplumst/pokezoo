@@ -27,6 +27,8 @@ html {
   --color-orange-btn-unfocus: #f97316;
   --color-lime-btn-focus: #65a30d;
   --color-lime-btn-unfocus: #84cc16;
+  --color-yellow-btn-focus: #eab308;
+  --color-yellow-btn-unfocus: #facc15;
   --color-text: black;
   --color-sidebar-focus: white;
   --color-sidebar-unfocus: #cbd5e1;
@@ -143,6 +145,10 @@ a span:visited {
 /* Ball Grid */
 .balls {
   grid-template-columns: repeat(auto-fill, 288px);
+}
+
+.trades {
+  grid-template-columns: repeat(auto-fill, 600px);
 }
 
 /* Card Hover Animation */
