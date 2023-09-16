@@ -2,6 +2,13 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 
 export const tradeRouter = router({
+  getTrades: protectedProcedure.query(async ({ ctx }) => {
+    const trades = await ctx.prisma.trade.findMany({
+      orderBy: { modifyDate: "desc" }
+    });
+    return { trades: trades };
+  }),
+
   initiateTrade: protectedProcedure
     .input(
       z.object({ instanceId: z.string(), description: z.string().nullish() })
