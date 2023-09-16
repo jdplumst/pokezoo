@@ -126,7 +126,8 @@ export const tradeRouter = router({
         where: { id: input.tradeId },
         data: {
           offererId: ctx.session.user.id,
-          offererInstanceId: input.instanceId
+          offererInstanceId: input.instanceId,
+          modifyDate: new Date()
         }
       });
       return { trade: newTrade };
@@ -146,7 +147,11 @@ export const tradeRouter = router({
       }
       await ctx.prisma.trade.update({
         where: { id: input.tradeId },
-        data: { offererId: null, offererInstanceId: null }
+        data: {
+          offererId: null,
+          offererInstanceId: null,
+          modifyDate: new Date()
+        }
       });
     }),
 
@@ -193,7 +198,11 @@ export const tradeRouter = router({
       }
       const newTrade = await ctx.prisma.trade.update({
         where: { id: input.tradeId },
-        data: { offererId: null, offererInstanceId: null }
+        data: {
+          offererId: null,
+          offererInstanceId: null,
+          modifyDate: new Date()
+        }
       });
       return { trade: newTrade };
     })
