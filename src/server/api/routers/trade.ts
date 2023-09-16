@@ -4,7 +4,25 @@ import { protectedProcedure, router } from "../trpc";
 export const tradeRouter = router({
   getTrades: protectedProcedure.query(async ({ ctx }) => {
     const trades = await ctx.prisma.trade.findMany({
-      orderBy: { modifyDate: "desc" }
+      orderBy: { modifyDate: "desc" },
+      include: {
+        initiator: { select: { username: true } },
+        offerer: { select: { username: true } },
+        initiatorInstance: {
+          select: {
+            species: {
+              select: { name: true, img: true, rarity: true, shiny: true }
+            }
+          }
+        },
+        offererInstance: {
+          select: {
+            species: {
+              select: { name: true, img: true, rarity: true, shiny: true }
+            }
+          }
+        }
+      }
     });
     return { trades: trades };
   }),
