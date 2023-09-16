@@ -36,6 +36,9 @@ export default function Trades() {
 
   const cancelMutation = trpc.trade.cancelTrade.useMutation();
 
+  const acceptMutation = trpc.trade.acceptTrade.useMutation();
+  const rejectMutation = trpc.trade.rejectTrade.useMutation();
+
   const [tradeId, setTradeId] = useState("-1");
 
   const [time, setTime] = useState<Time>("night");
@@ -141,7 +144,7 @@ export default function Trades() {
                               )
                             }
                             disabled={cancelMutation.isLoading}
-                            className="w-24 rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+                            className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
                             Cancel
                           </button>
                         ) : (
@@ -183,6 +186,40 @@ export default function Trades() {
                               className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
                               Withdraw
                             </button>
+                          ) : t.offererId &&
+                            t.initiatorId === session.user.id ? (
+                            <div className="flex gap-5">
+                              <button
+                                onClick={() =>
+                                  acceptMutation.mutate(
+                                    { tradeId: t.id },
+                                    {
+                                      onSuccess(data, variables, context) {
+                                        utils.trade.getTrades.invalidate();
+                                      }
+                                    }
+                                  )
+                                }
+                                disabled={acceptMutation.isLoading}
+                                className="w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus">
+                                Accept
+                              </button>
+                              <button
+                                onClick={() =>
+                                  rejectMutation.mutate(
+                                    { tradeId: t.id },
+                                    {
+                                      onSuccess(data, variables, context) {
+                                        utils.trade.getTrades.invalidate();
+                                      }
+                                    }
+                                  )
+                                }
+                                disabled={rejectMutation.isLoading}
+                                className="w-24 rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+                                Reject
+                              </button>
+                            </div>
                           ) : (
                             <div className="h-11"></div>
                           )}
