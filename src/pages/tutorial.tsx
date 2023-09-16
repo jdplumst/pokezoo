@@ -211,12 +211,28 @@ export default function Tutorial() {
               cannot be obtained.
             </p>
             <br></br>
-            <p className="pb-4">
+            <p>
               Pokémon can also be sold from the game page. Common Pokémon can be
               sold for P50, Rare Pokémon can be sold for P250, Epic Pokémon can
               be sold for P1,500, and Legendary Pokémon can be sold for P5,000.
               Shiny Pokémon can be sold for double the amount of their non-shiny
               counterparts.
+            </p>
+            <br></br>
+            <p className="pb-4">
+              Users can also trade Pokémon with each other from the{" "}
+              <a href="https://pokezoo.vercel.app/trades">
+                <span>trades page</span>
+              </a>
+              . In a trade, there are 2 people: an initiator and an offerer.
+              Anyone can be an initiator by simply creating a new trade. When a
+              user sees a trade that has already been created that they like,
+              they can become an offerer by offering up one of their own
+              Pokémon. Then, the initiator can choose whether they want to
+              accept or reject this offer. Each trade can only have one offer at
+              a time. The initiator can choose to cancel the trade at any time
+              before the trade ends, and the offerer can choose to withdraw from
+              the trade at any time before the trade ends.
             </p>
           </main>
         </Sidebar>
