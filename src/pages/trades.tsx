@@ -29,11 +29,15 @@ export default function Trades() {
 
   const initiateMutation = trpc.trade.initiateTrade.useMutation();
   const [initiateModal, setInitiateModal] = useState(false);
+  const [description, setDescription] = useState("");
+
+  const offerMutation = trpc.trade.offerTrade.useMutation();
+  const [offerModal, setOfferModal] = useState(false);
+  const [tradeId, setTradeId] = useState("-1");
 
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
-  const [description, setDescription] = useState("");
 
   // Set time and user data
   useEffect(() => {
@@ -115,7 +119,7 @@ export default function Trades() {
                             height={150}></img>
                           <div className="text-center font-bold capitalize">
                             {t.initiatorInstance.species.name}
-                            {!t.initiatorInstance.species.shiny && `⭐`}
+                            {t.initiatorInstance.species.shiny && `⭐`}
                           </div>
                         </div>
                         {t.description && t.description.length > 0 && (
@@ -154,7 +158,7 @@ export default function Trades() {
                               height={150}></img>
                             <div className="text-center font-bold capitalize">
                               {t.offererInstance.species.name}
-                              {!t.offererInstance.species.shiny && `⭐`}
+                              {t.offererInstance.species.shiny && `⭐`}
                             </div>
                           </div>
                           {t.description && t.description.length > 0 && (
@@ -178,8 +182,11 @@ export default function Trades() {
                             <div>This trade currently has no offers!</div>
                           </div>
                           <button
-                            // onClick={() => purchaseBall(b)}
-                            // disabled={disabled}
+                            onClick={() => {
+                              setOfferModal(true);
+                              setTradeId(t.id);
+                            }}
+                            disabled={offerModal}
                             className="w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus">
                             Add Offer
                           </button>
@@ -194,25 +201,29 @@ export default function Trades() {
         </Sidebar>
 
         {/* Modal for Selecting Pokemon */}
-        {initiateModal && (
+        {(initiateModal || offerModal) && (
           <Modal size="Large">
             <button
               onClick={() => {
                 setInitiateModal(false);
+                setOfferModal(false);
                 setError(null);
                 setDescription("");
+                setTradeId("-1");
               }}
               className="absolute right-4 top-4 text-3xl font-bold">
               X
             </button>
             <div className="p-2 text-3xl font-bold">Select a Pokémon</div>
-            <input
-              maxLength={50}
-              placeholder="Enter a short note here"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="w-1/2 p-2 text-black outline-none"
-            />
+            {initiateModal && (
+              <input
+                maxLength={50}
+                placeholder="Enter a short note here"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                className="w-1/2 p-2 text-black outline-none"
+              />
+            )}
             {error && (
               <div className="flex justify-center font-bold text-red-500">
                 {error}
@@ -263,6 +274,43 @@ export default function Trades() {
                         disabled={initiateMutation.isLoading}
                         className="pointer-events-auto w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus">
                         Trade
+                      </button>
+                    )}
+                    {offerModal && (
+                      <button
+                        onClick={() =>
+                          offerMutation.mutate(
+                            {
+                              instanceId: i.id,
+                              tradeId: tradeId
+                            },
+                            {
+                              onSuccess(data, variables, context) {
+                                setOfferModal(false);
+                                setError(null);
+                                setDescription("");
+                                utils.trade.getTrades.invalidate();
+                              },
+                              onError(error, variables, context) {
+                                if (
+                                  error.message ===
+                                  "You can't give an offer for your own trade"
+                                ) {
+                                  setError(
+                                    "You can't give an offer for your own trade"
+                                  );
+                                } else {
+                                  setError(
+                                    "This Pokémon is already in a trade"
+                                  );
+                                }
+                              }
+                            }
+                          )
+                        }
+                        disabled={offerMutation.isLoading}
+                        className="pointer-events-auto w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus">
+                        Offer
                       </button>
                     )}
                   </div>
