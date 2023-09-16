@@ -24,7 +24,9 @@ export default function Achievements() {
     order: null
   });
 
-  const { data: instanceData } = trpc.instance.getInstanceSpecies.useQuery();
+  const { data: instanceData } = trpc.instance.getInstanceSpecies.useQuery({
+    distinct: true
+  });
 
   const { data: achievementData } = trpc.achievement.getAchievements.useQuery();
 
