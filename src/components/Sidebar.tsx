@@ -42,8 +42,8 @@ export default function Sidebar({ children, page }: ISidebar) {
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"
               alt="game"
-              width={50}
-              height={50}
+              width={45}
+              height={45}
               className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
             />
             <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
@@ -59,8 +59,8 @@ export default function Sidebar({ children, page }: ISidebar) {
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/coin-case.png"
               alt="shop"
-              width={50}
-              height={50}
+              width={45}
+              height={45}
               className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
             />
             <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
@@ -77,8 +77,8 @@ export default function Sidebar({ children, page }: ISidebar) {
               // src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/badges/31.png"
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/badges/29.png"
               alt="shop"
-              width={50}
-              height={50}
+              width={45}
+              height={45}
               className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
             />
             <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
@@ -94,12 +94,29 @@ export default function Sidebar({ children, page }: ISidebar) {
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-radar.png"
               alt="pokedex"
-              width={50}
-              height={50}
+              width={45}
+              height={45}
               className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
             />
             <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
               Pokédex
+            </h2>
+          </div>
+        </Link>
+        <Link href="/trades">
+          <div
+            className={`${
+              page === "Trades" && `bg-sidebar-focus`
+            } mb-4 flex w-full items-center hover:bg-sidebar-unfocus`}>
+            <Image
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/bloom-mail.png"
+              alt="trades"
+              width={45}
+              height={45}
+              className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
+            />
+            <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
+              Trades
             </h2>
           </div>
         </Link>
@@ -111,8 +128,8 @@ export default function Sidebar({ children, page }: ISidebar) {
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/wide-lens.png"
               alt="tutorial"
-              width={50}
-              height={50}
+              width={45}
+              height={45}
               className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
             />
             <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
@@ -128,8 +145,8 @@ export default function Sidebar({ children, page }: ISidebar) {
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pal-pad.png"
               alt="patch_notes"
-              width={50}
-              height={50}
+              width={45}
+              height={45}
               className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
             />
             <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
@@ -143,8 +160,8 @@ export default function Sidebar({ children, page }: ISidebar) {
               <Image
                 src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
                 alt="pokeapi"
-                width={50}
-                height={50}
+                width={45}
+                height={45}
                 className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
               />
               <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>

@@ -74,7 +74,7 @@ export default function Trades() {
       {/* Main Trading Screen */}
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
-        <Sidebar page="Trading">
+        <Sidebar page="Trades">
           <Topbar
             username={session.user.username}
             balance={session.user.balance}
