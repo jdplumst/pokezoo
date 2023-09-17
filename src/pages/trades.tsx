@@ -307,6 +307,7 @@ export default function Trades() {
                     }`}>
                     <div className="text-center text-xl font-bold capitalize">
                       {i.species.name}
+                      {i.species.shiny && `⭐`}
                     </div>
                     <img src={i.species.img} />
                     {initiateModal && (
