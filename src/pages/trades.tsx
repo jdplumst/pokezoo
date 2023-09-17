@@ -107,7 +107,7 @@ export default function Trades() {
                   <div className="h-76 w-[600px] border-2 border-solid border-black bg-rose-600 p-2">
                     <div className="flex h-full w-full justify-between">
                       <div className="flex w-1/2 flex-col items-center justify-between gap-5">
-                        <div className="h-7 text-xl font-bold">
+                        <div className="h-8 text-center text-xl font-bold">
                           {t.initiator.username} wants to trade!
                         </div>
                         <div
@@ -155,7 +155,7 @@ export default function Trades() {
                       <div className="h-full w-[1px] border-2 border-solid border-black"></div>
                       {t.offerer && t.offererInstance ? (
                         <div className="flex w-1/2 flex-col items-center justify-between gap-5">
-                          <div className="h-7 text-xl font-bold">
+                          <div className="h-8 text-center text-xl font-bold">
                             {t.offerer.username} has an offer!
                           </div>
                           <div
