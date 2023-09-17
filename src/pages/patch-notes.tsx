@@ -64,6 +64,19 @@ export default function PatchNotes() {
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
+                4.20 (September 17, 2023)
+              </h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Sorted Pokémon on Trades page modal in Pokédex order.
+              </p>
+              <p className="px-4">
+                Display a star next to the name of shinies on Trades page modal.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">
                 4.19 (September 16, 2023)
               </h3>
               <hr className="border-black"></hr>
