@@ -65,7 +65,7 @@ export default function Trades() {
   return (
     <>
       <Head>
-        <title>PokéZoo - Trading</title>
+        <title>PokéZoo - Trades</title>
         <meta name="description" content="PokéZoo" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
