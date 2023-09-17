@@ -170,6 +170,22 @@ export const tradeRouter = router({
       if (!trade.offererId || !trade.offererInstanceId) {
         throw Error("There is no offer for this trade");
       }
+      const initiatorInstanceYield = await ctx.prisma.instance.findFirst({
+        where: { id: trade.initiatorInstanceId },
+        select: { species: { select: { yield: true } } }
+      });
+      const offererInstanceYield = await ctx.prisma.instance.findFirst({
+        where: { id: trade.offererInstanceId },
+        select: { species: { select: { yield: true } } }
+      });
+      const currInitiatorYield = await ctx.prisma.user.findFirst({
+        where: { id: trade.initiatorId },
+        select: { totalYield: true }
+      });
+      const currOffererYield = await ctx.prisma.user.findFirst({
+        where: { id: trade.offererId },
+        select: { totalYield: true }
+      });
       await ctx.prisma.instance.update({
         where: { id: trade.initiatorInstanceId },
         data: { userId: trade.offererId }
@@ -177,6 +193,24 @@ export const tradeRouter = router({
       await ctx.prisma.instance.update({
         where: { id: trade.offererInstanceId },
         data: { userId: trade.initiatorId }
+      });
+      await ctx.prisma.user.update({
+        where: { id: trade.initiatorId },
+        data: {
+          totalYield:
+            currInitiatorYield?.totalYield! -
+            initiatorInstanceYield?.species.yield! +
+            offererInstanceYield?.species.yield!
+        }
+      });
+      await ctx.prisma.user.update({
+        where: { id: trade.offererId },
+        data: {
+          totalYield:
+            currOffererYield?.totalYield! -
+            offererInstanceYield?.species.yield! +
+            initiatorInstanceYield?.species.yield!
+        }
       });
       await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
     }),
