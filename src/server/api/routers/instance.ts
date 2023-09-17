@@ -75,7 +75,12 @@ export const instanceRouter = router({
               shiny: true
             }
           }
-        }
+        },
+        orderBy: [
+          { species: { pokedexNumber: "asc" } },
+          { species: { name: "asc" } },
+          { species: { shiny: "desc" } }
+        ]
       });
 
       return { instances: instances };
