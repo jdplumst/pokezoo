@@ -64,6 +64,17 @@ export default function PatchNotes() {
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
+                4.21 (September 18, 2023)
+              </h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">Added Luxury Ball.</p>
+              <p className="px-4">
+                Changed Add Trade button to be purple at night.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">
                 4.20 (September 17, 2023)
               </h3>
               <hr className="border-black"></hr>
