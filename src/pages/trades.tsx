@@ -133,9 +133,7 @@ export default function Trades() {
                             {t.initiatorInstance.species.shiny && `⭐`}
                           </div>
                         </div>
-                        {t.description && t.description.length > 0 && (
-                          <div className="h-8 text-xl">{t.description}</div>
-                        )}
+                        <div className="h-8 text-xl">{t.description}</div>
                         {t.initiatorId === session.user.id ? (
                           <button
                             onClick={() =>
@@ -181,9 +179,7 @@ export default function Trades() {
                               {t.offererInstance.species.shiny && `⭐`}
                             </div>
                           </div>
-                          {t.description && t.description.length > 0 && (
-                            <div className="h-8"></div>
-                          )}
+                          <div className="h-8"></div>
                           {t.offererId === session.user.id ? (
                             <button
                               onClick={() =>
