@@ -94,7 +94,11 @@ export default function Trades() {
             <button
               onClick={() => setInitiateModal(true)}
               disabled={initiateModal}
-              className="w-48 rounded-lg border-2 border-black bg-yellow-btn-unfocus p-2 font-bold hover:bg-yellow-btn-focus">
+              className={`w-48 rounded-lg border-2 border-black p-2 font-bold ${
+                time === `day`
+                  ? `bg-yellow-btn-unfocus hover:bg-yellow-btn-focus`
+                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+              }`}>
               Add Trade
             </button>
             {tradeLoading ? (
