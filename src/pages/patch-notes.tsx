@@ -79,10 +79,11 @@ export default function PatchNotes() {
               </h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
-                Sorted Pokémon on Trades page modal in Pokédex order.
+                Sorted Pokémon on the Trades page modal in Pokédex order.
               </p>
               <p className="px-4">
-                Display a star next to the name of shinies on Trades page modal.
+                Display a star next to the name of shinies on the Trades page
+                modal.
               </p>
             </section>
             <hr className="border-black pb-4"></hr>
