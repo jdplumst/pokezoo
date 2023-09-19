@@ -24,6 +24,8 @@ type Sort = "Oldest" | "Newest" | "Pokedex" | "Rarity";
 export default function Game() {
   const router = useRouter();
 
+  const utils = trpc.useContext();
+
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
@@ -31,21 +33,10 @@ export default function Game() {
     }
   });
 
-  const { data: speciesData, isLoading: speciesLoading } =
-    trpc.species.getSpecies.useQuery({
-      order: null
-    });
-
-  const { data: instanceData, isLoading: instanceLoading } =
-    trpc.instance.getInstances.useQuery({
-      distinct: false
-    });
-
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
 
   // Variables associated with cards
-  const [cards, setCards] = useState<Instance[]>();
   const [balance, setBalance] = useState(0);
   const [totalYield, setTotalYield] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -75,6 +66,17 @@ export default function Game() {
   const [usernameError, setUsernameError] = useState<null | string>(null);
   const usernameMutation = trpc.user.selectUsername.useMutation();
 
+  const { data: speciesData, isLoading: speciesLoading } =
+    trpc.species.getSpecies.useQuery({
+      order: null
+    });
+
+  const { data: instanceData, isLoading: instanceLoading } =
+    trpc.instance.getInstances.useQuery({
+      distinct: false,
+      order: sort
+    });
+
   // Set time and user data
   useEffect(() => {
     const today = new Date();
@@ -99,15 +101,9 @@ export default function Game() {
     setLoading(false);
   }, [session]);
 
-  // Set cards
-  useEffect(() => {
-    if (!instanceData) return;
-    setCards(instanceData.instances);
-  }, [instanceData]);
-
   // Display starter and updated yield
   const addStarter = (i: Instance, r: Region) => {
-    setCards((p) => [...p!, i]);
+    utils.instance.getInstances.invalidate();
     setTotalYield((prevTotalYield) => prevTotalYield + 50);
 
     if (r === "Johto") {
@@ -151,58 +147,6 @@ export default function Game() {
     }
   };
 
-  // Change Card Sort Order
-  const changeSort = (s: Sort) => {
-    if (s === "Oldest") {
-      setSort("Oldest");
-      setCards((p) =>
-        p?.sort((a, b) => (a.createDate > b.createDate ? 1 : -1))
-      );
-    } else if (s === "Newest") {
-      setSort("Newest");
-      setCards((p) =>
-        p?.sort((a, b) => (a.createDate < b.createDate ? 1 : -1))
-      );
-    } else if (s === "Pokedex") {
-      setSort("Pokedex");
-      setCards((p) =>
-        p?.sort((a, b) =>
-          (speciesData?.species.find((s) => s.id === a.speciesId)
-            ?.pokedexNumber || 1) >=
-          (speciesData?.species.find((s) => s.id === b.speciesId)
-            ?.pokedexNumber || 1)
-            ? 1
-            : -1
-        )
-      );
-    } else if (s === "Rarity") {
-      setSort("Rarity");
-      setCards((p) =>
-        p
-          ?.sort((a, b) =>
-            (speciesData?.species.find((s) => s.id === a.speciesId)
-              ?.pokedexNumber || 1) >=
-            (speciesData?.species.find((s) => s.id === b.speciesId)
-              ?.pokedexNumber || 1)
-              ? 1
-              : -1
-          )
-          .sort((a, b) =>
-            Rarity[
-              speciesData?.species.find((s) => s.id === a.speciesId)?.rarity ||
-                1
-            ] >=
-            Rarity[
-              speciesData?.species.find((s) => s.id === b.speciesId)?.rarity ||
-                1
-            ]
-              ? 1
-              : -1
-          )
-      );
-    }
-  };
-
   // Add or remove instances from array of instances to be deleted
   const modifyDeleteList = (i: Instance, sell: boolean) => {
     if (sell) {
@@ -219,12 +163,12 @@ export default function Game() {
       { ids: deleteList },
       {
         onSuccess(data, variables, context) {
-          setCards((p) => p?.filter((c) => !data.instances.includes(c.id)));
           setTotalYield(data.user.totalYield);
           setBalance(data.user.balance);
           setError(null);
           setDeleteList([]);
           setDeleteDisabled(false);
+          utils.instance.getInstances.invalidate();
         },
         onError(error, variables, context) {
           setError(error.message);
@@ -329,7 +273,7 @@ export default function Game() {
             {error && <p>{error}</p>}
             <div className="flex justify-center gap-5">
               <button
-                onClick={() => changeSort("Oldest")}
+                onClick={() => setSort("Oldest")}
                 className={`${
                   sort === "Oldest"
                     ? `bg-purple-btn-focus`
@@ -338,7 +282,7 @@ export default function Game() {
                 Oldest
               </button>
               <button
-                onClick={() => changeSort("Newest")}
+                onClick={() => setSort("Newest")}
                 className={`${
                   sort === "Newest"
                     ? `bg-purple-btn-focus`
@@ -347,7 +291,7 @@ export default function Game() {
                 Newest
               </button>
               <button
-                onClick={() => changeSort("Pokedex")}
+                onClick={() => setSort("Pokedex")}
                 className={`${
                   sort === "Pokedex"
                     ? `bg-purple-btn-focus`
@@ -356,7 +300,7 @@ export default function Game() {
                 Pokédex #
               </button>
               <button
-                onClick={() => changeSort("Rarity")}
+                onClick={() => setSort("Rarity")}
                 className={`${
                   sort === "Rarity"
                     ? `bg-purple-btn-focus`

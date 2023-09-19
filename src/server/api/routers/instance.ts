@@ -1,17 +1,82 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
+import { Prisma } from "@prisma/client";
 
 export const instanceRouter = router({
   getInstances: protectedProcedure
     .input(
       z.object({
-        distinct: z.boolean()
+        distinct: z.boolean(),
+        order: z.string()
       })
     )
     .query(async ({ ctx, input }) => {
+      const sort =
+        input.order === "Oldest"
+          ? { createDate: Prisma.SortOrder.asc }
+          : input.order === "Newest"
+          ? { createDate: Prisma.SortOrder.desc }
+          : input.order === "Pokedex"
+          ? [
+              { species: { pokedexNumber: Prisma.SortOrder.asc } },
+              { species: { name: Prisma.SortOrder.asc } }
+            ]
+          : [
+              {
+                species: {
+                  rarity: Prisma.SortOrder.asc
+                }
+              },
+              {
+                species: {
+                  pokedexNumber: Prisma.SortOrder.asc
+                }
+              },
+              { species: { name: Prisma.SortOrder.asc } }
+            ];
       const instances = await ctx.prisma.instance.findMany({
         where: { userId: ctx.session.user.id },
-        distinct: input.distinct ? ["speciesId"] : undefined
+        distinct: input.distinct ? ["speciesId"] : undefined,
+        orderBy: sort
+
+        // orderBy: {
+        //   createDate:
+        //     input.order === "Oldest"
+        //       ? "asc"
+        //       : input.order === "Newest"
+        //       ? "desc"
+        //       : undefined,
+        //   species: {
+        //     pokedexNumber: input.order === "Pokedex" ? "asc" : undefined,
+        //     rarity: input.order === "Rarity" ? "asc" : undefined
+        //   }
+        // }
+        // orderBy: [
+        //   {
+        //     createDate:
+        //       input.order === "Oldest"
+        //         ? "asc"
+        //         : input.order === "Newest"
+        //         ? "desc"
+        //         : undefined
+        //   },
+        //   {
+        //     species: {
+        //       pokedexNumber: input.order === "Pokedex" ? "asc" : undefined
+        //     }
+        //   }
+        //   // { species: { rarity: input.order === "Rarity" ? "asc" : undefined } }
+        // ]
+        // orderBy: [
+        //   ...(input.order === "Oldest" ? )
+        // input.order === "Newest" && { createDate: "desc" }
+        // {
+        //   ...(input.order === "Pokedex" && {
+        //     species: { pokedexNumber: "asc" }
+        //   })
+        // },
+        // { ...(input.order === "Rarity" && { species: { rarity: "asc" } }) }
+        // ]
       });
 
       return { instances: instances };

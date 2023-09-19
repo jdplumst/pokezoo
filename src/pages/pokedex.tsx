@@ -87,7 +87,8 @@ export default function Pokedex() {
 
   const { data: instanceData, isLoading: instanceLoading } =
     trpc.instance.getInstances.useQuery({
-      distinct: true
+      distinct: true,
+      order: "Oldest"
     });
 
   const [time, setTime] = useState<Time>("night");
