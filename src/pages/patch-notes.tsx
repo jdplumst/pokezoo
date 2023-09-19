@@ -64,6 +64,17 @@ export default function PatchNotes() {
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
+                4.22 (September 19, 2023)
+              </h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Sold Pokémon now get removed from the Pokémon list on the Game
+                page without the user having to manually refresh the page.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">
                 4.21 (September 18, 2023)
               </h3>
               <hr className="border-black"></hr>
