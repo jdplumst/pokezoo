@@ -64,6 +64,17 @@ export default function PatchNotes() {
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
+                4.23 (September 20, 2023)
+              </h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Set maximum total yield to 1,000,000,000.
+              </p>
+              <p className="px-4">Set maximum balance to 1,000,000,000.</p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">
                 4.22 (September 19, 2023)
               </h3>
               <hr className="border-black"></hr>
