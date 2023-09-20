@@ -38,45 +38,6 @@ export const instanceRouter = router({
         where: { userId: ctx.session.user.id },
         distinct: input.distinct ? ["speciesId"] : undefined,
         orderBy: sort
-
-        // orderBy: {
-        //   createDate:
-        //     input.order === "Oldest"
-        //       ? "asc"
-        //       : input.order === "Newest"
-        //       ? "desc"
-        //       : undefined,
-        //   species: {
-        //     pokedexNumber: input.order === "Pokedex" ? "asc" : undefined,
-        //     rarity: input.order === "Rarity" ? "asc" : undefined
-        //   }
-        // }
-        // orderBy: [
-        //   {
-        //     createDate:
-        //       input.order === "Oldest"
-        //         ? "asc"
-        //         : input.order === "Newest"
-        //         ? "desc"
-        //         : undefined
-        //   },
-        //   {
-        //     species: {
-        //       pokedexNumber: input.order === "Pokedex" ? "asc" : undefined
-        //     }
-        //   }
-        //   // { species: { rarity: input.order === "Rarity" ? "asc" : undefined } }
-        // ]
-        // orderBy: [
-        //   ...(input.order === "Oldest" ? )
-        // input.order === "Newest" && { createDate: "desc" }
-        // {
-        //   ...(input.order === "Pokedex" && {
-        //     species: { pokedexNumber: "asc" }
-        //   })
-        // },
-        // { ...(input.order === "Rarity" && { species: { rarity: "asc" } }) }
-        // ]
       });
 
       return { instances: instances };
@@ -182,10 +143,14 @@ export const instanceRouter = router({
           "You have reached your limit. Sell Pokémon if you want to buy more."
         );
       }
+      const newYield =
+        currUser.totalYield + species.yield > 1000000000
+          ? 1000000000
+          : currUser.totalYield + species.yield;
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
         data: {
-          totalYield: currUser.totalYield + species.yield,
+          totalYield: newYield,
           balance: currUser.balance - input.cost,
           instanceCount: currUser.instanceCount + 1
         }
@@ -226,11 +191,15 @@ export const instanceRouter = router({
       if (!species) {
         throw Error("Species does not exist.");
       }
+      const newBalance =
+        currUser.balance + species.sellPrice > 1000000000
+          ? 1000000000
+          : currUser.balance + species.sellPrice;
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
         data: {
           totalYield: currUser.totalYield - species.yield,
-          balance: currUser.balance + species.sellPrice,
+          balance: newBalance,
           instanceCount: currUser.instanceCount - 1
         }
       });
@@ -261,8 +230,6 @@ export const instanceRouter = router({
       let sumYield = 0;
       let sumSellPrice = 0;
       for (let i of input.ids) {
-        console.log("-----------------------");
-        console.log(i);
         const exists = await ctx.prisma.instance.findUnique({
           where: { id: i },
           select: { speciesId: true }
@@ -283,11 +250,15 @@ export const instanceRouter = router({
         });
         result.push(instance.id);
       }
+      const newBalance =
+        currUser.balance + sumSellPrice > 1000000000
+          ? 1000000000
+          : currUser.balance + sumSellPrice;
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
         data: {
           totalYield: currUser.totalYield - sumYield,
-          balance: currUser.balance + sumSellPrice,
+          balance: newBalance,
           instanceCount: currUser.instanceCount - input.ids.length
         }
       });

@@ -12,7 +12,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "POST":
       try {
-        await prisma.$executeRaw`UPDATE User SET balance = balance + totalYield, claimedDaily = false, claimedNightly = false`;
+        const users = await prisma.user.findMany();
+        for (const user of users) {
+          const newBalance =
+            user.balance + user.totalYield > 1000000000
+              ? 1000000000
+              : user.balance + user.totalYield;
+          await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              balance: newBalance,
+              claimedDaily: false,
+              claimedNightly: false
+            }
+          });
+        }
         return res.status(200).json({
           msg: "Successfully updated all user's dollars and reset daily and nightly claims"
         });
