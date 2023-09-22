@@ -71,6 +71,16 @@ interface IHabitat {
   "Rare": boolean;
 }
 
+interface IDropdowns {
+  Caught: boolean;
+  Shiny: boolean;
+  Region: boolean;
+  Rarity: boolean;
+  Type: boolean;
+  Habitat: boolean;
+  [key: string]: boolean;
+}
+
 export default function Pokedex() {
   const router = useRouter();
 
@@ -153,13 +163,15 @@ export default function Pokedex() {
     "Rare": true
   });
 
-  // Dropdown open states
-  const [caughtOpen, setCaughtOpen] = useState(false);
-  const [shinyOpen, setShinyOpen] = useState(false);
-  const [regionOpen, setRegionOpen] = useState(false);
-  const [rarityOpen, setRarityOpen] = useState(false);
-  const [typeOpen, setTypeOpen] = useState(false);
-  const [habitatOpen, setHabitatOpen] = useState(false);
+  // Dropdown open state
+  const [dropdowns, setDropdowns] = useState<IDropdowns>({
+    Caught: false,
+    Shiny: false,
+    Region: false,
+    Rarity: false,
+    Type: false,
+    Habitat: false
+  });
 
   // Set time
   useEffect(() => {
@@ -401,11 +413,21 @@ export default function Pokedex() {
             <div className="flex justify-center gap-5">
               <div className="w-48">
                 <button
-                  onClick={() => setCaughtOpen((p) => !p)}
+                  onClick={() =>
+                    setDropdowns((p) => {
+                      let res = Object.assign({}, p);
+                      Object.keys(res).forEach((item) => {
+                        item === "Caught"
+                          ? (res[item] = !res[item])
+                          : (res[item] = false);
+                      });
+                      return res;
+                    })
+                  }
                   className="w-full border-2 border-black bg-red-btn-unfocus p-2 font-bold outline-none">
                   Select Caught
                 </button>
-                {caughtOpen && (
+                {dropdowns.Caught && (
                   <ul className="absolute z-10 w-48">
                     <li>
                       <DrowpdownItem
@@ -428,11 +450,21 @@ export default function Pokedex() {
               </div>
               <div className="w-48">
                 <button
-                  onClick={() => setShinyOpen((p) => !p)}
+                  onClick={() =>
+                    setDropdowns((p) => {
+                      let res = Object.assign({}, p);
+                      Object.keys(res).forEach((item) => {
+                        item === "Shiny"
+                          ? (res[item] = !res[item])
+                          : (res[item] = false);
+                      });
+                      return res;
+                    })
+                  }
                   className="w-full border-2 border-black bg-purple-btn-unfocus p-2 font-bold outline-none">
                   Select Shiny
                 </button>
-                {shinyOpen && (
+                {dropdowns.Shiny && (
                   <ul className="absolute z-10 w-48">
                     <li>
                       <DrowpdownItem
@@ -455,11 +487,21 @@ export default function Pokedex() {
               </div>
               <div className="w-48">
                 <button
-                  onClick={() => setRegionOpen((p) => !p)}
+                  onClick={() =>
+                    setDropdowns((p) => {
+                      let res = Object.assign({}, p);
+                      Object.keys(res).forEach((item) => {
+                        item === "Region"
+                          ? (res[item] = !res[item])
+                          : (res[item] = false);
+                      });
+                      return res;
+                    })
+                  }
                   className="w-full border-2 border-black bg-green-btn-unfocus p-2 font-bold outline-none">
                   Select Region
                 </button>
-                {regionOpen && (
+                {dropdowns.Region && (
                   <ul className="absolute z-10 w-48">
                     <li className="border-b-2 border-black">
                       <DrowpdownItem
@@ -488,11 +530,21 @@ export default function Pokedex() {
               </div>
               <div className="w-48">
                 <button
-                  onClick={() => setRarityOpen((p) => !p)}
+                  onClick={() =>
+                    setDropdowns((p) => {
+                      let res = Object.assign({}, p);
+                      Object.keys(res).forEach((item) => {
+                        item === "Rarity"
+                          ? (res[item] = !res[item])
+                          : (res[item] = false);
+                      });
+                      return res;
+                    })
+                  }
                   className="w-full border-2 border-black bg-orange-btn-unfocus p-2 font-bold outline-none">
                   Select Rarity
                 </button>
-                {rarityOpen && (
+                {dropdowns.Rarity && (
                   <ul className="absolute z-10 w-48">
                     <li className="border-b-2 border-black">
                       <DrowpdownItem
@@ -521,11 +573,21 @@ export default function Pokedex() {
               </div>
               <div className="w-48">
                 <button
-                  onClick={() => setTypeOpen((p) => !p)}
+                  onClick={() =>
+                    setDropdowns((p) => {
+                      let res = Object.assign({}, p);
+                      Object.keys(res).forEach((item) => {
+                        item === "Type"
+                          ? (res[item] = !res[item])
+                          : (res[item] = false);
+                      });
+                      return res;
+                    })
+                  }
                   className="w-full border-2 border-black bg-blue-btn-unfocus p-2 font-bold outline-none">
                   Select Type
                 </button>
-                {typeOpen && (
+                {dropdowns.Type && (
                   <ul className="absolute z-10 w-48">
                     <li className="border-b-2 border-black">
                       <DrowpdownItem
@@ -554,11 +616,21 @@ export default function Pokedex() {
               </div>
               <div className="w-48">
                 <button
-                  onClick={() => setHabitatOpen((p) => !p)}
+                  onClick={() =>
+                    setDropdowns((p) => {
+                      let res = Object.assign({}, p);
+                      Object.keys(res).forEach((item) => {
+                        item === "Habitat"
+                          ? (res[item] = !res[item])
+                          : (res[item] = false);
+                      });
+                      return res;
+                    })
+                  }
                   className="w-full border-2 border-black bg-lime-btn-unfocus p-2 font-bold outline-none">
                   Select Habitat
                 </button>
-                {habitatOpen && (
+                {dropdowns.Habitat && (
                   <ul className="absolute z-10 w-48">
                     <li className="border-b-2 border-black">
                       <DrowpdownItem
