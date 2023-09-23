@@ -12,13 +12,6 @@ import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
-enum Rarity {
-  Common = 1,
-  Rare = 2,
-  Epic = 3,
-  Legendary = 4
-}
-
 type Sort = "Oldest" | "Newest" | "Pokedex" | "Rarity";
 
 export default function Game() {

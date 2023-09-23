@@ -16,10 +16,8 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
   const [starter, setStarter] = useState<Starter | null>(null);
   const [error, setError] = useState<any>(null);
   const [disabled, setDisabled] = useState(false);
-  const purchaseMutation = trpc.instance.purchaseInstance.useMutation();
-  const johtoMutation = trpc.instance.getJohto.useMutation();
-  const hoennMutation = trpc.instance.getHoenn.useMutation();
-  const sinnohMutation = trpc.instance.getSinnoh.useMutation();
+  const purchaseMutation = trpc.instance.purchaseInstance.useMutation(); // Kanto
+  const starterMutation = trpc.instance.getStarter.useMutation();
 
   const grassStarter =
     region === "Kanto"
@@ -74,35 +72,9 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
             }
           }
         );
-      } else if (region === "Johto") {
-        johtoMutation.mutate(
-          { userId: user.id, speciesId: speciesId, cost: 0 },
-          {
-            onSuccess(data, variables, context) {
-              addStarter(data.instance, region);
-            },
-            onError(error, variables, context) {
-              setError(error.message);
-              setDisabled(false);
-            }
-          }
-        );
-      } else if (region === "Hoenn") {
-        hoennMutation.mutate(
-          { userId: user.id, speciesId: speciesId, cost: 0 },
-          {
-            onSuccess(data, variables, context) {
-              addStarter(data.instance, region);
-            },
-            onError(error, variables, context) {
-              setError(error.message);
-              setDisabled(false);
-            }
-          }
-        );
-      } else if (region === "Sinnoh") {
-        sinnohMutation.mutate(
-          { userId: user.id, speciesId: speciesId, cost: 0 },
+      } else {
+        starterMutation.mutate(
+          { speciesId: speciesId, region: region },
           {
             onSuccess(data, variables, context) {
               addStarter(data.instance, region);
