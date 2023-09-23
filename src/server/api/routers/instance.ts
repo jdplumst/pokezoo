@@ -268,12 +268,11 @@ export const instanceRouter = router({
       };
     }),
 
-  getJohto: protectedProcedure
+  getStarter: protectedProcedure
     .input(
       z.object({
         speciesId: z.string(),
-        userId: z.string(),
-        cost: z.number()
+        region: z.string()
       })
     )
     .mutation(async ({ ctx, input }) => {
@@ -283,113 +282,19 @@ export const instanceRouter = router({
           totalYield: true,
           balance: true,
           instanceCount: true,
-          johtoStarter: true
-        }
-      });
-      if (!currUser) {
-        throw Error("Not authorized to make this request");
-      }
-      if (currUser.johtoStarter) {
-        throw Error("You have already received a Johto starter.");
-      }
-      const species = await ctx.prisma.species.findUnique({
-        where: {
-          id: input.speciesId
-        }
-      });
-      if (!species) {
-        throw Error("Species does not exist.");
-      }
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          totalYield: currUser.totalYield + species.yield,
-          balance: currUser.balance - input.cost,
-          instanceCount: currUser.instanceCount + 1,
-          johtoStarter: true
-        }
-      });
-      const instance = await ctx.prisma.instance.create({
-        data: { userId: ctx.session.user.id, speciesId: input.speciesId }
-      });
-      return {
-        instance: instance,
-        user: user
-      };
-    }),
-
-  getHoenn: protectedProcedure
-    .input(
-      z.object({
-        speciesId: z.string(),
-        userId: z.string(),
-        cost: z.number()
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: {
-          totalYield: true,
-          balance: true,
-          instanceCount: true,
-          hoennStarter: true
-        }
-      });
-      if (!currUser) {
-        throw Error("Not authorized to make this request");
-      }
-      if (currUser.hoennStarter) {
-        throw Error("You have already received a Hoenn starter.");
-      }
-      const species = await ctx.prisma.species.findUnique({
-        where: {
-          id: input.speciesId
-        }
-      });
-      if (!species) {
-        throw Error("Species does not exist.");
-      }
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          totalYield: currUser.totalYield + species.yield,
-          balance: currUser.balance - input.cost,
-          instanceCount: currUser.instanceCount + 1,
-          hoennStarter: true
-        }
-      });
-      const instance = await ctx.prisma.instance.create({
-        data: { userId: ctx.session.user.id, speciesId: input.speciesId }
-      });
-      return {
-        instance: instance,
-        user: user
-      };
-    }),
-
-  getSinnoh: protectedProcedure
-    .input(
-      z.object({
-        speciesId: z.string(),
-        userId: z.string(),
-        cost: z.number()
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: {
-          totalYield: true,
-          balance: true,
-          instanceCount: true,
+          johtoStarter: true,
+          hoennStarter: true,
           sinnohStarter: true
         }
       });
       if (!currUser) {
         throw Error("Not authorized to make this request");
       }
-      if (currUser.sinnohStarter) {
+      if (input.region === "Johto" && currUser.johtoStarter) {
+        throw Error("You have already received a Johto starter.");
+      } else if (input.region === "Hoenn" && currUser.hoennStarter) {
+        throw Error("You have already received a Hoenn starter.");
+      } else if (input.region === "Sinnoh" && currUser.sinnohStarter) {
         throw Error("You have already received a Sinnoh starter.");
       }
       const species = await ctx.prisma.species.findUnique({
@@ -400,13 +305,18 @@ export const instanceRouter = router({
       if (!species) {
         throw Error("Species does not exist.");
       }
+      if (species.region !== input.region) {
+        throw Error(`Species does not come from ${input.region}`);
+      }
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
         data: {
           totalYield: currUser.totalYield + species.yield,
-          balance: currUser.balance - input.cost,
           instanceCount: currUser.instanceCount + 1,
-          sinnohStarter: true
+          johtoStarter: input.region === "Johto" ? true : currUser.johtoStarter,
+          hoennStarter: input.region === "Hoenn" ? true : currUser.hoennStarter,
+          sinnohStarter:
+            input.region === "Sinnoh" ? true : currUser.sinnohStarter
         }
       });
       const instance = await ctx.prisma.instance.create({
