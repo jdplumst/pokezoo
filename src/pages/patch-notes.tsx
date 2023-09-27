@@ -64,6 +64,21 @@ export default function PatchNotes() {
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
+                5.00 (September 27, 2023)
+              </h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Added Unova Pokémon! Start collecting Pokémon from Unova
+                alongside Pokémon from Kanto, Johto, Hoenn and Sinnoh.
+              </p>
+              <p className="px-4">
+                All exising users will get to choose a Unova starter between
+                Snivy, Tepig, and Oshawott for free!
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">
                 4.24 (September 22, 2023)
               </h3>
               <hr className="border-black"></hr>
