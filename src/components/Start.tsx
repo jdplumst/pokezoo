@@ -26,7 +26,10 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
       ? "chikorita"
       : region === "Hoenn"
       ? "treecko"
-      : "turtwig";
+      : region === "Sinnoh"
+      ? "turtwig"
+      : "snivy";
+
   const fireStarter =
     region === "Kanto"
       ? "charmander"
@@ -34,7 +37,10 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
       ? "cyndaquil"
       : region === "Hoenn"
       ? "torchic"
-      : "chimchar";
+      : region === "Sinnoh"
+      ? "chimchar"
+      : "tepig";
+
   const waterStarter =
     region === "Kanto"
       ? "squirtle"
@@ -42,7 +48,9 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
       ? "totodile"
       : region === "Hoenn"
       ? "mudkip"
-      : "piplup";
+      : region === "Sinnoh"
+      ? "piplup"
+      : "oshawott";
 
   const handleClose = async () => {
     setDisabled(true);

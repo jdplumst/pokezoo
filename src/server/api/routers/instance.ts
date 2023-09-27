@@ -285,7 +285,8 @@ export const instanceRouter = router({
           instanceCount: true,
           johtoStarter: true,
           hoennStarter: true,
-          sinnohStarter: true
+          sinnohStarter: true,
+          unovaStarter: true
         }
       });
       if (!currUser) {
@@ -317,7 +318,8 @@ export const instanceRouter = router({
           johtoStarter: input.region === "Johto" ? true : currUser.johtoStarter,
           hoennStarter: input.region === "Hoenn" ? true : currUser.hoennStarter,
           sinnohStarter:
-            input.region === "Sinnoh" ? true : currUser.sinnohStarter
+            input.region === "Sinnoh" ? true : currUser.sinnohStarter,
+          unovaStarter: input.region === "Unova" ? true : currUser.unovaStarter
         }
       });
       const instance = await ctx.prisma.instance.create({

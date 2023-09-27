@@ -51,6 +51,7 @@ export default function Game() {
   const [claimedJohto, setClaimedJohto] = useState(true);
   const [claimedHoenn, setClaimedHoenn] = useState(true);
   const [claimedSinnoh, setClaimedSinnoh] = useState(true);
+  const [claimedUnova, setClaimedUnova] = useState(true);
 
   // Variables associated with setting username
   const [usernameModal, setUsernameModal] = useState(false);
@@ -88,6 +89,7 @@ export default function Game() {
     setClaimedJohto(session.user.johtoStarter);
     setClaimedHoenn(session.user.hoennStarter);
     setClaimedSinnoh(session.user.sinnohStarter);
+    setClaimedUnova(session.user.unovaStarter);
     setUsernameModal(session.user.username ? false : true);
     setUsername(session.user.username ? session.user.username : "");
 
@@ -105,6 +107,8 @@ export default function Game() {
       setClaimedHoenn(true);
     } else if (r === "Sinnoh") {
       setClaimedSinnoh(true);
+    } else if (r === "Unova") {
+      setClaimedUnova(true);
     }
   };
 
@@ -386,6 +390,16 @@ export default function Game() {
           user={session.user}
           species={speciesData.species}
           region="Sinnoh"
+          addStarter={addStarter}
+        />
+      )}
+
+      {/* Modal for Unova Starter */}
+      {speciesData && !claimedUnova && (
+        <Start
+          user={session.user}
+          species={speciesData.species}
+          region="Unova"
           addStarter={addStarter}
         />
       )}
