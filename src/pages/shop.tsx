@@ -18,7 +18,8 @@ enum region {
   Kanto,
   Johto,
   Hoenn,
-  Sinnoh
+  Sinnoh,
+  Unova
 }
 
 export default function Shop() {
@@ -390,6 +391,15 @@ export default function Shop() {
               }}
               className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
               Sinnoh
+            </button>
+            <button
+              onClick={() => {
+                setRegionCurr(region.Unova);
+                setRegionOpen(false);
+                premierRef.current!.scrollIntoView();
+              }}
+              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+              Unova
             </button>
           </div>
         </Modal>
