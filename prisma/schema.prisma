@@ -61,6 +61,7 @@ model User {
   johtoStarter    Boolean
   hoennStarter    Boolean
   sinnohStarter   Boolean
+  unovaStarter    Boolean
   UserAchievement UserAchievement[]
   TradeInitiator  Trade[]           @relation("initiator")
   TradeOfferer    Trade[]           @relation("offerer")

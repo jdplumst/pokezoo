@@ -24,5 +24,6 @@ declare module "next-auth" {
     johtoStarter: boolean;
     hoennStarter: boolean;
     sinnohStarter: boolean;
+    unovaStarter: boolean;
   }
 }
