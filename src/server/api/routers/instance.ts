@@ -98,7 +98,8 @@ export const instanceRouter = router({
               typeOne: true,
               typeTwo: true,
               generation: true,
-              shiny: true
+              shiny: true,
+              region: true
             }
           }
         },
