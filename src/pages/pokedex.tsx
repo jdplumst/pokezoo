@@ -26,6 +26,7 @@ interface IRegion {
   Johto: boolean;
   Hoenn: boolean;
   Sinnoh: boolean;
+  Unova: boolean;
 }
 
 interface IRarity {
@@ -120,7 +121,8 @@ export default function Pokedex() {
     Kanto: true,
     Johto: true,
     Hoenn: true,
-    Sinnoh: true
+    Sinnoh: true,
+    Unova: true
   });
   const [rarities, setRarities] = useState<IRarity>({
     All: true,
@@ -220,7 +222,8 @@ export default function Pokedex() {
         Kanto: checked,
         Johto: checked,
         Hoenn: checked,
-        Sinnoh: checked
+        Sinnoh: checked,
+        Unova: checked
       });
     } else {
       setRegions({ ...regions, [label]: checked });

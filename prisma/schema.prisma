@@ -173,6 +173,7 @@ enum Region {
   Johto
   Hoenn
   Sinnoh
+  Unova
 }
 
 enum SpeciesType {
