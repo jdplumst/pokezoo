@@ -29,7 +29,7 @@ export default function Card({
           : species.rarity === Rarity.Legendary
           ? `bg-legendary-unfocus hover:bg-legendary-focus`
           : ``
-      } card-hover h-fit w-64 border-2 ${
+      } card-hover h-fit w-[260px] border-2 ${
         species.shiny ? `border-yellow-500` : `border-black`
       } p-2 text-black`}>
       {caught && (

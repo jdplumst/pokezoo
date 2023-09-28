@@ -678,7 +678,7 @@ export default function Pokedex() {
                 <LoadingSpinner />
               </div>
             ) : (
-              <div className="cards grid justify-center gap-5 pt-5">
+              <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
                 {cards?.map((c) => (
                   <Card
                     key={c.id}
