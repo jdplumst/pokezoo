@@ -64,6 +64,14 @@ export default function PatchNotes() {
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
+                5.02 (September 29, 2023)
+              </h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">Added Unova Achievements.</p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">
                 5.01 (September 28, 2023)
               </h3>
               <hr className="border-black"></hr>
