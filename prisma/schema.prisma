@@ -121,7 +121,7 @@ model Achievement {
   id              String            @id @default(cuid())
   description     String
   generation      Int
-  region          Region            @default(Kanto)
+  region          Region
   type            AchievementType
   attribute       Attribute
   shiny           Boolean
