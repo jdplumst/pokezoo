@@ -20,12 +20,11 @@ export const userRouter = router({
       if (input.time !== "day" && input.time !== "night") {
         throw new Error("Invalid input.");
       }
-      let reward = 25;
-      if (currUser.totalYield >= 10000) {
-        reward = 1000;
-      } else if (currUser.totalYield >= 1000) {
-        reward = 100;
-      }
+      const reward = Math.round(
+        Math.random() *
+          (0.125 * currUser.totalYield - 0.075 * currUser.totalYield) +
+          0.075 * currUser.totalYield
+      );
       let user;
       if (input.time === "day") {
         if (currUser.claimedDaily) {
