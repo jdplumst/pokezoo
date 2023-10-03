@@ -90,21 +90,11 @@ export default function Tutorial() {
               this time.
             </p>
             <br></br>
-            <p>Daily and Nightly Rewards work as follows:</p>
-            <ul className="list-disc px-4">
-              <li>
-                If player has total yield of less than P1,000, then they get a
-                P25 reward.
-              </li>
-              <li>
-                If player has total yield of P1,000 or more and less than
-                P10,000, then they get a P100 reward.
-              </li>
-              <li>
-                If player has total yield of P10,000 or more, then they get a
-                P1,000 reward.
-              </li>
-            </ul>
+            <p>
+              Daily and Nightly Rewards give the user a random amount between
+              7.5% of their total yield to 12.5% of their total yield (rounded
+              to the nearest integer).
+            </p>
             <br></br>
             <p>
               Pokémon rarity is calculated as following (using terms from{" "}
