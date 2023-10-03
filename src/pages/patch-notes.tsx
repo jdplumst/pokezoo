@@ -63,6 +63,16 @@ export default function PatchNotes() {
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">5.03 (October 3, 2023)</h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Modified Daily and Nightly rewards to give users a random amount
+                between 7.5% of their total yield to 12.5% of their total yield
+                (rounded to the nearest integer).
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
                 5.02 (September 29, 2023)
               </h3>
