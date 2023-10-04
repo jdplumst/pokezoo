@@ -25,6 +25,7 @@ export const userRouter = router({
           (0.125 * currUser.totalYield - 0.075 * currUser.totalYield) +
           0.075 * currUser.totalYield
       );
+      const newBalance = reward > 1000000000 ? 1000000000 : reward;
       let user;
       if (input.time === "day") {
         if (currUser.claimedDaily) {
@@ -32,7 +33,7 @@ export const userRouter = router({
         }
         user = await ctx.prisma.user.update({
           where: { id: ctx.session.user.id },
-          data: { balance: currUser.balance + reward, claimedDaily: true }
+          data: { balance: currUser.balance + newBalance, claimedDaily: true }
         });
       } else {
         if (currUser.claimedNightly) {
@@ -40,7 +41,7 @@ export const userRouter = router({
         }
         user = await ctx.prisma.user.update({
           where: { id: ctx.session.user.id },
-          data: { balance: currUser.balance + reward, claimedNightly: true }
+          data: { balance: currUser.balance + newBalance, claimedNightly: true }
         });
       }
 
