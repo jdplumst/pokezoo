@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
+import { TRPCError } from "@trpc/server";
 
 export const achievementRouter = router({
   getAchievements: protectedProcedure.query(async ({ ctx }) => {
@@ -15,21 +16,30 @@ export const achievementRouter = router({
         select: { totalYield: true, id: true }
       });
       if (!currUser || currUser.id !== input.userId) {
-        throw Error("Not authorized to make this request");
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authorized to make this request"
+        });
       }
 
       const achievement = await ctx.prisma.achievement.findFirst({
         where: { id: input.achievementId }
       });
       if (!achievement) {
-        throw Error("Achievement does not exist");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Achievement does not exist"
+        });
       }
 
       const exists = await ctx.prisma.userAchievement.findFirst({
         where: { userId: input.userId, achievementId: input.achievementId }
       });
       if (exists) {
-        throw Error("You have already claimed this achievement.");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You have already claimed this achievement."
+        });
       }
 
       const user = await ctx.prisma.user.update({

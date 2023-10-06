@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { Prisma } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
 
 export const instanceRouter = router({
   getInstances: protectedProcedure
@@ -126,10 +127,16 @@ export const instanceRouter = router({
         select: { totalYield: true, balance: true, instanceCount: true }
       });
       if (!currUser) {
-        throw Error("Not authorized to make this request");
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authorized to make this request"
+        });
       }
       if (currUser.balance < input.cost) {
-        throw Error("You cannot afford this ball.");
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You cannot afford this ball."
+        });
       }
       const species = await ctx.prisma.species.findUnique({
         where: {
@@ -137,12 +144,17 @@ export const instanceRouter = router({
         }
       });
       if (!species) {
-        throw Error("Species does not exist.");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Species does not exist."
+        });
       }
       if (currUser.instanceCount >= 2000) {
-        throw Error(
-          "You have reached your limit. Sell Pokémon if you want to buy more."
-        );
+        throw new TRPCError({
+          code: "CONFLICT",
+          message:
+            "You have reached your limit. Sell Pokémon if you want to buy more."
+        });
       }
       const newYield =
         currUser.totalYield + species.yield > 1000000000
@@ -177,20 +189,29 @@ export const instanceRouter = router({
         select: { totalYield: true, balance: true, instanceCount: true }
       });
       if (!currUser) {
-        throw Error("Not authorized to make this request");
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authorized to make this request"
+        });
       }
       const exists = await ctx.prisma.instance.findUnique({
         where: { id: input.id },
         select: { speciesId: true }
       });
       if (!exists) {
-        throw Error("Instance does not exist.");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Instance does not exist."
+        });
       }
       const species = await ctx.prisma.species.findUnique({
         where: { id: exists.speciesId }
       });
       if (!species) {
-        throw Error("Species does not exist.");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Species does not exist."
+        });
       }
       const newBalance =
         currUser.balance + species.sellPrice > 1000000000
@@ -226,7 +247,10 @@ export const instanceRouter = router({
         select: { totalYield: true, balance: true, instanceCount: true }
       });
       if (!currUser) {
-        throw Error("Not authorized to make this request");
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authorized to make this request"
+        });
       }
       let sumYield = 0;
       let sumSellPrice = 0;
@@ -236,13 +260,19 @@ export const instanceRouter = router({
           select: { speciesId: true }
         });
         if (!exists) {
-          throw Error("Instance does not exist.");
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Instance does not exist."
+          });
         }
         const species = await ctx.prisma.species.findUnique({
           where: { id: exists.speciesId }
         });
         if (!species) {
-          throw Error("Species does not exist.");
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Species does not exist."
+          });
         }
         sumYield += species.yield;
         sumSellPrice += species.sellPrice;
@@ -290,14 +320,26 @@ export const instanceRouter = router({
         }
       });
       if (!currUser) {
-        throw Error("Not authorized to make this request");
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authorized to make this request"
+        });
       }
       if (input.region === "Johto" && currUser.johtoStarter) {
-        throw Error("You have already received a Johto starter.");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You have already received a Johto starter."
+        });
       } else if (input.region === "Hoenn" && currUser.hoennStarter) {
-        throw Error("You have already received a Hoenn starter.");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You have already received a Hoenn starter."
+        });
       } else if (input.region === "Sinnoh" && currUser.sinnohStarter) {
-        throw Error("You have already received a Sinnoh starter.");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You have already received a Sinnoh starter."
+        });
       }
       const species = await ctx.prisma.species.findUnique({
         where: {
@@ -305,10 +347,16 @@ export const instanceRouter = router({
         }
       });
       if (!species) {
-        throw Error("Species does not exist.");
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Species does not exist."
+        });
       }
       if (species.region !== input.region) {
-        throw Error(`Species does not come from ${input.region}`);
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Species does not come from ${input.region}`
+        });
       }
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },

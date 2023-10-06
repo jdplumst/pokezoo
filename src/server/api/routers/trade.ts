@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
+import { TRPCError } from "@trpc/server";
 
 export const tradeRouter = router({
   getTrades: protectedProcedure.query(async ({ ctx }) => {
@@ -37,12 +38,16 @@ export const tradeRouter = router({
         where: { id: input.instanceId }
       });
       if (!instance) {
-        throw Error(`Instance with id ${input.instanceId} does not exist`);
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Instance with id ${input.instanceId} does not exist`
+        });
       }
       if (instance?.userId !== initiatorId) {
-        throw Error(
-          `Instance with id ${input.instanceId} does not belong to you`
-        );
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: `Instance with id ${input.instanceId} does not belong to you`
+        });
       }
       const exists = await ctx.prisma.trade.findFirst({
         where: {
@@ -53,9 +58,10 @@ export const tradeRouter = router({
         }
       });
       if (exists) {
-        throw Error(
-          `Instance with id ${input.instanceId} is already in a trade`
-        );
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: `Instance with id ${input.instanceId} is already in a trade`
+        });
       }
       const trade = await ctx.prisma.trade.create({
         data: {
@@ -74,10 +80,16 @@ export const tradeRouter = router({
         where: { id: input.tradeId }
       });
       if (!trade) {
-        throw Error(`Trade with id ${input.tradeId} does not exist`);
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Trade with id ${input.tradeId} does not exist`
+        });
       }
       if (trade.initiatorId !== ctx.session.user.id) {
-        throw Error("You are not authorized to cancel this trade");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not authorized to cancel this trade"
+        });
       }
       await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
     }),
@@ -90,24 +102,37 @@ export const tradeRouter = router({
         where: { id: input.instanceId }
       });
       if (!instance) {
-        throw Error(`Instance with id ${input.instanceId} does not exist`);
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Instance with id ${input.instanceId} does not exist`
+        });
       }
       if (instance?.userId !== offererId) {
-        throw Error(
-          `Instance with id ${input.instanceId} does not belong to you`
-        );
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: `Instance with id ${input.instanceId} does not belong to you`
+        });
       }
       const trade = await ctx.prisma.trade.findFirst({
         where: { id: input.tradeId }
       });
       if (!trade) {
-        throw Error(`Trade with id ${input.tradeId} does not exist`);
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Trade with id ${input.tradeId} does not exist`
+        });
       }
       if (trade.offererId) {
-        throw Error("There is already an offer for this trade");
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "There is already an offer for this trade"
+        });
       }
       if (trade.initiatorId === ctx.session.user.id) {
-        throw Error("You can't give an offer for your own trade");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You can't give an offer for your own trade"
+        });
       }
       const exists = await ctx.prisma.trade.findFirst({
         where: {
@@ -118,9 +143,10 @@ export const tradeRouter = router({
         }
       });
       if (exists) {
-        throw Error(
-          `Instance with id ${input.instanceId} is already in a trade`
-        );
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: `Instance with id ${input.instanceId} is already in a trade`
+        });
       }
       const newTrade = await ctx.prisma.trade.update({
         where: { id: input.tradeId },
@@ -140,10 +166,16 @@ export const tradeRouter = router({
         where: { id: input.tradeId }
       });
       if (!trade) {
-        throw Error(`Trade with id ${input.tradeId} does not exist`);
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Trade with id ${input.tradeId} does not exist`
+        });
       }
       if (trade.offererId !== ctx.session.user.id) {
-        throw Error("You are not the offerer for this trade");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not the offerer for this trade"
+        });
       }
       await ctx.prisma.trade.update({
         where: { id: input.tradeId },
@@ -162,13 +194,22 @@ export const tradeRouter = router({
         where: { id: input.tradeId }
       });
       if (!trade) {
-        throw Error(`Trade with id ${input.tradeId} does not exist`);
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Trade with id ${input.tradeId} does not exist`
+        });
       }
       if (trade.initiatorId !== ctx.session.user.id) {
-        throw Error("You are not the initiator for this trade");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not the initiator for this trade"
+        });
       }
       if (!trade.offererId || !trade.offererInstanceId) {
-        throw Error("There is no offer for this trade");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "There is no offer for this trade"
+        });
       }
       const initiatorInstanceYield = await ctx.prisma.instance.findFirst({
         where: { id: trade.initiatorInstanceId },
@@ -222,13 +263,22 @@ export const tradeRouter = router({
         where: { id: input.tradeId }
       });
       if (!trade) {
-        throw Error(`Trade with id ${input.tradeId} does not exist`);
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: `Trade with id ${input.tradeId} does not exist`
+        });
       }
       if (trade.initiatorId !== ctx.session.user.id) {
-        throw Error("You are not the initiator for this trade");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You are not the initiator for this trade"
+        });
       }
       if (!trade.offererId || !trade.offererInstanceId) {
-        throw Error("There is no offer for this trade");
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "There is no offer for this trade"
+        });
       }
       const newTrade = await ctx.prisma.trade.update({
         where: { id: input.tradeId },

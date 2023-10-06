@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
+import { TRPCError } from "@trpc/server";
 
 export const userRouter = router({
   claimReward: protectedProcedure
@@ -15,10 +16,13 @@ export const userRouter = router({
         }
       });
       if (!currUser) {
-        throw new Error("Not authorized to make this request");
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authorized to make this request"
+        });
       }
       if (input.time !== "day" && input.time !== "night") {
-        throw new Error("Invalid input.");
+        throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid input." });
       }
       const reward = Math.round(
         Math.random() *
@@ -29,7 +33,10 @@ export const userRouter = router({
       let user;
       if (input.time === "day") {
         if (currUser.claimedDaily) {
-          throw new Error("Daily reward already claimed");
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "Daily reward already claimed"
+          });
         }
         user = await ctx.prisma.user.update({
           where: { id: ctx.session.user.id },
@@ -37,7 +44,10 @@ export const userRouter = router({
         });
       } else {
         if (currUser.claimedNightly) {
-          throw new Error("Nightly reward already claimed");
+          throw new TRPCError({
+            code: "CONFLICT",
+            message: "Nightly reward already claimed"
+          });
         }
         user = await ctx.prisma.user.update({
           where: { id: ctx.session.user.id },
@@ -63,10 +73,16 @@ export const userRouter = router({
         }
       });
       if (!currUser) {
-        throw new Error("Not authorized to make this request");
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authorized to make this request"
+        });
       }
       if (input.username.length === 0 || input.username.length > 20) {
-        throw new Error("Username must be between 1 and 20 characters long");
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Username must be between 1 and 20 characters long"
+        });
       }
       const exists = await ctx.prisma.user.findFirst({
         where: { username: input.username }
@@ -75,7 +91,10 @@ export const userRouter = router({
         exists &&
         exists.username?.toLowerCase() === input.username.toLowerCase()
       ) {
-        throw new Error("Username is already taken");
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "Username is already taken"
+        });
       }
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
