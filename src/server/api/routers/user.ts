@@ -12,7 +12,11 @@ export const userRouter = router({
           balance: true,
           claimedDaily: true,
           claimedNightly: true,
-          totalYield: true
+          totalYield: true,
+          commonCards: true,
+          rareCards: true,
+          epicCards: true,
+          legendaryCards: true
         }
       });
       if (!currUser) {
@@ -24,12 +28,27 @@ export const userRouter = router({
       if (input.time !== "day" && input.time !== "night") {
         throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid input." });
       }
+
       const reward = Math.round(
         Math.random() *
           (0.125 * currUser.totalYield - 0.075 * currUser.totalYield) +
           0.075 * currUser.totalYield
       );
       const newBalance = reward > 1000000000 ? 1000000000 : reward;
+
+      type Card = "Common" | "Rare" | "Epic" | "Legendary";
+      const random = Math.random();
+      let card: Card = "Common";
+      if (random < 0.5) {
+        card = "Common";
+      } else if (random < 0.85) {
+        card = "Rare";
+      } else if (random < 0.99) {
+        card = "Epic";
+      } else {
+        card = "Legendary";
+      }
+
       let user;
       if (input.time === "day") {
         if (currUser.claimedDaily) {
@@ -40,7 +59,22 @@ export const userRouter = router({
         }
         user = await ctx.prisma.user.update({
           where: { id: ctx.session.user.id },
-          data: { balance: currUser.balance + newBalance, claimedDaily: true }
+          data: {
+            balance: currUser.balance + newBalance,
+            claimedDaily: true,
+            commonCards:
+              card === "Common"
+                ? currUser.commonCards + 1
+                : currUser.commonCards,
+            rareCards:
+              card === "Rare" ? currUser.rareCards + 1 : currUser.rareCards,
+            epicCards:
+              card === "Epic" ? currUser.epicCards + 1 : currUser.epicCards,
+            legendaryCards:
+              card === "Legendary"
+                ? currUser.legendaryCards + 1
+                : currUser.legendaryCards
+          }
         });
       } else {
         if (currUser.claimedNightly) {
@@ -51,7 +85,22 @@ export const userRouter = router({
         }
         user = await ctx.prisma.user.update({
           where: { id: ctx.session.user.id },
-          data: { balance: currUser.balance + newBalance, claimedNightly: true }
+          data: {
+            balance: currUser.balance + newBalance,
+            claimedNightly: true,
+            commonCards:
+              card === "Common"
+                ? currUser.commonCards + 1
+                : currUser.commonCards,
+            rareCards:
+              card === "Rare" ? currUser.rareCards + 1 : currUser.rareCards,
+            epicCards:
+              card === "Epic" ? currUser.epicCards + 1 : currUser.epicCards,
+            legendaryCards:
+              card === "Legendary"
+                ? currUser.legendaryCards + 1
+                : currUser.legendaryCards
+          }
         });
       }
 

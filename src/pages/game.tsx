@@ -42,6 +42,14 @@ export default function Game() {
   const [nightlyDisabled, setNightlyDisabled] = useState(false);
   const rewardMutation = trpc.user.claimReward.useMutation();
 
+  // Variables associated with wildcards
+  const [wildcards, setWildcards] = useState({
+    Common: 0,
+    Rare: 0,
+    Epic: 0,
+    Legendary: 0
+  });
+
   // Variables associated with selling an instance
   const [deleteList, setDeleteList] = useState<string[]>([]);
   const [deleteDisabled, setDeleteDisabled] = useState(false);
@@ -92,6 +100,12 @@ export default function Game() {
     setClaimedUnova(session.user.unovaStarter);
     setUsernameModal(session.user.username ? false : true);
     setUsername(session.user.username ? session.user.username : "");
+    setWildcards({
+      Common: session.user.commonCards,
+      Rare: session.user.rareCards,
+      Epic: session.user.epicCards,
+      Legendary: session.user.legendaryCards
+    });
 
     setLoading(false);
   }, [session]);
@@ -114,14 +128,20 @@ export default function Game() {
 
   // Claim Daily and Nightly Reward
   const claimReward = async () => {
-    setDailyDisabled(true);
     if (time === "day") {
+      setDailyDisabled(true);
       rewardMutation.mutate(
         { time: time },
         {
           onSuccess(data, variables, context) {
             setClaimedDaily(true);
             setBalance(data.user.balance);
+            setWildcards({
+              Common: data.user.commonCards,
+              Rare: data.user.rareCards,
+              Epic: data.user.epicCards,
+              Legendary: data.user.legendaryCards
+            });
           },
           onError(error, variables, context) {
             setDailyDisabled(false);
@@ -129,12 +149,19 @@ export default function Game() {
         }
       );
     } else if (time === "night") {
+      setNightlyDisabled(true);
       rewardMutation.mutate(
         { time: time },
         {
           onSuccess(data, variables, context) {
             setClaimedNightly(true);
             setBalance(data.user.balance);
+            setWildcards({
+              Common: data.user.commonCards,
+              Rare: data.user.rareCards,
+              Epic: data.user.epicCards,
+              Legendary: data.user.legendaryCards
+            });
           },
           onError(error, variables, context) {
             setNightlyDisabled(false);
@@ -213,10 +240,10 @@ export default function Game() {
             balance={balance}
             totalYield={totalYield}
             totalCards={session.user.instanceCount}
-            commonCards={session.user.commonCards}
-            rareCards={session.user.rareCards}
-            epicCards={session.user.epicCards}
-            legendaryCards={session.user.legendaryCards}
+            commonCards={wildcards.Common}
+            rareCards={wildcards.Rare}
+            epicCards={wildcards.Epic}
+            legendaryCards={wildcards.Legendary}
           />
           {deleteList.length > 0 && (
             <div className="sticky top-0 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">
