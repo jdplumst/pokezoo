@@ -26,6 +26,10 @@ export const authOptions: NextAuthOptions = {
           instanceCount: 0,
           claimedDaily: false,
           claimedNightly: false,
+          commonCards: 0,
+          rareCards: 0,
+          epicCards: 0,
+          legendaryCards: 0,
           johtoStarter: true,
           hoennStarter: true,
           sinnohStarter: true,
@@ -50,6 +54,10 @@ export const authOptions: NextAuthOptions = {
           instanceCount: 0,
           claimedDaily: false,
           claimedNightly: false,
+          commonCards: 0,
+          rareCards: 0,
+          epicCards: 0,
+          legendaryCards: 0,
           johtoStarter: true,
           hoennStarter: true,
           sinnohStarter: true,
@@ -74,6 +82,10 @@ export const authOptions: NextAuthOptions = {
           instanceCount: 0,
           claimedDaily: false,
           claimedNightly: false,
+          commonCards: 0,
+          rareCards: 0,
+          epicCards: 0,
+          legendaryCards: 0,
           johtoStarter: true,
           hoennStarter: true,
           sinnohStarter: true,
@@ -97,6 +109,10 @@ export const authOptions: NextAuthOptions = {
         session.user.instanceCount = user.instanceCount;
         session.user.claimedDaily = user.claimedDaily;
         session.user.claimedNightly = user.claimedNightly;
+        session.user.commonCards = user.commonCards;
+        session.user.rareCards = user.rareCards;
+        session.user.epicCards = user.epicCards;
+        session.user.legendaryCards = user.legendaryCards;
         session.user.johtoStarter = user.johtoStarter;
         session.user.hoennStarter = user.hoennStarter;
         session.user.sinnohStarter = user.sinnohStarter;

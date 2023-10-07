@@ -21,6 +21,10 @@ declare module "next-auth" {
     instanceCount: number;
     claimedDaily: boolean;
     claimedNightly: boolean;
+    commonCards: number;
+    rareCards: number;
+    epicCards: number;
+    legendaryCards: number;
     johtoStarter: boolean;
     hoennStarter: boolean;
     sinnohStarter: boolean;

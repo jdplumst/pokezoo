@@ -58,6 +58,10 @@ model User {
   claimedDaily    Boolean
   claimedNightly  Boolean
   instances       Instance[]
+  commonCards     Int               @default(0)
+  rareCards       Int               @default(0)
+  epicCards       Int               @default(0)
+  legendaryCards  Int               @default(0)
   johtoStarter    Boolean
   hoennStarter    Boolean
   sinnohStarter   Boolean
