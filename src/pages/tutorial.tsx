@@ -49,6 +49,10 @@ export default function Tutorial() {
             balance={session.user.balance}
             totalYield={session.user.totalYield}
             totalCards={session.user.instanceCount}
+            commonCards={session.user.commonCards}
+            rareCards={session.user.rareCards}
+            epicCards={session.user.epicCards}
+            legendaryCards={session.user.legendaryCards}
           />
           <main className="px-8">
             {session.user.admin && (

@@ -253,6 +253,10 @@ export default function Shop() {
             balance={balance}
             totalYield={totalYield}
             totalCards={totalCards}
+            commonCards={session.user.commonCards}
+            rareCards={session.user.rareCards}
+            epicCards={session.user.epicCards}
+            legendaryCards={session.user.legendaryCards}
           />
           <main className="p-4">
             {session.user.admin && (

@@ -213,6 +213,10 @@ export default function Game() {
             balance={balance}
             totalYield={totalYield}
             totalCards={session.user.instanceCount}
+            commonCards={session.user.commonCards}
+            rareCards={session.user.rareCards}
+            epicCards={session.user.epicCards}
+            legendaryCards={session.user.legendaryCards}
           />
           {deleteList.length > 0 && (
             <div className="sticky top-0 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">

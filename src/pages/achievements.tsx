@@ -172,6 +172,10 @@ export default function Achievements() {
             balance={session.user.balance}
             totalYield={totalYield}
             totalCards={session.user.instanceCount}
+            commonCards={session.user.commonCards}
+            rareCards={session.user.rareCards}
+            epicCards={session.user.epicCards}
+            legendaryCards={session.user.legendaryCards}
           />
           <main className="p-4">
             {session.user?.admin && (
