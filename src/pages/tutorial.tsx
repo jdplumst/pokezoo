@@ -97,7 +97,10 @@ export default function Tutorial() {
             <p>
               Daily and Nightly Rewards give the user a random amount between
               7.5% of their total yield to 12.5% of their total yield (rounded
-              to the nearest integer).
+              to the nearest integer). They also give 1 wildcard. There is a 50%
+              chance of obtaining a Common wildcard, 35% chance of obtaining a
+              Rare wildcard, 14% chance of obtaining an Epic wildcard, and a 1%
+              chance of obtaining a Legendary wildcard.
             </p>
             <br></br>
             <p>
