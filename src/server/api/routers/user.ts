@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { MAX_BALANCE } from "@/src/constants";
 
 export const userRouter = router({
   claimReward: protectedProcedure
@@ -34,7 +35,7 @@ export const userRouter = router({
           (0.125 * currUser.totalYield - 0.075 * currUser.totalYield) +
           0.075 * currUser.totalYield
       );
-      const newBalance = reward > 1000000000 ? 1000000000 : reward;
+      const newBalance = reward > MAX_BALANCE ? MAX_BALANCE : reward;
 
       type Card = "Common" | "Rare" | "Epic" | "Legendary";
       const random = Math.random();

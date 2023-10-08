@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { MAX_YIELD } from "@/src/constants";
 
 export const achievementRouter = router({
   getAchievements: protectedProcedure.query(async ({ ctx }) => {
@@ -42,9 +43,14 @@ export const achievementRouter = router({
         });
       }
 
+      const newYield =
+        currUser.totalYield + achievement.yield > MAX_YIELD
+          ? MAX_YIELD
+          : currUser.totalYield + achievement.yield;
+
       const user = await ctx.prisma.user.update({
         where: { id: input.userId },
-        data: { totalYield: currUser.totalYield + achievement.yield }
+        data: { totalYield: newYield }
       });
       const userAchievement = await ctx.prisma.userAchievement.create({
         data: { userId: input.userId, achievementId: input.achievementId }

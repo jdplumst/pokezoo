@@ -2,6 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
+import { MAX_BALANCE, MAX_YIELD } from "@/src/constants";
 
 export const instanceRouter = router({
   getInstances: protectedProcedure
@@ -157,8 +158,8 @@ export const instanceRouter = router({
         });
       }
       const newYield =
-        currUser.totalYield + species.yield > 1000000000
-          ? 1000000000
+        currUser.totalYield + species.yield > MAX_YIELD
+          ? MAX_YIELD
           : currUser.totalYield + species.yield;
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
@@ -214,8 +215,8 @@ export const instanceRouter = router({
         });
       }
       const newBalance =
-        currUser.balance + species.sellPrice > 1000000000
-          ? 1000000000
+        currUser.balance + species.sellPrice > MAX_BALANCE
+          ? MAX_BALANCE
           : currUser.balance + species.sellPrice;
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
@@ -282,8 +283,8 @@ export const instanceRouter = router({
         result.push(instance.id);
       }
       const newBalance =
-        currUser.balance + sumSellPrice > 1000000000
-          ? 1000000000
+        currUser.balance + sumSellPrice > MAX_BALANCE
+          ? MAX_BALANCE
           : currUser.balance + sumSellPrice;
       const user = await ctx.prisma.user.update({
         where: { id: ctx.session.user.id },
