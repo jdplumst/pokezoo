@@ -407,7 +407,9 @@ export default function Game() {
           </div>
           <div className="flex">
             <div className="text-xl font-medium">
-              You received 1 {dailyReward.card} wildcard!
+              You received 1 {dailyReward.modal && dailyReward.card}
+              {""}
+              {nightlyReward.modal && nightlyReward.card} wildcard!
             </div>
             <img
               src={
@@ -418,7 +420,7 @@ export default function Game() {
                     (nightlyReward.modal && nightlyReward.card === "Rare")
                   ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
                   : (dailyReward.modal && dailyReward.card === "Epic") ||
-                    (nightlyReward.modal && nightlyReward.card)
+                    (nightlyReward.modal && nightlyReward.card === "Epic")
                   ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
                   : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
               }
