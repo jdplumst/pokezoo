@@ -40,6 +40,16 @@ export default function Game() {
   const [dailyDisabled, setDailyDisabled] = useState(false);
   const [claimedNightly, setClaimedNightly] = useState(true);
   const [nightlyDisabled, setNightlyDisabled] = useState(false);
+  const [dailyReward, setDailyReward] = useState({
+    modal: false,
+    reward: 0,
+    card: "Common"
+  });
+  const [nightlyReward, setNightlyReward] = useState({
+    modal: false,
+    reward: 0,
+    card: "Common"
+  });
   const rewardMutation = trpc.user.claimReward.useMutation();
 
   // Variables associated with wildcards
@@ -142,6 +152,11 @@ export default function Game() {
               Epic: data.user.epicCards,
               Legendary: data.user.legendaryCards
             });
+            setDailyReward({
+              modal: true,
+              reward: data.reward,
+              card: data.card
+            });
           },
           onError(error, variables, context) {
             setDailyDisabled(false);
@@ -161,6 +176,11 @@ export default function Game() {
               Rare: data.user.rareCards,
               Epic: data.user.epicCards,
               Legendary: data.user.legendaryCards
+            });
+            setNightlyReward({
+              modal: true,
+              reward: data.reward,
+              card: data.card
             });
           },
           onError(error, variables, context) {
@@ -369,6 +389,52 @@ export default function Game() {
           region="Kanto"
           addStarter={addStarter}
         />
+      )}
+
+      {/* Modal for Rewards */}
+      {(dailyReward.modal || nightlyReward.modal) && (
+        <Modal size="Small">
+          <div className="p-2 text-3xl font-bold">
+            You have claimed your {dailyReward.modal && `daily`}
+            {""}
+            {nightlyReward.modal && `nightly`} reward!
+          </div>
+          <div className="text-xl font-medium">
+            You received P
+            {dailyReward.modal && dailyReward.reward.toLocaleString()}
+            {""}
+            {nightlyReward.modal && nightlyReward.reward.toLocaleString()}!
+          </div>
+          <div className="flex">
+            <div className="text-xl font-medium">
+              You received 1 {dailyReward.card} wildcard!
+            </div>
+            <img
+              src={
+                (dailyReward.modal && dailyReward.card === "Common") ||
+                (nightlyReward.modal && nightlyReward.card === "Common")
+                  ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png`
+                  : (dailyReward.modal && dailyReward.card === "Rare") ||
+                    (nightlyReward.modal && nightlyReward.card === "Rare")
+                  ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
+                  : (dailyReward.modal && dailyReward.card === "Epic") ||
+                    (nightlyReward.modal && nightlyReward.card)
+                  ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
+                  : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
+              }
+            />
+          </div>
+          <div className="pt-4">
+            <button
+              onClick={() => {
+                setDailyReward({ ...dailyReward, modal: false });
+                setNightlyReward({ ...nightlyReward, modal: false });
+              }}
+              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+              Got it!
+            </button>
+          </div>
+        </Modal>
       )}
 
       {/* Modal for Username */}

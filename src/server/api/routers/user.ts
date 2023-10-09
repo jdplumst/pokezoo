@@ -106,7 +106,9 @@ export const userRouter = router({
       }
 
       return {
-        user: user
+        user: user,
+        reward: reward,
+        card: card
       };
     }),
 
