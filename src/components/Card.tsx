@@ -152,6 +152,7 @@ export default function Card({
             ? "Rough-Terrain"
             : species.habitat}
         </p>
+        <p>Region: {species.region}</p>
         <p>Yield: P{species.yield.toLocaleString()}</p>
         <p>Sell Price: P{species.sellPrice.toLocaleString()}</p>
         {instance && modifyDeleteList && !beingDeleted && (
