@@ -68,6 +68,17 @@ export default function PatchNotes() {
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
+                5.07 (October 20, 2023)
+              </h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Users can now purchase Pokémon using wildcards from the Pokédex
+                page.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">
                 5.06 (October 19, 2023)
               </h3>
               <hr className="border-black"></hr>
