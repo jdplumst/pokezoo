@@ -2,7 +2,12 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
-import { MAX_BALANCE, MAX_YIELD } from "@/src/constants";
+import {
+  MAX_BALANCE,
+  MAX_YIELD,
+  SHINY_WILDCARD_COST,
+  WILDCARD_COST
+} from "@/src/constants";
 
 export const instanceRouter = router({
   getInstances: protectedProcedure
@@ -166,6 +171,123 @@ export const instanceRouter = router({
         data: {
           totalYield: newYield,
           balance: currUser.balance - input.cost,
+          instanceCount: currUser.instanceCount + 1
+        }
+      });
+      const instance = await ctx.prisma.instance.create({
+        data: { userId: ctx.session.user.id, speciesId: input.speciesId }
+      });
+      return {
+        instance: instance,
+        user: user
+      };
+    }),
+
+  purchaseInstanceWithWildcards: protectedProcedure
+    .input(
+      z.object({
+        speciesId: z.string()
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const currUser = await ctx.prisma.user.findUnique({
+        where: { id: ctx.session.user.id },
+        select: {
+          totalYield: true,
+          instanceCount: true,
+          commonCards: true,
+          rareCards: true,
+          epicCards: true,
+          legendaryCards: true
+        }
+      });
+      if (!currUser) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authorized to make this request"
+        });
+      }
+      const species = await ctx.prisma.species.findUnique({
+        where: {
+          id: input.speciesId
+        }
+      });
+      if (!species) {
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Species does not exist."
+        });
+      }
+      if (
+        (species.rarity === "Common" &&
+          !species.shiny &&
+          currUser.commonCards < WILDCARD_COST) ||
+        (species.rarity === "Common" &&
+          species.shiny &&
+          currUser.commonCards < SHINY_WILDCARD_COST) ||
+        (species.rarity === "Rare" &&
+          !species.shiny &&
+          currUser.rareCards < WILDCARD_COST) ||
+        (species.rarity === "Rare" &&
+          species.shiny &&
+          currUser.rareCards < SHINY_WILDCARD_COST) ||
+        (species.rarity === "Epic" &&
+          !species.shiny &&
+          currUser.epicCards < WILDCARD_COST) ||
+        (species.rarity === "Epic" &&
+          species.shiny &&
+          currUser.epicCards < SHINY_WILDCARD_COST) ||
+        (species.rarity === "Legendary" &&
+          !species.shiny &&
+          currUser.legendaryCards < WILDCARD_COST) ||
+        (species.rarity === "Legendary" &&
+          species.shiny &&
+          currUser.legendaryCards < SHINY_WILDCARD_COST)
+      ) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You cannot afford this Pokémon."
+        });
+      }
+      if (currUser.instanceCount >= 2000) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message:
+            "You have reached your limit. Sell Pokémon if you want to buy more."
+        });
+      }
+      const newYield =
+        currUser.totalYield + species.yield > MAX_YIELD
+          ? MAX_YIELD
+          : currUser.totalYield + species.yield;
+      const user = await ctx.prisma.user.update({
+        where: { id: ctx.session.user.id },
+        data: {
+          totalYield: newYield,
+          commonCards:
+            species.rarity === "Common" && !species.shiny
+              ? currUser.commonCards - WILDCARD_COST
+              : species.rarity === "Common" && species.shiny
+              ? currUser.commonCards - SHINY_WILDCARD_COST
+              : currUser.commonCards,
+          rareCards:
+            species.rarity === "Rare" && !species.shiny
+              ? currUser.rareCards - WILDCARD_COST
+              : species.rarity === "Rare" && species.shiny
+              ? currUser.rareCards - SHINY_WILDCARD_COST
+              : currUser.rareCards,
+          epicCards:
+            species.rarity === "Epic" && !species.shiny
+              ? currUser.epicCards - WILDCARD_COST
+              : species.rarity === "Epic" && species.shiny
+              ? currUser.epicCards - SHINY_WILDCARD_COST
+              : currUser.epicCards,
+          legendaryCards:
+            species.rarity === "Legendary" && !species.shiny
+              ? currUser.legendaryCards - WILDCARD_COST
+              : species.rarity === "Legendary" && species.shiny
+              ? currUser.legendaryCards - SHINY_WILDCARD_COST
+              : currUser.legendaryCards,
           instanceCount: currUser.instanceCount + 1
         }
       });
