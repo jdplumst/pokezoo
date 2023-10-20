@@ -16,7 +16,7 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
   const [starter, setStarter] = useState<Starter | null>(null);
   const [error, setError] = useState<any>(null);
   const [disabled, setDisabled] = useState(false);
-  const purchaseMutation = trpc.instance.purchaseInstance.useMutation(); // Kanto
+  const purchaseMutation = trpc.instance.purchaseInstanceWithBall.useMutation(); // Kanto
   const starterMutation = trpc.instance.getStarter.useMutation();
 
   const grassStarter =

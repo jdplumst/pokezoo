@@ -48,7 +48,7 @@ export default function Shop() {
   const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
   const [boughtBall, setBoughtBall] = useState<Ball>();
-  const purchaseMutation = trpc.instance.purchaseInstance.useMutation();
+  const purchaseMutation = trpc.instance.purchaseInstanceWithBall.useMutation();
 
   // Modal variables
   const [openModal, setOpenModal] = useState(false);

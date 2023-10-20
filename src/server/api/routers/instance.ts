@@ -115,7 +115,7 @@ export const instanceRouter = router({
       return { instances: instances };
     }),
 
-  purchaseInstance: protectedProcedure
+  purchaseInstanceWithBall: protectedProcedure
     .input(
       z.object({
         speciesId: z.string(),
