@@ -1,21 +1,27 @@
 import { Rarity, Species, Instance } from "@prisma/client";
 import Image from "next/image";
 import { useState } from "react";
+import { trpc } from "../utils/trpc";
 
 interface ICard {
   species: Species;
   instance?: Instance;
   modifyDeleteList?: (instance: Instance, sell: boolean) => void;
   caught?: Boolean;
+  handlePurchase?: (species: Species) => void;
 }
 
 export default function Card({
   species,
   instance,
   modifyDeleteList,
-  caught
+  caught,
+  handlePurchase
 }: ICard) {
   const [beingDeleted, setBeingDeleted] = useState(false);
+
+  const purchaseMutation =
+    trpc.instance.purchaseInstanceWithWildcards.useMutation();
 
   return (
     <div
@@ -174,6 +180,55 @@ export default function Card({
             className="rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold text-white hover:bg-green-btn-focus">
             Unsell Pokémon
           </button>
+        )}
+        {handlePurchase && (
+          <button
+            onClick={() =>
+              purchaseMutation.mutate(
+                { speciesId: species.id },
+                {
+                  onSuccess() {
+                    handlePurchase(species);
+                  }
+                }
+              )
+            }
+            disabled={purchaseMutation.isLoading}
+            className="rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold text-white hover:bg-blue-btn-focus">
+            <div className="flex flex-row">
+              {species.rarity === "Common" ? (
+                <img
+                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png"
+                  height={25}
+                  width={25}
+                />
+              ) : species.rarity === "Rare" ? (
+                <img
+                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png"
+                  height={25}
+                  width={25}
+                />
+              ) : species.rarity === "Epic" ? (
+                <img
+                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png"
+                  height={25}
+                  width={25}
+                />
+              ) : (
+                <img
+                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png"
+                  height={25}
+                  width={25}
+                />
+              )}
+              {species.shiny ? `100` : `10`}
+            </div>
+          </button>
+        )}
+        {purchaseMutation.error && (
+          <div className="font-medium text-red-600">
+            {purchaseMutation.error.message}
+          </div>
         )}
       </div>
     </div>

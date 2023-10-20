@@ -10,6 +10,12 @@ import { useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Habitat, Rarity, Region, Species, SpeciesType } from "@prisma/client";
+import Modal from "../components/Modal";
+
+interface IPurchased {
+  modal: boolean;
+  species: Species | null;
+}
 
 interface ICaught {
   Caught: boolean;
@@ -92,6 +98,8 @@ export default function Pokedex() {
     }
   });
 
+  const utils = trpc.useContext();
+
   const { data: speciesData } = trpc.species.getSpecies.useQuery({
     order: "pokedex"
   });
@@ -104,6 +112,18 @@ export default function Pokedex() {
 
   const [time, setTime] = useState<Time>("night");
   const [timeLoading, setTimeLoading] = useState(true);
+
+  const [purchased, setPurchased] = useState<IPurchased>({
+    modal: false,
+    species: null
+  });
+
+  const [commonCards, setCommonCards] = useState(0);
+  const [rareCards, setRareCards] = useState(0);
+  const [epicCards, setEpicCards] = useState(0);
+  const [legendaryCards, setLegendaryCards] = useState(0);
+  const [totalYield, setTotalYield] = useState(0);
+  const [instanceCount, setInstanceCount] = useState(0);
 
   const [cards, setCards] = useState<Species[]>();
   const [cardsLoading, setCardsLoading] = useState(true);
@@ -186,6 +206,17 @@ export default function Pokedex() {
     }
     setTimeLoading(false);
   }, []);
+
+  // Set user state
+  useEffect(() => {
+    if (!session) return;
+    setCommonCards(session.user.commonCards);
+    setRareCards(session.user.rareCards);
+    setEpicCards(session.user.epicCards);
+    setLegendaryCards(session.user.legendaryCards);
+    setTotalYield(session.user.totalYield);
+    setInstanceCount(session.user.instanceCount);
+  }, [session]);
 
   // Set intitial cards
   useEffect(() => {
@@ -300,6 +331,31 @@ export default function Pokedex() {
     }
   };
 
+  // Handle Purchase with Wildcards
+  const handlePurchase = (species: Species) => {
+    setPurchased({ modal: true, species: species });
+    if (species.rarity === "Common" && !species.shiny) {
+      setCommonCards((prev) => prev - 10);
+    } else if (species.rarity === "Common" && species.shiny) {
+      setCommonCards((prev) => prev - 100);
+    } else if (species.rarity === "Rare" && !species.shiny) {
+      setRareCards((prev) => prev - 10);
+    } else if (species.rarity === "Rare" && species.shiny) {
+      setRareCards((prev) => prev - 100);
+    } else if (species.rarity === "Epic" && !species.shiny) {
+      setEpicCards((prev) => prev - 10);
+    } else if (species.rarity === "Epic" && species.shiny) {
+      setEpicCards((prev) => prev - 100);
+    } else if (species.rarity === "Legendary" && !species.shiny) {
+      setLegendaryCards((prev) => prev - 10);
+    } else if (species.rarity === "Legendary" && species.shiny) {
+      setLegendaryCards((prev) => prev - 100);
+    }
+    setTotalYield((prev) => prev + species.yield);
+    setInstanceCount((prev) => prev + 1);
+    utils.instance.getInstances.invalidate();
+  };
+
   const filterSpecies = () => {
     // Filter based on shiny
     if (shiny.Shiny) {
@@ -400,12 +456,12 @@ export default function Pokedex() {
           <Topbar
             username={session.user.username}
             balance={session.user.balance}
-            totalYield={session.user.totalYield}
-            totalCards={session.user.instanceCount}
-            commonCards={session.user.commonCards}
-            rareCards={session.user.rareCards}
-            epicCards={session.user.epicCards}
-            legendaryCards={session.user.legendaryCards}
+            totalYield={totalYield}
+            totalCards={instanceCount}
+            commonCards={commonCards}
+            rareCards={rareCards}
+            epicCards={epicCards}
+            legendaryCards={legendaryCards}
           />
           <main className="p-4">
             {session.user?.admin && (
@@ -690,12 +746,40 @@ export default function Pokedex() {
                     caught={instanceData?.instances.some(
                       (i) => i.speciesId === c.id
                     )}
+                    handlePurchase={handlePurchase}
                   />
                 ))}
               </div>
             )}
           </main>
         </Sidebar>
+        {purchased.modal && (
+          <Modal size={"Small"}>
+            {"aeiou".includes(purchased.species!.name[0]) ? (
+              <div className="text-center text-xl font-bold">
+                You got an{" "}
+                {purchased.species!.name[0].toUpperCase() +
+                  purchased.species!.name.slice(1).toLowerCase()}
+                !{" "}
+              </div>
+            ) : (
+              <div className="text-center text-xl font-bold">
+                You got a{" "}
+                {purchased.species!.name[0].toUpperCase() +
+                  purchased.species!.name.slice(1).toLowerCase()}
+                !
+              </div>
+            )}
+            <Card species={purchased.species!} />
+            <div className="flex justify-center pt-4">
+              <button
+                onClick={() => setPurchased({ modal: false, species: null })}
+                className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+                Got it!
+              </button>
+            </div>
+          </Modal>
+        )}
       </div>
     </>
   );
