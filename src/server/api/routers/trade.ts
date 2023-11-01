@@ -229,7 +229,11 @@ export const tradeRouter = router({
       if (!offererInstance) {
         await ctx.prisma.trade.update({
           where: { id: input.tradeId },
-          data: { offererId: null, offererInstanceId: null }
+          data: {
+            offererId: null,
+            offererInstanceId: null,
+            modifyDate: new Date()
+          }
         });
         throw new TRPCError({
           code: "CONFLICT",
@@ -246,7 +250,11 @@ export const tradeRouter = router({
       if (offererInstance?.userId !== trade.offererId) {
         await ctx.prisma.trade.update({
           where: { id: input.tradeId },
-          data: { offererId: null, offererInstanceId: null }
+          data: {
+            offererId: null,
+            offererInstanceId: null,
+            modifyDate: new Date()
+          }
         });
         throw new TRPCError({
           code: "CONFLICT",
