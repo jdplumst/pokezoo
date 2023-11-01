@@ -211,14 +211,48 @@ export const tradeRouter = router({
           message: "There is no offer for this trade"
         });
       }
-      const initiatorInstanceYield = await ctx.prisma.instance.findFirst({
+      const initiatorInstance = await ctx.prisma.instance.findFirst({
         where: { id: trade.initiatorInstanceId },
-        select: { species: { select: { yield: true } } }
+        select: { id: true, userId: true, species: { select: { yield: true } } }
       });
-      const offererInstanceYield = await ctx.prisma.instance.findFirst({
+      const offererInstance = await ctx.prisma.instance.findFirst({
         where: { id: trade.offererInstanceId },
-        select: { species: { select: { yield: true } } }
+        select: { id: true, userId: true, species: { select: { yield: true } } }
       });
+      if (!initiatorInstance) {
+        await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "This initiator's Pokemon no longer belongs to the initiator"
+        });
+      }
+      if (!offererInstance) {
+        await ctx.prisma.trade.update({
+          where: { id: input.tradeId },
+          data: { offererId: null, offererInstanceId: null }
+        });
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "The offered Pokemon no longer belongs to the offerer"
+        });
+      }
+      if (initiatorInstance?.userId !== trade.initiatorId) {
+        await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "This initiator's Pokemon no longer belongs to the initiator"
+        });
+      }
+      if (offererInstance?.userId !== trade.offererId) {
+        await ctx.prisma.trade.update({
+          where: { id: input.tradeId },
+          data: { offererId: null, offererInstanceId: null }
+        });
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "The offered Pokemon no longer belongs to the offerer"
+        });
+      }
       const currInitiatorYield = await ctx.prisma.user.findFirst({
         where: { id: trade.initiatorId },
         select: { totalYield: true }
@@ -240,8 +274,8 @@ export const tradeRouter = router({
         data: {
           totalYield:
             currInitiatorYield?.totalYield! -
-            initiatorInstanceYield?.species.yield! +
-            offererInstanceYield?.species.yield!
+            initiatorInstance?.species.yield! +
+            offererInstance?.species.yield!
         }
       });
       await ctx.prisma.user.update({
@@ -249,11 +283,31 @@ export const tradeRouter = router({
         data: {
           totalYield:
             currOffererYield?.totalYield! -
-            offererInstanceYield?.species.yield! +
-            initiatorInstanceYield?.species.yield!
+            offererInstance?.species.yield! +
+            initiatorInstance?.species.yield!
         }
       });
       await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
+      await ctx.prisma.trade.deleteMany({
+        where: {
+          OR: [
+            { initiatorInstanceId: initiatorInstance.id },
+            { initiatorInstanceId: offererInstance.id }
+          ]
+        }
+      });
+      await ctx.prisma.trade.updateMany({
+        where: {
+          OR: [
+            { offererInstanceId: initiatorInstance.id },
+            { offererInstanceId: offererInstance.id }
+          ]
+        },
+        data: {
+          offererId: null,
+          offererInstanceId: null
+        }
+      });
     }),
 
   rejectTrade: protectedProcedure
