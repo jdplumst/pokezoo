@@ -17,7 +17,6 @@ export default async function middleware(
   request: NextRequest,
   event: NextFetchEvent
 ): Promise<Response | undefined> {
-  console.log("redis?", request.nextUrl.pathname);
   const ip = request.ip ?? "127.0.0.1";
 
   if (request.nextUrl.pathname === "/api/blocked") return;
@@ -26,8 +25,6 @@ export default async function middleware(
     `ratelimit_middleware_${ip}`
   );
   event.waitUntil(pending);
-
-  console.log("success? ", success);
 
   const res = success
     ? NextResponse.next()
