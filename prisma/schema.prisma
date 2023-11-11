@@ -101,6 +101,7 @@ model Instance {
   userId         String
   speciesId      String
   createDate     DateTime @default(now())
+  modifyDate     DateTime @default(now())
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   species        Species  @relation(fields: [speciesId], references: [id], onDelete: Cascade)
   TradeInitiator Trade[]  @relation("initiatorInstance")

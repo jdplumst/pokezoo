@@ -20,9 +20,9 @@ export const instanceRouter = router({
     .query(async ({ ctx, input }) => {
       const sort =
         input.order === "Oldest"
-          ? { createDate: Prisma.SortOrder.asc }
+          ? { modifyDate: Prisma.SortOrder.asc }
           : input.order === "Newest"
-          ? { createDate: Prisma.SortOrder.desc }
+          ? { modifyDate: Prisma.SortOrder.desc }
           : input.order === "Pokedex"
           ? [
               { species: { pokedexNumber: Prisma.SortOrder.asc } },

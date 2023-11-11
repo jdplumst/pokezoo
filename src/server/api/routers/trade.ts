@@ -269,53 +269,55 @@ export const tradeRouter = router({
         where: { id: trade.offererId },
         select: { totalYield: true }
       });
-      await ctx.prisma.instance.update({
-        where: { id: trade.initiatorInstanceId },
-        data: { userId: trade.offererId }
-      });
-      await ctx.prisma.instance.update({
-        where: { id: trade.offererInstanceId },
-        data: { userId: trade.initiatorId }
-      });
-      await ctx.prisma.user.update({
-        where: { id: trade.initiatorId },
-        data: {
-          totalYield:
-            currInitiatorYield?.totalYield! -
-            initiatorInstance?.species.yield! +
-            offererInstance?.species.yield!
-        }
-      });
-      await ctx.prisma.user.update({
-        where: { id: trade.offererId },
-        data: {
-          totalYield:
-            currOffererYield?.totalYield! -
-            offererInstance?.species.yield! +
-            initiatorInstance?.species.yield!
-        }
-      });
-      await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
-      await ctx.prisma.trade.deleteMany({
-        where: {
-          OR: [
-            { initiatorInstanceId: initiatorInstance.id },
-            { initiatorInstanceId: offererInstance.id }
-          ]
-        }
-      });
-      await ctx.prisma.trade.updateMany({
-        where: {
-          OR: [
-            { offererInstanceId: initiatorInstance.id },
-            { offererInstanceId: offererInstance.id }
-          ]
-        },
-        data: {
-          offererId: null,
-          offererInstanceId: null
-        }
-      });
+      await ctx.prisma.$transaction([
+        ctx.prisma.instance.update({
+          where: { id: trade.initiatorInstanceId },
+          data: { userId: trade.offererId, modifyDate: new Date() }
+        }),
+        ctx.prisma.instance.update({
+          where: { id: trade.offererInstanceId },
+          data: { userId: trade.initiatorId, modifyDate: new Date() }
+        }),
+        ctx.prisma.user.update({
+          where: { id: trade.initiatorId },
+          data: {
+            totalYield:
+              currInitiatorYield?.totalYield! -
+              initiatorInstance?.species.yield! +
+              offererInstance?.species.yield!
+          }
+        }),
+        ctx.prisma.user.update({
+          where: { id: trade.offererId },
+          data: {
+            totalYield:
+              currOffererYield?.totalYield! -
+              offererInstance?.species.yield! +
+              initiatorInstance?.species.yield!
+          }
+        }),
+        ctx.prisma.trade.delete({ where: { id: input.tradeId } }),
+        ctx.prisma.trade.deleteMany({
+          where: {
+            OR: [
+              { initiatorInstanceId: initiatorInstance.id },
+              { initiatorInstanceId: offererInstance.id }
+            ]
+          }
+        }),
+        ctx.prisma.trade.updateMany({
+          where: {
+            OR: [
+              { offererInstanceId: initiatorInstance.id },
+              { offererInstanceId: offererInstance.id }
+            ]
+          },
+          data: {
+            offererId: null,
+            offererInstanceId: null
+          }
+        })
+      ]);
     }),
 
   rejectTrade: protectedProcedure
