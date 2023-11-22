@@ -13,7 +13,11 @@ import LoadingSpinner from "../components/LoadingSpinner";
 export default function Achievements() {
   const router = useRouter();
 
-  const { data: session, status } = useSession({
+  const {
+    data: session,
+    status,
+    update: updateSession
+  } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
@@ -35,11 +39,11 @@ export default function Achievements() {
 
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
-  const [totalYield, setTotalYield] = useState(0);
   const [fullAchievements, setFullAchievements] = useState<FullAchievement[]>();
 
   // Set time and total yield states
   useEffect(() => {
+    if (status !== "authenticated") return;
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
@@ -47,10 +51,6 @@ export default function Achievements() {
     } else {
       setTime("night");
     }
-
-    if (status !== "authenticated") return;
-    setTotalYield(session.user.totalYield);
-
     setLoading(false);
   }, [session]);
 
@@ -150,11 +150,11 @@ export default function Achievements() {
     }
   }, [instanceData, speciesData, achievementData, userAchievementData]);
 
-  const updateYield = (x: number) => {
-    setTotalYield((prevTotalYield) => prevTotalYield + x);
+  const updateYield = () => {
+    updateSession();
   };
 
-  if (loading || status === "loading") return <Loading />;
+  if (!session || loading) return <Loading />;
 
   return (
     <>
@@ -192,8 +192,6 @@ export default function Achievements() {
                       <div>
                         <ProgressBar
                           user={session.user}
-                          species={speciesData?.species!}
-                          instances={instanceData?.instances!}
                           fullAchievement={a}
                           updateYield={updateYield}
                         />

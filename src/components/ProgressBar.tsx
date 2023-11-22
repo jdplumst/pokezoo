@@ -15,25 +15,12 @@ export interface FullAchievement {
 
 interface IProgressBar {
   user: User;
-  species: Species[];
-  instances: (Instance & {
-    species: {
-      rarity: Rarity;
-      shiny: boolean;
-      typeOne: string;
-      typeTwo: string | null;
-      generation: number;
-      habitat: string;
-    };
-  })[];
   fullAchievement: FullAchievement;
-  updateYield: (x: number) => void;
+  updateYield: () => void;
 }
 
 export default function ProgressBar({
   user,
-  species,
-  instances,
   fullAchievement,
   updateYield
 }: IProgressBar) {
@@ -51,7 +38,7 @@ export default function ProgressBar({
       },
       {
         onSuccess(data, variables, context) {
-          updateYield(fullAchievement.achievement.yield);
+          updateYield();
           setIsAchieved(true);
           setError(null);
         },
