@@ -12,14 +12,18 @@ import Modal from "../components/Modal";
 export default function Trades() {
   const router = useRouter();
 
-  const { data: session, status } = useSession({
+  const {
+    data: session,
+    status,
+    update: updateSession
+  } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
     }
   });
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
   const { data: tradeData, isLoading: tradeLoading } =
     trpc.trade.getTrades.useQuery();
@@ -48,6 +52,7 @@ export default function Trades() {
 
   // Set time and user data
   useEffect(() => {
+    if (status !== "authenticated") return;
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
@@ -55,12 +60,10 @@ export default function Trades() {
     } else {
       setTime("night");
     }
-
-    if (status !== "authenticated") return;
     setLoading(false);
   }, [session]);
 
-  if (loading || status === "loading") return <Loading />;
+  if (!session || loading) return <Loading />;
 
   return (
     <>
@@ -201,6 +204,7 @@ export default function Trades() {
                                     {
                                       onSuccess(data, variables, context) {
                                         utils.trade.getTrades.invalidate();
+                                        updateSession();
                                       }
                                     }
                                   )
