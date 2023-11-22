@@ -181,16 +181,7 @@ export default function Game() {
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Game">
-          <Topbar
-            username={session.user.username}
-            balance={session.user.balance}
-            totalYield={session.user.totalYield}
-            totalCards={session.user.instanceCount}
-            commonCards={session.user.commonCards}
-            rareCards={session.user.rareCards}
-            epicCards={session.user.epicCards}
-            legendaryCards={session.user.legendaryCards}
-          />
+          <Topbar user={session.user} />
           {deleteList.length > 0 && (
             <div className="sticky top-0 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">
               <span className="font-bold">

@@ -167,16 +167,7 @@ export default function Achievements() {
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Achievements">
-          <Topbar
-            username={session.user.username}
-            balance={session.user.balance}
-            totalYield={totalYield}
-            totalCards={session.user.instanceCount}
-            commonCards={session.user.commonCards}
-            rareCards={session.user.rareCards}
-            epicCards={session.user.epicCards}
-            legendaryCards={session.user.legendaryCards}
-          />
+          <Topbar user={session.user} />
           <main className="p-4">
             {session.user?.admin && (
               <div className="flex justify-center bg-red-500">

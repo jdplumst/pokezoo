@@ -248,16 +248,7 @@ export default function Shop() {
       <div
         className={`z-0 min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Shop">
-          <Topbar
-            username={session.user.username}
-            balance={balance}
-            totalYield={totalYield}
-            totalCards={totalCards}
-            commonCards={session.user.commonCards}
-            rareCards={session.user.rareCards}
-            epicCards={session.user.epicCards}
-            legendaryCards={session.user.legendaryCards}
-          />
+          <Topbar user={session.user} />
           <main className="p-4">
             {session.user.admin && (
               <div className="flex justify-center bg-red-500">
