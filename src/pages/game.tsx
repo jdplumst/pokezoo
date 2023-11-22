@@ -90,7 +90,7 @@ export default function Game() {
 
   // Display starter and updated yield
   const addStarter = (i: Instance, r: Region) => {
-    utils.instance.getInstances.invalidate();
+    utils.instance.getGame.invalidate();
     updateSession();
   };
 
@@ -144,7 +144,7 @@ export default function Game() {
         onSuccess(data, variables, context) {
           setError(null);
           setDeleteList([]);
-          utils.instance.getInstances.invalidate();
+          utils.instance.getGame.invalidate();
           updateSession();
         },
         onError(error, variables, context) {

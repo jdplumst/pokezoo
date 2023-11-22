@@ -1,4 +1,4 @@
-import { ZodType, z } from "zod";
+import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/types/zod";
 

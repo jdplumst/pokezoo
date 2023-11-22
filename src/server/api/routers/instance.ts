@@ -11,46 +11,6 @@ import {
 import { ZodSort } from "@/types/zod";
 
 export const instanceRouter = router({
-  getInstances: protectedProcedure
-    .input(
-      z.object({
-        distinct: z.boolean(),
-        order: z.string()
-      })
-    )
-    .query(async ({ ctx, input }) => {
-      const sort =
-        input.order === "Oldest"
-          ? { modifyDate: Prisma.SortOrder.asc }
-          : input.order === "Newest"
-          ? { modifyDate: Prisma.SortOrder.desc }
-          : input.order === "Pokedex"
-          ? [
-              { species: { pokedexNumber: Prisma.SortOrder.asc } },
-              { species: { name: Prisma.SortOrder.asc } }
-            ]
-          : [
-              {
-                species: {
-                  rarity: Prisma.SortOrder.asc
-                }
-              },
-              {
-                species: {
-                  pokedexNumber: Prisma.SortOrder.asc
-                }
-              },
-              { species: { name: Prisma.SortOrder.asc } }
-            ];
-      const instances = await ctx.prisma.instance.findMany({
-        where: { userId: ctx.session.user.id },
-        distinct: input.distinct ? ["speciesId"] : undefined,
-        orderBy: sort
-      });
-
-      return { instances: instances };
-    }),
-
   getInstanceSpecies: protectedProcedure
     .input(z.object({ distinct: z.boolean() }))
     .query(async ({ ctx, input }) => {
