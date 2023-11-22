@@ -68,7 +68,7 @@ export default function Pokedex() {
   const {
     data: session,
     status,
-    update
+    update: updateSession
   } = useSession({
     required: true,
     onUnauthenticated() {
@@ -260,7 +260,7 @@ export default function Pokedex() {
   // Handle Purchase with Wildcards
   const handlePurchase = (species: Species) => {
     setPurchased({ modal: true, species: species });
-    update();
+    updateSession();
     utils.species.getPokedex.invalidate();
   };
 

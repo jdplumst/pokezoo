@@ -25,7 +25,11 @@ enum region {
 export default function Shop() {
   const router = useRouter();
 
-  const { data: session, status } = useSession({
+  const {
+    data: session,
+    status,
+    update: updateSession
+  } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
@@ -42,11 +46,7 @@ export default function Shop() {
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
 
-  const [balance, setBalance] = useState(0);
-  const [totalYield, setTotalYield] = useState(0);
-  const [totalCards, setTotalCards] = useState(0);
   const [error, setError] = useState<string | null>(null);
-  const [disabled, setDisabled] = useState(false);
   const [boughtBall, setBoughtBall] = useState<Ball>();
   const purchaseMutation = trpc.instance.purchaseInstanceWithBall.useMutation();
 
@@ -61,6 +61,7 @@ export default function Shop() {
   const premierRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    if (status !== "authenticated") return;
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
@@ -68,22 +69,14 @@ export default function Shop() {
     } else {
       setTime("night");
     }
-
-    if (status !== "authenticated") return;
-    setBalance(session.user.balance);
-    setTotalYield(session.user.totalYield);
-    setTotalCards(session.user.instanceCount);
     setLoading(false);
   }, [session]);
 
   const purchaseBall = async (ball: Ball) => {
-    // Disable all purchase buttons
-    setDisabled(true);
     setBoughtBall(ball);
 
     if (ball.name === "Premier" && !regionCurr) {
       setRegionError(true);
-      setDisabled(false);
       return;
     }
 
@@ -215,27 +208,23 @@ export default function Shop() {
       { speciesId: newInstance!.id, cost: ball.cost },
       {
         onSuccess(data, variables, context) {
-          setBalance(data.user.balance);
-          setTotalYield(data.user.totalYield);
+          updateSession();
           setNewSpecies(
             speciesData?.species.filter(
               (s) => s.id === data.instance.speciesId
             )[0]
           );
           setOpenModal(true);
-          setDisabled(false);
           setError(null);
-          setTotalCards((p: number) => p + 1);
         },
         onError(error, variables, context) {
-          setDisabled(false);
           setError(error.message);
         }
       }
     );
   };
 
-  if (loading || status === "loading") return <Loading />;
+  if (!session || loading) return <Loading />;
 
   return (
     <>
@@ -298,7 +287,7 @@ export default function Shop() {
                           )}
                           <button
                             onClick={() => purchaseBall(b)}
-                            disabled={disabled}
+                            disabled={purchaseMutation.isLoading}
                             className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
                             {purchaseMutation.isLoading && boughtBall === b ? (
                               <LoadingSpinner />
