@@ -65,7 +65,11 @@ interface IDropdowns {
 export default function Pokedex() {
   const router = useRouter();
 
-  const { data: session, status } = useSession({
+  const {
+    data: session,
+    status,
+    update
+  } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
@@ -83,13 +87,6 @@ export default function Pokedex() {
     modal: false,
     species: null
   });
-
-  const [commonCards, setCommonCards] = useState(0);
-  const [rareCards, setRareCards] = useState(0);
-  const [epicCards, setEpicCards] = useState(0);
-  const [legendaryCards, setLegendaryCards] = useState(0);
-  const [totalYield, setTotalYield] = useState(0);
-  const [instanceCount, setInstanceCount] = useState(0);
 
   const [caught, setCaught] = useState({
     Caught: true,
@@ -126,6 +123,7 @@ export default function Pokedex() {
 
   // Set time
   useEffect(() => {
+    if (status !== "authenticated") return;
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
@@ -134,18 +132,7 @@ export default function Pokedex() {
       setTime("night");
     }
     setTimeLoading(false);
-  }, []);
-
-  // Set user state
-  useEffect(() => {
-    if (!session) return;
-    setCommonCards(session.user.commonCards);
-    setRareCards(session.user.rareCards);
-    setEpicCards(session.user.epicCards);
-    setLegendaryCards(session.user.legendaryCards);
-    setTotalYield(session.user.totalYield);
-    setInstanceCount(session.user.instanceCount);
-  }, [session]);
+  }, [status]);
 
   // Infinite scroll
   useEffect(() => {
@@ -273,29 +260,11 @@ export default function Pokedex() {
   // Handle Purchase with Wildcards
   const handlePurchase = (species: Species) => {
     setPurchased({ modal: true, species: species });
-    if (species.rarity === "Common" && !species.shiny) {
-      setCommonCards((prev) => prev - 10);
-    } else if (species.rarity === "Common" && species.shiny) {
-      setCommonCards((prev) => prev - 100);
-    } else if (species.rarity === "Rare" && !species.shiny) {
-      setRareCards((prev) => prev - 10);
-    } else if (species.rarity === "Rare" && species.shiny) {
-      setRareCards((prev) => prev - 100);
-    } else if (species.rarity === "Epic" && !species.shiny) {
-      setEpicCards((prev) => prev - 10);
-    } else if (species.rarity === "Epic" && species.shiny) {
-      setEpicCards((prev) => prev - 100);
-    } else if (species.rarity === "Legendary" && !species.shiny) {
-      setLegendaryCards((prev) => prev - 10);
-    } else if (species.rarity === "Legendary" && species.shiny) {
-      setLegendaryCards((prev) => prev - 100);
-    }
-    setTotalYield((prev) => prev + species.yield);
-    setInstanceCount((prev) => prev + 1);
+    update();
     utils.species.getPokedex.invalidate();
   };
 
-  if (status === "loading" || timeLoading) return <Loading />;
+  if (!session || timeLoading) return <Loading />;
 
   return (
     <>
@@ -311,12 +280,12 @@ export default function Pokedex() {
           <Topbar
             username={session.user.username}
             balance={session.user.balance}
-            totalYield={totalYield}
-            totalCards={instanceCount}
-            commonCards={commonCards}
-            rareCards={rareCards}
-            epicCards={epicCards}
-            legendaryCards={legendaryCards}
+            totalYield={session.user.totalYield}
+            totalCards={session.user.instanceCount}
+            commonCards={session.user.commonCards}
+            rareCards={session.user.rareCards}
+            epicCards={session.user.epicCards}
+            legendaryCards={session.user.legendaryCards}
           />
           <main className="p-4">
             {session.user?.admin && (
