@@ -22,6 +22,7 @@ export const speciesRouter = router({
       return { species: species };
     }),
 
+  // Species shown on Pokedex page
   getPokedex: protectedProcedure
     .input(
       z.object({
@@ -108,5 +109,24 @@ export const speciesRouter = router({
       }
 
       return { pokemon, nextCursor };
+    }),
+
+  getStarters: protectedProcedure
+    .input(
+      z.object({
+        region: z.enum(["Kanto", "Johto", "Hoenn", "Sinnoh", "Unova"])
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const starters = await ctx.prisma.species.findMany({
+        take: 9,
+        where: {
+          shiny: false,
+          region: input.region
+        },
+        orderBy: { pokedexNumber: "asc" }
+      });
+
+      return { starters };
     })
 });
