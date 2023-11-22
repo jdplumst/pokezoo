@@ -8,6 +8,7 @@ import {
   SHINY_WILDCARD_COST,
   WILDCARD_COST
 } from "@/src/constants";
+import { ZodSort } from "@/types/zod";
 
 export const instanceRouter = router({
   getInstances: protectedProcedure
@@ -87,7 +88,7 @@ export const instanceRouter = router({
       z.object({
         limit: z.number().min(1).max(100).nullish(),
         cursor: z.string().nullish(),
-        order: z.enum(["Oldest", "Newest", "Pokedex", "Rarity"])
+        order: ZodSort
       })
     )
     .query(async ({ ctx, input }) => {

@@ -12,8 +12,8 @@ import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
-
-type Sort = "Oldest" | "Newest" | "Pokedex" | "Rarity";
+import { z } from "zod";
+import { ZodSort } from "@/types/zod";
 
 export default function Game() {
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function Game() {
 
   // Variables associated with cards
   const [error, setError] = useState<string | null>(null);
-  const [sort, setSort] = useState<Sort>("Oldest");
+  const [sort, setSort] = useState<z.infer<typeof ZodSort>>("Oldest");
 
   // Variables associated with daily/night rewards
   const [dailyReward, setDailyReward] = useState({

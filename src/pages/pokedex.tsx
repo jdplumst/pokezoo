@@ -13,39 +13,10 @@ import { Habitat, Rarity, Region, Species, SpeciesType } from "@prisma/client";
 import Modal from "../components/Modal";
 import { useInView } from "react-intersection-observer";
 
-const RegionsList: Region[] = ["Kanto", "Johto", "Hoenn", "Sinnoh", "Unova"];
-const RaritiesList: Rarity[] = ["Common", "Rare", "Epic", "Legendary"];
-const TypesList: SpeciesType[] = [
-  "Bug",
-  "Dark",
-  "Dragon",
-  "Electric",
-  "Fairy",
-  "Fighting",
-  "Fire",
-  "Flying",
-  "Ghost",
-  "Grass",
-  "Ground",
-  "Ice",
-  "Normal",
-  "Poison",
-  "Psychic",
-  "Rock",
-  "Steel",
-  "Water"
-];
-const HabitatList: Habitat[] = [
-  "Cave",
-  "Forest",
-  "Grassland",
-  "Mountain",
-  "Rare",
-  "RoughTerrain",
-  "Sea",
-  "Urban",
-  "WatersEdge"
-];
+const RegionsList: Region[] = Object.values(Region);
+const RaritiesList: Rarity[] = Object.values(Rarity);
+const TypesList: SpeciesType[] = Object.values(SpeciesType);
+const HabitatList: Habitat[] = Object.values(Habitat);
 
 interface IPurchased {
   modal: boolean;

@@ -1,5 +1,6 @@
-import { z } from "zod";
+import { ZodType, z } from "zod";
 import { protectedProcedure, router } from "../trpc";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/types/zod";
 
 export const speciesRouter = router({
   getSpecies: protectedProcedure
@@ -30,45 +31,10 @@ export const speciesRouter = router({
         cursor: z.string().nullish(),
         caught: z.object({ Caught: z.boolean(), Uncaught: z.boolean() }),
         shiny: z.boolean(),
-        regions: z.array(
-          z.enum(["Kanto", "Johto", "Hoenn", "Sinnoh", "Unova"])
-        ),
-        rarities: z.array(z.enum(["Common", "Rare", "Epic", "Legendary"])),
-        types: z.array(
-          z.enum([
-            "Normal",
-            "Grass",
-            "Bug",
-            "Fire",
-            "Electric",
-            "Ground",
-            "Water",
-            "Fighting",
-            "Poison",
-            "Rock",
-            "Ice",
-            "Ghost",
-            "Psychic",
-            "Fairy",
-            "Dark",
-            "Dragon",
-            "Steel",
-            "Flying"
-          ])
-        ),
-        habitats: z.array(
-          z.enum([
-            "Grassland",
-            "Forest",
-            "WatersEdge",
-            "Sea",
-            "Cave",
-            "Mountain",
-            "RoughTerrain",
-            "Urban",
-            "Rare"
-          ])
-        )
+        regions: z.array(ZodRegion),
+        rarities: z.array(ZodRarity),
+        types: z.array(ZodSpeciesType),
+        habitats: z.array(ZodHabitat)
       })
     )
     .query(async ({ ctx, input }) => {
@@ -114,7 +80,7 @@ export const speciesRouter = router({
   getStarters: protectedProcedure
     .input(
       z.object({
-        region: z.enum(["Kanto", "Johto", "Hoenn", "Sinnoh", "Unova"])
+        region: ZodRegion
       })
     )
     .query(async ({ ctx, input }) => {
