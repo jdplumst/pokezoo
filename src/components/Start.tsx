@@ -6,18 +6,19 @@ import { trpc } from "../utils/trpc";
 import { User } from "next-auth";
 
 interface IStarter {
-  user: User;
-  species: Species[];
   region: Region;
   addStarter: (i: Instance, r: Region) => void;
 }
 
-export default function Start({ user, species, region, addStarter }: IStarter) {
+export default function Start({ region, addStarter }: IStarter) {
   const [starter, setStarter] = useState<Starter | null>(null);
   const [error, setError] = useState<any>(null);
   const [disabled, setDisabled] = useState(false);
+
+  const getStarters = trpc.species.getStarters.useQuery({ region });
+
   const purchaseMutation = trpc.instance.purchaseInstanceWithBall.useMutation(); // Kanto
-  const starterMutation = trpc.instance.getStarter.useMutation();
+  const starterMutation = trpc.instance.getStarter.useMutation(); // All other regions
 
   const grassStarter =
     region === "Kanto"
@@ -57,14 +58,11 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
     if (starter) {
       const speciesId =
         starter === "Grass"
-          ? species.find((s) => s.name === grassStarter && !s.shiny)?.id ||
-            species[0].id
+          ? getStarters.data?.starters.find((s) => s.name === grassStarter)?.id!
           : starter === "Fire"
-          ? species.find((s) => s.name === fireStarter && !s.shiny)?.id ||
-            species[3].id
+          ? getStarters.data?.starters.find((s) => s.name === fireStarter)?.id!
           : starter === "Water"
-          ? species.find((s) => s.name === waterStarter && !s.shiny)?.id ||
-            species[6].id
+          ? getStarters.data?.starters.find((s) => s.name === waterStarter)?.id!
           : "";
 
       if (region === "Kanto") {
@@ -100,6 +98,8 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
     }
   };
 
+  if (getStarters.isLoading) return <div></div>;
+
   return (
     <Modal size="Small">
       {region === "Kanto" ? (
@@ -125,8 +125,7 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
           <button onClick={() => setStarter("Grass")}>
             <Card
               species={
-                species.find((s) => s.name === grassStarter && !s.shiny) ||
-                species[0]
+                getStarters.data?.starters.find((s) => s.name === grassStarter)!
               }
             />
           </button>
@@ -138,8 +137,7 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
           <button onClick={() => setStarter("Fire")}>
             <Card
               species={
-                species.find((s) => s.name === fireStarter && !s.shiny) ||
-                species[3]
+                getStarters.data?.starters.find((s) => s.name === fireStarter)!
               }
             />
           </button>
@@ -151,8 +149,7 @@ export default function Start({ user, species, region, addStarter }: IStarter) {
           <button onClick={() => setStarter("Water")}>
             <Card
               species={
-                species.find((s) => s.name === waterStarter && !s.shiny) ||
-                species[6]
+                getStarters.data?.starters.find((s) => s.name === waterStarter)!
               }
             />
           </button>

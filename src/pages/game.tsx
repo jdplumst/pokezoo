@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Card from "@/src/components/Card";
 import Start from "@/src/components/Start";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Instance, Region } from "@prisma/client";
 import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
@@ -11,6 +11,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { useInView } from "react-intersection-observer";
 
 type Sort = "Oldest" | "Newest" | "Pokedex" | "Rarity";
 
@@ -29,6 +30,8 @@ export default function Game() {
       router.push("/");
     }
   });
+
+  const { ref, inView } = useInView();
 
   const [time, setTime] = useState<Time>("night");
   const [loading, setLoading] = useState(true);
@@ -60,16 +63,10 @@ export default function Game() {
   const [usernameError, setUsernameError] = useState<null | string>(null);
   const usernameMutation = trpc.user.selectUsername.useMutation();
 
-  const { data: speciesData, isLoading: speciesLoading } =
-    trpc.species.getSpecies.useQuery({
-      order: null
-    });
-
-  const { data: instanceData, isLoading: instanceLoading } =
-    trpc.instance.getInstances.useQuery({
-      distinct: false,
-      order: sort
-    });
+  const getGame = trpc.instance.getGame.useInfiniteQuery(
+    { limit: 50, order: sort },
+    { getNextPageParam: (lastPage) => lastPage.nextCursor }
+  );
 
   // Set time and user data
   useEffect(() => {
@@ -83,6 +80,13 @@ export default function Game() {
     }
     setLoading(false);
   }, [session]);
+
+  // Infinite scroll
+  useEffect(() => {
+    if (inView && getGame.hasNextPage) {
+      getGame.fetchNextPage();
+    }
+  }, [inView, getGame.hasNextPage]);
 
   // Display starter and updated yield
   const addStarter = (i: Instance, r: Region) => {
@@ -274,24 +278,28 @@ export default function Game() {
                 Rarity
               </button>
             </div>
-            {instanceLoading || speciesLoading ? (
+            {getGame.isInitialLoading && (
               <div className="flex items-center justify-center pt-5">
                 <LoadingSpinner />
               </div>
-            ) : (
-              <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
-                {instanceData?.instances.map((c) => (
-                  <Card
-                    key={c.id}
-                    instance={c}
-                    species={
-                      speciesData?.species.filter(
-                        (s) => s.id === c.speciesId
-                      )[0]!
-                    }
-                    modifyDeleteList={modifyDeleteList}
-                  />
-                ))}
+            )}
+            <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
+              {getGame.data?.pages.map((p) => (
+                <Fragment key={p.nextCursor}>
+                  {p.instances.map((c) => (
+                    <Card
+                      key={c.id}
+                      instance={c}
+                      species={c.species}
+                      modifyDeleteList={modifyDeleteList}
+                    />
+                  ))}
+                </Fragment>
+              ))}
+            </div>
+            {getGame.hasNextPage && (
+              <div ref={ref} className="flex h-16 justify-center pt-4">
+                {getGame.isFetchingNextPage && <LoadingSpinner />}
               </div>
             )}
           </main>
@@ -299,13 +307,8 @@ export default function Game() {
       </div>
 
       {/* Modal for New Players */}
-      {speciesData && instanceData?.instances.length === 0 && (
-        <Start
-          user={session.user}
-          species={speciesData.species}
-          region="Kanto"
-          addStarter={addStarter}
-        />
+      {session.user.instanceCount === 0 && (
+        <Start region="Kanto" addStarter={addStarter} />
       )}
 
       {/* Modal for Rewards */}
@@ -381,43 +384,23 @@ export default function Game() {
       )}
 
       {/* Modal for Johto Starter */}
-      {speciesData && !session.user.johtoStarter && (
-        <Start
-          user={session.user}
-          species={speciesData.species}
-          region="Johto"
-          addStarter={addStarter}
-        />
+      {!session.user.johtoStarter && (
+        <Start region="Johto" addStarter={addStarter} />
       )}
 
       {/* Modal for Hoenn Starter */}
-      {speciesData && !session.user.hoennStarter && (
-        <Start
-          user={session.user}
-          species={speciesData.species}
-          region="Hoenn"
-          addStarter={addStarter}
-        />
+      {!session.user.hoennStarter && (
+        <Start region="Hoenn" addStarter={addStarter} />
       )}
 
       {/* Modal for Sinnoh Starter */}
-      {speciesData && !session.user.sinnohStarter && (
-        <Start
-          user={session.user}
-          species={speciesData.species}
-          region="Sinnoh"
-          addStarter={addStarter}
-        />
+      {!session.user.sinnohStarter && (
+        <Start region="Sinnoh" addStarter={addStarter} />
       )}
 
       {/* Modal for Unova Starter */}
-      {speciesData && !session.user.unovaStarter && (
-        <Start
-          user={session.user}
-          species={speciesData.species}
-          region="Unova"
-          addStarter={addStarter}
-        />
+      {!session.user.unovaStarter && (
+        <Start region="Unova" addStarter={addStarter} />
       )}
     </>
   );
