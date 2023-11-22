@@ -17,9 +17,13 @@ type Sort = "Oldest" | "Newest" | "Pokedex" | "Rarity";
 export default function Game() {
   const router = useRouter();
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
-  const { data: session, status } = useSession({
+  const {
+    data: session,
+    status,
+    update: updateSession
+  } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
@@ -30,16 +34,10 @@ export default function Game() {
   const [loading, setLoading] = useState(true);
 
   // Variables associated with cards
-  const [balance, setBalance] = useState(0);
-  const [totalYield, setTotalYield] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<Sort>("Oldest");
 
   // Variables associated with daily/night rewards
-  const [claimedDaily, setClaimedDaily] = useState(true);
-  const [dailyDisabled, setDailyDisabled] = useState(false);
-  const [claimedNightly, setClaimedNightly] = useState(true);
-  const [nightlyDisabled, setNightlyDisabled] = useState(false);
   const [dailyReward, setDailyReward] = useState({
     modal: false,
     reward: 0,
@@ -52,29 +50,13 @@ export default function Game() {
   });
   const rewardMutation = trpc.user.claimReward.useMutation();
 
-  // Variables associated with wildcards
-  const [wildcards, setWildcards] = useState({
-    Common: 0,
-    Rare: 0,
-    Epic: 0,
-    Legendary: 0
-  });
-
   // Variables associated with selling an instance
   const [deleteList, setDeleteList] = useState<string[]>([]);
-  const [deleteDisabled, setDeleteDisabled] = useState(false);
   const sellMutation = trpc.instance.sellInstances.useMutation();
 
-  // Variables associated with starters
-  const [claimedJohto, setClaimedJohto] = useState(true);
-  const [claimedHoenn, setClaimedHoenn] = useState(true);
-  const [claimedSinnoh, setClaimedSinnoh] = useState(true);
-  const [claimedUnova, setClaimedUnova] = useState(true);
-
   // Variables associated with setting username
-  const [usernameModal, setUsernameModal] = useState(false);
   const [username, setUsername] = useState("");
-  const [usernameDisabled, setUsernameDisabled] = useState(false);
+  const [usernameModal, setUsernameModal] = useState(false);
   const [usernameError, setUsernameError] = useState<null | string>(null);
   const usernameMutation = trpc.user.selectUsername.useMutation();
 
@@ -91,6 +73,7 @@ export default function Game() {
 
   // Set time and user data
   useEffect(() => {
+    if (status !== "authenticated") return;
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
@@ -98,93 +81,42 @@ export default function Game() {
     } else {
       setTime("night");
     }
-
-    if (status !== "authenticated") return;
-    setBalance(session.user.balance);
-    setTotalYield(session.user.totalYield);
-    setClaimedDaily(session.user.claimedDaily);
-    setClaimedNightly(session.user.claimedNightly);
-    setClaimedJohto(session.user.johtoStarter);
-    setClaimedHoenn(session.user.hoennStarter);
-    setClaimedSinnoh(session.user.sinnohStarter);
-    setClaimedUnova(session.user.unovaStarter);
-    setUsernameModal(session.user.username ? false : true);
-    setUsername(session.user.username ? session.user.username : "");
-    setWildcards({
-      Common: session.user.commonCards,
-      Rare: session.user.rareCards,
-      Epic: session.user.epicCards,
-      Legendary: session.user.legendaryCards
-    });
-
     setLoading(false);
   }, [session]);
 
   // Display starter and updated yield
   const addStarter = (i: Instance, r: Region) => {
     utils.instance.getInstances.invalidate();
-    setTotalYield((prevTotalYield) => prevTotalYield + 50);
-
-    if (r === "Johto") {
-      setClaimedJohto(true);
-    } else if (r === "Hoenn") {
-      setClaimedHoenn(true);
-    } else if (r === "Sinnoh") {
-      setClaimedSinnoh(true);
-    } else if (r === "Unova") {
-      setClaimedUnova(true);
-    }
+    updateSession();
   };
 
   // Claim Daily and Nightly Reward
   const claimReward = async () => {
     if (time === "day") {
-      setDailyDisabled(true);
       rewardMutation.mutate(
         { time: time },
         {
           onSuccess(data, variables, context) {
-            setClaimedDaily(true);
-            setBalance(data.user.balance);
-            setWildcards({
-              Common: data.user.commonCards,
-              Rare: data.user.rareCards,
-              Epic: data.user.epicCards,
-              Legendary: data.user.legendaryCards
-            });
+            updateSession();
             setDailyReward({
               modal: true,
               reward: data.reward,
               card: data.card
             });
-          },
-          onError(error, variables, context) {
-            setDailyDisabled(false);
           }
         }
       );
     } else if (time === "night") {
-      setNightlyDisabled(true);
       rewardMutation.mutate(
         { time: time },
         {
           onSuccess(data, variables, context) {
-            setClaimedNightly(true);
-            setBalance(data.user.balance);
-            setWildcards({
-              Common: data.user.commonCards,
-              Rare: data.user.rareCards,
-              Epic: data.user.epicCards,
-              Legendary: data.user.legendaryCards
-            });
+            updateSession();
             setNightlyReward({
               modal: true,
               reward: data.reward,
               card: data.card
             });
-          },
-          onError(error, variables, context) {
-            setNightlyDisabled(false);
           }
         }
       );
@@ -202,21 +134,17 @@ export default function Game() {
 
   // Sell instance
   const handleDelete = () => {
-    setDeleteDisabled(true);
     sellMutation.mutate(
       { ids: deleteList },
       {
         onSuccess(data, variables, context) {
-          setTotalYield(data.user.totalYield);
-          setBalance(data.user.balance);
           setError(null);
           setDeleteList([]);
-          setDeleteDisabled(false);
           utils.instance.getInstances.invalidate();
+          updateSession();
         },
         onError(error, variables, context) {
           setError(error.message);
-          setDeleteDisabled(false);
         }
       }
     );
@@ -225,7 +153,6 @@ export default function Game() {
   // Set username
   const handleUsername = (e: React.FormEvent) => {
     e.preventDefault();
-    setUsernameDisabled(true);
     usernameMutation.mutate(
       { username: username },
       {
@@ -234,13 +161,12 @@ export default function Game() {
         },
         onError(error, variables, context) {
           setUsernameError(error.message);
-          setUsernameDisabled(false);
         }
       }
     );
   };
 
-  if (loading || status === "loading") return <Loading />;
+  if (!session || loading) return <Loading />;
 
   return (
     <>
@@ -256,14 +182,14 @@ export default function Game() {
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Game">
           <Topbar
-            username={username}
-            balance={balance}
-            totalYield={totalYield}
+            username={session.user.username}
+            balance={session.user.balance}
+            totalYield={session.user.totalYield}
             totalCards={session.user.instanceCount}
-            commonCards={wildcards.Common}
-            rareCards={wildcards.Rare}
-            epicCards={wildcards.Epic}
-            legendaryCards={wildcards.Legendary}
+            commonCards={session.user.commonCards}
+            rareCards={session.user.rareCards}
+            epicCards={session.user.epicCards}
+            legendaryCards={session.user.legendaryCards}
           />
           {deleteList.length > 0 && (
             <div className="sticky top-0 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">
@@ -273,7 +199,7 @@ export default function Game() {
 
               <button
                 onClick={() => handleDelete()}
-                disabled={deleteDisabled}
+                disabled={sellMutation.isLoading}
                 className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
                 {sellMutation.isLoading ? <LoadingSpinner /> : "Confirm Delete"}
               </button>
@@ -289,12 +215,12 @@ export default function Game() {
                 </button>
               </div>
             )}
-            {claimedDaily && time === "day" ? (
+            {session.user.claimedDaily && time === "day" ? (
               <span>You have already claimed your daily reward.</span>
-            ) : !claimedDaily && time === "day" ? (
+            ) : !session.user.claimedDaily && time === "day" ? (
               <button
                 onClick={() => claimReward()}
-                disabled={dailyDisabled}
+                disabled={rewardMutation.isLoading}
                 className="w-48 rounded-lg border-2 border-black bg-yellow-btn-unfocus p-2 font-bold hover:bg-yellow-btn-focus">
                 {rewardMutation.isLoading ? (
                   <LoadingSpinner />
@@ -302,12 +228,12 @@ export default function Game() {
                   "Claim Daily Reward"
                 )}
               </button>
-            ) : claimedNightly && time === "night" ? (
+            ) : session.user.claimedNightly && time === "night" ? (
               <span>You have already claimed your nightly reward.</span>
-            ) : !claimedNightly && time === "night" ? (
+            ) : !session.user.claimedNightly && time === "night" ? (
               <button
                 onClick={() => claimReward()}
-                disabled={nightlyDisabled}
+                disabled={rewardMutation.isLoading}
                 className="w-48 rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
                 {rewardMutation.isLoading ? (
                   <LoadingSpinner />
@@ -450,7 +376,7 @@ export default function Game() {
               onChange={(e) => setUsername(e.target.value)}
               className="p-2 text-black"></input>
             <button
-              disabled={usernameDisabled}
+              disabled={usernameMutation.isLoading}
               className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 text-xl font-bold hover:bg-red-btn-focus">
               {usernameMutation.isLoading ? <LoadingSpinner /> : "Confirm"}
             </button>
@@ -464,7 +390,7 @@ export default function Game() {
       )}
 
       {/* Modal for Johto Starter */}
-      {speciesData && !claimedJohto && (
+      {speciesData && !session.user.johtoStarter && (
         <Start
           user={session.user}
           species={speciesData.species}
@@ -474,7 +400,7 @@ export default function Game() {
       )}
 
       {/* Modal for Hoenn Starter */}
-      {speciesData && !claimedHoenn && (
+      {speciesData && !session.user.hoennStarter && (
         <Start
           user={session.user}
           species={speciesData.species}
@@ -484,7 +410,7 @@ export default function Game() {
       )}
 
       {/* Modal for Sinnoh Starter */}
-      {speciesData && !claimedSinnoh && (
+      {speciesData && !session.user.sinnohStarter && (
         <Start
           user={session.user}
           species={speciesData.species}
@@ -494,7 +420,7 @@ export default function Game() {
       )}
 
       {/* Modal for Unova Starter */}
-      {speciesData && !claimedUnova && (
+      {speciesData && !session.user.unovaStarter && (
         <Start
           user={session.user}
           species={speciesData.species}
