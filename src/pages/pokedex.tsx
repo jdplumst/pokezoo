@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Sidebar from "../components/Sidebar";
 import Card from "../components/Card";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import DrowpdownItem from "../components/DropdownItem";
 import Topbar from "../components/Topbar";
@@ -11,71 +11,45 @@ import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Habitat, Rarity, Region, Species, SpeciesType } from "@prisma/client";
 import Modal from "../components/Modal";
+import { useInView } from "react-intersection-observer";
+
+const RegionsList: Region[] = ["Kanto", "Johto", "Hoenn", "Sinnoh", "Unova"];
+const RaritiesList: Rarity[] = ["Common", "Rare", "Epic", "Legendary"];
+const TypesList: SpeciesType[] = [
+  "Bug",
+  "Dark",
+  "Dragon",
+  "Electric",
+  "Fairy",
+  "Fighting",
+  "Fire",
+  "Flying",
+  "Ghost",
+  "Grass",
+  "Ground",
+  "Ice",
+  "Normal",
+  "Poison",
+  "Psychic",
+  "Rock",
+  "Steel",
+  "Water"
+];
+const HabitatList: Habitat[] = [
+  "Cave",
+  "Forest",
+  "Grassland",
+  "Mountain",
+  "Rare",
+  "RoughTerrain",
+  "Sea",
+  "Urban",
+  "WatersEdge"
+];
 
 interface IPurchased {
   modal: boolean;
   species: Species | null;
-}
-
-interface ICaught {
-  Caught: boolean;
-  Uncaught: boolean;
-}
-interface IShiny {
-  "Not Shiny": boolean;
-  "Shiny": boolean;
-}
-
-interface IRegion {
-  All: boolean;
-  Kanto: boolean;
-  Johto: boolean;
-  Hoenn: boolean;
-  Sinnoh: boolean;
-  Unova: boolean;
-}
-
-interface IRarity {
-  All: boolean;
-  Common: boolean;
-  Rare: boolean;
-  Epic: boolean;
-  Legendary: boolean;
-}
-
-interface IType {
-  All: boolean;
-  Normal: boolean;
-  Grass: boolean;
-  Bug: boolean;
-  Fire: boolean;
-  Electric: boolean;
-  Ground: boolean;
-  Water: boolean;
-  Fighting: boolean;
-  Poison: boolean;
-  Rock: boolean;
-  Ice: boolean;
-  Ghost: boolean;
-  Psychic: boolean;
-  Fairy: boolean;
-  Dark: boolean;
-  Dragon: boolean;
-  Steel: boolean;
-  Flying: boolean;
-}
-
-interface IHabitat {
-  "All": boolean;
-  "Grassland": boolean;
-  "Forest": boolean;
-  "Waters-Edge": boolean;
-  "Sea": boolean;
-  "Cave": boolean;
-  "Mountain": boolean;
-  "Rough-Terrain": boolean;
-  "Urban": boolean;
-  "Rare": boolean;
 }
 
 interface IDropdowns {
@@ -100,15 +74,7 @@ export default function Pokedex() {
 
   const utils = trpc.useContext();
 
-  const { data: speciesData } = trpc.species.getSpecies.useQuery({
-    order: "pokedex"
-  });
-
-  const { data: instanceData, isLoading: instanceLoading } =
-    trpc.instance.getInstances.useQuery({
-      distinct: true,
-      order: "Oldest"
-    });
+  const { ref, inView } = useInView();
 
   const [time, setTime] = useState<Time>("night");
   const [timeLoading, setTimeLoading] = useState(true);
@@ -125,65 +91,15 @@ export default function Pokedex() {
   const [totalYield, setTotalYield] = useState(0);
   const [instanceCount, setInstanceCount] = useState(0);
 
-  const [cards, setCards] = useState<Species[]>();
-  const [cardsLoading, setCardsLoading] = useState(true);
-
-  const [caught, setCaught] = useState<ICaught>({
+  const [caught, setCaught] = useState({
     Caught: true,
     Uncaught: true
   });
-  const [shiny, setShiny] = useState<IShiny>({
-    "Not Shiny": true,
-    "Shiny": false
-  });
-  const [regions, setRegions] = useState<IRegion>({
-    All: true,
-    Kanto: true,
-    Johto: true,
-    Hoenn: true,
-    Sinnoh: true,
-    Unova: true
-  });
-  const [rarities, setRarities] = useState<IRarity>({
-    All: true,
-    Common: true,
-    Rare: true,
-    Epic: true,
-    Legendary: true
-  });
-  const [types, setTypes] = useState<IType>({
-    All: true,
-    Normal: true,
-    Grass: true,
-    Bug: true,
-    Fire: true,
-    Electric: true,
-    Ground: true,
-    Water: true,
-    Fighting: true,
-    Poison: true,
-    Rock: true,
-    Ice: true,
-    Ghost: true,
-    Psychic: true,
-    Fairy: true,
-    Dark: true,
-    Dragon: true,
-    Steel: true,
-    Flying: true
-  });
-  const [habitats, setHabitats] = useState<IHabitat>({
-    "All": true,
-    "Grassland": true,
-    "Forest": true,
-    "Waters-Edge": true,
-    "Sea": true,
-    "Cave": true,
-    "Mountain": true,
-    "Rough-Terrain": true,
-    "Urban": true,
-    "Rare": true
-  });
+  const [shiny, setShiny] = useState(false);
+  const [regions, setRegions] = useState<Region[]>(RegionsList);
+  const [rarities, setRarities] = useState<Rarity[]>(RaritiesList);
+  const [types, setTypes] = useState<SpeciesType[]>(TypesList);
+  const [habitats, setHabitats] = useState<Habitat[]>(HabitatList);
 
   // Dropdown open state
   const [dropdowns, setDropdowns] = useState<IDropdowns>({
@@ -194,6 +110,19 @@ export default function Pokedex() {
     Type: false,
     Habitat: false
   });
+
+  const getPokedex = trpc.species.getPokedex.useInfiniteQuery(
+    {
+      limit: 50,
+      caught: caught,
+      shiny: shiny,
+      regions: regions,
+      rarities: rarities,
+      types: types,
+      habitats: habitats
+    },
+    { getNextPageParam: (lastPage) => lastPage.nextCursor }
+  );
 
   // Set time
   useEffect(() => {
@@ -218,116 +147,126 @@ export default function Pokedex() {
     setInstanceCount(session.user.instanceCount);
   }, [session]);
 
-  // Set intitial cards
+  // Infinite scroll
   useEffect(() => {
-    if (!speciesData) return;
-    setCards(speciesData!.species!.filter((s) => !s.shiny));
-    setCardsLoading(false);
-  }, [speciesData]);
+    if (inView && getPokedex.hasNextPage) {
+      getPokedex.fetchNextPage();
+    }
+  }, [inView, getPokedex.hasNextPage]);
 
   // Handle Caught State
   const handleCaught = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
-    setCaught({ ...caught, [label]: checked });
+    if (label === "Uncaught" && !checked && !caught.Caught) {
+      setCaught({ Caught: true, Uncaught: true });
+    } else if (label === "Caught" && !checked && !caught.Uncaught) {
+      setCaught({ Caught: true, Uncaught: true });
+    } else {
+      setCaught({ ...caught, [label]: checked });
+    }
   };
 
   // Handle Shiny State
   const handleShiny = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor;
     const checked = e.target.checked;
-    if (label === "Not Shiny") {
-      setShiny({ "Shiny": !checked, "Not Shiny": checked });
-    } else if (label === "Shiny") {
-      setShiny({ "Shiny": checked, "Not Shiny": !checked });
+    if ((label === "Not Shiny" && checked) || (label === "Shiny" && !checked)) {
+      setShiny(false);
+    } else {
+      setShiny(true);
     }
   };
 
   // Handle Region State
   const handleRegion = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor;
+    const label = e.target.labels![0].htmlFor as Region;
     const checked = e.target.checked;
-    if (label.startsWith("all")) {
-      setRegions({
-        All: checked,
-        Kanto: checked,
-        Johto: checked,
-        Hoenn: checked,
-        Sinnoh: checked,
-        Unova: checked
-      });
+    if (label.startsWith("all") && regions === RegionsList) {
+      setRegions([]);
+    } else if (label.startsWith("all") && regions !== RegionsList) {
+      setRegions(RegionsList);
+    } else if (!checked && regions.includes(label)) {
+      setRegions(regions.filter((r) => r !== label));
     } else {
-      setRegions({ ...regions, [label]: checked });
+      setRegions([...regions, label]);
     }
+    console.log(regions);
   };
 
   // Handle Rarity State
   const handleRarity = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor;
+    const label = e.target.labels![0].htmlFor as Rarity;
     const checked = e.target.checked;
-    if (label.startsWith("all")) {
-      setRarities({
-        All: checked,
-        Common: checked,
-        Rare: checked,
-        Epic: checked,
-        Legendary: checked
-      });
+    if (label.startsWith("all") && rarities === RaritiesList) {
+      setRarities([]);
+    } else if (label.startsWith("all") && rarities !== RaritiesList) {
+      setRarities(RaritiesList);
+    } else if (!checked && rarities.includes(label)) {
+      setRarities(rarities.filter((r) => r !== label));
     } else {
-      setRarities({ ...rarities, [label]: checked });
+      setRarities([...rarities, label]);
     }
   };
 
   // Handle Type State
   const handleType = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor;
+    const label = e.target.labels![0].htmlFor as SpeciesType;
     const checked = e.target.checked;
-    if (label.startsWith("all")) {
-      setTypes({
-        All: checked,
-        Normal: checked,
-        Grass: checked,
-        Bug: checked,
-        Fire: checked,
-        Electric: checked,
-        Ground: checked,
-        Water: checked,
-        Fighting: checked,
-        Poison: checked,
-        Rock: checked,
-        Ice: checked,
-        Ghost: checked,
-        Psychic: checked,
-        Fairy: checked,
-        Dark: checked,
-        Dragon: checked,
-        Steel: checked,
-        Flying: checked
-      });
+    if (label.startsWith("all") && types === TypesList) {
+      setTypes([]);
+    } else if (label.startsWith("all") && types !== TypesList) {
+      setTypes(TypesList);
+    } else if (!checked && types.includes(label)) {
+      setTypes(types.filter((t) => t !== label));
     } else {
-      setTypes({ ...types, [label]: checked });
+      setTypes([...types, label]);
     }
   };
 
   // Handle Habitat State
   const handleHabitat = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor;
+    const label = e.target.labels![0].htmlFor as
+      | Habitat
+      | "Waters-Edge"
+      | "Rough-Terrain";
     const checked = e.target.checked;
-    if (label.startsWith("all")) {
-      setHabitats({
-        "All": checked,
-        "Grassland": checked,
-        "Forest": checked,
-        "Waters-Edge": checked,
-        "Sea": checked,
-        "Cave": checked,
-        "Mountain": checked,
-        "Rough-Terrain": checked,
-        "Urban": checked,
-        "Rare": checked
-      });
+    if (label.startsWith("all") && habitats === HabitatList) {
+      setHabitats([]);
+    } else if (label.startsWith("all") && habitats !== HabitatList) {
+      setHabitats(HabitatList);
+    } else if (
+      label !== "Waters-Edge" &&
+      label !== "Rough-Terrain" &&
+      habitats.includes(label)
+    ) {
+      setHabitats(habitats.filter((h) => h !== label));
+    } else if (
+      label === "Waters-Edge" &&
+      !checked &&
+      habitats.includes("WatersEdge")
+    ) {
+      setHabitats(habitats.filter((h) => h !== "WatersEdge"));
+    } else if (
+      label === "Rough-Terrain" &&
+      !checked &&
+      habitats.includes("RoughTerrain")
+    ) {
+      setHabitats(habitats.filter((h) => h !== "RoughTerrain"));
+    } else if (
+      label === "Waters-Edge" &&
+      checked &&
+      !habitats.includes("WatersEdge")
+    ) {
+      setHabitats([...habitats, "WatersEdge"]);
+    } else if (
+      label === "Rough-Terrain" &&
+      checked &&
+      !habitats.includes("RoughTerrain")
+    ) {
+      setHabitats([...habitats, "RoughTerrain"]);
     } else {
-      setHabitats({ ...habitats, [label]: checked });
+      setHabitats([...habitats, label as Habitat]);
     }
   };
 
@@ -355,90 +294,6 @@ export default function Pokedex() {
     setInstanceCount((prev) => prev + 1);
     utils.instance.getInstances.invalidate();
   };
-
-  const filterSpecies = () => {
-    // Filter based on shiny
-    if (shiny.Shiny) {
-      setCards(speciesData?.species.filter((s) => s.shiny));
-    } else if (shiny["Not Shiny"]) {
-      setCards(speciesData?.species.filter((s) => !s.shiny));
-    }
-
-    // Filter based on caught
-    if (caught.Caught && caught.Uncaught) {
-      setCards((p) => p);
-    } else if (caught.Caught) {
-      const instanceMap = instanceData?.instances.map((i) => i.speciesId);
-      setCards((p) => {
-        return p?.filter((item) => instanceMap?.includes(item.id));
-      });
-    } else if (caught.Uncaught) {
-      const instanceMap = instanceData?.instances.map((i) => i.speciesId);
-      setCards((p) => {
-        return p?.filter((item) => !instanceMap?.includes(item.id));
-      });
-    } else if (!caught.Caught && !caught.Uncaught) {
-      setCards([]);
-    }
-
-    // Filter based on region
-    setCards((p) =>
-      p?.filter((s) => {
-        let r = [];
-        let key: keyof IRegion;
-        for (key in regions) {
-          if (regions[key]) r.push(key);
-        }
-        return r.includes(s.region);
-      })
-    );
-
-    // Filter based on rarity
-    setCards((p) =>
-      p?.filter((s) => {
-        let r = [];
-        let key: keyof IRarity;
-        for (key in rarities) {
-          if (rarities[key]) r.push(key);
-        }
-        return r.includes(s.rarity);
-      })
-    );
-
-    // Filter based on type
-    setCards((p) =>
-      p?.filter((s) => {
-        let t = [];
-        let key: keyof IType;
-        for (key in types) {
-          if (types[key]) t.push(key);
-        }
-        return t.includes(s.typeOne) || t.includes(s.typeTwo!);
-      })
-    );
-
-    // Filter based on habitat
-    setCards((p) =>
-      p?.filter((s) => {
-        let h = [];
-        let key: keyof IHabitat;
-        for (key in habitats) {
-          if (habitats[key])
-            key === "Waters-Edge"
-              ? h.push("WatersEdge")
-              : key === "Rough-Terrain"
-              ? h.push("RoughTerrain")
-              : h.push(key);
-        }
-        return h.includes(s.habitat);
-      })
-    );
-  };
-
-  // Apply filters
-  useEffect(() => {
-    filterSpecies();
-  }, [caught, shiny, regions, rarities, types, habitats]);
 
   if (status === "loading" || timeLoading) return <Loading />;
 
@@ -533,7 +388,7 @@ export default function Pokedex() {
                       <DrowpdownItem
                         label={"Not Shiny"}
                         fn={handleShiny}
-                        checked={shiny["Not Shiny"]}
+                        checked={!shiny}
                         colour="purple"
                       />
                     </li>
@@ -541,7 +396,7 @@ export default function Pokedex() {
                       <DrowpdownItem
                         label="Shiny"
                         fn={handleShiny}
-                        checked={shiny.Shiny}
+                        checked={shiny}
                         colour="purple"
                       />
                     </li>
@@ -570,7 +425,7 @@ export default function Pokedex() {
                       <DrowpdownItem
                         label="Select All"
                         fn={handleRegion}
-                        checked={regions["All"]}
+                        checked={regions === RegionsList}
                         colour={"green"}
                       />
                     </li>
@@ -583,7 +438,7 @@ export default function Pokedex() {
                         <DrowpdownItem
                           label={r}
                           fn={handleRegion}
-                          checked={regions[r]}
+                          checked={regions.includes(r)}
                           colour={"green"}
                         />
                       </li>
@@ -613,7 +468,7 @@ export default function Pokedex() {
                       <DrowpdownItem
                         label="Select All"
                         fn={handleRarity}
-                        checked={rarities.All}
+                        checked={rarities === RaritiesList}
                         colour="orange"
                       />
                     </li>
@@ -626,7 +481,7 @@ export default function Pokedex() {
                         <DrowpdownItem
                           label={r}
                           fn={handleRarity}
-                          checked={rarities[r]}
+                          checked={rarities.includes(r)}
                           colour="orange"
                         />
                       </li>
@@ -656,7 +511,7 @@ export default function Pokedex() {
                       <DrowpdownItem
                         label="Select All"
                         fn={handleType}
-                        checked={types.All}
+                        checked={types === TypesList}
                         colour="blue"
                       />
                     </li>
@@ -669,7 +524,7 @@ export default function Pokedex() {
                         <DrowpdownItem
                           label={t}
                           fn={handleType}
-                          checked={types[t]}
+                          checked={types.includes(t)}
                           colour="blue"
                         />
                       </li>
@@ -699,7 +554,7 @@ export default function Pokedex() {
                       <DrowpdownItem
                         label="Select All"
                         fn={handleHabitat}
-                        checked={habitats.All}
+                        checked={habitats === HabitatList}
                         colour="lime"
                       />
                     </li>
@@ -718,13 +573,7 @@ export default function Pokedex() {
                               : h
                           }
                           fn={handleHabitat}
-                          checked={
-                            h === "WatersEdge"
-                              ? habitats["Waters-Edge"]
-                              : h === "RoughTerrain"
-                              ? habitats["Rough-Terrain"]
-                              : habitats[h]
-                          }
+                          checked={habitats.includes(h)}
                           colour="lime"
                         />
                       </li>
@@ -733,22 +582,28 @@ export default function Pokedex() {
                 )}
               </div>
             </div>
-            {instanceLoading || cardsLoading ? (
-              <div className="flex items-center justify-center pt-5">
+            {getPokedex.isInitialLoading && (
+              <div className="mx-auto pt-5">
                 <LoadingSpinner />
               </div>
-            ) : (
-              <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
-                {cards?.map((c) => (
-                  <Card
-                    key={c.id}
-                    species={c}
-                    caught={instanceData?.instances.some(
-                      (i) => i.speciesId === c.id
-                    )}
-                    handlePurchase={handlePurchase}
-                  />
-                ))}
+            )}
+            <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
+              {getPokedex.data?.pages.map((p) => (
+                <Fragment key={p.nextCursor}>
+                  {p.pokemon.map((c) => (
+                    <Card
+                      key={c.id}
+                      species={c}
+                      caught={c.instances.length > 0}
+                      handlePurchase={handlePurchase}
+                    />
+                  ))}
+                </Fragment>
+              ))}
+            </div>
+            {getPokedex.hasNextPage && (
+              <div ref={ref} className="flex h-16 justify-center pt-4">
+                {getPokedex.isFetchingNextPage && <LoadingSpinner />}
               </div>
             )}
           </main>
