@@ -72,7 +72,7 @@ export default function Pokedex() {
     }
   });
 
-  const utils = trpc.useContext();
+  const utils = trpc.useUtils();
 
   const { ref, inView } = useInView();
 
@@ -292,7 +292,7 @@ export default function Pokedex() {
     }
     setTotalYield((prev) => prev + species.yield);
     setInstanceCount((prev) => prev + 1);
-    utils.instance.getInstances.invalidate();
+    utils.species.getPokedex.invalidate();
   };
 
   if (status === "loading" || timeLoading) return <Loading />;
