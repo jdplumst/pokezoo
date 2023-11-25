@@ -9,7 +9,13 @@ import {
 } from "@prisma/client";
 import { z } from "zod";
 
-export const ZodSort = z.enum(["Oldest", "Newest", "Pokedex", "Rarity"]);
+export const ZodSort = z.enum([
+  "Oldest",
+  "Newest",
+  "Pokedex",
+  "Rarity",
+  "RarityDesc"
+]);
 
 // Prisma enums
 export const ZodRarity = z.nativeEnum(Rarity);

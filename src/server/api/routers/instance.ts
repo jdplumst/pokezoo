@@ -1,6 +1,5 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import {
   MAX_BALANCE,
@@ -9,7 +8,6 @@ import {
   WILDCARD_COST
 } from "@/src/constants";
 import { ZodSort } from "@/types/zod";
-import { spec } from "node:test/reporters";
 
 export const instanceRouter = router({
   getInstanceSpecies: protectedProcedure
@@ -73,6 +71,12 @@ export const instanceRouter = router({
             : input.order === "Rarity"
             ? [
                 { species: { rarity: "asc" } },
+                { species: { pokedexNumber: "asc" } },
+                { species: { name: "asc" } }
+              ]
+            : input.order === "RarityDesc"
+            ? [
+                { species: { rarity: "desc" } },
                 { species: { pokedexNumber: "asc" } },
                 { species: { name: "asc" } }
               ]

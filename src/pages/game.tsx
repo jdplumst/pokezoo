@@ -277,6 +277,15 @@ export default function Game() {
                 } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
                 Rarity
               </button>
+              <button
+                onClick={() => setSort("RarityDesc")}
+                className={`${
+                  sort === "RarityDesc"
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                Rarity Desc.
+              </button>
             </div>
             {getGame.isInitialLoading && (
               <div className="flex items-center justify-center pt-5">
