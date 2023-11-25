@@ -12,25 +12,17 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import { Habitat, Rarity, Region, Species, SpeciesType } from "@prisma/client";
 import Modal from "../components/Modal";
 import { useInView } from "react-intersection-observer";
-
-const RegionsList: Region[] = Object.values(Region);
-const RaritiesList: Rarity[] = Object.values(Rarity);
-const TypesList: SpeciesType[] = Object.values(SpeciesType);
-const HabitatList: Habitat[] = Object.values(Habitat);
+import Dropdown, { IDropdowns } from "../components/Dropdown";
+import {
+  RegionsList,
+  RaritiesList,
+  TypesList,
+  HabitatList
+} from "../constants";
 
 interface IPurchased {
   modal: boolean;
   species: Species | null;
-}
-
-interface IDropdowns {
-  Caught: boolean;
-  Shiny: boolean;
-  Region: boolean;
-  Rarity: boolean;
-  Type: boolean;
-  Habitat: boolean;
-  [key: string]: boolean;
 }
 
 export default function Pokedex() {
@@ -111,6 +103,23 @@ export default function Pokedex() {
       getPokedex.fetchNextPage();
     }
   }, [inView, getPokedex.hasNextPage]);
+
+  // Handle Dropdowns State
+  const handleDropdowns = (d: string) => {
+    console.log(d);
+    console.log(dropdowns[d]);
+    if (dropdowns[d]) {
+      const newDropdowns: IDropdowns = {} as IDropdowns;
+      Object.keys(dropdowns).forEach((x) => (newDropdowns[x] = false));
+      setDropdowns(newDropdowns);
+    } else {
+      const newDropdowns: IDropdowns = {} as IDropdowns;
+      Object.keys(dropdowns).forEach((x) =>
+        x === d ? (newDropdowns[x] = true) : (newDropdowns[x] = false)
+      );
+      setDropdowns(newDropdowns);
+    }
+  };
 
   // Handle Caught State
   const handleCaught = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -259,260 +268,22 @@ export default function Pokedex() {
                 </button>
               </div>
             )}
-            <div className="flex justify-center gap-5">
-              <div className="w-48">
-                <button
-                  onClick={() =>
-                    setDropdowns((p) => {
-                      let res = Object.assign({}, p);
-                      Object.keys(res).forEach((item) => {
-                        item === "Caught"
-                          ? (res[item] = !res[item])
-                          : (res[item] = false);
-                      });
-                      return res;
-                    })
-                  }
-                  className="w-full border-2 border-black bg-red-btn-unfocus p-2 font-bold outline-none">
-                  Select Caught
-                </button>
-                {dropdowns.Caught && (
-                  <ul className="absolute z-10 w-48">
-                    <li>
-                      <DrowpdownItem
-                        label="Caught"
-                        fn={handleCaught}
-                        checked={caught.Caught}
-                        colour="red"
-                      />
-                    </li>
-                    <li className="border-b-2 border-black">
-                      <DrowpdownItem
-                        label="Uncaught"
-                        fn={handleCaught}
-                        checked={caught.Uncaught}
-                        colour="red"
-                      />
-                    </li>
-                  </ul>
-                )}
-              </div>
-              <div className="w-48">
-                <button
-                  onClick={() =>
-                    setDropdowns((p) => {
-                      let res = Object.assign({}, p);
-                      Object.keys(res).forEach((item) => {
-                        item === "Shiny"
-                          ? (res[item] = !res[item])
-                          : (res[item] = false);
-                      });
-                      return res;
-                    })
-                  }
-                  className="w-full border-2 border-black bg-purple-btn-unfocus p-2 font-bold outline-none">
-                  Select Shiny
-                </button>
-                {dropdowns.Shiny && (
-                  <ul className="absolute z-10 w-48">
-                    <li>
-                      <DrowpdownItem
-                        label={"Not Shiny"}
-                        fn={handleShiny}
-                        checked={!shiny}
-                        colour="purple"
-                      />
-                    </li>
-                    <li className="border-b-2 border-black">
-                      <DrowpdownItem
-                        label="Shiny"
-                        fn={handleShiny}
-                        checked={shiny}
-                        colour="purple"
-                      />
-                    </li>
-                  </ul>
-                )}
-              </div>
-              <div className="w-48">
-                <button
-                  onClick={() =>
-                    setDropdowns((p) => {
-                      let res = Object.assign({}, p);
-                      Object.keys(res).forEach((item) => {
-                        item === "Region"
-                          ? (res[item] = !res[item])
-                          : (res[item] = false);
-                      });
-                      return res;
-                    })
-                  }
-                  className="w-full border-2 border-black bg-green-btn-unfocus p-2 font-bold outline-none">
-                  Select Region
-                </button>
-                {dropdowns.Region && (
-                  <ul className="absolute z-10 w-48">
-                    <li className="border-b-2 border-black">
-                      <DrowpdownItem
-                        label="Select All"
-                        fn={handleRegion}
-                        checked={regions === RegionsList}
-                        colour={"green"}
-                      />
-                    </li>
-                    {Object.values(Region).map((r, index) => (
-                      <li
-                        className={`${
-                          index === Object.values(Region).length - 1 &&
-                          `border-b-2`
-                        } border-black`}>
-                        <DrowpdownItem
-                          label={r}
-                          fn={handleRegion}
-                          checked={regions.includes(r)}
-                          colour={"green"}
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-              <div className="w-48">
-                <button
-                  onClick={() =>
-                    setDropdowns((p) => {
-                      let res = Object.assign({}, p);
-                      Object.keys(res).forEach((item) => {
-                        item === "Rarity"
-                          ? (res[item] = !res[item])
-                          : (res[item] = false);
-                      });
-                      return res;
-                    })
-                  }
-                  className="w-full border-2 border-black bg-orange-btn-unfocus p-2 font-bold outline-none">
-                  Select Rarity
-                </button>
-                {dropdowns.Rarity && (
-                  <ul className="absolute z-10 w-48">
-                    <li className="border-b-2 border-black">
-                      <DrowpdownItem
-                        label="Select All"
-                        fn={handleRarity}
-                        checked={rarities === RaritiesList}
-                        colour="orange"
-                      />
-                    </li>
-                    {Object.values(Rarity).map((r, index) => (
-                      <li
-                        className={`${
-                          index === Object.values(Rarity).length - 1 &&
-                          `border-b-2 border-black`
-                        }`}>
-                        <DrowpdownItem
-                          label={r}
-                          fn={handleRarity}
-                          checked={rarities.includes(r)}
-                          colour="orange"
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-              <div className="w-48">
-                <button
-                  onClick={() =>
-                    setDropdowns((p) => {
-                      let res = Object.assign({}, p);
-                      Object.keys(res).forEach((item) => {
-                        item === "Type"
-                          ? (res[item] = !res[item])
-                          : (res[item] = false);
-                      });
-                      return res;
-                    })
-                  }
-                  className="w-full border-2 border-black bg-blue-btn-unfocus p-2 font-bold outline-none">
-                  Select Type
-                </button>
-                {dropdowns.Type && (
-                  <ul className="absolute z-10 w-48">
-                    <li className="border-b-2 border-black">
-                      <DrowpdownItem
-                        label="Select All"
-                        fn={handleType}
-                        checked={types === TypesList}
-                        colour="blue"
-                      />
-                    </li>
-                    {Object.values(SpeciesType).map((t, index) => (
-                      <li
-                        className={`${
-                          index === Object.values(SpeciesType).length - 1 &&
-                          `border-b-2 border-black`
-                        }`}>
-                        <DrowpdownItem
-                          label={t}
-                          fn={handleType}
-                          checked={types.includes(t)}
-                          colour="blue"
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-              <div className="w-48">
-                <button
-                  onClick={() =>
-                    setDropdowns((p) => {
-                      let res = Object.assign({}, p);
-                      Object.keys(res).forEach((item) => {
-                        item === "Habitat"
-                          ? (res[item] = !res[item])
-                          : (res[item] = false);
-                      });
-                      return res;
-                    })
-                  }
-                  className="w-full border-2 border-black bg-lime-btn-unfocus p-2 font-bold outline-none">
-                  Select Habitat
-                </button>
-                {dropdowns.Habitat && (
-                  <ul className="absolute z-10 w-48">
-                    <li className="border-b-2 border-black">
-                      <DrowpdownItem
-                        label="Select All"
-                        fn={handleHabitat}
-                        checked={habitats === HabitatList}
-                        colour="lime"
-                      />
-                    </li>
-                    {Object.values(Habitat).map((h, index) => (
-                      <li
-                        className={`${
-                          index === Object.values(SpeciesType).length - 10 &&
-                          `border-b-2 border-black`
-                        }`}>
-                        <DrowpdownItem
-                          label={
-                            h === "WatersEdge"
-                              ? "Waters-Edge"
-                              : h === "RoughTerrain"
-                              ? "Rough-Terrain"
-                              : h
-                          }
-                          fn={handleHabitat}
-                          checked={habitats.includes(h)}
-                          colour="lime"
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </div>
+            <Dropdown
+              dropdowns={dropdowns}
+              handleDropdowns={handleDropdowns}
+              caught={caught}
+              shiny={shiny}
+              regions={regions}
+              rarities={rarities}
+              types={types}
+              habitats={habitats}
+              handleCaught={handleCaught}
+              handleShiny={handleShiny}
+              handleRegion={handleRegion}
+              handleRarity={handleRarity}
+              handleType={handleType}
+              handleHabitat={handleHabitat}
+            />
             {getPokedex.isInitialLoading && (
               <div className="mx-auto pt-5">
                 <LoadingSpinner />

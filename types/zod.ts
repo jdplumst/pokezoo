@@ -2,7 +2,6 @@ import {
   AchievementType,
   Attribute,
   Habitat,
-  Instance,
   Rarity,
   Region,
   SpeciesType
