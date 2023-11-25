@@ -59,6 +59,19 @@ export default function PatchNotes() {
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
+                5.09 (November 25, 2023)
+              </h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Added a Rarity Descending sorting button to Game page.
+              </p>
+              <p className="px-4">
+                Removed white outline that sometimes appeared on buttons.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">
                 5.08 (November 11, 2023)
               </h3>
               <hr className="border-black"></hr>
