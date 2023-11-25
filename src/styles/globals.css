@@ -118,6 +118,10 @@ a span:visited {
   color: rgb(147, 51, 234);
 }
 
+button {
+  outline: none;
+}
+
 /* Sidebar */
 .sidebar {
   transition: all 0.5s;
