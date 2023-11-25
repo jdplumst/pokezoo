@@ -106,8 +106,6 @@ export default function Pokedex() {
 
   // Handle Dropdowns State
   const handleDropdowns = (d: string) => {
-    console.log(d);
-    console.log(dropdowns[d]);
     if (dropdowns[d]) {
       const newDropdowns: IDropdowns = {} as IDropdowns;
       Object.keys(dropdowns).forEach((x) => (newDropdowns[x] = false));
@@ -158,7 +156,6 @@ export default function Pokedex() {
     } else {
       setRegions([...regions, label]);
     }
-    console.log(regions);
   };
 
   // Handle Rarity State
