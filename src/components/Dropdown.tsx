@@ -20,7 +20,7 @@ export interface IDropdowns {
 interface IDropdownProps {
   dropdowns: IDropdowns;
   handleDropdowns: (d: string) => void;
-  caught: {
+  caught?: {
     Caught: boolean;
     Uncaught: boolean;
   };
@@ -29,7 +29,7 @@ interface IDropdownProps {
   rarities: Rarity[];
   types: SpeciesType[];
   habitats: Habitat[];
-  handleCaught: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleCaught?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleShiny: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleRegion: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleRarity: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -54,34 +54,36 @@ export default function Dropdown({
   handleHabitat
 }: IDropdownProps) {
   return (
-    <div className="flex justify-center gap-5">
-      <div className="w-48">
-        <button
-          onClick={() => handleDropdowns("Caught")}
-          className="w-full border-2 border-black bg-red-btn-unfocus p-2 font-bold outline-none">
-          Select Caught
-        </button>
-        {dropdowns.Caught && (
-          <ul className="absolute z-10 w-48">
-            <li>
-              <DrowpdownItem
-                label="Caught"
-                fn={handleCaught}
-                checked={caught.Caught}
-                colour="red"
-              />
-            </li>
-            <li className="border-b-2 border-black">
-              <DrowpdownItem
-                label="Uncaught"
-                fn={handleCaught}
-                checked={caught.Uncaught}
-                colour="red"
-              />
-            </li>
-          </ul>
-        )}
-      </div>
+    <div className="flex justify-center gap-5 pt-5">
+      {caught && handleCaught && (
+        <div className="w-48">
+          <button
+            onClick={() => handleDropdowns("Caught")}
+            className="w-full border-2 border-black bg-red-btn-unfocus p-2 font-bold outline-none">
+            Select Caught
+          </button>
+          {dropdowns.Caught && (
+            <ul className="absolute z-10 w-48">
+              <li>
+                <DrowpdownItem
+                  label="Caught"
+                  fn={handleCaught}
+                  checked={caught.Caught}
+                  colour="red"
+                />
+              </li>
+              <li className="border-b-2 border-black">
+                <DrowpdownItem
+                  label="Uncaught"
+                  fn={handleCaught}
+                  checked={caught.Uncaught}
+                  colour="red"
+                />
+              </li>
+            </ul>
+          )}
+        </div>
+      )}
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Shiny")}

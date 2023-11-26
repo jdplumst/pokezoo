@@ -2,7 +2,7 @@ import Head from "next/head";
 import Card from "@/src/components/Card";
 import Start from "@/src/components/Start";
 import { Fragment, useEffect, useState } from "react";
-import { Instance, Region } from "@prisma/client";
+import { Habitat, Instance, Rarity, Region, SpeciesType } from "@prisma/client";
 import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
@@ -14,6 +14,14 @@ import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
 import { ZodSort } from "@/types/zod";
+import types from "next/types";
+import Dropdown, { IDropdowns } from "../components/Dropdown";
+import {
+  RegionsList,
+  RaritiesList,
+  TypesList,
+  HabitatList
+} from "../constants";
 
 export default function Game() {
   const router = useRouter();
@@ -63,8 +71,32 @@ export default function Game() {
   const [usernameError, setUsernameError] = useState<null | string>(null);
   const usernameMutation = trpc.user.selectUsername.useMutation();
 
+  const [shiny, setShiny] = useState(false);
+  const [regions, setRegions] = useState<Region[]>(RegionsList);
+  const [rarities, setRarities] = useState<Rarity[]>(RaritiesList);
+  const [types, setTypes] = useState<SpeciesType[]>(TypesList);
+  const [habitats, setHabitats] = useState<Habitat[]>(HabitatList);
+
+  // Dropdown open state
+  const [dropdowns, setDropdowns] = useState<IDropdowns>({
+    Caught: false,
+    Shiny: false,
+    Region: false,
+    Rarity: false,
+    Type: false,
+    Habitat: false
+  });
+
   const getGame = trpc.instance.getGame.useInfiniteQuery(
-    { limit: 50, order: sort },
+    {
+      limit: 50,
+      order: sort,
+      shiny: shiny,
+      regions: regions,
+      rarities: rarities,
+      types: types,
+      habitats: habitats
+    },
     { getNextPageParam: (lastPage) => lastPage.nextCursor }
   );
 
@@ -170,6 +202,123 @@ export default function Game() {
     );
   };
 
+  // Handle Dropdowns State
+  const handleDropdowns = (d: string) => {
+    if (dropdowns[d]) {
+      const newDropdowns: IDropdowns = {} as IDropdowns;
+      Object.keys(dropdowns).forEach((x) => (newDropdowns[x] = false));
+      setDropdowns(newDropdowns);
+    } else {
+      const newDropdowns: IDropdowns = {} as IDropdowns;
+      Object.keys(dropdowns).forEach((x) =>
+        x === d ? (newDropdowns[x] = true) : (newDropdowns[x] = false)
+      );
+      setDropdowns(newDropdowns);
+    }
+  };
+
+  // Handle Shiny State
+  const handleShiny = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.labels![0].htmlFor;
+    const checked = e.target.checked;
+    if ((label === "Not Shiny" && checked) || (label === "Shiny" && !checked)) {
+      setShiny(false);
+    } else {
+      setShiny(true);
+    }
+  };
+
+  // Handle Region State
+  const handleRegion = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.labels![0].htmlFor as Region;
+    const checked = e.target.checked;
+    if (label.startsWith("all") && regions === RegionsList) {
+      setRegions([]);
+    } else if (label.startsWith("all") && regions !== RegionsList) {
+      setRegions(RegionsList);
+    } else if (!checked && regions.includes(label)) {
+      setRegions(regions.filter((r) => r !== label));
+    } else {
+      setRegions([...regions, label]);
+    }
+  };
+
+  // Handle Rarity State
+  const handleRarity = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.labels![0].htmlFor as Rarity;
+    const checked = e.target.checked;
+    if (label.startsWith("all") && rarities === RaritiesList) {
+      setRarities([]);
+    } else if (label.startsWith("all") && rarities !== RaritiesList) {
+      setRarities(RaritiesList);
+    } else if (!checked && rarities.includes(label)) {
+      setRarities(rarities.filter((r) => r !== label));
+    } else {
+      setRarities([...rarities, label]);
+    }
+  };
+
+  // Handle Type State
+  const handleType = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.labels![0].htmlFor as SpeciesType;
+    const checked = e.target.checked;
+    if (label.startsWith("all") && types === TypesList) {
+      setTypes([]);
+    } else if (label.startsWith("all") && types !== TypesList) {
+      setTypes(TypesList);
+    } else if (!checked && types.includes(label)) {
+      setTypes(types.filter((t) => t !== label));
+    } else {
+      setTypes([...types, label]);
+    }
+  };
+
+  // Handle Habitat State
+  const handleHabitat = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const label = e.target.labels![0].htmlFor as
+      | Habitat
+      | "Waters-Edge"
+      | "Rough-Terrain";
+    const checked = e.target.checked;
+    if (label.startsWith("all") && habitats === HabitatList) {
+      setHabitats([]);
+    } else if (label.startsWith("all") && habitats !== HabitatList) {
+      setHabitats(HabitatList);
+    } else if (
+      label !== "Waters-Edge" &&
+      label !== "Rough-Terrain" &&
+      habitats.includes(label)
+    ) {
+      setHabitats(habitats.filter((h) => h !== label));
+    } else if (
+      label === "Waters-Edge" &&
+      !checked &&
+      habitats.includes("WatersEdge")
+    ) {
+      setHabitats(habitats.filter((h) => h !== "WatersEdge"));
+    } else if (
+      label === "Rough-Terrain" &&
+      !checked &&
+      habitats.includes("RoughTerrain")
+    ) {
+      setHabitats(habitats.filter((h) => h !== "RoughTerrain"));
+    } else if (
+      label === "Waters-Edge" &&
+      checked &&
+      !habitats.includes("WatersEdge")
+    ) {
+      setHabitats([...habitats, "WatersEdge"]);
+    } else if (
+      label === "Rough-Terrain" &&
+      checked &&
+      !habitats.includes("RoughTerrain")
+    ) {
+      setHabitats([...habitats, "RoughTerrain"]);
+    } else {
+      setHabitats([...habitats, label as Habitat]);
+    }
+  };
+
   if (!session || loading) return <Loading />;
 
   return (
@@ -240,7 +389,21 @@ export default function Game() {
               <></>
             )}
             {error && <p>{error}</p>}
-            <div className="flex justify-center gap-5">
+            <Dropdown
+              dropdowns={dropdowns}
+              handleDropdowns={handleDropdowns}
+              shiny={shiny}
+              regions={regions}
+              rarities={rarities}
+              types={types}
+              habitats={habitats}
+              handleShiny={handleShiny}
+              handleRegion={handleRegion}
+              handleRarity={handleRarity}
+              handleType={handleType}
+              handleHabitat={handleHabitat}
+            />
+            <div className="flex justify-center gap-5 pt-5">
               <button
                 onClick={() => setSort("Oldest")}
                 className={`${

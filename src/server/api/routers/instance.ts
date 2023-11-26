@@ -7,7 +7,13 @@ import {
   SHINY_WILDCARD_COST,
   WILDCARD_COST
 } from "@/src/constants";
-import { ZodSort } from "@/types/zod";
+import {
+  ZodHabitat,
+  ZodRarity,
+  ZodRegion,
+  ZodSort,
+  ZodSpeciesType
+} from "@/types/zod";
 
 export const instanceRouter = router({
   getInstanceSpecies: protectedProcedure
@@ -47,7 +53,12 @@ export const instanceRouter = router({
       z.object({
         limit: z.number().min(1).max(100).nullish(),
         cursor: z.string().nullish(),
-        order: ZodSort
+        order: ZodSort,
+        shiny: z.boolean(),
+        regions: z.array(ZodRegion),
+        rarities: z.array(ZodRarity),
+        types: z.array(ZodSpeciesType),
+        habitats: z.array(ZodHabitat)
       })
     )
     .query(async ({ ctx, input }) => {
@@ -56,7 +67,19 @@ export const instanceRouter = router({
       const instances = await ctx.prisma.instance.findMany({
         take: limit + 1,
         include: { species: true },
-        where: { userId: ctx.session.user.id },
+        where: {
+          userId: ctx.session.user.id,
+          species: {
+            shiny: input.shiny,
+            region: { in: input.regions },
+            rarity: { in: input.rarities },
+            OR: [
+              { typeOne: { in: input.types } },
+              { typeTwo: { in: input.types } }
+            ],
+            habitat: { in: input.habitats }
+          }
+        },
         cursor: input.cursor ? { id: input.cursor } : undefined,
         orderBy:
           input.order === "Oldest"
