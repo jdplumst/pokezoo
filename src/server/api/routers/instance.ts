@@ -91,6 +91,11 @@ export const instanceRouter = router({
                 { species: { pokedexNumber: "asc" } },
                 { species: { name: "asc" } }
               ]
+            : input.order === "PokedexDesc"
+            ? [
+                { species: { pokedexNumber: "desc" } },
+                { species: { name: "asc" } }
+              ]
             : input.order === "Rarity"
             ? [
                 { species: { rarity: "asc" } },

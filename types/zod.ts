@@ -12,6 +12,7 @@ export const ZodSort = z.enum([
   "Oldest",
   "Newest",
   "Pokedex",
+  "PokedexDesc",
   "Rarity",
   "RarityDesc"
 ]);

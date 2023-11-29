@@ -410,7 +410,7 @@ export default function Game() {
                   sort === "Oldest"
                     ? `bg-purple-btn-focus`
                     : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Oldest
               </button>
               <button
@@ -419,7 +419,7 @@ export default function Game() {
                   sort === "Newest"
                     ? `bg-purple-btn-focus`
                     : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Newest
               </button>
               <button
@@ -428,8 +428,17 @@ export default function Game() {
                   sort === "Pokedex"
                     ? `bg-purple-btn-focus`
                     : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Pokédex #
+              </button>
+              <button
+                onClick={() => setSort("PokedexDesc")}
+                className={`${
+                  sort === "PokedexDesc"
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                Pokédex # Desc.
               </button>
               <button
                 onClick={() => setSort("Rarity")}
@@ -437,7 +446,7 @@ export default function Game() {
                   sort === "Rarity"
                     ? `bg-purple-btn-focus`
                     : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Rarity
               </button>
               <button
@@ -446,7 +455,7 @@ export default function Game() {
                   sort === "RarityDesc"
                     ? `bg-purple-btn-focus`
                     : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-28 rounded-lg border-2 border-black p-2 font-bold`}>
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Rarity Desc.
               </button>
             </div>
