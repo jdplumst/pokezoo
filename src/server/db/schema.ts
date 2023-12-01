@@ -9,7 +9,8 @@ import {
   mysqlEnum,
   tinyint,
   datetime,
-  timestamp
+  timestamp,
+  boolean
 } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
 import type { AdapterAccount } from "@auth/core/adapters";
@@ -86,7 +87,7 @@ export const achievement = mysqlTable(
       "All"
     ]).notNull(),
     generation: int("generation").notNull(),
-    shiny: tinyint("shiny").notNull(),
+    shiny: boolean("shiny").notNull(),
     region: mysqlEnum("region", [
       "Kanto",
       "Johto",

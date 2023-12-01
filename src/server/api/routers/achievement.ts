@@ -2,10 +2,11 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { MAX_YIELD } from "@/src/constants";
+import { achievement } from "../../db/schema";
 
 export const achievementRouter = router({
   getAchievements: protectedProcedure.query(async ({ ctx }) => {
-    const achievements = await ctx.prisma.achievement.findMany();
+    const achievements = await ctx.db.select().from(achievement);
     return { achievements: achievements };
   }),
 
