@@ -7,7 +7,9 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
-    "analyze": "cross-env ANALYZE=true next build"
+    "analyze": "cross-env ANALYZE=true next build",
+    "db:push": "dotenv drizzle-kit push:mysql",
+    "db:studio": "dotenv drizzle-kit studio"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.9",
@@ -39,6 +41,7 @@
     "cross-env": "^7.0.3",
     "dotenv-cli": "^7.3.0",
     "drizzle-kit": "^0.20.6",
+    "mysql2": "^3.6.5",
     "postcss": "^8.4.31",
     "prettier": "^2.8.8",
     "prettier-plugin-tailwindcss": "^0.2.8",

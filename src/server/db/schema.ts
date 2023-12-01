@@ -18,7 +18,7 @@ import type { AdapterAccount } from "@auth/core/adapters";
 export const account = mysqlTable(
   "Account",
   {
-    id: varchar("id", { length: 191 }).notNull().primaryKey(),
+    id: varchar("id", { length: 191 }).notNull(),
     userId: varchar("userId", { length: 191 }).notNull(),
     type: varchar("type", { length: 191 })
       .$type<AdapterAccount["type"]>()
@@ -151,7 +151,7 @@ export const instance = mysqlTable(
 export const session = mysqlTable(
   "Session",
   {
-    id: varchar("id", { length: 191 }).notNull().primaryKey(),
+    id: varchar("id", { length: 191 }).notNull(),
     sessionToken: varchar("sessionToken", { length: 191 }).notNull(),
     userId: varchar("userId", { length: 191 }).notNull(),
     expires: datetime("expires", { mode: "date", fsp: 3 }).notNull()
@@ -286,9 +286,9 @@ export const trade = mysqlTable(
 export const user = mysqlTable(
   "User",
   {
-    id: varchar("id", { length: 191 }).notNull().primaryKey(),
+    id: varchar("id", { length: 191 }).notNull(),
     name: varchar("name", { length: 191 }),
-    email: varchar("email", { length: 191 }).notNull(),
+    email: varchar("email", { length: 191 }),
     emailVerified: datetime("emailVerified", {
       mode: "string",
       fsp: 3
