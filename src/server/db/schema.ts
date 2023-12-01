@@ -8,16 +8,20 @@ import {
   int,
   mysqlEnum,
   tinyint,
-  datetime
+  datetime,
+  timestamp
 } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
+import type { AdapterAccount } from "@auth/core/adapters";
 
 export const account = mysqlTable(
   "Account",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 }).notNull().primaryKey(),
     userId: varchar("userId", { length: 191 }).notNull(),
-    type: varchar("type", { length: 191 }).notNull(),
+    type: varchar("type", { length: 191 })
+      .$type<AdapterAccount["type"]>()
+      .notNull(),
     provider: varchar("provider", { length: 191 }).notNull(),
     providerAccountId: varchar("providerAccountId", { length: 191 }).notNull(),
     refreshToken: text("refresh_token"),
@@ -146,10 +150,10 @@ export const instance = mysqlTable(
 export const session = mysqlTable(
   "Session",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 }).notNull().primaryKey(),
     sessionToken: varchar("sessionToken", { length: 191 }).notNull(),
     userId: varchar("userId", { length: 191 }).notNull(),
-    expires: datetime("expires", { mode: "string", fsp: 3 }).notNull()
+    expires: datetime("expires", { mode: "date", fsp: 3 }).notNull()
   },
   (table) => {
     return {
@@ -281,10 +285,13 @@ export const trade = mysqlTable(
 export const user = mysqlTable(
   "User",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 }).notNull().primaryKey(),
     name: varchar("name", { length: 191 }),
-    email: varchar("email", { length: 191 }),
-    emailVerified: datetime("emailVerified", { mode: "string", fsp: 3 }),
+    email: varchar("email", { length: 191 }).notNull(),
+    emailVerified: datetime("emailVerified", {
+      mode: "string",
+      fsp: 3
+    }),
     image: varchar("image", { length: 191 }),
     totalYield: int("totalYield").notNull(),
     balance: int("balance").notNull(),
@@ -339,7 +346,7 @@ export const verificationToken = mysqlTable(
   {
     identifier: varchar("identifier", { length: 191 }).notNull(),
     token: varchar("token", { length: 191 }).notNull(),
-    expires: datetime("expires", { mode: "string", fsp: 3 }).notNull()
+    expires: datetime("expires", { mode: "date", fsp: 3 }).notNull()
   },
   (table) => {
     return {

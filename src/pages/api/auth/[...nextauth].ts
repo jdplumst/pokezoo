@@ -1,13 +1,37 @@
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import NextAuth, { Awaitable, NextAuthOptions, Session, User } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import TwitchProvider from "next-auth/providers/twitch";
 import GoogleProvider from "next-auth/providers/google";
-import { prisma } from "@/src/server/db";
 import { AdapterUser } from "next-auth/adapters";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import { db } from "@/src/server/db/index";
+import {
+  user,
+  account,
+  session,
+  verificationToken
+} from "@/src/server/db/schema";
+import { MySqlTableFn, mysqlTable } from "drizzle-orm/mysql-core";
+
+//@ts-ignore
+const myTableHijack: MySqlTableFn = (name, columns, extraConfig) => {
+  switch (name) {
+    case "user":
+      return user;
+    case "account":
+      return account;
+    case "session":
+      return session;
+    case "verificationToken":
+      return verificationToken;
+    default:
+      return mysqlTable(name, columns, extraConfig);
+  }
+};
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
+  //@ts-ignore
+  adapter: DrizzleAdapter(db, myTableHijack),
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
