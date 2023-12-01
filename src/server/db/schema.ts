@@ -14,11 +14,14 @@ import {
 } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
 import type { AdapterAccount } from "@auth/core/adapters";
+import { createId } from "@paralleldrive/cuid2";
 
 export const account = mysqlTable(
   "Account",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
     userId: varchar("userId", { length: 191 }).notNull(),
     type: varchar("type", { length: 191 })
       .$type<AdapterAccount["type"]>()
@@ -48,7 +51,9 @@ export const account = mysqlTable(
 export const achievement = mysqlTable(
   "Achievement",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
     description: varchar("description", { length: 191 }).notNull(),
     tier: int("tier").notNull(),
     yield: int("yield").notNull(),
@@ -109,7 +114,9 @@ export const achievement = mysqlTable(
 export const ball = mysqlTable(
   "Ball",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
     name: varchar("name", { length: 191 }).notNull(),
     img: varchar("img", { length: 191 }).notNull(),
     cost: int("cost").notNull(),
@@ -129,7 +136,9 @@ export const ball = mysqlTable(
 export const instance = mysqlTable(
   "Instance",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
     userId: varchar("userId", { length: 191 }).notNull(),
     speciesId: varchar("speciesId", { length: 191 }).notNull(),
     createDate: datetime("createDate", { mode: "string", fsp: 3 })
@@ -151,7 +160,9 @@ export const instance = mysqlTable(
 export const session = mysqlTable(
   "Session",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
     sessionToken: varchar("sessionToken", { length: 191 }).notNull(),
     userId: varchar("userId", { length: 191 }).notNull(),
     expires: datetime("expires", { mode: "date", fsp: 3 }).notNull()
@@ -170,7 +181,9 @@ export const session = mysqlTable(
 export const species = mysqlTable(
   "Species",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
     pokedexNumber: int("pokedexNumber").notNull(),
     name: varchar("name", { length: 191 }).notNull(),
     rarity: mysqlEnum("rarity", [
@@ -253,7 +266,9 @@ export const species = mysqlTable(
 export const trade = mysqlTable(
   "Trade",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
     initiatorId: varchar("initiatorId", { length: 191 }).notNull(),
     offererId: varchar("offererId", { length: 191 }),
     createDate: datetime("createDate", { mode: "string", fsp: 3 })
@@ -286,7 +301,9 @@ export const trade = mysqlTable(
 export const user = mysqlTable(
   "User",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
     name: varchar("name", { length: 191 }),
     email: varchar("email", { length: 191 }),
     emailVerified: datetime("emailVerified", {
@@ -321,7 +338,9 @@ export const user = mysqlTable(
 export const userAchievement = mysqlTable(
   "UserAchievement",
   {
-    id: varchar("id", { length: 191 }).notNull(),
+    id: varchar("id", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
     userId: varchar("userId", { length: 191 }).notNull(),
     achievementId: varchar("achievementId", { length: 191 }).notNull(),
     createDate: datetime("createDate", { mode: "string", fsp: 3 })
@@ -345,7 +364,9 @@ export const userAchievement = mysqlTable(
 export const verificationToken = mysqlTable(
   "VerificationToken",
   {
-    identifier: varchar("identifier", { length: 191 }).notNull(),
+    identifier: varchar("identifier", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
     token: varchar("token", { length: 191 }).notNull(),
     expires: datetime("expires", { mode: "date", fsp: 3 }).notNull()
   },

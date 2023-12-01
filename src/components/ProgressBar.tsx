@@ -14,13 +14,11 @@ export interface FullAchievement {
 }
 
 interface IProgressBar {
-  user: User;
   fullAchievement: FullAchievement;
   updateYield: () => void;
 }
 
 export default function ProgressBar({
-  user,
   fullAchievement,
   updateYield
 }: IProgressBar) {
@@ -33,7 +31,6 @@ export default function ProgressBar({
     setDisabled(true);
     achievementMutation.mutate(
       {
-        userId: user.id,
         achievementId: fullAchievement.achievement.id
       },
       {

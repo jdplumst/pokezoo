@@ -191,7 +191,6 @@ export default function Achievements() {
                       </div>
                       <div>
                         <ProgressBar
-                          user={session.user}
                           fullAchievement={a}
                           updateYield={updateYield}
                         />
