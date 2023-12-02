@@ -10,6 +10,7 @@ import {
   inArray,
   isNotNull,
   isNull,
+  min,
   notInArray,
   or
 } from "drizzle-orm";
@@ -119,5 +120,21 @@ export const speciesRouter = router({
         .limit(9);
 
       return { starters };
-    })
+    }),
+
+  getCaughtSpecies: protectedProcedure.query(async ({ ctx }) => {
+    const i = ctx.db
+      .select({ speciesId: min(instance.speciesId).as("speciesId") })
+      .from(instance)
+      .where(eq(instance.userId, ctx.session.user.id))
+      .groupBy(instance.speciesId)
+      .as("i");
+
+    const speciesData = await ctx.db
+      .select()
+      .from(species)
+      .innerJoin(i, eq(species.id, i.speciesId));
+
+    return speciesData;
+  })
 });

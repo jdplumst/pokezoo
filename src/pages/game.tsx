@@ -475,7 +475,7 @@ export default function Game() {
                     <Card
                       key={c.Instance.id}
                       instance={c.Instance}
-                      species={c.Species!}
+                      species={c.Species}
                       modifyDeleteList={modifyDeleteList}
                     />
                   ))}

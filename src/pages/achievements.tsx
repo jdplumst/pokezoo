@@ -30,9 +30,7 @@ export default function Achievements() {
     order: null
   });
 
-  const { data: instanceData } = trpc.instance.getInstanceSpecies.useQuery({
-    distinct: true
-  });
+  const { data: instanceData } = trpc.species.getCaughtSpecies.useQuery();
 
   const { data: achievementData } = trpc.achievement.getAchievements.useQuery();
 
@@ -71,10 +69,10 @@ export default function Achievements() {
               s.region === achievementData.achievements[x].region &&
               s.shiny === achievementData.achievements[x].shiny
           ).length;
-          value = instanceData.instances.filter(
+          value = instanceData.filter(
             (i) =>
-              i.species.region === achievementData.achievements[x].region &&
-              i.species.shiny === achievementData.achievements[x].shiny
+              i.Species.region === achievementData.achievements[x].region &&
+              i.Species.shiny === achievementData.achievements[x].shiny
           ).length;
         } else if (achievementData.achievements[x].type === "Rarity") {
           max = speciesData.species.filter(
@@ -83,11 +81,11 @@ export default function Achievements() {
               s.region === achievementData.achievements[x].region &&
               s.shiny === achievementData.achievements[x].shiny
           ).length;
-          value = instanceData.instances.filter(
+          value = instanceData.filter(
             (i) =>
-              i.species.rarity === achievementData.achievements[x].attribute &&
-              i.species.region === achievementData.achievements[x].region &&
-              i.species.shiny === achievementData.achievements[x].shiny
+              i.Species.rarity === achievementData.achievements[x].attribute &&
+              i.Species.region === achievementData.achievements[x].region &&
+              i.Species.shiny === achievementData.achievements[x].shiny
           ).length;
         } else if (achievementData.achievements[x].type === "Habitat") {
           max = speciesData.species.filter(
@@ -96,11 +94,11 @@ export default function Achievements() {
               s.region === achievementData.achievements[x].region &&
               s.shiny === achievementData.achievements[x].shiny
           ).length;
-          value = instanceData.instances.filter(
+          value = instanceData.filter(
             (i) =>
-              i.species.habitat === achievementData.achievements[x].attribute &&
-              i.species.region === achievementData.achievements[x].region &&
-              i.species.shiny === achievementData.achievements[x].shiny
+              i.Species.habitat === achievementData.achievements[x].attribute &&
+              i.Species.region === achievementData.achievements[x].region &&
+              i.Species.shiny === achievementData.achievements[x].shiny
           ).length;
         } else if (achievementData.achievements[x].type === "Type") {
           max = speciesData.species.filter(
@@ -110,14 +108,14 @@ export default function Achievements() {
               s.region === achievementData.achievements[x].region &&
               s.shiny === achievementData.achievements[x].shiny
           ).length;
-          value = instanceData.instances.filter(
+          value = instanceData.filter(
             (i) =>
-              (i.species.typeOne ===
+              (i.Species.typeOne ===
                 achievementData.achievements[x].attribute ||
-                i.species.typeTwo ===
+                i.Species.typeTwo ===
                   achievementData.achievements[x].attribute) &&
-              i.species.region === achievementData.achievements[x].region &&
-              i.species.shiny === achievementData.achievements[x].shiny
+              i.Species.region === achievementData.achievements[x].region &&
+              i.Species.shiny === achievementData.achievements[x].shiny
           ).length;
         }
 

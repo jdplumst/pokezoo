@@ -31,7 +31,7 @@ export default function Trades() {
     trpc.trade.getTrades.useQuery();
 
   const { data: instanceData, isLoading: instanceLoading } =
-    trpc.instance.getInstanceSpecies.useQuery({ distinct: false });
+    trpc.instance.getInstanceSpecies.useQuery();
 
   const initiateMutation = trpc.trade.initiateTrade.useMutation();
   const [initiateModal, setInitiateModal] = useState(false);
@@ -298,25 +298,25 @@ export default function Trades() {
                 {instanceData?.instances.map((i) => (
                   <div
                     className={`flex flex-col items-center border-2 border-solid border-white p-2 text-black ${
-                      i.species.rarity === `Common`
+                      i.rarity === `Common`
                         ? `bg-common-unfocus`
-                        : i.species.rarity === `Rare`
+                        : i.rarity === `Rare`
                         ? `bg-rare-unfocus`
-                        : i.species.rarity === `Epic`
+                        : i.rarity === `Epic`
                         ? `bg-epic-unfocus`
                         : `bg-legendary-unfocus`
                     }`}>
                     <div className="text-center text-xl font-bold capitalize">
-                      {i.species.name}
-                      {i.species.shiny && `⭐`}
+                      {i.name}
+                      {i.shiny && `⭐`}
                     </div>
-                    <img src={i.species.img} />
+                    <img src={i.img} />
                     {initiateModal && (
                       <button
                         onClick={() =>
                           initiateMutation.mutate(
                             {
-                              instanceId: i.id,
+                              instanceId: i.instanceId,
                               description: description
                             },
                             {
@@ -342,7 +342,7 @@ export default function Trades() {
                         onClick={() =>
                           offerMutation.mutate(
                             {
-                              instanceId: i.id,
+                              instanceId: i.instanceId,
                               tradeId: tradeId
                             },
                             {

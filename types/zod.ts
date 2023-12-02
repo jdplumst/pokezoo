@@ -20,6 +20,9 @@ export const ZodSort = z.enum([
 export const ZodTime = z.enum(["day", "night"]);
 
 // let oink: [string, ...string[]] = ["Rarity", "Habitat", "Type", "All"];
+// const ZodOink = z.enum(["Rarity", "Habitat", "Type", "All"]);
+// export const DBOink = Object.values(ZodOink) as [string, ...string[]];
+// const TypeOink = <z.infer<typeof ZodOink>>;
 
 // Prisma enums
 export const ZodRarity = z.nativeEnum(Rarity);

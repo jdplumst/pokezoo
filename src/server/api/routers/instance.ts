@@ -19,39 +19,46 @@ import {
   ZodSpeciesType
 } from "@/types/zod";
 import { instance, species } from "../../db/schema";
-import { and, asc, desc, eq, gte, inArray, notInArray, or } from "drizzle-orm";
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gte,
+  inArray,
+  max,
+  min,
+  notExists,
+  notInArray,
+  or
+} from "drizzle-orm";
 
 export const instanceRouter = router({
-  getInstanceSpecies: protectedProcedure
-    .input(z.object({ distinct: z.boolean() }))
-    .query(async ({ ctx, input }) => {
-      const instances = await ctx.prisma.instance.findMany({
-        where: { userId: ctx.session.user.id.toString() },
-        distinct: [input.distinct ? "speciesId" : "id"],
-        include: {
-          species: {
-            select: {
-              name: true,
-              img: true,
-              rarity: true,
-              habitat: true,
-              typeOne: true,
-              typeTwo: true,
-              generation: true,
-              shiny: true,
-              region: true
-            }
-          }
-        },
-        orderBy: [
-          { species: { pokedexNumber: "asc" } },
-          { species: { name: "asc" } },
-          { species: { shiny: "desc" } }
-        ]
-      });
+  getInstanceSpecies: protectedProcedure.query(async ({ ctx }) => {
+    const instances = await ctx.db
+      .select({
+        instanceId: instance.id,
+        speciesId: species.id,
+        region: species.region,
+        shiny: species.shiny,
+        rarity: species.rarity,
+        habitat: species.habitat,
+        typeOne: species.typeOne,
+        typeTwo: species.typeTwo,
+        name: species.name,
+        img: species.img
+      })
+      .from(instance)
+      .innerJoin(species, eq(instance.speciesId, species.id))
+      .where(and(eq(instance.userId, ctx.session.user.id)))
+      .orderBy(
+        asc(species.pokedexNumber),
+        asc(species.name),
+        desc(species.shiny)
+      );
 
-      return { instances: instances };
-    }),
+    return { instances: instances };
+  }),
 
   // Instances shown on Game page
   getGame: protectedProcedure
@@ -73,7 +80,7 @@ export const instanceRouter = router({
       const instances = await ctx.db
         .select()
         .from(instance)
-        .leftJoin(species, eq(instance.speciesId, species.id))
+        .innerJoin(species, eq(instance.speciesId, species.id))
         .where(
           and(
             eq(instance.userId, ctx.session.user.id),
