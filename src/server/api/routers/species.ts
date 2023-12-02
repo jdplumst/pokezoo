@@ -28,17 +28,15 @@ export const speciesRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      let species;
+      let speciesData;
 
       if (input.order === "pokedex") {
-        species = await ctx.prisma.species.findMany({
-          orderBy: [{ pokedexNumber: "asc" }]
-        });
+        speciesData = await ctx.db.select().from(species);
       } else {
-        species = await ctx.prisma.species.findMany();
+        speciesData = await ctx.db.select().from(species);
       }
 
-      return { species: species };
+      return { species: speciesData };
     }),
 
   // Species shown on Pokedex page
