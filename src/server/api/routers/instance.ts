@@ -18,7 +18,7 @@ import {
   ZodSort,
   ZodSpeciesType
 } from "@/types/zod";
-import { instance, species } from "../../db/schema";
+import { instance, species, user } from "../../db/schema";
 import {
   and,
   asc,
@@ -424,7 +424,7 @@ export const instanceRouter = router({
       };
     }),
 
-  getStarter: protectedProcedure
+  claimStarter: protectedProcedure
     .input(
       z.object({
         speciesId: z.string(),
@@ -432,24 +432,28 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: {
-          totalYield: true,
-          balance: true,
-          instanceCount: true,
-          johtoStarter: true,
-          hoennStarter: true,
-          sinnohStarter: true,
-          unovaStarter: true
-        }
-      });
+      const currUser = (
+        await ctx.db
+          .select({
+            totalYield: user.totalYield,
+            balance: user.balance,
+            instanceCount: user.instanceCount,
+            johtoStarter: user.johtoStarter,
+            hoennStarter: user.hoennStarter,
+            sinnohStarter: user.sinnohStarter,
+            unovaStarter: user.unovaStarter
+          })
+          .from(user)
+          .where(eq(user.id, ctx.session.user.id))
+      )[0];
+
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Not authorized to make this request"
         });
       }
+
       if (input.region === "Johto" && currUser.johtoStarter) {
         throw new TRPCError({
           code: "FORBIDDEN",
@@ -466,41 +470,47 @@ export const instanceRouter = router({
           message: "You have already received a Sinnoh starter."
         });
       }
-      const species = await ctx.prisma.species.findUnique({
-        where: {
-          id: input.speciesId
-        }
-      });
-      if (!species) {
+      const speciesData = (
+        await ctx.db
+          .select()
+          .from(species)
+          .where(eq(species.id, input.speciesId))
+      )[0];
+      if (!speciesData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Species does not exist."
         });
       }
-      if (species.region !== input.region) {
+      if (speciesData.region !== input.region) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: `Species does not come from ${input.region}`
         });
       }
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          totalYield: currUser.totalYield + species.yield,
-          instanceCount: currUser.instanceCount + 1,
-          johtoStarter: input.region === "Johto" ? true : currUser.johtoStarter,
-          hoennStarter: input.region === "Hoenn" ? true : currUser.hoennStarter,
-          sinnohStarter:
-            input.region === "Sinnoh" ? true : currUser.sinnohStarter,
-          unovaStarter: input.region === "Unova" ? true : currUser.unovaStarter
-        }
+
+      await ctx.db.transaction(async (tx) => {
+        await tx
+          .update(user)
+          .set({
+            totalYield: currUser.totalYield + speciesData.yield,
+            instanceCount: currUser.instanceCount + 1,
+            johtoStarter:
+              input.region === "Johto" ? true : currUser.johtoStarter,
+            hoennStarter:
+              input.region === "Hoenn" ? true : currUser.hoennStarter,
+            sinnohStarter:
+              input.region === "Sinnoh" ? true : currUser.sinnohStarter,
+            unovaStarter:
+              input.region === "Unova" ? true : currUser.unovaStarter
+          })
+          .where(eq(user.id, ctx.session.user.id));
+
+        await tx
+          .insert(instance)
+          .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
       });
-      const instance = await ctx.prisma.instance.create({
-        data: { userId: ctx.session.user.id, speciesId: input.speciesId }
-      });
-      return {
-        instance: instance,
-        user: user
-      };
+
+      return { message: "Successfully obtained starter" };
     })
 });

@@ -124,7 +124,7 @@ export default function Game() {
   }, [inView, getGame.hasNextPage]);
 
   // Display starter and updated yield
-  const addStarter = (i: Instance, r: Region) => {
+  const addStarter = () => {
     utils.instance.getGame.invalidate();
     updateSession();
   };

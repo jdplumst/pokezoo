@@ -7,7 +7,7 @@ import { User } from "next-auth";
 
 interface IStarter {
   region: Region;
-  addStarter: (i: Instance, r: Region) => void;
+  addStarter: () => void;
 }
 
 export default function Start({ region, addStarter }: IStarter) {
@@ -18,7 +18,7 @@ export default function Start({ region, addStarter }: IStarter) {
   const getStarters = trpc.species.getStarters.useQuery({ region });
 
   const purchaseMutation = trpc.instance.purchaseInstanceWithBall.useMutation(); // Kanto
-  const starterMutation = trpc.instance.getStarter.useMutation(); // All other regions
+  const starterMutation = trpc.instance.claimStarter.useMutation(); // All other regions
 
   const grassStarter =
     region === "Kanto"
@@ -70,7 +70,7 @@ export default function Start({ region, addStarter }: IStarter) {
           { speciesId: speciesId, cost: 0 },
           {
             onSuccess(data, variables, context) {
-              addStarter(data.instance, region);
+              addStarter();
             },
             onError(error, variables, context) {
               setError(error.message);
@@ -83,7 +83,7 @@ export default function Start({ region, addStarter }: IStarter) {
           { speciesId: speciesId, region: region },
           {
             onSuccess(data, variables, context) {
-              addStarter(data.instance, region);
+              addStarter();
             },
             onError(error, variables, context) {
               setError(error.message);
