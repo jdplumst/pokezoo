@@ -293,9 +293,9 @@ export default function Pokedex() {
                 <Fragment key={p.nextCursor}>
                   {p.pokemon.map((c) => (
                     <Card
-                      key={c.id}
-                      species={c}
-                      caught={c.instances.length > 0}
+                      key={c.Species.id}
+                      species={c.Species}
+                      caught={!!c.i}
                       handlePurchase={handlePurchase}
                     />
                   ))}

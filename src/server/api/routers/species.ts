@@ -1,6 +1,24 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/types/zod";
+import { instance, species } from "../../db/schema";
+import {
+  and,
+  asc,
+  eq,
+  gte,
+  inArray,
+  isNotNull,
+  isNull,
+  notInArray,
+  or
+} from "drizzle-orm";
+import {
+  HabitatList,
+  RaritiesList,
+  RegionsList,
+  TypesList
+} from "@/src/constants";
 
 export const speciesRouter = router({
   getSpecies: protectedProcedure
@@ -40,38 +58,49 @@ export const speciesRouter = router({
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 50;
 
-      const pokemon = await ctx.prisma.species.findMany({
-        take: limit + 1,
-        include: {
-          instances: {
-            distinct: ["speciesId"],
-            where: { userId: ctx.session.user.id }
-          }
-        },
-        where: {
-          shiny: input.shiny,
-          region: { in: input.regions },
-          rarity: { in: input.rarities },
-          OR: [
-            { typeOne: { in: input.types } },
-            { typeTwo: { in: input.types } }
-          ],
-          habitat: { in: input.habitats },
-          instances:
+      const i = ctx.db
+        .selectDistinct({ speciesId: instance.speciesId })
+        .from(instance)
+        .where(eq(instance.userId, ctx.session.user.id))
+        .as("i");
+
+      const pokemon = await ctx.db
+        .select()
+        .from(species)
+        .leftJoin(i, eq(species.id, i.speciesId))
+        .where(
+          and(
+            eq(species.shiny, input.shiny),
+            input.regions.length > 0
+              ? inArray(species.region, input.regions)
+              : notInArray(species.region, RegionsList),
+            input.rarities.length > 0
+              ? inArray(species.rarity, input.rarities)
+              : notInArray(species.rarity, RaritiesList),
+            input.types.length > 0
+              ? or(
+                  inArray(species.typeOne, input.types),
+                  inArray(species.typeTwo, input.types)
+                )
+              : notInArray(species.typeOne, TypesList),
+            input.habitats.length > 0
+              ? inArray(species.habitat, input.habitats)
+              : notInArray(species.habitat, HabitatList),
             input.caught.Caught && !input.caught.Uncaught
-              ? { some: { userId: ctx.session.user.id } }
+              ? isNotNull(i.speciesId)
               : !input.caught.Caught && input.caught.Uncaught
-              ? { none: { userId: ctx.session.user.id } }
-              : undefined
-        },
-        cursor: input.cursor ? { id: input.cursor } : undefined,
-        orderBy: { pokedexNumber: "asc" }
-      });
+              ? isNull(i.speciesId)
+              : undefined,
+            gte(species.id, input.cursor ?? "")
+          )
+        )
+        .limit(limit + 1)
+        .orderBy(asc(species.pokedexNumber));
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (pokemon.length > limit) {
         const nextItem = pokemon.pop();
-        nextCursor = nextItem?.id;
+        nextCursor = nextItem?.Species.id;
       }
 
       return { pokemon, nextCursor };

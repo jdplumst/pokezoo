@@ -194,7 +194,7 @@ export const species = mysqlTable(
     yield: int("yield").notNull(),
     img: varchar("img", { length: 191 }).notNull(),
     sellPrice: int("sellPrice").notNull(),
-    shiny: tinyint("shiny").notNull(),
+    shiny: boolean("shiny").notNull(),
     typeOne: mysqlEnum("typeOne", [
       "Normal",
       "Grass",
