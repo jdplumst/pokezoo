@@ -111,6 +111,9 @@ export default function Game() {
       setTime("night");
     }
     setLoading(false);
+    if (!session.user.username) {
+      setUsernameModal(true);
+    }
   }, [session]);
 
   // Infinite scroll
@@ -194,6 +197,7 @@ export default function Game() {
       {
         onSuccess(data, variables, context) {
           setUsernameModal(false);
+          updateSession();
         },
         onError(error, variables, context) {
           setUsernameError(error.message);

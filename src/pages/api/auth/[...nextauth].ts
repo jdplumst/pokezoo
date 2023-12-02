@@ -12,6 +12,8 @@ import {
   verificationToken
 } from "@/src/server/db/schema";
 import { MySqlTableFn, mysqlTable } from "drizzle-orm/mysql-core";
+import { PrismaAdapter } from "@next-auth/prisma-adapter";
+import { prisma } from "@/src/server/db";
 
 //@ts-ignore
 const myTableHijack: MySqlTableFn = (name, columns, extraConfig) => {
@@ -22,7 +24,7 @@ const myTableHijack: MySqlTableFn = (name, columns, extraConfig) => {
       return account;
     case "session":
       return session;
-    case "verificationToken":
+    case "verification_token":
       return verificationToken;
     default:
       return mysqlTable(name, columns, extraConfig);
@@ -31,7 +33,8 @@ const myTableHijack: MySqlTableFn = (name, columns, extraConfig) => {
 
 export const authOptions: NextAuthOptions = {
   //@ts-ignore
-  adapter: DrizzleAdapter(db, myTableHijack),
+  // adapter: DrizzleAdapter(db),
+  adapter: PrismaAdapter(prisma),
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,

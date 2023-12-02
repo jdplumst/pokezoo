@@ -17,6 +17,8 @@ export const ZodSort = z.enum([
   "RarityDesc"
 ]);
 
+// let oink: [string, ...string[]] = ["Rarity", "Habitat", "Type", "All"];
+
 // Prisma enums
 export const ZodRarity = z.nativeEnum(Rarity);
 export const ZodRegion = z.nativeEnum(Region);

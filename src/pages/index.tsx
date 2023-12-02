@@ -48,7 +48,7 @@ export default function Home() {
           </button>
           <button
             onClick={() => signIn("twitch")}
-            className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black  bg-purple-500">
+            className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-purple-500">
             <span className="flex items-center justify-center gap-2">
               Sign in with Twitch
               <FaTwitch />
