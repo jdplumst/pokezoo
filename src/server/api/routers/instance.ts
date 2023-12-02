@@ -2,9 +2,13 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import {
+  HabitatList,
   MAX_BALANCE,
   MAX_YIELD,
+  RaritiesList,
+  RegionsList,
   SHINY_WILDCARD_COST,
+  TypesList,
   WILDCARD_COST
 } from "@/src/constants";
 import {
@@ -14,6 +18,8 @@ import {
   ZodSort,
   ZodSpeciesType
 } from "@/types/zod";
+import { instance, species } from "../../db/schema";
+import { and, asc, desc, eq, gte, inArray, notInArray, or } from "drizzle-orm";
 
 export const instanceRouter = router({
   getInstanceSpecies: protectedProcedure
@@ -64,57 +70,53 @@ export const instanceRouter = router({
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 50;
 
-      const instances = await ctx.prisma.instance.findMany({
-        take: limit + 1,
-        include: { species: true },
-        where: {
-          userId: ctx.session.user.id,
-          species: {
-            shiny: input.shiny,
-            region: { in: input.regions },
-            rarity: { in: input.rarities },
-            OR: [
-              { typeOne: { in: input.types } },
-              { typeTwo: { in: input.types } }
-            ],
-            habitat: { in: input.habitats }
-          }
-        },
-        cursor: input.cursor ? { id: input.cursor } : undefined,
-        orderBy:
+      const instances = await ctx.db
+        .select()
+        .from(instance)
+        .leftJoin(species, eq(instance.speciesId, species.id))
+        .where(
+          and(
+            eq(instance.userId, ctx.session.user.id),
+            eq(species.shiny, input.shiny),
+            input.regions.length > 0
+              ? inArray(species.region, input.regions)
+              : notInArray(species.region, RegionsList),
+            input.rarities.length > 0
+              ? inArray(species.rarity, input.rarities)
+              : notInArray(species.rarity, RaritiesList),
+            input.types.length > 0
+              ? or(
+                  inArray(species.typeOne, input.types),
+                  inArray(species.typeTwo, input.types)
+                )
+              : notInArray(species.typeOne, TypesList),
+            input.habitats.length > 0
+              ? inArray(species.habitat, input.habitats)
+              : notInArray(species.habitat, HabitatList),
+            gte(instance.id, input.cursor ?? "")
+          )
+        )
+        .orderBy(
           input.order === "Oldest"
-            ? { modifyDate: "asc" }
+            ? asc(instance.modifyDate)
             : input.order === "Newest"
-            ? { modifyDate: "desc" }
+            ? desc(instance.modifyDate)
             : input.order === "Pokedex"
-            ? [
-                { species: { pokedexNumber: "asc" } },
-                { species: { name: "asc" } }
-              ]
+            ? asc(species.pokedexNumber)
             : input.order === "PokedexDesc"
-            ? [
-                { species: { pokedexNumber: "desc" } },
-                { species: { name: "asc" } }
-              ]
+            ? desc(species.pokedexNumber)
             : input.order === "Rarity"
-            ? [
-                { species: { rarity: "asc" } },
-                { species: { pokedexNumber: "asc" } },
-                { species: { name: "asc" } }
-              ]
+            ? asc(species.rarity)
             : input.order === "RarityDesc"
-            ? [
-                { species: { rarity: "desc" } },
-                { species: { pokedexNumber: "asc" } },
-                { species: { name: "asc" } }
-              ]
-            : undefined
-      });
+            ? desc(species.rarity)
+            : asc(instance.id)
+        )
+        .limit(limit + 1);
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (instances.length > limit) {
         const nextItem = instances.pop();
-        nextCursor = nextItem?.id;
+        nextCursor = nextItem?.Instance.id;
       }
 
       return { instances, nextCursor };

@@ -140,10 +140,10 @@ export const instance = mysqlTable(
       .$defaultFn(() => createId()),
     userId: varchar("userId", { length: 191 }).notNull(),
     speciesId: varchar("speciesId", { length: 191 }).notNull(),
-    createDate: datetime("createDate", { mode: "string", fsp: 3 })
+    createDate: datetime("createDate", { mode: "date", fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
-    modifyDate: datetime("modifyDate", { mode: "string", fsp: 3 })
+    modifyDate: datetime("modifyDate", { mode: "date", fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull()
   },

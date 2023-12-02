@@ -473,9 +473,9 @@ export default function Game() {
                 <Fragment key={p.nextCursor}>
                   {p.instances.map((c) => (
                     <Card
-                      key={c.id}
-                      instance={c}
-                      species={c.species}
+                      key={c.Instance.id}
+                      instance={c.Instance}
+                      species={c.Species!}
                       modifyDeleteList={modifyDeleteList}
                     />
                   ))}

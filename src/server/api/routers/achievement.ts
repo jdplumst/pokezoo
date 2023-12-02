@@ -4,7 +4,6 @@ import { TRPCError } from "@trpc/server";
 import { MAX_YIELD } from "@/src/constants";
 import { achievement, user, userAchievement } from "../../db/schema";
 import { and, eq } from "drizzle-orm";
-import { createId } from "@paralleldrive/cuid2";
 
 export const achievementRouter = router({
   getAchievements: protectedProcedure.query(async ({ ctx }) => {
