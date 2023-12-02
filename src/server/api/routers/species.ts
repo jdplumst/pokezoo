@@ -111,14 +111,12 @@ export const speciesRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const starters = await ctx.prisma.species.findMany({
-        take: 9,
-        where: {
-          shiny: false,
-          region: input.region
-        },
-        orderBy: { pokedexNumber: "asc" }
-      });
+      const starters = await ctx.db
+        .select()
+        .from(species)
+        .where(and(eq(species.shiny, false), eq(species.region, input.region)))
+        .orderBy(asc(species.pokedexNumber))
+        .limit(9);
 
       return { starters };
     })
