@@ -1,5 +1,7 @@
 import {
   mysqlTable,
+  mysqlSchema,
+  AnyMySqlColumn,
   index,
   primaryKey,
   unique,
@@ -7,12 +9,10 @@ import {
   text,
   int,
   mysqlEnum,
-  tinyint,
   datetime,
   boolean
 } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
-import type { AdapterAccount } from "@auth/core/adapters";
 import { createId } from "@paralleldrive/cuid2";
 
 export const account = mysqlTable(
@@ -22,9 +22,7 @@ export const account = mysqlTable(
       .notNull()
       .$defaultFn(() => createId()),
     userId: varchar("userId", { length: 191 }).notNull(),
-    type: varchar("type", { length: 191 })
-      .$type<AdapterAccount["type"]>()
-      .notNull(),
+    type: varchar("type", { length: 191 }).notNull(),
     provider: varchar("provider", { length: 191 }).notNull(),
     providerAccountId: varchar("providerAccountId", { length: 191 }).notNull(),
     refreshToken: text("refresh_token"),
@@ -304,23 +302,20 @@ export const user = mysqlTable(
       .notNull()
       .$defaultFn(() => createId()),
     name: varchar("name", { length: 191 }),
-    email: varchar("email", { length: 191 }),
-    emailVerified: datetime("emailVerified", {
-      mode: "string",
-      fsp: 3
-    }),
+    email: varchar("email", { length: 191 }).default("").notNull(),
+    emailVerified: datetime("emailVerified", { mode: "date", fsp: 3 }),
     image: varchar("image", { length: 191 }),
-    totalYield: int("totalYield").notNull(),
-    balance: int("balance").notNull(),
-    claimedDaily: boolean("claimedDaily").notNull(),
-    johtoStarter: boolean("johtoStarter").notNull(),
-    claimedNightly: boolean("claimedNightly").notNull(),
-    admin: boolean("admin").notNull(),
-    hoennStarter: boolean("hoennStarter").notNull(),
-    sinnohStarter: boolean("sinnohStarter").notNull(),
+    totalYield: int("totalYield").default(0).notNull(),
+    balance: int("balance").default(0).notNull(),
+    claimedDaily: boolean("claimedDaily").default(false).notNull(),
+    johtoStarter: boolean("johtoStarter").default(true).notNull(),
+    claimedNightly: boolean("claimedNightly").default(false).notNull(),
+    admin: boolean("admin").default(false).notNull(),
+    hoennStarter: boolean("hoennStarter").default(true).notNull(),
+    sinnohStarter: boolean("sinnohStarter").default(true).notNull(),
     username: varchar("username", { length: 191 }),
-    instanceCount: int("instanceCount").notNull(),
-    unovaStarter: boolean("unovaStarter").notNull(),
+    instanceCount: int("instanceCount").default(0).notNull(),
+    unovaStarter: boolean("unovaStarter").default(true).notNull(),
     commonCards: int("commonCards").default(0).notNull(),
     epicCards: int("epicCards").default(0).notNull(),
     legendaryCards: int("legendaryCards").default(0).notNull(),

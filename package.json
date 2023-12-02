@@ -9,6 +9,7 @@
     "lint": "next lint",
     "analyze": "cross-env ANALYZE=true next build",
     "db:push": "dotenv drizzle-kit push:mysql",
+    "db:pull": "dotenv drizzle-kit introspect:mysql",
     "db:studio": "dotenv drizzle-kit studio"
   },
   "dependencies": {
