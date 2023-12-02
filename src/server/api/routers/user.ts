@@ -116,30 +116,33 @@ export const userRouter = router({
   selectUsername: protectedProcedure
     .input(z.object({ username: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findFirst({
-        where: { id: ctx.session.user.id },
-        select: {
-          balance: true,
-          claimedDaily: true,
-          claimedNightly: true,
-          totalYield: true
-        }
-      });
+      const currUser = (
+        await ctx.db
+          .select({ username: user.username })
+          .from(user)
+          .where(eq(user.id, ctx.session.user.id))
+      )[0];
+
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Not authorized to make this request"
         });
       }
+
       if (input.username.length === 0 || input.username.length > 20) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: "Username must be between 1 and 20 characters long"
         });
       }
-      const exists = await ctx.prisma.user.findFirst({
-        where: { username: input.username }
-      });
+
+      const exists = (
+        await ctx.db
+          .select({ username: user.username })
+          .from(user)
+          .where(eq(user.username, input.username))
+      )[0];
       if (
         exists &&
         exists.username?.toLowerCase() === input.username.toLowerCase()
@@ -149,10 +152,12 @@ export const userRouter = router({
           message: "Username is already taken"
         });
       }
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: { username: input.username }
-      });
-      return { user: user };
+
+      await ctx.db
+        .update(user)
+        .set({ username: input.username })
+        .where(eq(user.id, ctx.session.user.id));
+
+      return { message: "Username set successfully" };
     })
 });
