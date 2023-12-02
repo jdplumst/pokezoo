@@ -6,6 +6,8 @@ import Loading from "../components/Loading";
 import { trpc } from "../utils/trpc";
 import { useRouter } from "next/router";
 import Topbar from "../components/Topbar";
+import { z } from "zod";
+import { ZodTime } from "@/types/zod";
 
 export default function PatchNotes() {
   const router = useRouter();
@@ -17,7 +19,7 @@ export default function PatchNotes() {
     }
   });
 
-  const [time, setTime] = useState<Time>("night");
+  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

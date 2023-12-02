@@ -17,6 +17,8 @@ export const ZodSort = z.enum([
   "RarityDesc"
 ]);
 
+export const ZodTime = z.enum(["day", "night"]);
+
 // let oink: [string, ...string[]] = ["Rarity", "Habitat", "Type", "All"];
 
 // Prisma enums

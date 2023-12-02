@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
-import { ZodSort } from "@/types/zod";
+import { ZodSort, ZodTime } from "@/types/zod";
 import types from "next/types";
 import Dropdown, { IDropdowns } from "../components/Dropdown";
 import {
@@ -41,7 +41,7 @@ export default function Game() {
 
   const { ref, inView } = useInView();
 
-  const [time, setTime] = useState<Time>("night");
+  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
   const [loading, setLoading] = useState(true);
 
   // Variables associated with cards

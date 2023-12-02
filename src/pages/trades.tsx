@@ -8,6 +8,8 @@ import Loading from "../components/Loading";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../components/Modal";
+import { z } from "zod";
+import { ZodTime } from "@/types/zod";
 
 export default function Trades() {
   const router = useRouter();
@@ -46,7 +48,7 @@ export default function Trades() {
 
   const [tradeId, setTradeId] = useState("-1");
 
-  const [time, setTime] = useState<Time>("night");
+  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 

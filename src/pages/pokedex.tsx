@@ -19,6 +19,8 @@ import {
   TypesList,
   HabitatList
 } from "../constants";
+import { z } from "zod";
+import { ZodTime } from "@/types/zod";
 
 interface IPurchased {
   modal: boolean;
@@ -43,7 +45,7 @@ export default function Pokedex() {
 
   const { ref, inView } = useInView();
 
-  const [time, setTime] = useState<Time>("night");
+  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
   const [timeLoading, setTimeLoading] = useState(true);
 
   const [purchased, setPurchased] = useState<IPurchased>({

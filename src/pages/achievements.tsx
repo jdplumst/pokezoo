@@ -9,6 +9,8 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { z } from "zod";
+import { ZodTime } from "@/types/zod";
 
 export default function Achievements() {
   const router = useRouter();
@@ -37,7 +39,7 @@ export default function Achievements() {
   const { data: userAchievementData } =
     trpc.userAchievement.getUserAchievements.useQuery();
 
-  const [time, setTime] = useState<Time>("night");
+  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
   const [loading, setLoading] = useState(true);
   const [fullAchievements, setFullAchievements] = useState<FullAchievement[]>();
 

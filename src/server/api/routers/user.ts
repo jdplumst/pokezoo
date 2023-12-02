@@ -2,32 +2,35 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { MAX_BALANCE } from "@/src/constants";
+import { user } from "../../db/schema";
+import { ZodTime } from "@/types/zod";
+import { eq } from "drizzle-orm";
 
 export const userRouter = router({
   claimReward: protectedProcedure
-    .input(z.object({ time: z.string() }))
+    .input(z.object({ time: ZodTime }))
     .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findFirst({
-        where: { id: ctx.session.user.id },
-        select: {
-          balance: true,
-          claimedDaily: true,
-          claimedNightly: true,
-          totalYield: true,
-          commonCards: true,
-          rareCards: true,
-          epicCards: true,
-          legendaryCards: true
-        }
-      });
+      const currUser = (
+        await ctx.db
+          .select({
+            balance: user.balance,
+            claimedDaily: user.claimedDaily,
+            claimedNightly: user.claimedNightly,
+            totalYield: user.totalYield,
+            commonCards: user.commonCards,
+            rareCards: user.rareCards,
+            epicCards: user.epicCards,
+            legendaryCards: user.legendaryCards
+          })
+          .from(user)
+          .where(eq(user.id, ctx.session.user.id))
+      )[0];
+
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Not authorized to make this request"
         });
-      }
-      if (input.time !== "day" && input.time !== "night") {
-        throw new TRPCError({ code: "BAD_REQUEST", message: "Invalid input." });
       }
 
       const reward = Math.round(
@@ -50,7 +53,6 @@ export const userRouter = router({
         card = "Legendary";
       }
 
-      let user;
       if (input.time === "day") {
         if (currUser.claimedDaily) {
           throw new TRPCError({
@@ -58,9 +60,9 @@ export const userRouter = router({
             message: "Daily reward already claimed"
           });
         }
-        user = await ctx.prisma.user.update({
-          where: { id: ctx.session.user.id },
-          data: {
+        await ctx.db
+          .update(user)
+          .set({
             balance: currUser.balance + newBalance,
             claimedDaily: true,
             commonCards:
@@ -75,8 +77,8 @@ export const userRouter = router({
               card === "Legendary"
                 ? currUser.legendaryCards + 1
                 : currUser.legendaryCards
-          }
-        });
+          })
+          .where(eq(user.id, ctx.session.user.id));
       } else {
         if (currUser.claimedNightly) {
           throw new TRPCError({
@@ -84,9 +86,9 @@ export const userRouter = router({
             message: "Nightly reward already claimed"
           });
         }
-        user = await ctx.prisma.user.update({
-          where: { id: ctx.session.user.id },
-          data: {
+        await ctx.db
+          .update(user)
+          .set({
             balance: currUser.balance + newBalance,
             claimedNightly: true,
             commonCards:
@@ -101,12 +103,11 @@ export const userRouter = router({
               card === "Legendary"
                 ? currUser.legendaryCards + 1
                 : currUser.legendaryCards
-          }
-        });
+          })
+          .where(eq(user.id, ctx.session.user.id));
       }
 
       return {
-        user: user,
         reward: reward,
         card: card
       };
