@@ -356,63 +356,6 @@ export const instanceRouter = router({
       };
     }),
 
-  sellInstance: protectedProcedure
-    .input(
-      z.object({
-        id: z.string()
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true, instanceCount: true }
-      });
-      if (!currUser) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Not authorized to make this request"
-        });
-      }
-      const exists = await ctx.prisma.instance.findUnique({
-        where: { id: input.id },
-        select: { speciesId: true }
-      });
-      if (!exists) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Instance does not exist."
-        });
-      }
-      const species = await ctx.prisma.species.findUnique({
-        where: { id: exists.speciesId }
-      });
-      if (!species) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Species does not exist."
-        });
-      }
-      const newBalance =
-        currUser.balance + species.sellPrice > MAX_BALANCE
-          ? MAX_BALANCE
-          : currUser.balance + species.sellPrice;
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          totalYield: currUser.totalYield - species.yield,
-          balance: newBalance,
-          instanceCount: currUser.instanceCount - 1
-        }
-      });
-      const instance = await ctx.prisma.instance.delete({
-        where: { id: input.id }
-      });
-      return {
-        instance: instance,
-        user: user
-      };
-    }),
-
   sellInstances: protectedProcedure
     .input(
       z.object({
