@@ -24,8 +24,11 @@ import {
   asc,
   desc,
   eq,
+  gt,
   gte,
   inArray,
+  lt,
+  lte,
   max,
   min,
   notExists,
@@ -65,7 +68,7 @@ export const instanceRouter = router({
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.string().nullish(),
+        cursor: z.any().nullish(),
         order: ZodSort,
         shiny: z.boolean(),
         regions: z.array(ZodRegion),
@@ -76,6 +79,7 @@ export const instanceRouter = router({
     )
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 50;
+      console.log(input.cursor);
 
       const instances = await ctx.db
         .select()
@@ -100,7 +104,39 @@ export const instanceRouter = router({
             input.habitats.length > 0
               ? inArray(species.habitat, input.habitats)
               : notInArray(species.habitat, HabitatList),
-            gte(instance.id, input.cursor ?? "")
+            // gt(instance.id, input.cursor ?? "")
+            input.order === "Oldest"
+              ? gte(
+                  instance.modifyDate,
+                  input.cursor ?? new Date("2020-12-03 17:20:11.049")
+                )
+              : input.order === "Newest"
+              ? lte(
+                  instance.modifyDate,
+                  input.cursor ?? new Date("2050-12-03 17:20:11.049")
+                )
+              : input.order === "Pokedex"
+              ? gte(species.pokedexNumber, input.cursor ?? "")
+              : input.order === "PokedexDesc"
+              ? lte(species.pokedexNumber, input.cursor ?? "10000")
+              : input.order === "Rarity"
+              ? and(
+                  gte(
+                    species.pokedexNumber,
+                    input.cursor && input.cursor.pokedexNumber
+                      ? input.cursor.pokedexNumber
+                      : ""
+                  ),
+                  gte(
+                    species.rarity,
+                    input.cursor && input.cursor.rarity
+                      ? input.cursor.rarity
+                      : ""
+                  )
+                )
+              : input.order === "RarityDesc"
+              ? lte(species.pokedexNumber, input.cursor ?? "")
+              : undefined
           )
         )
         .orderBy(
@@ -109,21 +145,36 @@ export const instanceRouter = router({
             : input.order === "Newest"
             ? desc(instance.modifyDate)
             : input.order === "Pokedex"
-            ? asc(species.pokedexNumber)
+            ? (asc(species.name), asc(species.pokedexNumber))
             : input.order === "PokedexDesc"
-            ? desc(species.pokedexNumber)
+            ? (asc(species.name), desc(species.pokedexNumber))
             : input.order === "Rarity"
-            ? asc(species.rarity)
+            ? (asc(species.name),
+              asc(species.pokedexNumber),
+              asc(species.rarity))
             : input.order === "RarityDesc"
-            ? desc(species.rarity)
+            ? (asc(species.name),
+              asc(species.pokedexNumber),
+              desc(species.rarity))
             : asc(instance.id)
+          // asc(instance.id)
         )
         .limit(limit + 1);
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (instances.length > limit) {
         const nextItem = instances.pop();
-        nextCursor = nextItem?.Instance.id;
+        nextCursor =
+          input.order === "Oldest" || input.order === "Newest"
+            ? nextItem?.Instance.modifyDate
+            : input.order === "Pokedex" || input.order === "PokedexDesc"
+            ? nextItem?.Species.pokedexNumber
+            : input.order === "Rarity" || input.order === "RarityDesc"
+            ? {
+                rarity: nextItem?.Species.rarity,
+                pokedexNumber: nextItem?.Species.pokedexNumber
+              }
+            : nextItem?.Instance.id;
       }
 
       return { instances, nextCursor };
@@ -359,7 +410,7 @@ export const instanceRouter = router({
   sellInstances: protectedProcedure
     .input(
       z.object({
-        ids: z.array(z.string()).nonempty("Must include at least one instance")
+        ids: z.array(z.string())
       })
     )
     .mutation(async ({ ctx, input }) => {
