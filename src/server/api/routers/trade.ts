@@ -1,30 +1,54 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
+import { instance, species, trade, user } from "../../db/schema";
+import { desc, eq } from "drizzle-orm";
+import { alias } from "drizzle-orm/mysql-core";
 
 export const tradeRouter = router({
   getTrades: protectedProcedure.query(async ({ ctx }) => {
-    const trades = await ctx.prisma.trade.findMany({
-      orderBy: { modifyDate: "desc" },
-      include: {
-        initiator: { select: { username: true } },
-        offerer: { select: { username: true } },
-        initiatorInstance: {
-          select: {
-            species: {
-              select: { name: true, img: true, rarity: true, shiny: true }
-            }
-          }
-        },
-        offererInstance: {
-          select: {
-            species: {
-              select: { name: true, img: true, rarity: true, shiny: true }
-            }
-          }
-        }
-      }
-    });
+    const initiator = alias(user, "initiator");
+    const offerer = alias(user, "offerer");
+
+    const initiatorInstance = ctx.db
+      .select({
+        id: instance.id,
+        name: species.name,
+        img: species.img,
+        rarity: species.rarity,
+        shiny: species.shiny
+      })
+      .from(instance)
+      .leftJoin(species, eq(instance.speciesId, species.id))
+      .as("initiatorInstance");
+
+    const offererInstance = ctx.db
+      .select({
+        id: instance.id,
+        name: species.name,
+        img: species.img,
+        rarity: species.rarity,
+        shiny: species.shiny
+      })
+      .from(instance)
+      .leftJoin(species, eq(instance.speciesId, species.id))
+      .as("offererInstance");
+
+    const trades = await ctx.db
+      .select()
+      .from(trade)
+      .innerJoin(initiator, eq(trade.initiatorId, initiator.id))
+      .leftJoin(offerer, eq(trade.offererId, offerer.id))
+      .innerJoin(
+        initiatorInstance,
+        eq(trade.initiatorInstanceId, initiatorInstance.id)
+      )
+      .leftJoin(
+        offererInstance,
+        eq(trade.offererInstanceId, offererInstance.id)
+      )
+      .orderBy(desc(trade.modifyDate));
+
     return { trades: trades };
   }),
 

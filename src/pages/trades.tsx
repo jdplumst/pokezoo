@@ -116,29 +116,29 @@ export default function Trades() {
                         </div>
                         <div
                           className={`h-48 border-2 border-solid border-black p-2 ${
-                            t.initiatorInstance.species.rarity === `Common`
+                            t.initiatorInstance.rarity === `Common`
                               ? `bg-common-unfocus`
-                              : t.initiatorInstance.species.rarity === `Rare`
+                              : t.initiatorInstance.rarity === `Rare`
                               ? `bg-rare-unfocus`
-                              : t.initiatorInstance.species.rarity === `Epic`
+                              : t.initiatorInstance.rarity === `Epic`
                               ? `bg-epic-unfocus`
                               : `bg-legendary-unfocus`
                           }`}>
                           <img
-                            src={t.initiatorInstance.species.img}
+                            src={t.initiatorInstance.img!}
                             width={150}
                             height={150}></img>
                           <div className="text-center font-bold capitalize">
-                            {t.initiatorInstance.species.name}
-                            {t.initiatorInstance.species.shiny && `⭐`}
+                            {t.initiatorInstance.name}
+                            {t.initiatorInstance.shiny && `⭐`}
                           </div>
                         </div>
-                        <div className="h-8 text-xl">{t.description}</div>
-                        {t.initiatorId === session.user.id ? (
+                        <div className="h-8 text-xl">{t.Trade.description}</div>
+                        {t.Trade.initiatorId === session.user.id ? (
                           <button
                             onClick={() =>
                               cancelMutation.mutate(
-                                { tradeId: t.id },
+                                { tradeId: t.Trade.id },
                                 {
                                   onSuccess(data, variables, context) {
                                     utils.trade.getTrades.invalidate();
@@ -162,29 +162,29 @@ export default function Trades() {
                           </div>
                           <div
                             className={`h-48 border-2 border-solid border-black p-2 ${
-                              t.offererInstance.species.rarity === `Common`
+                              t.offererInstance.rarity === `Common`
                                 ? `bg-common-unfocus`
-                                : t.offererInstance.species.rarity === `Rare`
+                                : t.offererInstance.rarity === `Rare`
                                 ? `bg-rare-unfocus`
-                                : t.offererInstance.species.rarity === `Epic`
+                                : t.offererInstance.rarity === `Epic`
                                 ? `bg-epic-unfocus`
                                 : `bg-legendary-unfocus`
                             }`}>
                             <img
-                              src={t.offererInstance.species.img}
+                              src={t.offererInstance.img!}
                               width={150}
                               height={150}></img>
                             <div className="text-center font-bold capitalize">
-                              {t.offererInstance.species.name}
-                              {t.offererInstance.species.shiny && `⭐`}
+                              {t.offererInstance.name}
+                              {t.offererInstance.shiny && `⭐`}
                             </div>
                           </div>
                           <div className="h-8"></div>
-                          {t.offererId === session.user.id ? (
+                          {t.Trade.offererId === session.user.id ? (
                             <button
                               onClick={() =>
                                 withdrawMutation.mutate(
-                                  { tradeId: t.id },
+                                  { tradeId: t.Trade.id },
                                   {
                                     onSuccess(data, variables, context) {
                                       utils.trade.getTrades.invalidate();
@@ -196,13 +196,13 @@ export default function Trades() {
                               className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
                               Withdraw
                             </button>
-                          ) : t.offererId &&
-                            t.initiatorId === session.user.id ? (
+                          ) : t.Trade.offererId &&
+                            t.Trade.initiatorId === session.user.id ? (
                             <div className="flex gap-5">
                               <button
                                 onClick={() =>
                                   acceptMutation.mutate(
-                                    { tradeId: t.id },
+                                    { tradeId: t.Trade.id },
                                     {
                                       onSuccess(data, variables, context) {
                                         utils.trade.getTrades.invalidate();
@@ -218,7 +218,7 @@ export default function Trades() {
                               <button
                                 onClick={() =>
                                   rejectMutation.mutate(
-                                    { tradeId: t.id },
+                                    { tradeId: t.Trade.id },
                                     {
                                       onSuccess(data, variables, context) {
                                         utils.trade.getTrades.invalidate();
@@ -244,7 +244,7 @@ export default function Trades() {
                           <button
                             onClick={() => {
                               setOfferModal(true);
-                              setTradeId(t.id);
+                              setTradeId(t.Trade.id);
                             }}
                             disabled={offerModal}
                             className="w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus">
