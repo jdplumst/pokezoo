@@ -137,33 +137,45 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true, instanceCount: true }
-      });
+      const currUser = (
+        await ctx.db
+          .select({
+            totalYield: user.totalYield,
+            balance: user.balance,
+            instanceCount: user.instanceCount
+          })
+          .from(user)
+          .where(eq(user.id, ctx.session.user.id))
+      )[0];
+
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Not authorized to make this request"
         });
       }
+
       if (currUser.balance < input.cost) {
         throw new TRPCError({
           code: "CONFLICT",
           message: "You cannot afford this ball."
         });
       }
-      const species = await ctx.prisma.species.findUnique({
-        where: {
-          id: input.speciesId
-        }
-      });
-      if (!species) {
+
+      const speciesData = (
+        await ctx.db
+          .select()
+          .from(species)
+          .where(eq(species.id, input.speciesId))
+      )[0];
+
+      if (!speciesData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Species does not exist."
         });
       }
+
       if (currUser.instanceCount >= 2000) {
         throw new TRPCError({
           code: "CONFLICT",
@@ -172,24 +184,36 @@ export const instanceRouter = router({
         });
       }
       const newYield =
-        currUser.totalYield + species.yield > MAX_YIELD
+        currUser.totalYield + speciesData.yield > MAX_YIELD
           ? MAX_YIELD
-          : currUser.totalYield + species.yield;
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
+          : currUser.totalYield + speciesData.yield;
+
+      await ctx.db
+        .update(user)
+        .set({
           totalYield: newYield,
           balance: currUser.balance - input.cost,
           instanceCount: currUser.instanceCount + 1
-        }
-      });
-      const instance = await ctx.prisma.instance.create({
-        data: { userId: ctx.session.user.id, speciesId: input.speciesId }
-      });
-      return {
-        instance: instance,
-        user: user
-      };
+        })
+        .where(eq(user.id, ctx.session.user.id));
+
+      await ctx.db
+        .insert(instance)
+        .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
+
+      const instanceData = (
+        await ctx.db
+          .select()
+          .from(instance)
+          .where(
+            and(
+              eq(instance.userId, ctx.session.user.id),
+              eq(instance.speciesId, input.speciesId)
+            )
+          )
+      )[0];
+
+      return { instance: instanceData };
     }),
 
   purchaseInstanceWithWildcards: protectedProcedure
@@ -470,18 +494,21 @@ export const instanceRouter = router({
           message: "You have already received a Sinnoh starter."
         });
       }
+
       const speciesData = (
         await ctx.db
           .select()
           .from(species)
           .where(eq(species.id, input.speciesId))
       )[0];
+
       if (!speciesData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Species does not exist."
         });
       }
+
       if (speciesData.region !== input.region) {
         throw new TRPCError({
           code: "BAD_REQUEST",
