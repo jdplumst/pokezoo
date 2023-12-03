@@ -359,54 +359,64 @@ export const instanceRouter = router({
   sellInstances: protectedProcedure
     .input(
       z.object({
-        ids: z.array(z.string())
+        ids: z.array(z.string()).nonempty("Must include at least one instance")
       })
     )
     .mutation(async ({ ctx, input }) => {
       for (let i of input.ids) {
-        await ctx.prisma.$transaction(async (tx) => {
-          const exists = await tx.instance.findUnique({
-            where: { id: i },
-            select: { speciesId: true }
-          });
+        await ctx.db.transaction(async (tx) => {
+          const exists = (
+            await tx
+              .select({ speciesId: instance.speciesId })
+              .from(instance)
+              .where(eq(instance.id, i))
+          )[0];
+
           if (!exists) {
             throw new TRPCError({
               code: "NOT_FOUND",
               message: "Instance does not exist."
             });
           }
-          const species = await tx.species.findUnique({
-            where: { id: exists.speciesId }
-          });
-          if (!species) {
+
+          const speciesData = (
+            await tx
+              .select()
+              .from(species)
+              .where(eq(species.id, exists.speciesId))
+          )[0];
+
+          if (!speciesData) {
             throw new TRPCError({
               code: "NOT_FOUND",
               message: "Species does not exist."
             });
           }
-          await tx.instance.delete({
-            where: { id: i }
-          });
-          const currUser = await tx.user.findUnique({
-            where: { id: ctx.session.user.id }
-          });
+
+          await tx.delete(instance).where(eq(instance.id, i));
+
+          const currUser = (
+            await tx.select().from(user).where(eq(user.id, ctx.session.user.id))
+          )[0];
+
           if (!currUser) {
             throw new TRPCError({
               code: "UNAUTHORIZED",
               message: "Not authorized to make this request"
             });
           }
-          await tx.user.update({
-            where: { id: ctx.session.user.id },
-            data: {
-              totalYield: currUser.totalYield - species.yield,
+
+          await tx
+            .update(user)
+            .set({
+              totalYield: currUser.totalYield - speciesData.yield,
               balance:
-                currUser.balance + species.sellPrice > MAX_BALANCE
+                currUser.balance + speciesData.sellPrice > MAX_BALANCE
                   ? MAX_BALANCE
-                  : currUser.balance + species.sellPrice,
+                  : currUser.balance + speciesData.sellPrice,
               instanceCount: currUser.instanceCount - 1
-            }
-          });
+            })
+            .where(eq(user.id, ctx.session.user.id));
         });
       }
       return {
