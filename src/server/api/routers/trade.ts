@@ -219,29 +219,34 @@ export const tradeRouter = router({
   withdrawTrade: protectedProcedure
     .input(z.object({ tradeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const trade = await ctx.prisma.trade.findFirst({
-        where: { id: input.tradeId }
-      });
-      if (!trade) {
+      const tradeData = (
+        await ctx.db.select().from(trade).where(eq(trade.id, input.tradeId))
+      )[0];
+
+      if (!tradeData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: `Trade with id ${input.tradeId} does not exist`
         });
       }
-      if (trade.offererId !== ctx.session.user.id) {
+
+      if (tradeData.offererId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You are not the offerer for this trade"
         });
       }
-      await ctx.prisma.trade.update({
-        where: { id: input.tradeId },
-        data: {
+
+      await ctx.db
+        .update(trade)
+        .set({
           offererId: null,
           offererInstanceId: null,
           modifyDate: new Date()
-        }
-      });
+        })
+        .where(eq(trade.id, input.tradeId));
+
+      return { message: "Withdrawn from trade successfully" };
     }),
 
   acceptTrade: protectedProcedure
