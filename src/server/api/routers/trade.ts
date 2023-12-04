@@ -409,35 +409,40 @@ export const tradeRouter = router({
   rejectTrade: protectedProcedure
     .input(z.object({ tradeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const trade = await ctx.prisma.trade.findFirst({
-        where: { id: input.tradeId }
-      });
-      if (!trade) {
+      const tradeData = (
+        await ctx.db.select().from(trade).where(eq(trade.id, input.tradeId))
+      )[0];
+
+      if (!tradeData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: `Trade with id ${input.tradeId} does not exist`
         });
       }
-      if (trade.initiatorId !== ctx.session.user.id) {
+
+      if (tradeData.initiatorId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You are not the initiator for this trade"
         });
       }
-      if (!trade.offererId || !trade.offererInstanceId) {
+
+      if (!tradeData.offererId || !tradeData.offererInstanceId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "There is no offer for this trade"
         });
       }
-      const newTrade = await ctx.prisma.trade.update({
-        where: { id: input.tradeId },
-        data: {
+
+      await ctx.db
+        .update(trade)
+        .set({
           offererId: null,
           offererInstanceId: null,
           modifyDate: new Date()
-        }
-      });
-      return { trade: newTrade };
+        })
+        .where(eq(trade.id, input.tradeId));
+
+      return { message: "Trade rejected successfully" };
     })
 });
