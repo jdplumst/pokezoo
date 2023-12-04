@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { instance, species, trade, user } from "../../db/schema";
-import { desc, eq, or } from "drizzle-orm";
+import { and, desc, eq, or } from "drizzle-orm";
 import { alias } from "drizzle-orm/mysql-core";
 
 export const tradeRouter = router({
@@ -252,134 +252,158 @@ export const tradeRouter = router({
   acceptTrade: protectedProcedure
     .input(z.object({ tradeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const trade = await ctx.prisma.trade.findFirst({
-        where: { id: input.tradeId }
-      });
-      if (!trade) {
+      const tradeData = (
+        await ctx.db.select().from(trade).where(eq(trade.id, input.tradeId))
+      )[0];
+
+      if (!tradeData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: `Trade with id ${input.tradeId} does not exist`
         });
       }
-      if (trade.initiatorId !== ctx.session.user.id) {
+
+      if (tradeData.initiatorId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You are not the initiator for this trade"
         });
       }
-      if (!trade.offererId || !trade.offererInstanceId) {
+
+      if (!tradeData.offererId || !tradeData.offererInstanceId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "There is no offer for this trade"
         });
       }
-      const initiatorInstance = await ctx.prisma.instance.findFirst({
-        where: { id: trade.initiatorInstanceId },
-        select: { id: true, userId: true, species: { select: { yield: true } } }
-      });
-      const offererInstance = await ctx.prisma.instance.findFirst({
-        where: { id: trade.offererInstanceId },
-        select: { id: true, userId: true, species: { select: { yield: true } } }
-      });
+
+      const initiatorInstance = (
+        await ctx.db
+          .select({
+            id: instance.id,
+            userId: instance.userId,
+            yield: species.yield
+          })
+          .from(instance)
+          .innerJoin(species, eq(instance.speciesId, species.id))
+          .where(
+            and(
+              eq(instance.id, tradeData.initiatorInstanceId),
+              eq(instance.userId, tradeData.initiatorId)
+            )
+          )
+      )[0];
+
+      const offererInstance = (
+        await ctx.db
+          .select({
+            id: instance.id,
+            userId: instance.userId,
+            yield: species.yield
+          })
+          .from(instance)
+          .innerJoin(species, eq(instance.speciesId, species.id))
+          .where(
+            and(
+              eq(instance.id, tradeData.offererInstanceId),
+              eq(instance.userId, tradeData.offererId)
+            )
+          )
+      )[0];
+
       if (!initiatorInstance) {
-        await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
+        await ctx.db.delete(trade).where(eq(trade.id, input.tradeId));
+
         throw new TRPCError({
           code: "CONFLICT",
           message: "This initiator's Pokemon no longer belongs to the initiator"
         });
       }
+
       if (!offererInstance) {
-        await ctx.prisma.trade.update({
-          where: { id: input.tradeId },
-          data: {
+        await ctx.db
+          .update(trade)
+          .set({
             offererId: null,
             offererInstanceId: null,
             modifyDate: new Date()
-          }
-        });
+          })
+          .where(eq(trade.id, input.tradeId));
+
         throw new TRPCError({
           code: "CONFLICT",
           message: "The offered Pokemon no longer belongs to the offerer"
         });
       }
-      if (initiatorInstance?.userId !== trade.initiatorId) {
-        await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
-        throw new TRPCError({
-          code: "FORBIDDEN",
-          message: "This initiator's Pokemon no longer belongs to the initiator"
-        });
-      }
-      if (offererInstance?.userId !== trade.offererId) {
-        await ctx.prisma.trade.update({
-          where: { id: input.tradeId },
-          data: {
-            offererId: null,
-            offererInstanceId: null,
-            modifyDate: new Date()
-          }
-        });
-        throw new TRPCError({
-          code: "CONFLICT",
-          message: "The offered Pokemon no longer belongs to the offerer"
-        });
-      }
-      const currInitiatorYield = await ctx.prisma.user.findFirst({
-        where: { id: trade.initiatorId },
-        select: { totalYield: true }
-      });
-      const currOffererYield = await ctx.prisma.user.findFirst({
-        where: { id: trade.offererId },
-        select: { totalYield: true }
-      });
-      await ctx.prisma.$transaction([
-        ctx.prisma.instance.update({
-          where: { id: trade.initiatorInstanceId },
-          data: { userId: trade.offererId, modifyDate: new Date() }
-        }),
-        ctx.prisma.instance.update({
-          where: { id: trade.offererInstanceId },
-          data: { userId: trade.initiatorId, modifyDate: new Date() }
-        }),
-        ctx.prisma.user.update({
-          where: { id: trade.initiatorId },
-          data: {
+
+      const initiator = (
+        await ctx.db
+          .select({ totalYield: user.totalYield })
+          .from(user)
+          .where(eq(user.id, tradeData.initiatorId))
+      )[0];
+
+      const offerer = (
+        await ctx.db
+          .select({ totalYield: user.totalYield })
+          .from(user)
+          .where(eq(user.id, tradeData.offererId))
+      )[0];
+
+      await ctx.db.transaction(async (tx) => {
+        await tx
+          .update(instance)
+          .set({ userId: tradeData.offererId!, modifyDate: new Date() })
+          .where(eq(instance.id, tradeData.initiatorInstanceId));
+
+        await tx
+          .update(instance)
+          .set({ userId: tradeData.initiatorId, modifyDate: new Date() })
+          .where(eq(instance.id, tradeData.offererInstanceId!));
+
+        await tx
+          .update(user)
+          .set({
             totalYield:
-              currInitiatorYield?.totalYield! -
-              initiatorInstance?.species.yield! +
-              offererInstance?.species.yield!
-          }
-        }),
-        ctx.prisma.user.update({
-          where: { id: trade.offererId },
-          data: {
+              initiator.totalYield -
+              initiatorInstance.yield +
+              offererInstance.yield
+          })
+          .where(eq(user.id, tradeData.initiatorId));
+
+        await tx
+          .update(user)
+          .set({
             totalYield:
-              currOffererYield?.totalYield! -
-              offererInstance?.species.yield! +
-              initiatorInstance?.species.yield!
-          }
-        }),
-        ctx.prisma.trade.delete({ where: { id: input.tradeId } }),
-        ctx.prisma.trade.deleteMany({
-          where: {
-            OR: [
-              { initiatorInstanceId: initiatorInstance.id },
-              { initiatorInstanceId: offererInstance.id }
-            ]
-          }
-        }),
-        ctx.prisma.trade.updateMany({
-          where: {
-            OR: [
-              { offererInstanceId: initiatorInstance.id },
-              { offererInstanceId: offererInstance.id }
-            ]
-          },
-          data: {
-            offererId: null,
-            offererInstanceId: null
-          }
-        })
-      ]);
+              offerer.totalYield -
+              offererInstance.yield +
+              initiatorInstance.yield
+          })
+          .where(eq(user.id, tradeData.offererId!));
+
+        await tx.delete(trade).where(eq(trade.id, input.tradeId));
+
+        await tx
+          .delete(trade)
+          .where(
+            or(
+              eq(trade.initiatorInstanceId, initiatorInstance.id),
+              eq(trade.initiatorInstanceId, offererInstance.id)
+            )
+          );
+
+        await tx
+          .update(trade)
+          .set({ offererId: null, offererInstanceId: null })
+          .where(
+            or(
+              eq(trade.offererInstanceId, initiatorInstance.id),
+              eq(trade.offererInstanceId, offererInstance.id)
+            )
+          );
+      });
+
+      return { message: "Trade accepted successfully" };
     }),
 
   rejectTrade: protectedProcedure
