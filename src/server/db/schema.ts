@@ -12,6 +12,14 @@ import {
 } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
+import {
+  DBAchivementType,
+  DBAttribute,
+  DBHabitat,
+  DBRarity,
+  DBRegion,
+  DBSpeciesType
+} from "@/types/zod";
 
 export const account = mysqlTable(
   "Account",
@@ -52,49 +60,11 @@ export const achievement = mysqlTable(
     description: varchar("description", { length: 191 }).notNull(),
     tier: int("tier").notNull(),
     yield: int("yield").notNull(),
-    type: mysqlEnum("type", ["Rarity", "Habitat", "Type", "All"]).notNull(),
-    attribute: mysqlEnum("attribute", [
-      "Common",
-      "Rare",
-      "Epic",
-      "Legendary",
-      "Grassland",
-      "Forest",
-      "WatersEdge",
-      "Sea",
-      "Cave",
-      "Mountain",
-      "RoughTerrain",
-      "Urban",
-      "Normal",
-      "Fire",
-      "Fighting",
-      "Water",
-      "Flying",
-      "Grass",
-      "Poison",
-      "Electric",
-      "Ground",
-      "Psychic",
-      "Rock",
-      "Ice",
-      "Bug",
-      "Dragon",
-      "Ghost",
-      "Steel",
-      "Fairy",
-      "Dark",
-      "All"
-    ]).notNull(),
+    type: mysqlEnum("type", DBAchivementType).notNull(),
+    attribute: mysqlEnum("attribute", DBAttribute).notNull(),
     generation: int("generation").notNull(),
     shiny: boolean("shiny").notNull(),
-    region: mysqlEnum("region", [
-      "Kanto",
-      "Johto",
-      "Hoenn",
-      "Sinnoh",
-      "Unova"
-    ]).notNull()
+    region: mysqlEnum("region", DBRegion).notNull()
   },
   (table) => {
     return {
@@ -181,75 +151,16 @@ export const species = mysqlTable(
       .$defaultFn(() => createId()),
     pokedexNumber: int("pokedexNumber").notNull(),
     name: varchar("name", { length: 191 }).notNull(),
-    rarity: mysqlEnum("rarity", [
-      "Common",
-      "Rare",
-      "Epic",
-      "Legendary"
-    ]).notNull(),
+    rarity: mysqlEnum("rarity", DBRarity).notNull(),
     yield: int("yield").notNull(),
     img: varchar("img", { length: 191 }).notNull(),
     sellPrice: int("sellPrice").notNull(),
     shiny: boolean("shiny").notNull(),
-    typeOne: mysqlEnum("typeOne", [
-      "Normal",
-      "Grass",
-      "Bug",
-      "Fire",
-      "Electric",
-      "Ground",
-      "Water",
-      "Fighting",
-      "Poison",
-      "Rock",
-      "Ice",
-      "Ghost",
-      "Psychic",
-      "Fairy",
-      "Dark",
-      "Dragon",
-      "Steel",
-      "Flying"
-    ]).notNull(),
-    typeTwo: mysqlEnum("typeTwo", [
-      "Normal",
-      "Grass",
-      "Bug",
-      "Fire",
-      "Electric",
-      "Ground",
-      "Water",
-      "Fighting",
-      "Poison",
-      "Rock",
-      "Ice",
-      "Ghost",
-      "Psychic",
-      "Fairy",
-      "Dark",
-      "Dragon",
-      "Steel",
-      "Flying"
-    ]),
+    typeOne: mysqlEnum("typeOne", DBSpeciesType).notNull(),
+    typeTwo: mysqlEnum("typeTwo", DBSpeciesType),
     generation: int("generation").notNull(),
-    habitat: mysqlEnum("habitat", [
-      "Grassland",
-      "Forest",
-      "WatersEdge",
-      "Sea",
-      "Cave",
-      "Mountain",
-      "RoughTerrain",
-      "Urban",
-      "Rare"
-    ]).notNull(),
-    region: mysqlEnum("region", [
-      "Kanto",
-      "Johto",
-      "Hoenn",
-      "Sinnoh",
-      "Unova"
-    ]).notNull()
+    habitat: mysqlEnum("habitat", DBHabitat).notNull(),
+    region: mysqlEnum("region", DBRegion).notNull()
   },
   (table) => {
     return {

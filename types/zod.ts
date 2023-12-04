@@ -19,15 +19,82 @@ export const ZodSort = z.enum([
 
 export const ZodTime = z.enum(["day", "night"]);
 
-// let oink: [string, ...string[]] = ["Rarity", "Habitat", "Type", "All"];
-// const ZodOink = z.enum(["Rarity", "Habitat", "Type", "All"]);
-// export const DBOink = Object.values(ZodOink) as [string, ...string[]];
-// const TypeOink = <z.infer<typeof ZodOink>>;
+// Drizzle enums
+export const DBRegion = ["Kanto", "Johto", "Hoenn", "Sinnoh", "Unova"] as const;
+export const ZodRegion = z.enum(DBRegion);
 
-// Prisma enums
-export const ZodRarity = z.nativeEnum(Rarity);
-export const ZodRegion = z.nativeEnum(Region);
-export const ZodSpeciesType = z.nativeEnum(SpeciesType);
-export const ZodHabitat = z.nativeEnum(Habitat);
-export const ZodAttribute = z.nativeEnum(Attribute);
-export const ZodAchievementType = z.nativeEnum(AchievementType);
+export const DBRarity = ["Common", "Rare", "Epic", "Legendary"] as const;
+export const ZodRarity = z.enum(DBRarity);
+
+export const DBSpeciesType = [
+  "Normal",
+  "Grass",
+  "Bug",
+  "Fire",
+  "Electric",
+  "Ground",
+  "Water",
+  "Fighting",
+  "Poison",
+  "Rock",
+  "Ice",
+  "Ghost",
+  "Psychic",
+  "Fairy",
+  "Dark",
+  "Dragon",
+  "Steel",
+  "Flying"
+] as const;
+export const ZodSpeciesType = z.enum(DBSpeciesType);
+
+export const DBHabitat = [
+  "Grassland",
+  "Forest",
+  "WatersEdge",
+  "Sea",
+  "Cave",
+  "Mountain",
+  "RoughTerrain",
+  "Urban",
+  "Rare"
+] as const;
+export const ZodHabitat = z.enum(DBHabitat);
+
+export const DBAttribute = [
+  "Common",
+  "Rare",
+  "Epic",
+  "Legendary",
+  "Grassland",
+  "Forest",
+  "WatersEdge",
+  "Sea",
+  "Cave",
+  "Mountain",
+  "RoughTerrain",
+  "Urban",
+  "Normal",
+  "Fire",
+  "Fighting",
+  "Water",
+  "Flying",
+  "Grass",
+  "Poison",
+  "Electric",
+  "Ground",
+  "Psychic",
+  "Rock",
+  "Ice",
+  "Bug",
+  "Dragon",
+  "Ghost",
+  "Steel",
+  "Fairy",
+  "Dark",
+  "All"
+] as const;
+export const ZodAttribute = z.enum(DBAttribute);
+
+export const DBAchivementType = ["Rarity", "Habitat", "Type", "All"] as const;
+export const ZodAchievementType = z.enum(DBAchivementType);
