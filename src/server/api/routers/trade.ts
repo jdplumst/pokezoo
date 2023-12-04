@@ -111,22 +111,27 @@ export const tradeRouter = router({
   cancelTrade: protectedProcedure
     .input(z.object({ tradeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const trade = await ctx.prisma.trade.findFirst({
-        where: { id: input.tradeId }
-      });
-      if (!trade) {
+      const tradeData = (
+        await ctx.db.select().from(trade).where(eq(trade.id, input.tradeId))
+      )[0];
+
+      if (!tradeData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: `Trade with id ${input.tradeId} does not exist`
         });
       }
-      if (trade.initiatorId !== ctx.session.user.id) {
+
+      if (tradeData.initiatorId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You are not authorized to cancel this trade"
         });
       }
-      await ctx.prisma.trade.delete({ where: { id: input.tradeId } });
+
+      await ctx.db.delete(trade).where(eq(trade.id, input.tradeId));
+
+      return { message: "Trade deleted successfully" };
     }),
 
   offerTrade: protectedProcedure
