@@ -19,6 +19,8 @@ import {
   TypesList,
   HabitatList
 } from "../constants";
+import { z } from "zod";
+import { ZodTime } from "@/types/zod";
 
 interface IPurchased {
   modal: boolean;
@@ -43,7 +45,7 @@ export default function Pokedex() {
 
   const { ref, inView } = useInView();
 
-  const [time, setTime] = useState<Time>("night");
+  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
   const [timeLoading, setTimeLoading] = useState(true);
 
   const [purchased, setPurchased] = useState<IPurchased>({
@@ -291,9 +293,9 @@ export default function Pokedex() {
                 <Fragment key={p.nextCursor}>
                   {p.pokemon.map((c) => (
                     <Card
-                      key={c.id}
-                      species={c}
-                      caught={c.instances.length > 0}
+                      key={c.Species.id}
+                      species={c.Species}
+                      caught={!!c.i}
                       handlePurchase={handlePurchase}
                     />
                   ))}

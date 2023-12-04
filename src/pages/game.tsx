@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
-import { ZodSort } from "@/types/zod";
+import { ZodSort, ZodTime } from "@/types/zod";
 import types from "next/types";
 import Dropdown, { IDropdowns } from "../components/Dropdown";
 import {
@@ -41,7 +41,7 @@ export default function Game() {
 
   const { ref, inView } = useInView();
 
-  const [time, setTime] = useState<Time>("night");
+  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
   const [loading, setLoading] = useState(true);
 
   // Variables associated with cards
@@ -111,6 +111,9 @@ export default function Game() {
       setTime("night");
     }
     setLoading(false);
+    if (!session.user.username) {
+      setUsernameModal(true);
+    }
   }, [session]);
 
   // Infinite scroll
@@ -121,7 +124,7 @@ export default function Game() {
   }, [inView, getGame.hasNextPage]);
 
   // Display starter and updated yield
-  const addStarter = (i: Instance, r: Region) => {
+  const addStarter = () => {
     utils.instance.getGame.invalidate();
     updateSession();
   };
@@ -194,6 +197,7 @@ export default function Game() {
       {
         onSuccess(data, variables, context) {
           setUsernameModal(false);
+          updateSession();
         },
         onError(error, variables, context) {
           setUsernameError(error.message);
@@ -469,9 +473,9 @@ export default function Game() {
                 <Fragment key={p.nextCursor}>
                   {p.instances.map((c) => (
                     <Card
-                      key={c.id}
-                      instance={c}
-                      species={c.species}
+                      key={c.Instance.id}
+                      instance={c.Instance}
+                      species={c.Species}
                       modifyDeleteList={modifyDeleteList}
                     />
                   ))}

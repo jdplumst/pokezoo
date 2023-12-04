@@ -2,30 +2,39 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { MAX_YIELD } from "@/src/constants";
+import { achievement, user, userAchievement } from "../../db/schema";
+import { and, eq } from "drizzle-orm";
 
 export const achievementRouter = router({
   getAchievements: protectedProcedure.query(async ({ ctx }) => {
-    const achievements = await ctx.prisma.achievement.findMany();
+    const achievements = await ctx.db.select().from(achievement);
     return { achievements: achievements };
   }),
 
   claimAchievement: protectedProcedure
-    .input(z.object({ userId: z.string(), achievementId: z.string() }))
+    .input(z.object({ achievementId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: { totalYield: true, id: true }
-      });
-      if (!currUser || currUser.id !== input.userId) {
+      const currUser = (
+        await ctx.db
+          .select({ id: user.id, totalYield: user.totalYield })
+          .from(user)
+          .where(eq(user.id, ctx.session.user.id))
+      )[0];
+
+      if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Not authorized to make this request"
         });
       }
 
-      const achievement = await ctx.prisma.achievement.findFirst({
-        where: { id: input.achievementId }
-      });
+      const achievementData = (
+        await ctx.db
+          .select()
+          .from(achievement)
+          .where(eq(achievement.id, input.achievementId))
+      )[0];
+
       if (!achievement) {
         throw new TRPCError({
           code: "NOT_FOUND",
@@ -33,9 +42,18 @@ export const achievementRouter = router({
         });
       }
 
-      const exists = await ctx.prisma.userAchievement.findFirst({
-        where: { userId: input.userId, achievementId: input.achievementId }
-      });
+      const exists = (
+        await ctx.db
+          .select()
+          .from(userAchievement)
+          .where(
+            and(
+              eq(userAchievement.userId, ctx.session.user.id),
+              eq(userAchievement.achievementId, input.achievementId)
+            )
+          )
+      )[0];
+
       if (exists) {
         throw new TRPCError({
           code: "FORBIDDEN",
@@ -44,17 +62,21 @@ export const achievementRouter = router({
       }
 
       const newYield =
-        currUser.totalYield + achievement.yield > MAX_YIELD
+        currUser.totalYield + achievementData.yield > MAX_YIELD
           ? MAX_YIELD
-          : currUser.totalYield + achievement.yield;
+          : currUser.totalYield + achievementData.yield;
 
-      const user = await ctx.prisma.user.update({
-        where: { id: input.userId },
-        data: { totalYield: newYield }
+      await ctx.db.transaction(async (tx) => {
+        await tx
+          .update(user)
+          .set({ totalYield: newYield })
+          .where(eq(user.id, ctx.session.user.id));
+        await tx.insert(userAchievement).values({
+          userId: ctx.session.user.id,
+          achievementId: input.achievementId
+        });
       });
-      const userAchievement = await ctx.prisma.userAchievement.create({
-        data: { userId: input.userId, achievementId: input.achievementId }
-      });
-      return userAchievement;
+
+      return { message: "Achievement claimed successfully" };
     })
 });

@@ -2,9 +2,13 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import {
+  HabitatList,
   MAX_BALANCE,
   MAX_YIELD,
+  RaritiesList,
+  RegionsList,
   SHINY_WILDCARD_COST,
+  TypesList,
   WILDCARD_COST
 } from "@/src/constants";
 import {
@@ -14,45 +18,57 @@ import {
   ZodSort,
   ZodSpeciesType
 } from "@/types/zod";
+import { instance, species, user } from "../../db/schema";
+import {
+  and,
+  asc,
+  desc,
+  eq,
+  gt,
+  gte,
+  inArray,
+  lt,
+  lte,
+  max,
+  min,
+  notExists,
+  notInArray,
+  or
+} from "drizzle-orm";
 
 export const instanceRouter = router({
-  getInstanceSpecies: protectedProcedure
-    .input(z.object({ distinct: z.boolean() }))
-    .query(async ({ ctx, input }) => {
-      const instances = await ctx.prisma.instance.findMany({
-        where: { userId: ctx.session.user.id.toString() },
-        distinct: [input.distinct ? "speciesId" : "id"],
-        include: {
-          species: {
-            select: {
-              name: true,
-              img: true,
-              rarity: true,
-              habitat: true,
-              typeOne: true,
-              typeTwo: true,
-              generation: true,
-              shiny: true,
-              region: true
-            }
-          }
-        },
-        orderBy: [
-          { species: { pokedexNumber: "asc" } },
-          { species: { name: "asc" } },
-          { species: { shiny: "desc" } }
-        ]
-      });
+  getInstanceSpecies: protectedProcedure.query(async ({ ctx }) => {
+    const instances = await ctx.db
+      .select({
+        instanceId: instance.id,
+        speciesId: species.id,
+        region: species.region,
+        shiny: species.shiny,
+        rarity: species.rarity,
+        habitat: species.habitat,
+        typeOne: species.typeOne,
+        typeTwo: species.typeTwo,
+        name: species.name,
+        img: species.img
+      })
+      .from(instance)
+      .innerJoin(species, eq(instance.speciesId, species.id))
+      .where(and(eq(instance.userId, ctx.session.user.id)))
+      .orderBy(
+        asc(species.pokedexNumber),
+        asc(species.name),
+        desc(species.shiny)
+      );
 
-      return { instances: instances };
-    }),
+    return { instances: instances };
+  }),
 
   // Instances shown on Game page
   getGame: protectedProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.string().nullish(),
+        cursor: z.any().nullish(),
         order: ZodSort,
         shiny: z.boolean(),
         regions: z.array(ZodRegion),
@@ -64,57 +80,98 @@ export const instanceRouter = router({
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 50;
 
-      const instances = await ctx.prisma.instance.findMany({
-        take: limit + 1,
-        include: { species: true },
-        where: {
-          userId: ctx.session.user.id,
-          species: {
-            shiny: input.shiny,
-            region: { in: input.regions },
-            rarity: { in: input.rarities },
-            OR: [
-              { typeOne: { in: input.types } },
-              { typeTwo: { in: input.types } }
-            ],
-            habitat: { in: input.habitats }
-          }
-        },
-        cursor: input.cursor ? { id: input.cursor } : undefined,
-        orderBy:
+      const instances = await ctx.db
+        .select()
+        .from(instance)
+        .innerJoin(species, eq(instance.speciesId, species.id))
+        .where(
+          and(
+            eq(instance.userId, ctx.session.user.id),
+            eq(species.shiny, input.shiny),
+            input.regions.length > 0
+              ? inArray(species.region, input.regions)
+              : notInArray(species.region, RegionsList),
+            input.rarities.length > 0
+              ? inArray(species.rarity, input.rarities)
+              : notInArray(species.rarity, RaritiesList),
+            input.types.length > 0
+              ? or(
+                  inArray(species.typeOne, input.types),
+                  inArray(species.typeTwo, input.types)
+                )
+              : notInArray(species.typeOne, TypesList),
+            input.habitats.length > 0
+              ? inArray(species.habitat, input.habitats)
+              : notInArray(species.habitat, HabitatList),
+            input.order === "Oldest"
+              ? gte(
+                  instance.modifyDate,
+                  input.cursor ?? new Date("2020-12-03 17:20:11.049")
+                )
+              : input.order === "Newest"
+              ? lte(
+                  instance.modifyDate,
+                  input.cursor ?? new Date("2050-12-03 17:20:11.049")
+                )
+              : input.order === "Pokedex"
+              ? gte(species.pokedexNumber, input.cursor ?? "")
+              : input.order === "PokedexDesc"
+              ? lte(species.pokedexNumber, input.cursor ?? "10000")
+              : input.order === "Rarity"
+              ? and(
+                  gte(
+                    species.pokedexNumber,
+                    input.cursor && input.cursor.pokedexNumber
+                      ? input.cursor.pokedexNumber
+                      : ""
+                  ),
+                  gte(
+                    species.rarity,
+                    input.cursor && input.cursor.rarity
+                      ? input.cursor.rarity
+                      : ""
+                  )
+                )
+              : input.order === "RarityDesc"
+              ? lte(species.pokedexNumber, input.cursor ?? "")
+              : undefined
+          )
+        )
+        .orderBy(
           input.order === "Oldest"
-            ? { modifyDate: "asc" }
+            ? asc(instance.modifyDate)
             : input.order === "Newest"
-            ? { modifyDate: "desc" }
+            ? desc(instance.modifyDate)
             : input.order === "Pokedex"
-            ? [
-                { species: { pokedexNumber: "asc" } },
-                { species: { name: "asc" } }
-              ]
+            ? (asc(species.name), asc(species.pokedexNumber))
             : input.order === "PokedexDesc"
-            ? [
-                { species: { pokedexNumber: "desc" } },
-                { species: { name: "asc" } }
-              ]
+            ? (asc(species.name), desc(species.pokedexNumber))
             : input.order === "Rarity"
-            ? [
-                { species: { rarity: "asc" } },
-                { species: { pokedexNumber: "asc" } },
-                { species: { name: "asc" } }
-              ]
+            ? (asc(species.name),
+              asc(species.pokedexNumber),
+              asc(species.rarity))
             : input.order === "RarityDesc"
-            ? [
-                { species: { rarity: "desc" } },
-                { species: { pokedexNumber: "asc" } },
-                { species: { name: "asc" } }
-              ]
-            : undefined
-      });
+            ? (asc(species.name),
+              asc(species.pokedexNumber),
+              desc(species.rarity))
+            : asc(instance.id)
+        )
+        .limit(limit + 1);
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (instances.length > limit) {
         const nextItem = instances.pop();
-        nextCursor = nextItem?.id;
+        nextCursor =
+          input.order === "Oldest" || input.order === "Newest"
+            ? nextItem?.Instance.modifyDate
+            : input.order === "Pokedex" || input.order === "PokedexDesc"
+            ? nextItem?.Species.pokedexNumber
+            : input.order === "Rarity" || input.order === "RarityDesc"
+            ? {
+                rarity: nextItem?.Species.rarity,
+                pokedexNumber: nextItem?.Species.pokedexNumber
+              }
+            : nextItem?.Instance.id;
       }
 
       return { instances, nextCursor };
@@ -128,33 +185,45 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true, instanceCount: true }
-      });
+      const currUser = (
+        await ctx.db
+          .select({
+            totalYield: user.totalYield,
+            balance: user.balance,
+            instanceCount: user.instanceCount
+          })
+          .from(user)
+          .where(eq(user.id, ctx.session.user.id))
+      )[0];
+
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Not authorized to make this request"
         });
       }
+
       if (currUser.balance < input.cost) {
         throw new TRPCError({
           code: "CONFLICT",
           message: "You cannot afford this ball."
         });
       }
-      const species = await ctx.prisma.species.findUnique({
-        where: {
-          id: input.speciesId
-        }
-      });
-      if (!species) {
+
+      const speciesData = (
+        await ctx.db
+          .select()
+          .from(species)
+          .where(eq(species.id, input.speciesId))
+      )[0];
+
+      if (!speciesData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Species does not exist."
         });
       }
+
       if (currUser.instanceCount >= 2000) {
         throw new TRPCError({
           code: "CONFLICT",
@@ -163,24 +232,36 @@ export const instanceRouter = router({
         });
       }
       const newYield =
-        currUser.totalYield + species.yield > MAX_YIELD
+        currUser.totalYield + speciesData.yield > MAX_YIELD
           ? MAX_YIELD
-          : currUser.totalYield + species.yield;
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
+          : currUser.totalYield + speciesData.yield;
+
+      await ctx.db
+        .update(user)
+        .set({
           totalYield: newYield,
           balance: currUser.balance - input.cost,
           instanceCount: currUser.instanceCount + 1
-        }
-      });
-      const instance = await ctx.prisma.instance.create({
-        data: { userId: ctx.session.user.id, speciesId: input.speciesId }
-      });
-      return {
-        instance: instance,
-        user: user
-      };
+        })
+        .where(eq(user.id, ctx.session.user.id));
+
+      await ctx.db
+        .insert(instance)
+        .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
+
+      const instanceData = (
+        await ctx.db
+          .select()
+          .from(instance)
+          .where(
+            and(
+              eq(instance.userId, ctx.session.user.id),
+              eq(instance.speciesId, input.speciesId)
+            )
+          )
+      )[0];
+
+      return { instance: instanceData };
     }),
 
   purchaseInstanceWithWildcards: protectedProcedure
@@ -190,58 +271,65 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: {
-          totalYield: true,
-          instanceCount: true,
-          commonCards: true,
-          rareCards: true,
-          epicCards: true,
-          legendaryCards: true
-        }
-      });
+      const currUser = (
+        await ctx.db
+          .select({
+            totalYield: user.totalYield,
+            instanceCount: user.instanceCount,
+            commonCards: user.commonCards,
+            rareCards: user.rareCards,
+            epicCards: user.epicCards,
+            legendaryCards: user.legendaryCards
+          })
+          .from(user)
+          .where(eq(user.id, ctx.session.user.id))
+      )[0];
+
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Not authorized to make this request"
         });
       }
-      const species = await ctx.prisma.species.findUnique({
-        where: {
-          id: input.speciesId
-        }
-      });
-      if (!species) {
+
+      const speciesData = (
+        await ctx.db
+          .select()
+          .from(species)
+          .where(eq(species.id, input.speciesId))
+      )[0];
+
+      if (!speciesData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Species does not exist."
         });
       }
+
       if (
-        (species.rarity === "Common" &&
-          !species.shiny &&
+        (speciesData.rarity === "Common" &&
+          !speciesData.shiny &&
           currUser.commonCards < WILDCARD_COST) ||
-        (species.rarity === "Common" &&
-          species.shiny &&
+        (speciesData.rarity === "Common" &&
+          speciesData.shiny &&
           currUser.commonCards < SHINY_WILDCARD_COST) ||
-        (species.rarity === "Rare" &&
-          !species.shiny &&
+        (speciesData.rarity === "Rare" &&
+          !speciesData.shiny &&
           currUser.rareCards < WILDCARD_COST) ||
-        (species.rarity === "Rare" &&
-          species.shiny &&
+        (speciesData.rarity === "Rare" &&
+          speciesData.shiny &&
           currUser.rareCards < SHINY_WILDCARD_COST) ||
-        (species.rarity === "Epic" &&
-          !species.shiny &&
+        (speciesData.rarity === "Epic" &&
+          !speciesData.shiny &&
           currUser.epicCards < WILDCARD_COST) ||
-        (species.rarity === "Epic" &&
-          species.shiny &&
+        (speciesData.rarity === "Epic" &&
+          speciesData.shiny &&
           currUser.epicCards < SHINY_WILDCARD_COST) ||
-        (species.rarity === "Legendary" &&
-          !species.shiny &&
+        (speciesData.rarity === "Legendary" &&
+          !speciesData.shiny &&
           currUser.legendaryCards < WILDCARD_COST) ||
-        (species.rarity === "Legendary" &&
-          species.shiny &&
+        (speciesData.rarity === "Legendary" &&
+          speciesData.shiny &&
           currUser.legendaryCards < SHINY_WILDCARD_COST)
       ) {
         throw new TRPCError({
@@ -249,6 +337,7 @@ export const instanceRouter = router({
           message: "You cannot afford this Pokémon."
         });
       }
+
       if (currUser.instanceCount >= 2000) {
         throw new TRPCError({
           code: "CONFLICT",
@@ -256,104 +345,62 @@ export const instanceRouter = router({
             "You have reached your limit. Sell Pokémon if you want to buy more."
         });
       }
-      const newYield =
-        currUser.totalYield + species.yield > MAX_YIELD
-          ? MAX_YIELD
-          : currUser.totalYield + species.yield;
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          totalYield: newYield,
-          commonCards:
-            species.rarity === "Common" && !species.shiny
-              ? currUser.commonCards - WILDCARD_COST
-              : species.rarity === "Common" && species.shiny
-              ? currUser.commonCards - SHINY_WILDCARD_COST
-              : currUser.commonCards,
-          rareCards:
-            species.rarity === "Rare" && !species.shiny
-              ? currUser.rareCards - WILDCARD_COST
-              : species.rarity === "Rare" && species.shiny
-              ? currUser.rareCards - SHINY_WILDCARD_COST
-              : currUser.rareCards,
-          epicCards:
-            species.rarity === "Epic" && !species.shiny
-              ? currUser.epicCards - WILDCARD_COST
-              : species.rarity === "Epic" && species.shiny
-              ? currUser.epicCards - SHINY_WILDCARD_COST
-              : currUser.epicCards,
-          legendaryCards:
-            species.rarity === "Legendary" && !species.shiny
-              ? currUser.legendaryCards - WILDCARD_COST
-              : species.rarity === "Legendary" && species.shiny
-              ? currUser.legendaryCards - SHINY_WILDCARD_COST
-              : currUser.legendaryCards,
-          instanceCount: currUser.instanceCount + 1
-        }
-      });
-      const instance = await ctx.prisma.instance.create({
-        data: { userId: ctx.session.user.id, speciesId: input.speciesId }
-      });
-      return {
-        instance: instance,
-        user: user
-      };
-    }),
 
-  sellInstance: protectedProcedure
-    .input(
-      z.object({
-        id: z.string()
-      })
-    )
-    .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: { totalYield: true, balance: true, instanceCount: true }
+      const newYield =
+        currUser.totalYield + speciesData.yield > MAX_YIELD
+          ? MAX_YIELD
+          : currUser.totalYield + speciesData.yield;
+
+      await ctx.db.transaction(async (tx) => {
+        await tx
+          .update(user)
+          .set({
+            totalYield: newYield,
+            commonCards:
+              speciesData.rarity === "Common" && !speciesData.shiny
+                ? currUser.commonCards - WILDCARD_COST
+                : speciesData.rarity === "Common" && speciesData.shiny
+                ? currUser.commonCards - SHINY_WILDCARD_COST
+                : currUser.commonCards,
+            rareCards:
+              speciesData.rarity === "Rare" && !speciesData.shiny
+                ? currUser.rareCards - WILDCARD_COST
+                : speciesData.rarity === "Rare" && speciesData.shiny
+                ? currUser.rareCards - SHINY_WILDCARD_COST
+                : currUser.rareCards,
+            epicCards:
+              speciesData.rarity === "Epic" && !speciesData.shiny
+                ? currUser.epicCards - WILDCARD_COST
+                : speciesData.rarity === "Epic" && speciesData.shiny
+                ? currUser.epicCards - SHINY_WILDCARD_COST
+                : currUser.epicCards,
+            legendaryCards:
+              speciesData.rarity === "Legendary" && !speciesData.shiny
+                ? currUser.legendaryCards - WILDCARD_COST
+                : speciesData.rarity === "Legendary" && speciesData.shiny
+                ? currUser.legendaryCards - SHINY_WILDCARD_COST
+                : currUser.legendaryCards,
+            instanceCount: currUser.instanceCount + 1
+          })
+          .where(eq(user.id, ctx.session.user.id));
+
+        await tx
+          .insert(instance)
+          .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
       });
-      if (!currUser) {
-        throw new TRPCError({
-          code: "UNAUTHORIZED",
-          message: "Not authorized to make this request"
-        });
-      }
-      const exists = await ctx.prisma.instance.findUnique({
-        where: { id: input.id },
-        select: { speciesId: true }
-      });
-      if (!exists) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Instance does not exist."
-        });
-      }
-      const species = await ctx.prisma.species.findUnique({
-        where: { id: exists.speciesId }
-      });
-      if (!species) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Species does not exist."
-        });
-      }
-      const newBalance =
-        currUser.balance + species.sellPrice > MAX_BALANCE
-          ? MAX_BALANCE
-          : currUser.balance + species.sellPrice;
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          totalYield: currUser.totalYield - species.yield,
-          balance: newBalance,
-          instanceCount: currUser.instanceCount - 1
-        }
-      });
-      const instance = await ctx.prisma.instance.delete({
-        where: { id: input.id }
-      });
+
+      const instanceData = await ctx.db
+        .select()
+        .from(instance)
+        .where(
+          and(
+            eq(instance.userId, ctx.session.user.id),
+            eq(instance.speciesId, input.speciesId)
+          )
+        );
+
       return {
-        instance: instance,
-        user: user
+        instance: instanceData
       };
     }),
 
@@ -365,49 +412,59 @@ export const instanceRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       for (let i of input.ids) {
-        await ctx.prisma.$transaction(async (tx) => {
-          const exists = await tx.instance.findUnique({
-            where: { id: i },
-            select: { speciesId: true }
-          });
+        await ctx.db.transaction(async (tx) => {
+          const exists = (
+            await tx
+              .select({ speciesId: instance.speciesId })
+              .from(instance)
+              .where(eq(instance.id, i))
+          )[0];
+
           if (!exists) {
             throw new TRPCError({
               code: "NOT_FOUND",
               message: "Instance does not exist."
             });
           }
-          const species = await tx.species.findUnique({
-            where: { id: exists.speciesId }
-          });
-          if (!species) {
+
+          const speciesData = (
+            await tx
+              .select()
+              .from(species)
+              .where(eq(species.id, exists.speciesId))
+          )[0];
+
+          if (!speciesData) {
             throw new TRPCError({
               code: "NOT_FOUND",
               message: "Species does not exist."
             });
           }
-          await tx.instance.delete({
-            where: { id: i }
-          });
-          const currUser = await tx.user.findUnique({
-            where: { id: ctx.session.user.id }
-          });
+
+          await tx.delete(instance).where(eq(instance.id, i));
+
+          const currUser = (
+            await tx.select().from(user).where(eq(user.id, ctx.session.user.id))
+          )[0];
+
           if (!currUser) {
             throw new TRPCError({
               code: "UNAUTHORIZED",
               message: "Not authorized to make this request"
             });
           }
-          await tx.user.update({
-            where: { id: ctx.session.user.id },
-            data: {
-              totalYield: currUser.totalYield - species.yield,
+
+          await tx
+            .update(user)
+            .set({
+              totalYield: currUser.totalYield - speciesData.yield,
               balance:
-                currUser.balance + species.sellPrice > MAX_BALANCE
+                currUser.balance + speciesData.sellPrice > MAX_BALANCE
                   ? MAX_BALANCE
-                  : currUser.balance + species.sellPrice,
+                  : currUser.balance + speciesData.sellPrice,
               instanceCount: currUser.instanceCount - 1
-            }
-          });
+            })
+            .where(eq(user.id, ctx.session.user.id));
         });
       }
       return {
@@ -415,7 +472,7 @@ export const instanceRouter = router({
       };
     }),
 
-  getStarter: protectedProcedure
+  claimStarter: protectedProcedure
     .input(
       z.object({
         speciesId: z.string(),
@@ -423,24 +480,28 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const currUser = await ctx.prisma.user.findUnique({
-        where: { id: ctx.session.user.id },
-        select: {
-          totalYield: true,
-          balance: true,
-          instanceCount: true,
-          johtoStarter: true,
-          hoennStarter: true,
-          sinnohStarter: true,
-          unovaStarter: true
-        }
-      });
+      const currUser = (
+        await ctx.db
+          .select({
+            totalYield: user.totalYield,
+            balance: user.balance,
+            instanceCount: user.instanceCount,
+            johtoStarter: user.johtoStarter,
+            hoennStarter: user.hoennStarter,
+            sinnohStarter: user.sinnohStarter,
+            unovaStarter: user.unovaStarter
+          })
+          .from(user)
+          .where(eq(user.id, ctx.session.user.id))
+      )[0];
+
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
           message: "Not authorized to make this request"
         });
       }
+
       if (input.region === "Johto" && currUser.johtoStarter) {
         throw new TRPCError({
           code: "FORBIDDEN",
@@ -457,41 +518,50 @@ export const instanceRouter = router({
           message: "You have already received a Sinnoh starter."
         });
       }
-      const species = await ctx.prisma.species.findUnique({
-        where: {
-          id: input.speciesId
-        }
-      });
-      if (!species) {
+
+      const speciesData = (
+        await ctx.db
+          .select()
+          .from(species)
+          .where(eq(species.id, input.speciesId))
+      )[0];
+
+      if (!speciesData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Species does not exist."
         });
       }
-      if (species.region !== input.region) {
+
+      if (speciesData.region !== input.region) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: `Species does not come from ${input.region}`
         });
       }
-      const user = await ctx.prisma.user.update({
-        where: { id: ctx.session.user.id },
-        data: {
-          totalYield: currUser.totalYield + species.yield,
-          instanceCount: currUser.instanceCount + 1,
-          johtoStarter: input.region === "Johto" ? true : currUser.johtoStarter,
-          hoennStarter: input.region === "Hoenn" ? true : currUser.hoennStarter,
-          sinnohStarter:
-            input.region === "Sinnoh" ? true : currUser.sinnohStarter,
-          unovaStarter: input.region === "Unova" ? true : currUser.unovaStarter
-        }
+
+      await ctx.db.transaction(async (tx) => {
+        await tx
+          .update(user)
+          .set({
+            totalYield: currUser.totalYield + speciesData.yield,
+            instanceCount: currUser.instanceCount + 1,
+            johtoStarter:
+              input.region === "Johto" ? true : currUser.johtoStarter,
+            hoennStarter:
+              input.region === "Hoenn" ? true : currUser.hoennStarter,
+            sinnohStarter:
+              input.region === "Sinnoh" ? true : currUser.sinnohStarter,
+            unovaStarter:
+              input.region === "Unova" ? true : currUser.unovaStarter
+          })
+          .where(eq(user.id, ctx.session.user.id));
+
+        await tx
+          .insert(instance)
+          .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
       });
-      const instance = await ctx.prisma.instance.create({
-        data: { userId: ctx.session.user.id, speciesId: input.speciesId }
-      });
-      return {
-        instance: instance,
-        user: user
-      };
+
+      return { message: "Successfully obtained starter" };
     })
 });

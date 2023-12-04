@@ -12,6 +12,8 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import { z } from "zod";
+import { ZodTime } from "@/types/zod";
 
 enum region {
   None,
@@ -43,7 +45,7 @@ export default function Shop() {
   const { data: ballData, isLoading: ballLoading } =
     trpc.ball.getBalls.useQuery();
 
-  const [time, setTime] = useState<Time>("night");
+  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState<string | null>(null);

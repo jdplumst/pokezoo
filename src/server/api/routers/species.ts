@@ -1,6 +1,25 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/types/zod";
+import { instance, species } from "../../db/schema";
+import {
+  and,
+  asc,
+  eq,
+  gte,
+  inArray,
+  isNotNull,
+  isNull,
+  min,
+  notInArray,
+  or
+} from "drizzle-orm";
+import {
+  HabitatList,
+  RaritiesList,
+  RegionsList,
+  TypesList
+} from "@/src/constants";
 
 export const speciesRouter = router({
   getSpecies: protectedProcedure
@@ -10,17 +29,15 @@ export const speciesRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      let species;
+      let speciesData;
 
       if (input.order === "pokedex") {
-        species = await ctx.prisma.species.findMany({
-          orderBy: [{ pokedexNumber: "asc" }]
-        });
+        speciesData = await ctx.db.select().from(species);
       } else {
-        species = await ctx.prisma.species.findMany();
+        speciesData = await ctx.db.select().from(species);
       }
 
-      return { species: species };
+      return { species: speciesData };
     }),
 
   // Species shown on Pokedex page
@@ -40,38 +57,49 @@ export const speciesRouter = router({
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 50;
 
-      const pokemon = await ctx.prisma.species.findMany({
-        take: limit + 1,
-        include: {
-          instances: {
-            distinct: ["speciesId"],
-            where: { userId: ctx.session.user.id }
-          }
-        },
-        where: {
-          shiny: input.shiny,
-          region: { in: input.regions },
-          rarity: { in: input.rarities },
-          OR: [
-            { typeOne: { in: input.types } },
-            { typeTwo: { in: input.types } }
-          ],
-          habitat: { in: input.habitats },
-          instances:
+      const i = ctx.db
+        .selectDistinct({ speciesId: instance.speciesId })
+        .from(instance)
+        .where(eq(instance.userId, ctx.session.user.id))
+        .as("i");
+
+      const pokemon = await ctx.db
+        .select()
+        .from(species)
+        .leftJoin(i, eq(species.id, i.speciesId))
+        .where(
+          and(
+            eq(species.shiny, input.shiny),
+            input.regions.length > 0
+              ? inArray(species.region, input.regions)
+              : notInArray(species.region, RegionsList),
+            input.rarities.length > 0
+              ? inArray(species.rarity, input.rarities)
+              : notInArray(species.rarity, RaritiesList),
+            input.types.length > 0
+              ? or(
+                  inArray(species.typeOne, input.types),
+                  inArray(species.typeTwo, input.types)
+                )
+              : notInArray(species.typeOne, TypesList),
+            input.habitats.length > 0
+              ? inArray(species.habitat, input.habitats)
+              : notInArray(species.habitat, HabitatList),
             input.caught.Caught && !input.caught.Uncaught
-              ? { some: { userId: ctx.session.user.id } }
+              ? isNotNull(i.speciesId)
               : !input.caught.Caught && input.caught.Uncaught
-              ? { none: { userId: ctx.session.user.id } }
-              : undefined
-        },
-        cursor: input.cursor ? { id: input.cursor } : undefined,
-        orderBy: { pokedexNumber: "asc" }
-      });
+              ? isNull(i.speciesId)
+              : undefined,
+            gte(species.id, input.cursor ?? "")
+          )
+        )
+        .limit(limit + 1)
+        .orderBy(asc(species.pokedexNumber));
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (pokemon.length > limit) {
         const nextItem = pokemon.pop();
-        nextCursor = nextItem?.id;
+        nextCursor = nextItem?.Species.id;
       }
 
       return { pokemon, nextCursor };
@@ -84,15 +112,29 @@ export const speciesRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
-      const starters = await ctx.prisma.species.findMany({
-        take: 9,
-        where: {
-          shiny: false,
-          region: input.region
-        },
-        orderBy: { pokedexNumber: "asc" }
-      });
+      const starters = await ctx.db
+        .select()
+        .from(species)
+        .where(and(eq(species.shiny, false), eq(species.region, input.region)))
+        .orderBy(asc(species.pokedexNumber))
+        .limit(9);
 
       return { starters };
-    })
+    }),
+
+  getCaughtSpecies: protectedProcedure.query(async ({ ctx }) => {
+    const i = ctx.db
+      .select({ speciesId: min(instance.speciesId).as("speciesId") })
+      .from(instance)
+      .where(eq(instance.userId, ctx.session.user.id))
+      .groupBy(instance.speciesId)
+      .as("i");
+
+    const speciesData = await ctx.db
+      .select()
+      .from(species)
+      .innerJoin(i, eq(species.id, i.speciesId));
+
+    return speciesData;
+  })
 });
