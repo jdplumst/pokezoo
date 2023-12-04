@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { instance, species, trade, user } from "../../db/schema";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, or } from "drizzle-orm";
 import { alias } from "drizzle-orm/mysql-core";
 
 export const tradeRouter = router({
@@ -58,43 +58,54 @@ export const tradeRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       const initiatorId = ctx.session.user.id;
-      const instance = await ctx.prisma.instance.findFirst({
-        where: { id: input.instanceId }
-      });
-      if (!instance) {
+
+      const instanceData = (
+        await ctx.db
+          .select()
+          .from(instance)
+          .where(eq(instance.id, input.instanceId))
+      )[0];
+
+      if (!instanceData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: `Instance with id ${input.instanceId} does not exist`
         });
       }
-      if (instance?.userId !== initiatorId) {
+
+      if (instanceData.userId !== initiatorId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: `Instance with id ${input.instanceId} does not belong to you`
         });
       }
-      const exists = await ctx.prisma.trade.findFirst({
-        where: {
-          OR: [
-            { initiatorInstanceId: input.instanceId },
-            { offererInstanceId: input.instanceId }
-          ]
-        }
-      });
+
+      const exists = (
+        await ctx.db
+          .select()
+          .from(trade)
+          .where(
+            or(
+              eq(trade.initiatorInstanceId, input.instanceId),
+              eq(trade.offererInstanceId, input.instanceId)
+            )
+          )
+      )[0];
+
       if (exists) {
         throw new TRPCError({
           code: "CONFLICT",
           message: `Instance with id ${input.instanceId} is already in a trade`
         });
       }
-      const trade = await ctx.prisma.trade.create({
-        data: {
-          initiatorId: initiatorId,
-          initiatorInstanceId: input.instanceId,
-          description: input.description
-        }
+
+      await ctx.db.insert(trade).values({
+        initiatorId: initiatorId,
+        initiatorInstanceId: input.instanceId,
+        description: input.description
       });
-      return { trade: trade };
+
+      return { message: "Trade created successfully" };
     }),
 
   cancelTrade: protectedProcedure

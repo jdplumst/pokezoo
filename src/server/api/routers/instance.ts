@@ -79,7 +79,6 @@ export const instanceRouter = router({
     )
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 50;
-      console.log(input.cursor);
 
       const instances = await ctx.db
         .select()
@@ -104,7 +103,6 @@ export const instanceRouter = router({
             input.habitats.length > 0
               ? inArray(species.habitat, input.habitats)
               : notInArray(species.habitat, HabitatList),
-            // gt(instance.id, input.cursor ?? "")
             input.order === "Oldest"
               ? gte(
                   instance.modifyDate,
@@ -157,7 +155,6 @@ export const instanceRouter = router({
               asc(species.pokedexNumber),
               desc(species.rarity))
             : asc(instance.id)
-          // asc(instance.id)
         )
         .limit(limit + 1);
 
