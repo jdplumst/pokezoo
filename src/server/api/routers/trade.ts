@@ -138,65 +138,82 @@ export const tradeRouter = router({
     .input(z.object({ tradeId: z.string(), instanceId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const offererId = ctx.session.user.id;
-      const instance = await ctx.prisma.instance.findFirst({
-        where: { id: input.instanceId }
-      });
-      if (!instance) {
+
+      const instanceData = (
+        await ctx.db
+          .select()
+          .from(instance)
+          .where(eq(instance.id, input.instanceId))
+      )[0];
+
+      if (!instanceData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: `Instance with id ${input.instanceId} does not exist`
         });
       }
-      if (instance?.userId !== offererId) {
+
+      if (instanceData?.userId !== offererId) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: `Instance with id ${input.instanceId} does not belong to you`
         });
       }
-      const trade = await ctx.prisma.trade.findFirst({
-        where: { id: input.tradeId }
-      });
-      if (!trade) {
+
+      const tradeData = (
+        await ctx.db.select().from(trade).where(eq(trade.id, input.tradeId))
+      )[0];
+
+      if (!tradeData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: `Trade with id ${input.tradeId} does not exist`
         });
       }
-      if (trade.offererId) {
+
+      if (tradeData.offererId) {
         throw new TRPCError({
           code: "CONFLICT",
           message: "There is already an offer for this trade"
         });
       }
-      if (trade.initiatorId === ctx.session.user.id) {
+
+      if (tradeData.initiatorId === ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
           message: "You can't give an offer for your own trade"
         });
       }
-      const exists = await ctx.prisma.trade.findFirst({
-        where: {
-          OR: [
-            { initiatorInstanceId: input.instanceId },
-            { offererInstanceId: input.instanceId }
-          ]
-        }
-      });
+
+      const exists = (
+        await ctx.db
+          .select()
+          .from(trade)
+          .where(
+            or(
+              eq(trade.initiatorInstanceId, input.instanceId),
+              eq(trade.offererInstanceId, input.instanceId)
+            )
+          )
+      )[0];
+
       if (exists) {
         throw new TRPCError({
           code: "CONFLICT",
           message: `Instance with id ${input.instanceId} is already in a trade`
         });
       }
-      const newTrade = await ctx.prisma.trade.update({
-        where: { id: input.tradeId },
-        data: {
+
+      await ctx.db
+        .update(trade)
+        .set({
           offererId: ctx.session.user.id,
           offererInstanceId: input.instanceId,
           modifyDate: new Date()
-        }
-      });
-      return { trade: newTrade };
+        })
+        .where(eq(trade.id, input.tradeId));
+
+      return { message: "Trade offer placed successfully" };
     }),
 
   withdrawTrade: protectedProcedure

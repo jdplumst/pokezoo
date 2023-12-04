@@ -266,10 +266,10 @@ export const trade = mysqlTable(
       .$defaultFn(() => createId()),
     initiatorId: varchar("initiatorId", { length: 191 }).notNull(),
     offererId: varchar("offererId", { length: 191 }),
-    createDate: datetime("createDate", { mode: "string", fsp: 3 })
+    createDate: datetime("createDate", { mode: "date", fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
-    modifyDate: datetime("modifyDate", { mode: "string", fsp: 3 })
+    modifyDate: datetime("modifyDate", { mode: "date", fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull(),
     description: varchar("description", { length: 191 }),
@@ -335,7 +335,7 @@ export const userAchievement = mysqlTable(
       .$defaultFn(() => createId()),
     userId: varchar("userId", { length: 191 }).notNull(),
     achievementId: varchar("achievementId", { length: 191 }).notNull(),
-    createDate: datetime("createDate", { mode: "string", fsp: 3 })
+    createDate: datetime("createDate", { mode: "date", fsp: 3 })
       .default(sql`CURRENT_TIMESTAMP(3)`)
       .notNull()
   },
