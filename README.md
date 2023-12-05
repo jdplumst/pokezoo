@@ -13,8 +13,7 @@ The app is currently on version 5.11.
 - TypeScript
 - TailwindCSS
 - MySQL with PlanetScale
-- Drizzle
-- Prisma
+- Drizzle (Previously Prisma)
 - NextAuth.js
 - tRPC
 - React Query
