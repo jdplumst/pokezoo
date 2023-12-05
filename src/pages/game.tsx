@@ -27,7 +27,7 @@ export default function Game() {
 
   const utils = trpc.useUtils();
 
-  const { data: session, status } = useSession({
+  const { status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");

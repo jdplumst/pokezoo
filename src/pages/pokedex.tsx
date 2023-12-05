@@ -29,7 +29,7 @@ interface IPurchased {
 export default function Pokedex() {
   const router = useRouter();
 
-  const { data: session, status } = useSession({
+  const { status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
@@ -237,7 +237,7 @@ export default function Pokedex() {
     utils.species.getPokedex.invalidate();
   };
 
-  if (!session || timeLoading) return <Loading />;
+  if (status === "loading" || timeLoading) return <Loading />;
 
   return (
     <>

@@ -15,7 +15,7 @@ import { ZodTime } from "@/types/zod";
 export default function Achievements() {
   const router = useRouter();
 
-  const { data: session, status } = useSession({
+  const { status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
@@ -39,9 +39,8 @@ export default function Achievements() {
   const [loading, setLoading] = useState(true);
   const [fullAchievements, setFullAchievements] = useState<FullAchievement[]>();
 
-  // Set time and total yield states
+  // Set time
   useEffect(() => {
-    if (status !== "authenticated") return;
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
@@ -50,7 +49,7 @@ export default function Achievements() {
       setTime("night");
     }
     setLoading(false);
-  }, [session]);
+  }, []);
 
   // Set full achievements to display progress bars
   useEffect(() => {
@@ -152,7 +151,7 @@ export default function Achievements() {
     utils.profile.getProfile.invalidate();
   };
 
-  if (!session || loading) return <Loading />;
+  if (status === "loading" || loading) return <Loading />;
 
   return (
     <>
