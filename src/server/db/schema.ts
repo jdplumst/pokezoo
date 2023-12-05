@@ -122,6 +122,37 @@ export const instance = mysqlTable(
   }
 );
 
+export const profile = mysqlTable(
+  "Profile",
+  {
+    id: varchar("id", { length: 191 })
+      .notNull()
+      .$defaultFn(() => createId()),
+    totalYield: int("totalYield").default(0).notNull(),
+    balance: int("balance").default(0).notNull(),
+    claimedDaily: boolean("claimedDaily").default(false).notNull(),
+    johtoStarter: boolean("johtoStarter").default(true).notNull(),
+    claimedNightly: boolean("claimedNightly").default(false).notNull(),
+    admin: boolean("admin").default(false).notNull(),
+    hoennStarter: boolean("hoennStarter").default(true).notNull(),
+    sinnohStarter: boolean("sinnohStarter").default(true).notNull(),
+    username: varchar("username", { length: 191 }),
+    instanceCount: int("instanceCount").default(0).notNull(),
+    unovaStarter: boolean("unovaStarter").default(true).notNull(),
+    commonCards: int("commonCards").default(0).notNull(),
+    epicCards: int("epicCards").default(0).notNull(),
+    legendaryCards: int("legendaryCards").default(0).notNull(),
+    rareCards: int("rareCards").default(0).notNull(),
+    userId: varchar("userId", { length: 191 }).notNull()
+  },
+  (table) => {
+    return {
+      userIdIdx: index("Profile_userId_idx").on(table.userId),
+      profileIdPk: primaryKey({ columns: [table.id], name: "Profile_id_pk" })
+    };
+  }
+);
+
 export const session = mysqlTable(
   "Session",
   {
