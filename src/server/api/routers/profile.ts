@@ -7,6 +7,17 @@ import { ZodTime } from "@/types/zod";
 import { eq } from "drizzle-orm";
 
 export const profileRouter = router({
+  getProfile: protectedProcedure.query(async ({ ctx }) => {
+    const profileData = (
+      await ctx.db
+        .select()
+        .from(profile)
+        .where(eq(profile.userId, ctx.session.user.id))
+    )[0];
+
+    return profileData;
+  }),
+
   claimReward: protectedProcedure
     .input(z.object({ time: ZodTime }))
     .mutation(async ({ ctx, input }) => {
