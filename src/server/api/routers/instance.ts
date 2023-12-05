@@ -18,20 +18,15 @@ import {
   ZodSort,
   ZodSpeciesType
 } from "@/types/zod";
-import { instance, species, user } from "../../db/schema";
+import { instance, profile, species } from "../../db/schema";
 import {
   and,
   asc,
   desc,
   eq,
-  gt,
   gte,
   inArray,
-  lt,
   lte,
-  max,
-  min,
-  notExists,
   notInArray,
   or
 } from "drizzle-orm";
@@ -188,12 +183,12 @@ export const instanceRouter = router({
       const currUser = (
         await ctx.db
           .select({
-            totalYield: user.totalYield,
-            balance: user.balance,
-            instanceCount: user.instanceCount
+            totalYield: profile.totalYield,
+            balance: profile.balance,
+            instanceCount: profile.instanceCount
           })
-          .from(user)
-          .where(eq(user.id, ctx.session.user.id))
+          .from(profile)
+          .where(eq(profile.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -237,13 +232,13 @@ export const instanceRouter = router({
           : currUser.totalYield + speciesData.yield;
 
       await ctx.db
-        .update(user)
+        .update(profile)
         .set({
           totalYield: newYield,
           balance: currUser.balance - input.cost,
           instanceCount: currUser.instanceCount + 1
         })
-        .where(eq(user.id, ctx.session.user.id));
+        .where(eq(profile.userId, ctx.session.user.id));
 
       await ctx.db
         .insert(instance)
@@ -274,15 +269,15 @@ export const instanceRouter = router({
       const currUser = (
         await ctx.db
           .select({
-            totalYield: user.totalYield,
-            instanceCount: user.instanceCount,
-            commonCards: user.commonCards,
-            rareCards: user.rareCards,
-            epicCards: user.epicCards,
-            legendaryCards: user.legendaryCards
+            totalYield: profile.totalYield,
+            instanceCount: profile.instanceCount,
+            commonCards: profile.commonCards,
+            rareCards: profile.rareCards,
+            epicCards: profile.epicCards,
+            legendaryCards: profile.legendaryCards
           })
-          .from(user)
-          .where(eq(user.id, ctx.session.user.id))
+          .from(profile)
+          .where(eq(profile.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -353,7 +348,7 @@ export const instanceRouter = router({
 
       await ctx.db.transaction(async (tx) => {
         await tx
-          .update(user)
+          .update(profile)
           .set({
             totalYield: newYield,
             commonCards:
@@ -382,7 +377,7 @@ export const instanceRouter = router({
                 : currUser.legendaryCards,
             instanceCount: currUser.instanceCount + 1
           })
-          .where(eq(user.id, ctx.session.user.id));
+          .where(eq(profile.userId, ctx.session.user.id));
 
         await tx
           .insert(instance)
@@ -444,7 +439,10 @@ export const instanceRouter = router({
           await tx.delete(instance).where(eq(instance.id, i));
 
           const currUser = (
-            await tx.select().from(user).where(eq(user.id, ctx.session.user.id))
+            await tx
+              .select()
+              .from(profile)
+              .where(eq(profile.userId, ctx.session.user.id))
           )[0];
 
           if (!currUser) {
@@ -455,7 +453,7 @@ export const instanceRouter = router({
           }
 
           await tx
-            .update(user)
+            .update(profile)
             .set({
               totalYield: currUser.totalYield - speciesData.yield,
               balance:
@@ -464,7 +462,7 @@ export const instanceRouter = router({
                   : currUser.balance + speciesData.sellPrice,
               instanceCount: currUser.instanceCount - 1
             })
-            .where(eq(user.id, ctx.session.user.id));
+            .where(eq(profile.userId, ctx.session.user.id));
         });
       }
       return {
@@ -483,16 +481,16 @@ export const instanceRouter = router({
       const currUser = (
         await ctx.db
           .select({
-            totalYield: user.totalYield,
-            balance: user.balance,
-            instanceCount: user.instanceCount,
-            johtoStarter: user.johtoStarter,
-            hoennStarter: user.hoennStarter,
-            sinnohStarter: user.sinnohStarter,
-            unovaStarter: user.unovaStarter
+            totalYield: profile.totalYield,
+            balance: profile.balance,
+            instanceCount: profile.instanceCount,
+            johtoStarter: profile.johtoStarter,
+            hoennStarter: profile.hoennStarter,
+            sinnohStarter: profile.sinnohStarter,
+            unovaStarter: profile.unovaStarter
           })
-          .from(user)
-          .where(eq(user.id, ctx.session.user.id))
+          .from(profile)
+          .where(eq(profile.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -542,7 +540,7 @@ export const instanceRouter = router({
 
       await ctx.db.transaction(async (tx) => {
         await tx
-          .update(user)
+          .update(profile)
           .set({
             totalYield: currUser.totalYield + speciesData.yield,
             instanceCount: currUser.instanceCount + 1,
@@ -555,7 +553,7 @@ export const instanceRouter = router({
             unovaStarter:
               input.region === "Unova" ? true : currUser.unovaStarter
           })
-          .where(eq(user.id, ctx.session.user.id));
+          .where(eq(profile.userId, ctx.session.user.id));
 
         await tx
           .insert(instance)

@@ -2,28 +2,28 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { MAX_BALANCE } from "@/src/constants";
-import { user } from "../../db/schema";
+import { profile } from "../../db/schema";
 import { ZodTime } from "@/types/zod";
 import { eq } from "drizzle-orm";
 
-export const userRouter = router({
+export const profileRouter = router({
   claimReward: protectedProcedure
     .input(z.object({ time: ZodTime }))
     .mutation(async ({ ctx, input }) => {
       const currUser = (
         await ctx.db
           .select({
-            balance: user.balance,
-            claimedDaily: user.claimedDaily,
-            claimedNightly: user.claimedNightly,
-            totalYield: user.totalYield,
-            commonCards: user.commonCards,
-            rareCards: user.rareCards,
-            epicCards: user.epicCards,
-            legendaryCards: user.legendaryCards
+            balance: profile.balance,
+            claimedDaily: profile.claimedDaily,
+            claimedNightly: profile.claimedNightly,
+            totalYield: profile.totalYield,
+            commonCards: profile.commonCards,
+            rareCards: profile.rareCards,
+            epicCards: profile.epicCards,
+            legendaryCards: profile.legendaryCards
           })
-          .from(user)
-          .where(eq(user.id, ctx.session.user.id))
+          .from(profile)
+          .where(eq(profile.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -61,7 +61,7 @@ export const userRouter = router({
           });
         }
         await ctx.db
-          .update(user)
+          .update(profile)
           .set({
             balance: currUser.balance + newBalance,
             claimedDaily: true,
@@ -78,7 +78,7 @@ export const userRouter = router({
                 ? currUser.legendaryCards + 1
                 : currUser.legendaryCards
           })
-          .where(eq(user.id, ctx.session.user.id));
+          .where(eq(profile.userId, ctx.session.user.id));
       } else {
         if (currUser.claimedNightly) {
           throw new TRPCError({
@@ -87,7 +87,7 @@ export const userRouter = router({
           });
         }
         await ctx.db
-          .update(user)
+          .update(profile)
           .set({
             balance: currUser.balance + newBalance,
             claimedNightly: true,
@@ -104,7 +104,7 @@ export const userRouter = router({
                 ? currUser.legendaryCards + 1
                 : currUser.legendaryCards
           })
-          .where(eq(user.id, ctx.session.user.id));
+          .where(eq(profile.userId, ctx.session.user.id));
       }
 
       return {
@@ -118,9 +118,9 @@ export const userRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currUser = (
         await ctx.db
-          .select({ username: user.username })
-          .from(user)
-          .where(eq(user.id, ctx.session.user.id))
+          .select({ username: profile.username })
+          .from(profile)
+          .where(eq(profile.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -139,9 +139,9 @@ export const userRouter = router({
 
       const exists = (
         await ctx.db
-          .select({ username: user.username })
-          .from(user)
-          .where(eq(user.username, input.username))
+          .select({ username: profile.username })
+          .from(profile)
+          .where(eq(profile.username, input.username))
       )[0];
       if (
         exists &&
@@ -154,9 +154,9 @@ export const userRouter = router({
       }
 
       await ctx.db
-        .update(user)
+        .update(profile)
         .set({ username: input.username })
-        .where(eq(user.id, ctx.session.user.id));
+        .where(eq(profile.userId, ctx.session.user.id));
 
       return { message: "Username set successfully" };
     })

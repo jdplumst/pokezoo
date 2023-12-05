@@ -1,14 +1,14 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { instance, species, trade, user } from "../../db/schema";
+import { instance, profile, species, trade } from "../../db/schema";
 import { and, desc, eq, or } from "drizzle-orm";
 import { alias } from "drizzle-orm/mysql-core";
 
 export const tradeRouter = router({
   getTrades: protectedProcedure.query(async ({ ctx }) => {
-    const initiator = alias(user, "initiator");
-    const offerer = alias(user, "offerer");
+    const initiator = alias(profile, "initiator");
+    const offerer = alias(profile, "offerer");
 
     const initiatorInstance = ctx.db
       .select({
@@ -37,8 +37,8 @@ export const tradeRouter = router({
     const trades = await ctx.db
       .select()
       .from(trade)
-      .innerJoin(initiator, eq(trade.initiatorId, initiator.id))
-      .leftJoin(offerer, eq(trade.offererId, offerer.id))
+      .innerJoin(initiator, eq(trade.initiatorId, initiator.userId))
+      .leftJoin(offerer, eq(trade.offererId, offerer.userId))
       .innerJoin(
         initiatorInstance,
         eq(trade.initiatorInstanceId, initiatorInstance.id)
@@ -338,16 +338,16 @@ export const tradeRouter = router({
 
       const initiator = (
         await ctx.db
-          .select({ totalYield: user.totalYield })
-          .from(user)
-          .where(eq(user.id, tradeData.initiatorId))
+          .select({ totalYield: profile.totalYield })
+          .from(profile)
+          .where(eq(profile.userId, tradeData.initiatorId))
       )[0];
 
       const offerer = (
         await ctx.db
-          .select({ totalYield: user.totalYield })
-          .from(user)
-          .where(eq(user.id, tradeData.offererId))
+          .select({ totalYield: profile.totalYield })
+          .from(profile)
+          .where(eq(profile.userId, tradeData.offererId))
       )[0];
 
       await ctx.db.transaction(async (tx) => {
@@ -362,24 +362,24 @@ export const tradeRouter = router({
           .where(eq(instance.id, tradeData.offererInstanceId!));
 
         await tx
-          .update(user)
+          .update(profile)
           .set({
             totalYield:
               initiator.totalYield -
               initiatorInstance.yield +
               offererInstance.yield
           })
-          .where(eq(user.id, tradeData.initiatorId));
+          .where(eq(profile.userId, tradeData.initiatorId));
 
         await tx
-          .update(user)
+          .update(profile)
           .set({
             totalYield:
               offerer.totalYield -
               offererInstance.yield +
               initiatorInstance.yield
           })
-          .where(eq(user.id, tradeData.offererId!));
+          .where(eq(profile.userId, tradeData.offererId!));
 
         await tx.delete(trade).where(eq(trade.id, input.tradeId));
 

@@ -1,6 +1,6 @@
 import { router } from "./trpc";
 import { instanceRouter } from "./routers/instance";
-import { userRouter } from "./routers/user";
+import { profileRouter } from "./routers/profile";
 import { achievementRouter } from "./routers/achievement";
 import { speciesRouter } from "./routers/species";
 import { userAchievementRouter } from "./routers/userAchievement";
@@ -13,7 +13,7 @@ import { tradeRouter } from "./routers/trade";
 export const appRouter = router({
   instance: instanceRouter,
   species: speciesRouter,
-  user: userRouter,
+  profile: profileRouter,
   achievement: achievementRouter,
   userAchievement: userAchievementRouter,
   ball: ballRouter,

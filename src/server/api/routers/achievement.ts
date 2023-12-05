@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { MAX_YIELD } from "@/src/constants";
-import { achievement, user, userAchievement } from "../../db/schema";
+import { achievement, profile, userAchievement } from "../../db/schema";
 import { and, eq } from "drizzle-orm";
 
 export const achievementRouter = router({
@@ -16,9 +16,9 @@ export const achievementRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currUser = (
         await ctx.db
-          .select({ id: user.id, totalYield: user.totalYield })
-          .from(user)
-          .where(eq(user.id, ctx.session.user.id))
+          .select({ totalYield: profile.totalYield })
+          .from(profile)
+          .where(eq(profile.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -68,9 +68,10 @@ export const achievementRouter = router({
 
       await ctx.db.transaction(async (tx) => {
         await tx
-          .update(user)
+          .update(profile)
           .set({ totalYield: newYield })
-          .where(eq(user.id, ctx.session.user.id));
+          .where(eq(profile.userId, ctx.session.user.id));
+
         await tx.insert(userAchievement).values({
           userId: ctx.session.user.id,
           achievementId: input.achievementId
