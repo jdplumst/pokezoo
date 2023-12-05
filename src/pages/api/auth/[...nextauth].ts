@@ -1,4 +1,4 @@
-import NextAuth, { Awaitable, NextAuthOptions, Session, User } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import TwitchProvider from "next-auth/providers/twitch";
 import GoogleProvider from "next-auth/providers/google";
@@ -9,11 +9,13 @@ import {
   user,
   account,
   session,
-  verificationToken
+  verificationToken,
+  profile
 } from "@/src/server/db/schema";
 import { MySqlTableFn, mysqlTable } from "drizzle-orm/mysql-core";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { prisma } from "@/src/server/db";
+import { eq } from "drizzle-orm";
 
 //@ts-ignore
 const myTableHijack: MySqlTableFn = (name, columns, extraConfig) => {
@@ -38,115 +40,34 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET,
-      profile(profile): Awaitable<User> {
-        return {
-          id: profile.id.toString(),
-          name: profile.name,
-          email: profile.email,
-          emailVerified: null,
-          image: profile.avatar_url,
-          admin: false,
-          username: null,
-          totalYield: 0,
-          balance: 500,
-          instanceCount: 0,
-          claimedDaily: false,
-          claimedNightly: false,
-          commonCards: 0,
-          rareCards: 0,
-          epicCards: 0,
-          legendaryCards: 0,
-          johtoStarter: true,
-          hoennStarter: true,
-          sinnohStarter: true,
-          unovaStarter: true
-        };
-      }
+      clientSecret: process.env.GITHUB_SECRET
     }),
     TwitchProvider({
       clientId: process.env.TWITCH_CLIENT_ID,
-      clientSecret: process.env.TWITCH_CLIENT_SECRET,
-      profile(profile): Awaitable<User> {
-        return {
-          id: profile.sub,
-          name: profile.preferred_username,
-          email: profile.email,
-          emailVerified: null,
-          image: profile.picture,
-          admin: false,
-          username: null,
-          totalYield: 0,
-          balance: 500,
-          instanceCount: 0,
-          claimedDaily: false,
-          claimedNightly: false,
-          commonCards: 0,
-          rareCards: 0,
-          epicCards: 0,
-          legendaryCards: 0,
-          johtoStarter: true,
-          hoennStarter: true,
-          sinnohStarter: true,
-          unovaStarter: true
-        };
-      }
+      clientSecret: process.env.TWITCH_CLIENT_SECRET
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      profile(profile): Awaitable<User> {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          emailVerified: null,
-          image: profile.picture,
-          admin: false,
-          username: null,
-          totalYield: 0,
-          balance: 500,
-          instanceCount: 0,
-          claimedDaily: false,
-          claimedNightly: false,
-          commonCards: 0,
-          rareCards: 0,
-          epicCards: 0,
-          legendaryCards: 0,
-          johtoStarter: true,
-          hoennStarter: true,
-          sinnohStarter: true,
-          unovaStarter: true
-        };
-      }
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET
     })
   ],
   callbacks: {
-    session({ session, user }: { session: Session; user: User | AdapterUser }) {
-      if (session.user) {
-        session.user.id = user.id.toString();
-        session.user.name = user.name;
-        session.user.email = user.email;
-        session.user.emailVerified = user.emailVerified;
-        session.user.image = user.image;
-        session.user.admin = user.admin;
-        session.user.username = user.username;
-        session.user.totalYield = user.totalYield;
-        session.user.balance = user.balance;
-        session.user.instanceCount = user.instanceCount;
-        session.user.claimedDaily = user.claimedDaily;
-        session.user.claimedNightly = user.claimedNightly;
-        session.user.commonCards = user.commonCards;
-        session.user.rareCards = user.rareCards;
-        session.user.epicCards = user.epicCards;
-        session.user.legendaryCards = user.legendaryCards;
-        session.user.johtoStarter = user.johtoStarter;
-        session.user.hoennStarter = user.hoennStarter;
-        session.user.sinnohStarter = user.sinnohStarter;
-        session.user.unovaStarter = user.unovaStarter;
+    async signIn({ user }) {
+      const profileExists = (
+        await db.select().from(profile).where(eq(profile.userId, user.id))
+      )[0];
+      if (!profileExists) {
+        await db.insert(profile).values({ userId: user.id });
       }
-      return session;
-    }
+      return true;
+    },
+    session: ({ session, user }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: user.id
+      }
+    })
   },
   pages: { signIn: "/", signOut: "/", error: "/" },
   secret: process.env.NEXTAUTH_SECRET
