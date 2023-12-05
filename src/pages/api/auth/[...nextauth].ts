@@ -1,4 +1,4 @@
-import NextAuth, { DefaultSession, NextAuthOptions } from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import TwitchProvider from "next-auth/providers/twitch";
 import GoogleProvider from "next-auth/providers/google";
@@ -6,16 +6,6 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/src/server/db/index";
 import { profiles } from "@/src/server/db/schema";
 import { eq } from "drizzle-orm";
-
-declare module "next-auth" {
-  interface Session extends DefaultSession {
-    user: User & DefaultSession["user"];
-  }
-
-  interface User {
-    id: string;
-  }
-}
 
 export const authOptions: NextAuthOptions = {
   adapter: DrizzleAdapter(db),

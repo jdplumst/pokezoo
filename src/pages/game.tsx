@@ -111,7 +111,6 @@ export default function Game() {
     if (!getProfile.data?.username) {
       setUsernameModal(true);
     }
-    console.log(getProfile.data);
   }, [getProfile]);
 
   // Infinite scroll
