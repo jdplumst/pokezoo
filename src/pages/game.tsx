@@ -14,7 +14,6 @@ import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
 import { ZodSort, ZodTime } from "@/types/zod";
-import types from "next/types";
 import Dropdown, { IDropdowns } from "../components/Dropdown";
 import {
   RegionsList,
@@ -28,11 +27,7 @@ export default function Game() {
 
   const utils = trpc.useUtils();
 
-  const {
-    data: session,
-    status,
-    update: updateSession
-  } = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
@@ -59,7 +54,7 @@ export default function Game() {
     reward: 0,
     card: "Common"
   });
-  const rewardMutation = trpc.user.claimReward.useMutation();
+  const rewardMutation = trpc.profile.claimReward.useMutation();
 
   // Variables associated with selling an instance
   const [deleteList, setDeleteList] = useState<string[]>([]);
@@ -69,7 +64,7 @@ export default function Game() {
   const [username, setUsername] = useState("");
   const [usernameModal, setUsernameModal] = useState(false);
   const [usernameError, setUsernameError] = useState<null | string>(null);
-  const usernameMutation = trpc.user.selectUsername.useMutation();
+  const usernameMutation = trpc.profile.selectUsername.useMutation();
 
   const [shiny, setShiny] = useState(false);
   const [regions, setRegions] = useState<Region[]>(RegionsList);
@@ -100,9 +95,11 @@ export default function Game() {
     { getNextPageParam: (lastPage) => lastPage.nextCursor }
   );
 
+  const getProfile = trpc.profile.getProfile.useQuery();
+
   // Set time and user data
   useEffect(() => {
-    if (status !== "authenticated") return;
+    if (getProfile.isInitialLoading) return;
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
@@ -111,10 +108,10 @@ export default function Game() {
       setTime("night");
     }
     setLoading(false);
-    if (!session.user.username) {
+    if (!getProfile.data?.username) {
       setUsernameModal(true);
     }
-  }, [session]);
+  }, [getProfile]);
 
   // Infinite scroll
   useEffect(() => {
@@ -126,7 +123,7 @@ export default function Game() {
   // Display starter and updated yield
   const addStarter = () => {
     utils.instance.getGame.invalidate();
-    updateSession();
+    utils.profile.getProfile.invalidate();
   };
 
   // Claim Daily and Nightly Reward
@@ -136,7 +133,7 @@ export default function Game() {
         { time: time },
         {
           onSuccess(data, variables, context) {
-            updateSession();
+            utils.profile.getProfile.invalidate();
             setDailyReward({
               modal: true,
               reward: data.reward,
@@ -150,7 +147,7 @@ export default function Game() {
         { time: time },
         {
           onSuccess(data, variables, context) {
-            updateSession();
+            utils.profile.getProfile.invalidate();
             setNightlyReward({
               modal: true,
               reward: data.reward,
@@ -180,7 +177,7 @@ export default function Game() {
           setError(null);
           setDeleteList([]);
           utils.instance.getGame.invalidate();
-          updateSession();
+          utils.profile.getProfile.invalidate();
         },
         onError(error, variables, context) {
           setError(error.message);
@@ -197,7 +194,7 @@ export default function Game() {
       {
         onSuccess(data, variables, context) {
           setUsernameModal(false);
-          updateSession();
+          utils.profile.getProfile.invalidate();
         },
         onError(error, variables, context) {
           setUsernameError(error.message);
@@ -323,7 +320,7 @@ export default function Game() {
     }
   };
 
-  if (!session || loading) return <Loading />;
+  if (status === "loading" || loading) return <Loading />;
 
   return (
     <>
@@ -338,7 +335,7 @@ export default function Game() {
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Game">
-          <Topbar user={session.user} />
+          <Topbar />
           {deleteList.length > 0 && (
             <div className="sticky top-0 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">
               <span className="font-bold">
@@ -354,18 +351,9 @@ export default function Game() {
             </div>
           )}
           <main className="p-4">
-            {session.user.admin && (
-              <div className="flex justify-center bg-red-500">
-                <button
-                  onClick={() => setTime(time === "day" ? "night" : "day")}
-                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
-                  Toggle day/night
-                </button>
-              </div>
-            )}
-            {session.user.claimedDaily && time === "day" ? (
+            {getProfile.data?.claimedDaily && time === "day" ? (
               <span>You have already claimed your daily reward.</span>
-            ) : !session.user.claimedDaily && time === "day" ? (
+            ) : !getProfile.data?.claimedDaily && time === "day" ? (
               <button
                 onClick={() => claimReward()}
                 disabled={rewardMutation.isLoading}
@@ -376,9 +364,9 @@ export default function Game() {
                   "Claim Daily Reward"
                 )}
               </button>
-            ) : session.user.claimedNightly && time === "night" ? (
+            ) : getProfile.data?.claimedNightly && time === "night" ? (
               <span>You have already claimed your nightly reward.</span>
-            ) : !session.user.claimedNightly && time === "night" ? (
+            ) : !getProfile.data?.claimedNightly && time === "night" ? (
               <button
                 onClick={() => claimReward()}
                 disabled={rewardMutation.isLoading}
@@ -492,7 +480,7 @@ export default function Game() {
       </div>
 
       {/* Modal for New Players */}
-      {session.user.instanceCount === 0 && (
+      {getProfile.data?.instanceCount === 0 && (
         <Start region="Kanto" addStarter={addStarter} />
       )}
 
@@ -569,22 +557,22 @@ export default function Game() {
       )}
 
       {/* Modal for Johto Starter */}
-      {!session.user.johtoStarter && (
+      {!getProfile.data?.johtoStarter && (
         <Start region="Johto" addStarter={addStarter} />
       )}
 
       {/* Modal for Hoenn Starter */}
-      {!session.user.hoennStarter && (
+      {!getProfile.data?.hoennStarter && (
         <Start region="Hoenn" addStarter={addStarter} />
       )}
 
       {/* Modal for Sinnoh Starter */}
-      {!session.user.sinnohStarter && (
+      {!getProfile.data?.sinnohStarter && (
         <Start region="Sinnoh" addStarter={addStarter} />
       )}
 
       {/* Modal for Unova Starter */}
-      {!session.user.unovaStarter && (
+      {!getProfile.data?.unovaStarter && (
         <Start region="Unova" addStarter={addStarter} />
       )}
     </>

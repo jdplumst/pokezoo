@@ -27,16 +27,14 @@ enum region {
 export default function Shop() {
   const router = useRouter();
 
-  const {
-    data: session,
-    status,
-    update: updateSession
-  } = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
     }
   });
+
+  const utils = trpc.useUtils();
 
   const { data: speciesData } = trpc.species.getSpecies.useQuery({
     order: null
@@ -63,7 +61,6 @@ export default function Shop() {
   const premierRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    if (status !== "authenticated") return;
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
@@ -72,7 +69,7 @@ export default function Shop() {
       setTime("night");
     }
     setLoading(false);
-  }, [session]);
+  }, []);
 
   const purchaseBall = async (ball: Ball) => {
     setBoughtBall(ball);
@@ -210,7 +207,7 @@ export default function Shop() {
       { speciesId: newInstance!.id, cost: ball.cost },
       {
         onSuccess(data, variables, context) {
-          updateSession();
+          utils.profile.getProfile.invalidate();
           setNewSpecies(
             speciesData?.species.filter(
               (s) => s.id === data.instance.speciesId
@@ -226,7 +223,7 @@ export default function Shop() {
     );
   };
 
-  if (!session || loading) return <Loading />;
+  if (status === "loading" || loading) return <Loading />;
 
   return (
     <>
@@ -239,17 +236,8 @@ export default function Shop() {
       <div
         className={`z-0 min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Shop">
-          <Topbar user={session.user} />
+          <Topbar />
           <main className="p-4">
-            {session.user.admin && (
-              <div className="flex justify-center bg-red-500">
-                <button
-                  onClick={() => setTime(time === "day" ? "night" : "day")}
-                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
-                  Toggle day/night
-                </button>
-              </div>
-            )}
             {error && <p className="font-bold text-red-500">{error}</p>}
             {ballLoading ? (
               <div className="flex items-center justify-center pt-5">

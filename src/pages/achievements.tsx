@@ -15,16 +15,14 @@ import { ZodTime } from "@/types/zod";
 export default function Achievements() {
   const router = useRouter();
 
-  const {
-    data: session,
-    status,
-    update: updateSession
-  } = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
     }
   });
+
+  const utils = trpc.useUtils();
 
   const { data: speciesData } = trpc.species.getSpecies.useQuery({
     order: null
@@ -151,7 +149,7 @@ export default function Achievements() {
   }, [instanceData, speciesData, achievementData, userAchievementData]);
 
   const updateYield = () => {
-    updateSession();
+    utils.profile.getProfile.invalidate();
   };
 
   if (!session || loading) return <Loading />;
@@ -167,17 +165,8 @@ export default function Achievements() {
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Achievements">
-          <Topbar user={session.user} />
+          <Topbar />
           <main className="p-4">
-            {session.user?.admin && (
-              <div className="flex justify-center bg-red-500">
-                <button
-                  onClick={() => setTime(time === "day" ? "night" : "day")}
-                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
-                  Toggle day/night
-                </button>
-              </div>
-            )}
             {fullAchievements ? (
               <div className="flex justify-center pt-5">
                 <ul className="w-3/4">

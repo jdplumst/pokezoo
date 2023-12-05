@@ -14,11 +14,7 @@ import { ZodTime } from "@/types/zod";
 export default function Trades() {
   const router = useRouter();
 
-  const {
-    data: session,
-    status,
-    update: updateSession
-  } = useSession({
+  const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
@@ -54,7 +50,6 @@ export default function Trades() {
 
   // Set time and user data
   useEffect(() => {
-    if (status !== "authenticated") return;
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
@@ -63,9 +58,9 @@ export default function Trades() {
       setTime("night");
     }
     setLoading(false);
-  }, [session]);
+  }, []);
 
-  if (!session || loading) return <Loading />;
+  if (status === "loading" || loading) return <Loading />;
 
   return (
     <>
@@ -80,17 +75,8 @@ export default function Trades() {
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="Trades">
-          <Topbar user={session.user} />
+          <Topbar />
           <main className="p-4">
-            {session.user.admin && (
-              <div className="flex justify-center bg-red-500">
-                <button
-                  onClick={() => setTime(time === "day" ? "night" : "day")}
-                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
-                  Toggle day/night
-                </button>
-              </div>
-            )}
             <button
               onClick={() => setInitiateModal(true)}
               disabled={initiateModal}
@@ -206,7 +192,7 @@ export default function Trades() {
                                     {
                                       onSuccess(data, variables, context) {
                                         utils.trade.getTrades.invalidate();
-                                        updateSession();
+                                        utils.profile.getProfile.invalidate();
                                       }
                                     }
                                   )

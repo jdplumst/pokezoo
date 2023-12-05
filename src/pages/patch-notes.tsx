@@ -3,7 +3,6 @@ import Sidebar from "../components/Sidebar";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
-import { trpc } from "../utils/trpc";
 import { useRouter } from "next/router";
 import Topbar from "../components/Topbar";
 import { z } from "zod";
@@ -12,7 +11,7 @@ import { ZodTime } from "@/types/zod";
 export default function PatchNotes() {
   const router = useRouter();
 
-  const { data: session, status } = useSession({
+  const { status } = useSession({
     required: true,
     onUnauthenticated() {
       router.push("/");
@@ -33,7 +32,7 @@ export default function PatchNotes() {
     setLoading(false);
   }, []);
 
-  if (loading || status === "loading") return <Loading />;
+  if (status === "loading" || loading) return <Loading />;
 
   return (
     <>
@@ -46,17 +45,8 @@ export default function PatchNotes() {
       <div
         className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
         <Sidebar page="PatchNotes">
-          <Topbar user={session.user} />
+          <Topbar />
           <main className="px-8">
-            {session.user?.admin && (
-              <div className="flex justify-center bg-red-500">
-                <button
-                  onClick={() => setTime(time === "day" ? "night" : "day")}
-                  className="w-fit rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
-                  Toggle day/night
-                </button>
-              </div>
-            )}
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
