@@ -231,18 +231,20 @@ export const instanceRouter = router({
           ? MAX_YIELD
           : currUser.totalYield + speciesData.yield;
 
-      await ctx.db
-        .update(profile)
-        .set({
-          totalYield: newYield,
-          balance: currUser.balance - input.cost,
-          instanceCount: currUser.instanceCount + 1
-        })
-        .where(eq(profile.userId, ctx.session.user.id));
+      await ctx.db.transaction(async (tx) => {
+        await tx
+          .update(profile)
+          .set({
+            totalYield: newYield,
+            balance: currUser.balance - input.cost,
+            instanceCount: currUser.instanceCount + 1
+          })
+          .where(eq(profile.userId, ctx.session.user.id));
 
-      await ctx.db
-        .insert(instance)
-        .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
+        await tx
+          .insert(instance)
+          .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
+      });
 
       const instanceData = (
         await ctx.db
