@@ -111,6 +111,7 @@ export default function Game() {
     if (!getProfile.data?.username) {
       setUsernameModal(true);
     }
+    console.log(getProfile.data);
   }, [getProfile]);
 
   // Infinite scroll
@@ -459,11 +460,11 @@ export default function Game() {
             <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
               {getGame.data?.pages.map((p) => (
                 <Fragment key={p.nextCursor}>
-                  {p.instances.map((c) => (
+                  {p.instancesData.map((c) => (
                     <Card
-                      key={c.Instance.id}
-                      instance={c.Instance}
-                      species={c.Species}
+                      key={c.instance.id}
+                      instance={c.instance}
+                      species={c.species}
                       modifyDeleteList={modifyDeleteList}
                     />
                   ))}

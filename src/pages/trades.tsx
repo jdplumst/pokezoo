@@ -119,12 +119,12 @@ export default function Trades() {
                             {t.initiatorInstance.shiny && `⭐`}
                           </div>
                         </div>
-                        <div className="h-8 text-xl">{t.Trade.description}</div>
-                        {t.Trade.initiatorId === session.user.id ? (
+                        <div className="h-8 text-xl">{t.trade.description}</div>
+                        {t.trade.initiatorId === session.user.id ? (
                           <button
                             onClick={() =>
                               cancelMutation.mutate(
-                                { tradeId: t.Trade.id },
+                                { tradeId: t.trade.id },
                                 {
                                   onSuccess(data, variables, context) {
                                     utils.trade.getTrades.invalidate();
@@ -166,11 +166,11 @@ export default function Trades() {
                             </div>
                           </div>
                           <div className="h-8"></div>
-                          {t.Trade.offererId === session.user.id ? (
+                          {t.trade.offererId === session.user.id ? (
                             <button
                               onClick={() =>
                                 withdrawMutation.mutate(
-                                  { tradeId: t.Trade.id },
+                                  { tradeId: t.trade.id },
                                   {
                                     onSuccess(data, variables, context) {
                                       utils.trade.getTrades.invalidate();
@@ -182,13 +182,13 @@ export default function Trades() {
                               className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
                               Withdraw
                             </button>
-                          ) : t.Trade.offererId &&
-                            t.Trade.initiatorId === session.user.id ? (
+                          ) : t.trade.offererId &&
+                            t.trade.initiatorId === session.user.id ? (
                             <div className="flex gap-5">
                               <button
                                 onClick={() =>
                                   acceptMutation.mutate(
-                                    { tradeId: t.Trade.id },
+                                    { tradeId: t.trade.id },
                                     {
                                       onSuccess(data, variables, context) {
                                         utils.trade.getTrades.invalidate();
@@ -204,7 +204,7 @@ export default function Trades() {
                               <button
                                 onClick={() =>
                                   rejectMutation.mutate(
-                                    { tradeId: t.Trade.id },
+                                    { tradeId: t.trade.id },
                                     {
                                       onSuccess(data, variables, context) {
                                         utils.trade.getTrades.invalidate();
@@ -230,7 +230,7 @@ export default function Trades() {
                           <button
                             onClick={() => {
                               setOfferModal(true);
-                              setTradeId(t.Trade.id);
+                              setTradeId(t.trade.id);
                             }}
                             disabled={offerModal}
                             className="w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus">

@@ -1,6 +1,6 @@
 import { db } from "@/src/server/db/index";
 import { NextApiRequest, NextApiResponse } from "next";
-import { user } from "@/src/server/db/schema";
+import { profiles } from "@/src/server/db/schema";
 import { eq } from "drizzle-orm";
 import { MAX_BALANCE } from "@/src/constants";
 
@@ -15,22 +15,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   switch (req.method) {
     case "POST":
       try {
-        const users = await db.select().from(user);
+        const profilesData = await db.select().from(profiles);
 
-        for (const u of users) {
+        for (const profile of profilesData) {
           const newBalance =
-            u.balance + u.totalYield > MAX_BALANCE
+            profile.balance + profile.totalYield > MAX_BALANCE
               ? MAX_BALANCE
-              : u.balance + u.totalYield;
+              : profile.balance + profile.totalYield;
 
           await db
-            .update(user)
+            .update(profiles)
             .set({
               balance: newBalance,
               claimedDaily: false,
               claimedNightly: false
             })
-            .where(eq(user.id, u.id));
+            .where(eq(profiles.id, profile.id));
         }
         return res.status(200).json({
           msg: "Successfully updated all user's dollars and reset daily and nightly claims"

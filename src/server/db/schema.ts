@@ -8,9 +8,10 @@ import {
   int,
   mysqlEnum,
   datetime,
-  boolean
+  boolean,
+  timestamp
 } from "drizzle-orm/mysql-core";
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import {
   DBAchivementType,
@@ -20,39 +21,90 @@ import {
   DBRegion,
   DBSpeciesType
 } from "@/types/zod";
+import { AdapterAccount } from "next-auth/adapters";
 
-export const account = mysqlTable(
-  "Account",
+export const users = mysqlTable("user", {
+  id: varchar("id", { length: 255 }).notNull().primaryKey(),
+  name: varchar("name", { length: 255 }),
+  email: varchar("email", { length: 255 }).notNull(),
+  emailVerified: timestamp("emailVerified", {
+    mode: "date",
+    fsp: 3
+  }).default(sql`CURRENT_TIMESTAMP(3)`),
+  image: varchar("image", { length: 255 })
+});
+
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+  sessions: many(sessions)
+}));
+
+export const accounts = mysqlTable(
+  "account",
   {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
-    userId: varchar("userId", { length: 191 }).notNull(),
-    type: varchar("type", { length: 191 }).notNull(),
-    provider: varchar("provider", { length: 191 }).notNull(),
-    providerAccountId: varchar("providerAccountId", { length: 191 }).notNull(),
-    refreshToken: text("refresh_token"),
-    accessToken: text("access_token"),
-    expiresAt: int("expires_at"),
-    tokenType: varchar("token_type", { length: 191 }),
-    scope: varchar("scope", { length: 191 }),
-    idToken: text("id_token"),
-    sessionState: varchar("session_state", { length: 191 }),
-    refreshTokenExpiresIn: int("refresh_token_expires_in")
+    userId: varchar("userId", { length: 255 }).notNull(),
+    type: varchar("type", { length: 255 })
+      .$type<AdapterAccount["type"]>()
+      .notNull(),
+    provider: varchar("provider", { length: 255 }).notNull(),
+    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: int("expires_at"),
+    token_type: varchar("token_type", { length: 255 }),
+    scope: varchar("scope", { length: 255 }),
+    id_token: text("id_token"),
+    session_state: varchar("session_state", { length: 255 }),
+    refresh_token_expires_in: int("refresh_token_expires_in")
   },
-  (table) => {
-    return {
-      userIdIdx: index("Account_userId_idx").on(table.userId),
-      accountIdPk: primaryKey({ columns: [table.id], name: "Account_id_pk" }),
-      accountProviderProviderAccountIdKey: unique(
-        "Account_provider_providerAccountId_key"
-      ).on(table.provider, table.providerAccountId)
-    };
-  }
+  (account) => ({
+    compoundKey: primaryKey({
+      columns: [account.provider, account.providerAccountId],
+      name: "Account_pk"
+    }),
+    userIdIdx: index("userId_idx").on(account.userId)
+  })
 );
 
-export const achievement = mysqlTable(
-  "Achievement",
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, { fields: [accounts.userId], references: [users.id] })
+}));
+
+export const sessions = mysqlTable(
+  "session",
+  {
+    sessionToken: varchar("sessionToken", { length: 255 })
+      .notNull()
+      .primaryKey(),
+    userId: varchar("userId", { length: 255 }).notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull()
+  },
+  (session) => ({
+    userIdIdx: index("userId_idx").on(session.userId)
+  })
+);
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, { fields: [sessions.userId], references: [users.id] })
+}));
+
+export const verificationTokens = mysqlTable(
+  "verificationToken",
+  {
+    identifier: varchar("identifier", { length: 255 }).notNull(),
+    token: varchar("token", { length: 255 }).notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull()
+  },
+  (vt) => ({
+    compoundKey: primaryKey({
+      columns: [vt.identifier, vt.token],
+      name: "VerificationToken_pk"
+    })
+  })
+);
+
+export const achievements = mysqlTable(
+  "achievement",
   {
     id: varchar("id", { length: 191 })
       .notNull()
@@ -76,8 +128,8 @@ export const achievement = mysqlTable(
   }
 );
 
-export const ball = mysqlTable(
-  "Ball",
+export const balls = mysqlTable(
+  "ball",
   {
     id: varchar("id", { length: 191 })
       .notNull()
@@ -98,8 +150,8 @@ export const ball = mysqlTable(
   }
 );
 
-export const instance = mysqlTable(
-  "Instance",
+export const instances = mysqlTable(
+  "instance",
   {
     id: varchar("id", { length: 191 })
       .notNull()
@@ -122,8 +174,8 @@ export const instance = mysqlTable(
   }
 );
 
-export const profile = mysqlTable(
-  "Profile",
+export const profiles = mysqlTable(
+  "profile",
   {
     id: varchar("id", { length: 191 })
       .notNull()
@@ -153,29 +205,8 @@ export const profile = mysqlTable(
   }
 );
 
-export const session = mysqlTable(
-  "Session",
-  {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
-    sessionToken: varchar("sessionToken", { length: 191 }).notNull(),
-    userId: varchar("userId", { length: 191 }).notNull(),
-    expires: datetime("expires", { mode: "date", fsp: 3 }).notNull()
-  },
-  (table) => {
-    return {
-      userIdIdx: index("Session_userId_idx").on(table.userId),
-      sessionIdPk: primaryKey({ columns: [table.id], name: "Session_id_pk" }),
-      sessionSessionTokenKey: unique("Session_sessionToken_key").on(
-        table.sessionToken
-      )
-    };
-  }
-);
-
 export const species = mysqlTable(
-  "Species",
+  "species",
   {
     id: varchar("id", { length: 191 })
       .notNull()
@@ -200,8 +231,8 @@ export const species = mysqlTable(
   }
 );
 
-export const trade = mysqlTable(
-  "Trade",
+export const trades = mysqlTable(
+  "trade",
   {
     id: varchar("id", { length: 191 })
       .notNull()
@@ -235,42 +266,8 @@ export const trade = mysqlTable(
   }
 );
 
-export const user = mysqlTable(
-  "User",
-  {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
-    name: varchar("name", { length: 191 }),
-    email: varchar("email", { length: 191 }).default("").notNull(),
-    emailVerified: datetime("emailVerified", { mode: "date", fsp: 3 }),
-    image: varchar("image", { length: 191 }),
-    totalYield: int("totalYield").default(0).notNull(),
-    balance: int("balance").default(0).notNull(),
-    claimedDaily: boolean("claimedDaily").default(false).notNull(),
-    johtoStarter: boolean("johtoStarter").default(true).notNull(),
-    claimedNightly: boolean("claimedNightly").default(false).notNull(),
-    admin: boolean("admin").default(false).notNull(),
-    hoennStarter: boolean("hoennStarter").default(true).notNull(),
-    sinnohStarter: boolean("sinnohStarter").default(true).notNull(),
-    username: varchar("username", { length: 191 }),
-    instanceCount: int("instanceCount").default(0).notNull(),
-    unovaStarter: boolean("unovaStarter").default(true).notNull(),
-    commonCards: int("commonCards").default(0).notNull(),
-    epicCards: int("epicCards").default(0).notNull(),
-    legendaryCards: int("legendaryCards").default(0).notNull(),
-    rareCards: int("rareCards").default(0).notNull()
-  },
-  (table) => {
-    return {
-      userIdPk: primaryKey({ columns: [table.id], name: "User_id_pk" }),
-      userEmailKey: unique("User_email_key").on(table.email)
-    };
-  }
-);
-
-export const userAchievement = mysqlTable(
-  "UserAchievement",
+export const userAchievements = mysqlTable(
+  "userAchievement",
   {
     id: varchar("id", { length: 191 })
       .notNull()
@@ -291,31 +288,6 @@ export const userAchievement = mysqlTable(
         columns: [table.id],
         name: "UserAchievement_id_pk"
       })
-    };
-  }
-);
-
-export const verificationToken = mysqlTable(
-  "VerificationToken",
-  {
-    identifier: varchar("identifier", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
-    token: varchar("token", { length: 191 }).notNull(),
-    expires: datetime("expires", { mode: "date", fsp: 3 }).notNull()
-  },
-  (table) => {
-    return {
-      verificationTokenIdentifierPk: primaryKey({
-        columns: [table.identifier],
-        name: "VerificationToken_identifier_pk"
-      }),
-      verificationTokenTokenKey: unique("VerificationToken_token_key").on(
-        table.token
-      ),
-      verificationTokenIdentifierTokenKey: unique(
-        "VerificationToken_identifier_token_key"
-      ).on(table.identifier, table.token)
     };
   }
 );

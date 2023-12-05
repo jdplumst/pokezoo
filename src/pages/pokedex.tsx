@@ -278,8 +278,8 @@ export default function Pokedex() {
                 <Fragment key={p.nextCursor}>
                   {p.pokemon.map((c) => (
                     <Card
-                      key={c.Species.id}
-                      species={c.Species}
+                      key={c.species.id}
+                      species={c.species}
                       caught={!!c.i}
                       handlePurchase={handlePurchase}
                     />

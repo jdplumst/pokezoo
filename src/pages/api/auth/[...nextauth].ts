@@ -1,42 +1,24 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
+import NextAuth, { DefaultSession, NextAuthOptions } from "next-auth";
 import GithubProvider from "next-auth/providers/github";
 import TwitchProvider from "next-auth/providers/twitch";
 import GoogleProvider from "next-auth/providers/google";
-import { AdapterUser } from "next-auth/adapters";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/src/server/db/index";
-import {
-  user,
-  account,
-  session,
-  verificationToken,
-  profile
-} from "@/src/server/db/schema";
-import { MySqlTableFn, mysqlTable } from "drizzle-orm/mysql-core";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { prisma } from "@/src/server/db";
+import { profiles } from "@/src/server/db/schema";
 import { eq } from "drizzle-orm";
 
-//@ts-ignore
-const myTableHijack: MySqlTableFn = (name, columns, extraConfig) => {
-  switch (name) {
-    case "user":
-      return user;
-    case "account":
-      return account;
-    case "session":
-      return session;
-    case "verification_token":
-      return verificationToken;
-    default:
-      return mysqlTable(name, columns, extraConfig);
+declare module "next-auth" {
+  interface Session extends DefaultSession {
+    user: User & DefaultSession["user"];
   }
-};
+
+  interface User {
+    id: string;
+  }
+}
 
 export const authOptions: NextAuthOptions = {
-  //@ts-ignore
-  // adapter: DrizzleAdapter(db),
-  adapter: PrismaAdapter(prisma),
+  adapter: DrizzleAdapter(db),
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID,
@@ -52,24 +34,23 @@ export const authOptions: NextAuthOptions = {
     })
   ],
   callbacks: {
-    async signIn({ user }) {
+    async session({ session, user }) {
       const profileExists = (
-        await db.select().from(profile).where(eq(profile.userId, user.id))
+        await db.select().from(profiles).where(eq(profiles.userId, user.id))
       )[0];
       if (!profileExists) {
-        await db.insert(profile).values({ userId: user.id });
+        await db.insert(profiles).values({ userId: user.id });
       }
-      return true;
-    },
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id
-      }
-    })
+      return {
+        ...session,
+        user: {
+          ...session.user,
+          id: user.id
+        }
+      };
+    }
   },
-  pages: { signIn: "/", signOut: "/", error: "/" },
+  pages: { signOut: "/" },
   secret: process.env.NEXTAUTH_SECRET
 };
 

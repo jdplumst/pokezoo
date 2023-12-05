@@ -1,55 +1,55 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { instance, profile, species, trade } from "../../db/schema";
+import { instances, profiles, species, trades } from "../../db/schema";
 import { and, desc, eq, or } from "drizzle-orm";
 import { alias } from "drizzle-orm/mysql-core";
 
 export const tradeRouter = router({
   getTrades: protectedProcedure.query(async ({ ctx }) => {
-    const initiator = alias(profile, "initiator");
-    const offerer = alias(profile, "offerer");
+    const initiator = alias(profiles, "initiator");
+    const offerer = alias(profiles, "offerer");
 
     const initiatorInstance = ctx.db
       .select({
-        id: instance.id,
+        id: instances.id,
         name: species.name,
         img: species.img,
         rarity: species.rarity,
         shiny: species.shiny
       })
-      .from(instance)
-      .leftJoin(species, eq(instance.speciesId, species.id))
+      .from(instances)
+      .leftJoin(species, eq(instances.speciesId, species.id))
       .as("initiatorInstance");
 
     const offererInstance = ctx.db
       .select({
-        id: instance.id,
+        id: instances.id,
         name: species.name,
         img: species.img,
         rarity: species.rarity,
         shiny: species.shiny
       })
-      .from(instance)
-      .leftJoin(species, eq(instance.speciesId, species.id))
+      .from(instances)
+      .leftJoin(species, eq(instances.speciesId, species.id))
       .as("offererInstance");
 
-    const trades = await ctx.db
+    const tradesData = await ctx.db
       .select()
-      .from(trade)
-      .innerJoin(initiator, eq(trade.initiatorId, initiator.userId))
-      .leftJoin(offerer, eq(trade.offererId, offerer.userId))
+      .from(trades)
+      .innerJoin(initiator, eq(trades.initiatorId, initiator.userId))
+      .leftJoin(offerer, eq(trades.offererId, offerer.userId))
       .innerJoin(
         initiatorInstance,
-        eq(trade.initiatorInstanceId, initiatorInstance.id)
+        eq(trades.initiatorInstanceId, initiatorInstance.id)
       )
       .leftJoin(
         offererInstance,
-        eq(trade.offererInstanceId, offererInstance.id)
+        eq(trades.offererInstanceId, offererInstance.id)
       )
-      .orderBy(desc(trade.modifyDate));
+      .orderBy(desc(trades.modifyDate));
 
-    return { trades: trades };
+    return { trades: tradesData };
   }),
 
   initiateTrade: protectedProcedure
@@ -62,8 +62,8 @@ export const tradeRouter = router({
       const instanceData = (
         await ctx.db
           .select()
-          .from(instance)
-          .where(eq(instance.id, input.instanceId))
+          .from(instances)
+          .where(eq(instances.id, input.instanceId))
       )[0];
 
       if (!instanceData) {
@@ -83,11 +83,11 @@ export const tradeRouter = router({
       const exists = (
         await ctx.db
           .select()
-          .from(trade)
+          .from(trades)
           .where(
             or(
-              eq(trade.initiatorInstanceId, input.instanceId),
-              eq(trade.offererInstanceId, input.instanceId)
+              eq(trades.initiatorInstanceId, input.instanceId),
+              eq(trades.offererInstanceId, input.instanceId)
             )
           )
       )[0];
@@ -99,7 +99,7 @@ export const tradeRouter = router({
         });
       }
 
-      await ctx.db.insert(trade).values({
+      await ctx.db.insert(trades).values({
         initiatorId: initiatorId,
         initiatorInstanceId: input.instanceId,
         description: input.description
@@ -112,7 +112,7 @@ export const tradeRouter = router({
     .input(z.object({ tradeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const tradeData = (
-        await ctx.db.select().from(trade).where(eq(trade.id, input.tradeId))
+        await ctx.db.select().from(trades).where(eq(trades.id, input.tradeId))
       )[0];
 
       if (!tradeData) {
@@ -129,7 +129,7 @@ export const tradeRouter = router({
         });
       }
 
-      await ctx.db.delete(trade).where(eq(trade.id, input.tradeId));
+      await ctx.db.delete(trades).where(eq(trades.id, input.tradeId));
 
       return { message: "Trade deleted successfully" };
     }),
@@ -142,8 +142,8 @@ export const tradeRouter = router({
       const instanceData = (
         await ctx.db
           .select()
-          .from(instance)
-          .where(eq(instance.id, input.instanceId))
+          .from(instances)
+          .where(eq(instances.id, input.instanceId))
       )[0];
 
       if (!instanceData) {
@@ -161,7 +161,7 @@ export const tradeRouter = router({
       }
 
       const tradeData = (
-        await ctx.db.select().from(trade).where(eq(trade.id, input.tradeId))
+        await ctx.db.select().from(trades).where(eq(trades.id, input.tradeId))
       )[0];
 
       if (!tradeData) {
@@ -188,11 +188,11 @@ export const tradeRouter = router({
       const exists = (
         await ctx.db
           .select()
-          .from(trade)
+          .from(trades)
           .where(
             or(
-              eq(trade.initiatorInstanceId, input.instanceId),
-              eq(trade.offererInstanceId, input.instanceId)
+              eq(trades.initiatorInstanceId, input.instanceId),
+              eq(trades.offererInstanceId, input.instanceId)
             )
           )
       )[0];
@@ -205,13 +205,13 @@ export const tradeRouter = router({
       }
 
       await ctx.db
-        .update(trade)
+        .update(trades)
         .set({
           offererId: ctx.session.user.id,
           offererInstanceId: input.instanceId,
           modifyDate: new Date()
         })
-        .where(eq(trade.id, input.tradeId));
+        .where(eq(trades.id, input.tradeId));
 
       return { message: "Trade offer placed successfully" };
     }),
@@ -220,7 +220,7 @@ export const tradeRouter = router({
     .input(z.object({ tradeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const tradeData = (
-        await ctx.db.select().from(trade).where(eq(trade.id, input.tradeId))
+        await ctx.db.select().from(trades).where(eq(trades.id, input.tradeId))
       )[0];
 
       if (!tradeData) {
@@ -238,13 +238,13 @@ export const tradeRouter = router({
       }
 
       await ctx.db
-        .update(trade)
+        .update(trades)
         .set({
           offererId: null,
           offererInstanceId: null,
           modifyDate: new Date()
         })
-        .where(eq(trade.id, input.tradeId));
+        .where(eq(trades.id, input.tradeId));
 
       return { message: "Withdrawn from trade successfully" };
     }),
@@ -253,7 +253,7 @@ export const tradeRouter = router({
     .input(z.object({ tradeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const tradeData = (
-        await ctx.db.select().from(trade).where(eq(trade.id, input.tradeId))
+        await ctx.db.select().from(trades).where(eq(trades.id, input.tradeId))
       )[0];
 
       if (!tradeData) {
@@ -280,16 +280,16 @@ export const tradeRouter = router({
       const initiatorInstance = (
         await ctx.db
           .select({
-            id: instance.id,
-            userId: instance.userId,
+            id: instances.id,
+            userId: instances.userId,
             yield: species.yield
           })
-          .from(instance)
-          .innerJoin(species, eq(instance.speciesId, species.id))
+          .from(instances)
+          .innerJoin(species, eq(instances.speciesId, species.id))
           .where(
             and(
-              eq(instance.id, tradeData.initiatorInstanceId),
-              eq(instance.userId, tradeData.initiatorId)
+              eq(instances.id, tradeData.initiatorInstanceId),
+              eq(instances.userId, tradeData.initiatorId)
             )
           )
       )[0];
@@ -297,22 +297,22 @@ export const tradeRouter = router({
       const offererInstance = (
         await ctx.db
           .select({
-            id: instance.id,
-            userId: instance.userId,
+            id: instances.id,
+            userId: instances.userId,
             yield: species.yield
           })
-          .from(instance)
-          .innerJoin(species, eq(instance.speciesId, species.id))
+          .from(instances)
+          .innerJoin(species, eq(instances.speciesId, species.id))
           .where(
             and(
-              eq(instance.id, tradeData.offererInstanceId),
-              eq(instance.userId, tradeData.offererId)
+              eq(instances.id, tradeData.offererInstanceId),
+              eq(instances.userId, tradeData.offererId)
             )
           )
       )[0];
 
       if (!initiatorInstance) {
-        await ctx.db.delete(trade).where(eq(trade.id, input.tradeId));
+        await ctx.db.delete(trades).where(eq(trades.id, input.tradeId));
 
         throw new TRPCError({
           code: "CONFLICT",
@@ -322,13 +322,13 @@ export const tradeRouter = router({
 
       if (!offererInstance) {
         await ctx.db
-          .update(trade)
+          .update(trades)
           .set({
             offererId: null,
             offererInstanceId: null,
             modifyDate: new Date()
           })
-          .where(eq(trade.id, input.tradeId));
+          .where(eq(trades.id, input.tradeId));
 
         throw new TRPCError({
           code: "CONFLICT",
@@ -338,67 +338,67 @@ export const tradeRouter = router({
 
       const initiator = (
         await ctx.db
-          .select({ totalYield: profile.totalYield })
-          .from(profile)
-          .where(eq(profile.userId, tradeData.initiatorId))
+          .select({ totalYield: profiles.totalYield })
+          .from(profiles)
+          .where(eq(profiles.userId, tradeData.initiatorId))
       )[0];
 
       const offerer = (
         await ctx.db
-          .select({ totalYield: profile.totalYield })
-          .from(profile)
-          .where(eq(profile.userId, tradeData.offererId))
+          .select({ totalYield: profiles.totalYield })
+          .from(profiles)
+          .where(eq(profiles.userId, tradeData.offererId))
       )[0];
 
       await ctx.db.transaction(async (tx) => {
         await tx
-          .update(instance)
+          .update(instances)
           .set({ userId: tradeData.offererId!, modifyDate: new Date() })
-          .where(eq(instance.id, tradeData.initiatorInstanceId));
+          .where(eq(instances.id, tradeData.initiatorInstanceId));
 
         await tx
-          .update(instance)
+          .update(instances)
           .set({ userId: tradeData.initiatorId, modifyDate: new Date() })
-          .where(eq(instance.id, tradeData.offererInstanceId!));
+          .where(eq(instances.id, tradeData.offererInstanceId!));
 
         await tx
-          .update(profile)
+          .update(profiles)
           .set({
             totalYield:
               initiator.totalYield -
               initiatorInstance.yield +
               offererInstance.yield
           })
-          .where(eq(profile.userId, tradeData.initiatorId));
+          .where(eq(profiles.userId, tradeData.initiatorId));
 
         await tx
-          .update(profile)
+          .update(profiles)
           .set({
             totalYield:
               offerer.totalYield -
               offererInstance.yield +
               initiatorInstance.yield
           })
-          .where(eq(profile.userId, tradeData.offererId!));
+          .where(eq(profiles.userId, tradeData.offererId!));
 
-        await tx.delete(trade).where(eq(trade.id, input.tradeId));
+        await tx.delete(trades).where(eq(trades.id, input.tradeId));
 
         await tx
-          .delete(trade)
+          .delete(trades)
           .where(
             or(
-              eq(trade.initiatorInstanceId, initiatorInstance.id),
-              eq(trade.initiatorInstanceId, offererInstance.id)
+              eq(trades.initiatorInstanceId, initiatorInstance.id),
+              eq(trades.initiatorInstanceId, offererInstance.id)
             )
           );
 
         await tx
-          .update(trade)
+          .update(trades)
           .set({ offererId: null, offererInstanceId: null })
           .where(
             or(
-              eq(trade.offererInstanceId, initiatorInstance.id),
-              eq(trade.offererInstanceId, offererInstance.id)
+              eq(trades.offererInstanceId, initiatorInstance.id),
+              eq(trades.offererInstanceId, offererInstance.id)
             )
           );
       });
@@ -410,7 +410,7 @@ export const tradeRouter = router({
     .input(z.object({ tradeId: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const tradeData = (
-        await ctx.db.select().from(trade).where(eq(trade.id, input.tradeId))
+        await ctx.db.select().from(trades).where(eq(trades.id, input.tradeId))
       )[0];
 
       if (!tradeData) {
@@ -435,13 +435,13 @@ export const tradeRouter = router({
       }
 
       await ctx.db
-        .update(trade)
+        .update(trades)
         .set({
           offererId: null,
           offererInstanceId: null,
           modifyDate: new Date()
         })
-        .where(eq(trade.id, input.tradeId));
+        .where(eq(trades.id, input.tradeId));
 
       return { message: "Trade rejected successfully" };
     })

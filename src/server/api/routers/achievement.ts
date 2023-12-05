@@ -2,13 +2,13 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { MAX_YIELD } from "@/src/constants";
-import { achievement, profile, userAchievement } from "../../db/schema";
+import { achievements, profiles, userAchievements } from "../../db/schema";
 import { and, eq } from "drizzle-orm";
 
 export const achievementRouter = router({
   getAchievements: protectedProcedure.query(async ({ ctx }) => {
-    const achievements = await ctx.db.select().from(achievement);
-    return { achievements: achievements };
+    const achievementsData = await ctx.db.select().from(achievements);
+    return { achievements: achievementsData };
   }),
 
   claimAchievement: protectedProcedure
@@ -16,9 +16,9 @@ export const achievementRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currUser = (
         await ctx.db
-          .select({ totalYield: profile.totalYield })
-          .from(profile)
-          .where(eq(profile.userId, ctx.session.user.id))
+          .select({ totalYield: profiles.totalYield })
+          .from(profiles)
+          .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -31,11 +31,11 @@ export const achievementRouter = router({
       const achievementData = (
         await ctx.db
           .select()
-          .from(achievement)
-          .where(eq(achievement.id, input.achievementId))
+          .from(achievements)
+          .where(eq(achievements.id, input.achievementId))
       )[0];
 
-      if (!achievement) {
+      if (!achievementData) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Achievement does not exist"
@@ -45,11 +45,11 @@ export const achievementRouter = router({
       const exists = (
         await ctx.db
           .select()
-          .from(userAchievement)
+          .from(userAchievements)
           .where(
             and(
-              eq(userAchievement.userId, ctx.session.user.id),
-              eq(userAchievement.achievementId, input.achievementId)
+              eq(userAchievements.userId, ctx.session.user.id),
+              eq(userAchievements.achievementId, input.achievementId)
             )
           )
       )[0];
@@ -68,11 +68,11 @@ export const achievementRouter = router({
 
       await ctx.db.transaction(async (tx) => {
         await tx
-          .update(profile)
+          .update(profiles)
           .set({ totalYield: newYield })
-          .where(eq(profile.userId, ctx.session.user.id));
+          .where(eq(profiles.userId, ctx.session.user.id));
 
-        await tx.insert(userAchievement).values({
+        await tx.insert(userAchievements).values({
           userId: ctx.session.user.id,
           achievementId: input.achievementId
         });

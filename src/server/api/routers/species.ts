@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/types/zod";
-import { instance, species } from "../../db/schema";
+import { instances, species } from "../../db/schema";
 import {
   and,
   asc,
@@ -58,9 +58,9 @@ export const speciesRouter = router({
       const limit = input.limit ?? 50;
 
       const i = ctx.db
-        .selectDistinct({ speciesId: instance.speciesId })
-        .from(instance)
-        .where(eq(instance.userId, ctx.session.user.id))
+        .selectDistinct({ speciesId: instances.speciesId })
+        .from(instances)
+        .where(eq(instances.userId, ctx.session.user.id))
         .as("i");
 
       const pokemon = await ctx.db
@@ -99,7 +99,7 @@ export const speciesRouter = router({
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (pokemon.length > limit) {
         const nextItem = pokemon.pop();
-        nextCursor = nextItem?.Species.id;
+        nextCursor = nextItem?.species.id;
       }
 
       return { pokemon, nextCursor };
@@ -124,10 +124,10 @@ export const speciesRouter = router({
 
   getCaughtSpecies: protectedProcedure.query(async ({ ctx }) => {
     const i = ctx.db
-      .select({ speciesId: min(instance.speciesId).as("speciesId") })
-      .from(instance)
-      .where(eq(instance.userId, ctx.session.user.id))
-      .groupBy(instance.speciesId)
+      .select({ speciesId: min(instances.speciesId).as("speciesId") })
+      .from(instances)
+      .where(eq(instances.userId, ctx.session.user.id))
+      .groupBy(instances.speciesId)
       .as("i");
 
     const speciesData = await ctx.db

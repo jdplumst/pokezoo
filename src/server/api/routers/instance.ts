@@ -18,7 +18,7 @@ import {
   ZodSort,
   ZodSpeciesType
 } from "@/types/zod";
-import { instance, profile, species } from "../../db/schema";
+import { instances, profiles, species } from "../../db/schema";
 import {
   and,
   asc,
@@ -33,9 +33,9 @@ import {
 
 export const instanceRouter = router({
   getInstanceSpecies: protectedProcedure.query(async ({ ctx }) => {
-    const instances = await ctx.db
+    const instancesData = await ctx.db
       .select({
-        instanceId: instance.id,
+        instanceId: instances.id,
         speciesId: species.id,
         region: species.region,
         shiny: species.shiny,
@@ -46,16 +46,16 @@ export const instanceRouter = router({
         name: species.name,
         img: species.img
       })
-      .from(instance)
-      .innerJoin(species, eq(instance.speciesId, species.id))
-      .where(and(eq(instance.userId, ctx.session.user.id)))
+      .from(instances)
+      .innerJoin(species, eq(instances.speciesId, species.id))
+      .where(and(eq(instances.userId, ctx.session.user.id)))
       .orderBy(
         asc(species.pokedexNumber),
         asc(species.name),
         desc(species.shiny)
       );
 
-    return { instances: instances };
+    return { instances: instancesData };
   }),
 
   // Instances shown on Game page
@@ -75,13 +75,13 @@ export const instanceRouter = router({
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 50;
 
-      const instances = await ctx.db
+      const instancesData = await ctx.db
         .select()
-        .from(instance)
-        .innerJoin(species, eq(instance.speciesId, species.id))
+        .from(instances)
+        .innerJoin(species, eq(instances.speciesId, species.id))
         .where(
           and(
-            eq(instance.userId, ctx.session.user.id),
+            eq(instances.userId, ctx.session.user.id),
             eq(species.shiny, input.shiny),
             input.regions.length > 0
               ? inArray(species.region, input.regions)
@@ -100,12 +100,12 @@ export const instanceRouter = router({
               : notInArray(species.habitat, HabitatList),
             input.order === "Oldest"
               ? gte(
-                  instance.modifyDate,
+                  instances.modifyDate,
                   input.cursor ?? new Date("2020-12-03 17:20:11.049")
                 )
               : input.order === "Newest"
               ? lte(
-                  instance.modifyDate,
+                  instances.modifyDate,
                   input.cursor ?? new Date("2050-12-03 17:20:11.049")
                 )
               : input.order === "Pokedex"
@@ -134,9 +134,9 @@ export const instanceRouter = router({
         )
         .orderBy(
           input.order === "Oldest"
-            ? asc(instance.modifyDate)
+            ? asc(instances.modifyDate)
             : input.order === "Newest"
-            ? desc(instance.modifyDate)
+            ? desc(instances.modifyDate)
             : input.order === "Pokedex"
             ? (asc(species.name), asc(species.pokedexNumber))
             : input.order === "PokedexDesc"
@@ -149,27 +149,27 @@ export const instanceRouter = router({
             ? (asc(species.name),
               asc(species.pokedexNumber),
               desc(species.rarity))
-            : asc(instance.id)
+            : asc(instances.id)
         )
         .limit(limit + 1);
 
       let nextCursor: typeof input.cursor | undefined = undefined;
-      if (instances.length > limit) {
-        const nextItem = instances.pop();
+      if (instancesData.length > limit) {
+        const nextItem = instancesData.pop();
         nextCursor =
           input.order === "Oldest" || input.order === "Newest"
-            ? nextItem?.Instance.modifyDate
+            ? nextItem?.instance.modifyDate
             : input.order === "Pokedex" || input.order === "PokedexDesc"
-            ? nextItem?.Species.pokedexNumber
+            ? nextItem?.species.pokedexNumber
             : input.order === "Rarity" || input.order === "RarityDesc"
             ? {
-                rarity: nextItem?.Species.rarity,
-                pokedexNumber: nextItem?.Species.pokedexNumber
+                rarity: nextItem?.species.rarity,
+                pokedexNumber: nextItem?.species.pokedexNumber
               }
-            : nextItem?.Instance.id;
+            : nextItem?.instance.id;
       }
 
-      return { instances, nextCursor };
+      return { instancesData, nextCursor };
     }),
 
   purchaseInstanceWithBall: protectedProcedure
@@ -183,12 +183,12 @@ export const instanceRouter = router({
       const currUser = (
         await ctx.db
           .select({
-            totalYield: profile.totalYield,
-            balance: profile.balance,
-            instanceCount: profile.instanceCount
+            totalYield: profiles.totalYield,
+            balance: profiles.balance,
+            instanceCount: profiles.instanceCount
           })
-          .from(profile)
-          .where(eq(profile.userId, ctx.session.user.id))
+          .from(profiles)
+          .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -233,27 +233,27 @@ export const instanceRouter = router({
 
       await ctx.db.transaction(async (tx) => {
         await tx
-          .update(profile)
+          .update(profiles)
           .set({
             totalYield: newYield,
             balance: currUser.balance - input.cost,
             instanceCount: currUser.instanceCount + 1
           })
-          .where(eq(profile.userId, ctx.session.user.id));
+          .where(eq(profiles.userId, ctx.session.user.id));
 
         await tx
-          .insert(instance)
+          .insert(instances)
           .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
       });
 
       const instanceData = (
         await ctx.db
           .select()
-          .from(instance)
+          .from(instances)
           .where(
             and(
-              eq(instance.userId, ctx.session.user.id),
-              eq(instance.speciesId, input.speciesId)
+              eq(instances.userId, ctx.session.user.id),
+              eq(instances.speciesId, input.speciesId)
             )
           )
       )[0];
@@ -271,15 +271,15 @@ export const instanceRouter = router({
       const currUser = (
         await ctx.db
           .select({
-            totalYield: profile.totalYield,
-            instanceCount: profile.instanceCount,
-            commonCards: profile.commonCards,
-            rareCards: profile.rareCards,
-            epicCards: profile.epicCards,
-            legendaryCards: profile.legendaryCards
+            totalYield: profiles.totalYield,
+            instanceCount: profiles.instanceCount,
+            commonCards: profiles.commonCards,
+            rareCards: profiles.rareCards,
+            epicCards: profiles.epicCards,
+            legendaryCards: profiles.legendaryCards
           })
-          .from(profile)
-          .where(eq(profile.userId, ctx.session.user.id))
+          .from(profiles)
+          .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -350,7 +350,7 @@ export const instanceRouter = router({
 
       await ctx.db.transaction(async (tx) => {
         await tx
-          .update(profile)
+          .update(profiles)
           .set({
             totalYield: newYield,
             commonCards:
@@ -379,20 +379,20 @@ export const instanceRouter = router({
                 : currUser.legendaryCards,
             instanceCount: currUser.instanceCount + 1
           })
-          .where(eq(profile.userId, ctx.session.user.id));
+          .where(eq(profiles.userId, ctx.session.user.id));
 
         await tx
-          .insert(instance)
+          .insert(instances)
           .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
       });
 
       const instanceData = await ctx.db
         .select()
-        .from(instance)
+        .from(instances)
         .where(
           and(
-            eq(instance.userId, ctx.session.user.id),
-            eq(instance.speciesId, input.speciesId)
+            eq(instances.userId, ctx.session.user.id),
+            eq(instances.speciesId, input.speciesId)
           )
         );
 
@@ -412,9 +412,9 @@ export const instanceRouter = router({
         await ctx.db.transaction(async (tx) => {
           const exists = (
             await tx
-              .select({ speciesId: instance.speciesId })
-              .from(instance)
-              .where(eq(instance.id, i))
+              .select({ speciesId: instances.speciesId })
+              .from(instances)
+              .where(eq(instances.id, i))
           )[0];
 
           if (!exists) {
@@ -438,13 +438,13 @@ export const instanceRouter = router({
             });
           }
 
-          await tx.delete(instance).where(eq(instance.id, i));
+          await tx.delete(instances).where(eq(instances.id, i));
 
           const currUser = (
             await tx
               .select()
-              .from(profile)
-              .where(eq(profile.userId, ctx.session.user.id))
+              .from(profiles)
+              .where(eq(profiles.userId, ctx.session.user.id))
           )[0];
 
           if (!currUser) {
@@ -455,7 +455,7 @@ export const instanceRouter = router({
           }
 
           await tx
-            .update(profile)
+            .update(profiles)
             .set({
               totalYield: currUser.totalYield - speciesData.yield,
               balance:
@@ -464,7 +464,7 @@ export const instanceRouter = router({
                   : currUser.balance + speciesData.sellPrice,
               instanceCount: currUser.instanceCount - 1
             })
-            .where(eq(profile.userId, ctx.session.user.id));
+            .where(eq(profiles.userId, ctx.session.user.id));
         });
       }
       return {
@@ -483,16 +483,16 @@ export const instanceRouter = router({
       const currUser = (
         await ctx.db
           .select({
-            totalYield: profile.totalYield,
-            balance: profile.balance,
-            instanceCount: profile.instanceCount,
-            johtoStarter: profile.johtoStarter,
-            hoennStarter: profile.hoennStarter,
-            sinnohStarter: profile.sinnohStarter,
-            unovaStarter: profile.unovaStarter
+            totalYield: profiles.totalYield,
+            balance: profiles.balance,
+            instanceCount: profiles.instanceCount,
+            johtoStarter: profiles.johtoStarter,
+            hoennStarter: profiles.hoennStarter,
+            sinnohStarter: profiles.sinnohStarter,
+            unovaStarter: profiles.unovaStarter
           })
-          .from(profile)
-          .where(eq(profile.userId, ctx.session.user.id))
+          .from(profiles)
+          .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -542,7 +542,7 @@ export const instanceRouter = router({
 
       await ctx.db.transaction(async (tx) => {
         await tx
-          .update(profile)
+          .update(profiles)
           .set({
             totalYield: currUser.totalYield + speciesData.yield,
             instanceCount: currUser.instanceCount + 1,
@@ -555,10 +555,10 @@ export const instanceRouter = router({
             unovaStarter:
               input.region === "Unova" ? true : currUser.unovaStarter
           })
-          .where(eq(profile.userId, ctx.session.user.id));
+          .where(eq(profiles.userId, ctx.session.user.id));
 
         await tx
-          .insert(instance)
+          .insert(instances)
           .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
       });
 

@@ -1,13 +1,13 @@
 import { eq } from "drizzle-orm";
-import { userAchievement } from "../../db/schema";
+import { userAchievements } from "../../db/schema";
 import { protectedProcedure, router } from "../trpc";
 
 export const userAchievementRouter = router({
   getUserAchievements: protectedProcedure.query(async ({ ctx }) => {
-    const userAchievements = await ctx.db
+    const userAchievementsData = await ctx.db
       .select()
-      .from(userAchievement)
-      .where(eq(userAchievement.userId, ctx.session.user.id));
-    return { userAchievements: userAchievements };
+      .from(userAchievements)
+      .where(eq(userAchievements.userId, ctx.session.user.id));
+    return { userAchievements: userAchievementsData };
   })
 });

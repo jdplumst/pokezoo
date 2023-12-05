@@ -2,7 +2,7 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { MAX_BALANCE } from "@/src/constants";
-import { profile } from "../../db/schema";
+import { profiles } from "../../db/schema";
 import { ZodTime } from "@/types/zod";
 import { eq } from "drizzle-orm";
 
@@ -11,8 +11,8 @@ export const profileRouter = router({
     const profileData = (
       await ctx.db
         .select()
-        .from(profile)
-        .where(eq(profile.userId, ctx.session.user.id))
+        .from(profiles)
+        .where(eq(profiles.userId, ctx.session.user.id))
     )[0];
 
     return profileData;
@@ -24,17 +24,17 @@ export const profileRouter = router({
       const currUser = (
         await ctx.db
           .select({
-            balance: profile.balance,
-            claimedDaily: profile.claimedDaily,
-            claimedNightly: profile.claimedNightly,
-            totalYield: profile.totalYield,
-            commonCards: profile.commonCards,
-            rareCards: profile.rareCards,
-            epicCards: profile.epicCards,
-            legendaryCards: profile.legendaryCards
+            balance: profiles.balance,
+            claimedDaily: profiles.claimedDaily,
+            claimedNightly: profiles.claimedNightly,
+            totalYield: profiles.totalYield,
+            commonCards: profiles.commonCards,
+            rareCards: profiles.rareCards,
+            epicCards: profiles.epicCards,
+            legendaryCards: profiles.legendaryCards
           })
-          .from(profile)
-          .where(eq(profile.userId, ctx.session.user.id))
+          .from(profiles)
+          .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -72,7 +72,7 @@ export const profileRouter = router({
           });
         }
         await ctx.db
-          .update(profile)
+          .update(profiles)
           .set({
             balance: currUser.balance + newBalance,
             claimedDaily: true,
@@ -89,7 +89,7 @@ export const profileRouter = router({
                 ? currUser.legendaryCards + 1
                 : currUser.legendaryCards
           })
-          .where(eq(profile.userId, ctx.session.user.id));
+          .where(eq(profiles.userId, ctx.session.user.id));
       } else {
         if (currUser.claimedNightly) {
           throw new TRPCError({
@@ -98,7 +98,7 @@ export const profileRouter = router({
           });
         }
         await ctx.db
-          .update(profile)
+          .update(profiles)
           .set({
             balance: currUser.balance + newBalance,
             claimedNightly: true,
@@ -115,7 +115,7 @@ export const profileRouter = router({
                 ? currUser.legendaryCards + 1
                 : currUser.legendaryCards
           })
-          .where(eq(profile.userId, ctx.session.user.id));
+          .where(eq(profiles.userId, ctx.session.user.id));
       }
 
       return {
@@ -129,9 +129,9 @@ export const profileRouter = router({
     .mutation(async ({ ctx, input }) => {
       const currUser = (
         await ctx.db
-          .select({ username: profile.username })
-          .from(profile)
-          .where(eq(profile.userId, ctx.session.user.id))
+          .select({ username: profiles.username })
+          .from(profiles)
+          .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
 
       if (!currUser) {
@@ -150,9 +150,9 @@ export const profileRouter = router({
 
       const exists = (
         await ctx.db
-          .select({ username: profile.username })
-          .from(profile)
-          .where(eq(profile.username, input.username))
+          .select({ username: profiles.username })
+          .from(profiles)
+          .where(eq(profiles.username, input.username))
       )[0];
       if (
         exists &&
@@ -165,9 +165,9 @@ export const profileRouter = router({
       }
 
       await ctx.db
-        .update(profile)
+        .update(profiles)
         .set({ username: input.username })
-        .where(eq(profile.userId, ctx.session.user.id));
+        .where(eq(profiles.userId, ctx.session.user.id));
 
       return { message: "Username set successfully" };
     })
