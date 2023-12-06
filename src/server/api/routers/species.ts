@@ -45,7 +45,9 @@ export const speciesRouter = router({
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.string().nullish(),
+        cursor: z
+          .object({ pokedexNumber: z.number(), id: z.string() })
+          .nullish(),
         caught: z.object({ Caught: z.boolean(), Uncaught: z.boolean() }),
         shiny: z.boolean(),
         regions: z.array(ZodRegion),
@@ -90,16 +92,19 @@ export const speciesRouter = router({
               : !input.caught.Caught && input.caught.Uncaught
               ? isNull(i.speciesId)
               : undefined,
-            gte(species.id, input.cursor ?? "")
+            and(gte(species.pokedexNumber, input.cursor?.pokedexNumber ?? 0))
           )
         )
         .limit(limit + 1)
-        .orderBy(asc(species.pokedexNumber));
+        .orderBy(asc(species.pokedexNumber), asc(species.name));
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (pokemon.length > limit) {
-        const nextItem = pokemon.pop();
-        nextCursor = nextItem?.species.id;
+        const nextItem = pokemon.pop()!;
+        nextCursor = {
+          pokedexNumber: nextItem?.species.pokedexNumber,
+          id: nextItem?.species.id
+        };
       }
 
       return { pokemon, nextCursor };

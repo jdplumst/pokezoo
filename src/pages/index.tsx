@@ -1,4 +1,4 @@
-import { GetServerSidePropsContext } from "next";
+import { type GetServerSidePropsContext } from "next";
 import { signIn } from "next-auth/react";
 import Head from "next/head";
 import { AiOutlineGithub } from "react-icons/ai";

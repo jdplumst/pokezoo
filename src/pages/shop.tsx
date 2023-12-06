@@ -11,18 +11,12 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { z } from "zod";
-import { ZodRarity, ZodTime } from "@/src/zod";
-import { selectBallSchema, selectSpeciesSchema } from "../server/db/schema";
-
-enum region {
-  None,
-  Kanto,
-  Johto,
-  Hoenn,
-  Sinnoh,
-  Unova
-}
+import { type z } from "zod";
+import { type ZodRegion, type ZodRarity, type ZodTime } from "@/src/zod";
+import {
+  type selectBallSchema,
+  type selectSpeciesSchema
+} from "../server/db/schema";
 
 export default function Shop() {
   const router = useRouter();
@@ -30,7 +24,7 @@ export default function Shop() {
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/");
+      void router.push("/");
     }
   });
 
@@ -58,7 +52,9 @@ export default function Shop() {
 
   // Premier Ball
   const [regionOpen, setRegionOpen] = useState(false);
-  const [regionCurr, setRegionCurr] = useState<region>(region.None);
+  const [regionCurr, setRegionCurr] = useState<z.infer<
+    typeof ZodRegion
+  > | null>(null);
   const [regionError, setRegionError] = useState(false);
   const premierRef = useRef<HTMLButtonElement>(null);
 
@@ -73,7 +69,7 @@ export default function Shop() {
     setLoading(false);
   }, []);
 
-  const purchaseBall = async (ball: z.infer<typeof selectBallSchema>) => {
+  const purchaseBall = (ball: z.infer<typeof selectBallSchema>) => {
     setBoughtBall(ball);
 
     if (ball.name === "Premier" && !regionCurr) {
@@ -129,7 +125,7 @@ export default function Shop() {
         (s) => s.habitat === "Mountain" || s.habitat === "RoughTerrain"
       );
     } else if (ball.name === "Premier") {
-      filteredSpecies = timeSpecies?.filter((s) => s.generation === regionCurr);
+      filteredSpecies = timeSpecies?.filter((s) => s.region === regionCurr);
     }
 
     // Determine rarity
@@ -208,8 +204,8 @@ export default function Shop() {
     purchaseMutation.mutate(
       { speciesId: newInstance!.id, cost: ball.cost },
       {
-        onSuccess(data, variables, context) {
-          utils.profile.getProfile.invalidate();
+        onSuccess(data) {
+          void utils.profile.getProfile.invalidate();
           setNewSpecies(
             speciesData?.species.filter(
               (s) => s.id === data.instance.speciesId
@@ -218,7 +214,7 @@ export default function Shop() {
           setOpenModal(true);
           setError(null);
         },
-        onError(error, variables, context) {
+        onError(error) {
           setError(error.message);
         }
       }
@@ -274,7 +270,7 @@ export default function Shop() {
                               className={`w-24 rounded-lg border-2 ${
                                 regionError ? "border-red-500" : "border-black"
                               } bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus`}>
-                              {regionCurr ? region[regionCurr!] : "Region"}
+                              {regionCurr ?? "Region"}
                             </button>
                           )}
                           <button
@@ -334,7 +330,7 @@ export default function Shop() {
           <div className="flex gap-5 pt-5">
             <button
               onClick={() => {
-                setRegionCurr(region.Kanto);
+                setRegionCurr("Kanto");
                 setRegionOpen(false);
                 premierRef.current!.scrollIntoView();
               }}
@@ -343,7 +339,7 @@ export default function Shop() {
             </button>
             <button
               onClick={() => {
-                setRegionCurr(region.Johto);
+                setRegionCurr("Johto");
                 setRegionOpen(false);
                 premierRef.current!.scrollIntoView();
               }}
@@ -352,7 +348,7 @@ export default function Shop() {
             </button>
             <button
               onClick={() => {
-                setRegionCurr(region.Hoenn);
+                setRegionCurr("Hoenn");
                 setRegionOpen(false);
                 premierRef.current!.scrollIntoView();
               }}
@@ -361,7 +357,7 @@ export default function Shop() {
             </button>
             <button
               onClick={() => {
-                setRegionCurr(region.Sinnoh);
+                setRegionCurr("Sinnoh");
                 setRegionOpen(false);
                 premierRef.current!.scrollIntoView();
               }}
@@ -370,7 +366,7 @@ export default function Shop() {
             </button>
             <button
               onClick={() => {
-                setRegionCurr(region.Unova);
+                setRegionCurr("Unova");
                 setRegionOpen(false);
                 premierRef.current!.scrollIntoView();
               }}

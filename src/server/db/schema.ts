@@ -21,7 +21,7 @@ import {
   DBRegion,
   DBSpeciesType
 } from "@/src/zod";
-import { AdapterAccount } from "next-auth/adapters";
+import { type AdapterAccount } from "next-auth/adapters";
 import { createSelectSchema } from "drizzle-zod";
 
 // Next Auth Tables

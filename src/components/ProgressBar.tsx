@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "./LoadingSpinner";
-import { z } from "zod";
-import { selectAchievementSchema } from "../server/db/schema";
+import { type z } from "zod";
+import { type selectAchievementSchema } from "../server/db/schema";
 
 export interface FullAchievement {
   achievement: z.infer<typeof selectAchievementSchema>;
@@ -35,12 +35,12 @@ export default function ProgressBar({
         achievementId: fullAchievement.achievement.id
       },
       {
-        onSuccess(data, variables, context) {
+        onSuccess() {
           updateYield();
           setIsAchieved(true);
           setError(null);
         },
-        onError(error, variables, context) {
+        onError(error) {
           setError(error.message);
           setDisabled(false);
         }

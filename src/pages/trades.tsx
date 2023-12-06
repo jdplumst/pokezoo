@@ -8,8 +8,8 @@ import Loading from "../components/Loading";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../components/Modal";
-import { z } from "zod";
-import { ZodTime } from "@/src/zod";
+import { type z } from "zod";
+import { type ZodTime } from "@/src/zod";
 
 export default function Trades() {
   const router = useRouter();
@@ -17,7 +17,7 @@ export default function Trades() {
   const { data: session, status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/");
+      void router.push("/");
     }
   });
 
@@ -94,7 +94,9 @@ export default function Trades() {
             ) : (
               <div className="trades grid justify-center gap-10 pt-5">
                 {tradeData?.trades.map((t) => (
-                  <div className="h-76 w-[600px] border-2 border-solid border-black bg-rose-600 p-2">
+                  <div
+                    key={t.trade.id}
+                    className="h-76 w-[600px] border-2 border-solid border-black bg-rose-600 p-2">
                     <div className="flex h-full w-full justify-between">
                       <div className="flex w-1/2 flex-col items-center justify-between gap-5">
                         <div className="h-8 text-center text-xl font-bold">
@@ -112,6 +114,7 @@ export default function Trades() {
                           }`}>
                           <img
                             src={t.initiatorInstance.img!}
+                            alt={t.initiatorInstance.name!}
                             width={150}
                             height={150}></img>
                           <div className="text-center font-bold capitalize">
@@ -126,8 +129,8 @@ export default function Trades() {
                               cancelMutation.mutate(
                                 { tradeId: t.trade.id },
                                 {
-                                  onSuccess(data, variables, context) {
-                                    utils.trade.getTrades.invalidate();
+                                  onSuccess() {
+                                    void utils.trade.getTrades.invalidate();
                                   }
                                 }
                               )
@@ -158,6 +161,7 @@ export default function Trades() {
                             }`}>
                             <img
                               src={t.offererInstance.img!}
+                              alt={t.offererInstance.name!}
                               width={150}
                               height={150}></img>
                             <div className="text-center font-bold capitalize">
@@ -172,8 +176,8 @@ export default function Trades() {
                                 withdrawMutation.mutate(
                                   { tradeId: t.trade.id },
                                   {
-                                    onSuccess(data, variables, context) {
-                                      utils.trade.getTrades.invalidate();
+                                    onSuccess() {
+                                      void utils.trade.getTrades.invalidate();
                                     }
                                   }
                                 )
@@ -190,9 +194,9 @@ export default function Trades() {
                                   acceptMutation.mutate(
                                     { tradeId: t.trade.id },
                                     {
-                                      onSuccess(data, variables, context) {
-                                        utils.trade.getTrades.invalidate();
-                                        utils.profile.getProfile.invalidate();
+                                      onSuccess() {
+                                        void utils.trade.getTrades.invalidate();
+                                        void utils.profile.getProfile.invalidate();
                                       }
                                     }
                                   )
@@ -206,8 +210,8 @@ export default function Trades() {
                                   rejectMutation.mutate(
                                     { tradeId: t.trade.id },
                                     {
-                                      onSuccess(data, variables, context) {
-                                        utils.trade.getTrades.invalidate();
+                                      onSuccess() {
+                                        void utils.trade.getTrades.invalidate();
                                       }
                                     }
                                   )
@@ -283,6 +287,7 @@ export default function Trades() {
               <div className="grid w-full grid-cols-5 gap-5 pt-5">
                 {instanceData?.instances.map((i) => (
                   <div
+                    key={i.instanceId}
                     className={`flex flex-col items-center border-2 border-solid border-white p-2 text-black ${
                       i.rarity === `Common`
                         ? `bg-common-unfocus`
@@ -296,7 +301,7 @@ export default function Trades() {
                       {i.name}
                       {i.shiny && `⭐`}
                     </div>
-                    <img src={i.img} />
+                    <img src={i.img} alt={i.name} />
                     {initiateModal && (
                       <button
                         onClick={() =>
@@ -306,13 +311,13 @@ export default function Trades() {
                               description: description
                             },
                             {
-                              onSuccess(data, variables, context) {
+                              onSuccess() {
                                 setInitiateModal(false);
                                 setError(null);
                                 setDescription("");
-                                utils.trade.getTrades.invalidate();
+                                void utils.trade.getTrades.invalidate();
                               },
-                              onError(error, variables, context) {
+                              onError() {
                                 setError("This Pokémon is already in a trade");
                               }
                             }
@@ -332,13 +337,13 @@ export default function Trades() {
                               tradeId: tradeId
                             },
                             {
-                              onSuccess(data, variables, context) {
+                              onSuccess() {
                                 setOfferModal(false);
                                 setError(null);
                                 setDescription("");
-                                utils.trade.getTrades.invalidate();
+                                void utils.trade.getTrades.invalidate();
                               },
-                              onError(error, variables, context) {
+                              onError(error) {
                                 if (
                                   error.message ===
                                   "You can't give an offer for your own trade"

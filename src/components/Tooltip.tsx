@@ -1,6 +1,6 @@
-import { ReactNode, useState } from "react";
-import { z } from "zod";
-import { selectBallSchema } from "../server/db/schema";
+import { type ReactNode, useState } from "react";
+import { type z } from "zod";
+import { type selectBallSchema } from "../server/db/schema";
 
 interface ITooltip {
   ball: z.infer<typeof selectBallSchema>;

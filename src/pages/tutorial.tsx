@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
-import { z } from "zod";
-import { ZodTime } from "@/src/zod";
+import { type z } from "zod";
+import { type ZodTime } from "@/src/zod";
 
 export default function Tutorial() {
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function Tutorial() {
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/");
+      void router.push("/");
     }
   });
 

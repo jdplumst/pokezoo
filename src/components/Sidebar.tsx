@@ -1,7 +1,7 @@
 import { signOut } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
-import { ReactNode, useState } from "react";
+import { type ReactNode, useState } from "react";
 import { AiOutlineMenu, AiOutlineGithub } from "react-icons/ai";
 import { GoSignOut } from "react-icons/go";
 

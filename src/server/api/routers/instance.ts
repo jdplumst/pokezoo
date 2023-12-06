@@ -116,15 +116,13 @@ export const instanceRouter = router({
               ? and(
                   gte(
                     species.pokedexNumber,
-                    input.cursor && input.cursor.pokedexNumber
+                    input.cursor?.pokedexNumber
                       ? input.cursor.pokedexNumber
                       : ""
                   ),
                   gte(
                     species.rarity,
-                    input.cursor && input.cursor.rarity
-                      ? input.cursor.rarity
-                      : ""
+                    input.cursor?.rarity ? input.cursor.rarity : ""
                   )
                 )
               : input.order === "RarityDesc"
@@ -408,7 +406,7 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      for (let i of input.ids) {
+      for (const i of input.ids) {
         await ctx.db.transaction(async (tx) => {
           const exists = (
             await tx

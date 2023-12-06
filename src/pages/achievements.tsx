@@ -3,14 +3,14 @@ import Sidebar from "../components/Sidebar";
 import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import ProgressBar from "../components/ProgressBar";
-import { FullAchievement } from "../components/ProgressBar";
+import { type FullAchievement } from "../components/ProgressBar";
 import Topbar from "../components/Topbar";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { z } from "zod";
-import { ZodTime } from "@/src/zod";
+import { type z } from "zod";
+import { type ZodTime } from "@/src/zod";
 
 export default function Achievements() {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function Achievements() {
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/");
+      void router.push("/");
     }
   });
 
@@ -54,65 +54,58 @@ export default function Achievements() {
   // Set full achievements to display progress bars
   useEffect(() => {
     if (speciesData && instanceData && achievementData && userAchievementData) {
-      let full: FullAchievement[] = [];
-
-      for (let x = 0; x < achievementData.achievements.length; x++) {
+      const full: FullAchievement[] = [];
+      // (let x = 0; x < achievementData.achievements.length; x++)
+      for (const a of achievementData.achievements) {
         let max = 0;
         let value = 0;
 
-        if (achievementData.achievements[x].type === "All") {
+        if (a.type === "All") {
+          max = speciesData.species.filter(
+            (s) => s.region === a.region && s.shiny === a.shiny
+          ).length;
+          value = instanceData.filter(
+            (i) => i.species.region === a.region && i.species.shiny === a.shiny
+          ).length;
+        } else if (a.type === "Rarity") {
           max = speciesData.species.filter(
             (s) =>
-              s.region === achievementData.achievements[x].region &&
-              s.shiny === achievementData.achievements[x].shiny
+              s.rarity === a.attribute &&
+              s.region === a.region &&
+              s.shiny === a.shiny
           ).length;
           value = instanceData.filter(
             (i) =>
-              i.species.region === achievementData.achievements[x].region &&
-              i.species.shiny === achievementData.achievements[x].shiny
+              i.species.rarity === a.attribute &&
+              i.species.region === a.region &&
+              i.species.shiny === a.shiny
           ).length;
-        } else if (achievementData.achievements[x].type === "Rarity") {
+        } else if (a.type === "Habitat") {
           max = speciesData.species.filter(
             (s) =>
-              s.rarity === achievementData.achievements[x].attribute &&
-              s.region === achievementData.achievements[x].region &&
-              s.shiny === achievementData.achievements[x].shiny
+              s.habitat === a.attribute &&
+              s.region === a.region &&
+              s.shiny === a.shiny
           ).length;
           value = instanceData.filter(
             (i) =>
-              i.species.rarity === achievementData.achievements[x].attribute &&
-              i.species.region === achievementData.achievements[x].region &&
-              i.species.shiny === achievementData.achievements[x].shiny
+              i.species.habitat === a.attribute &&
+              i.species.region === a.region &&
+              i.species.shiny === a.shiny
           ).length;
-        } else if (achievementData.achievements[x].type === "Habitat") {
+        } else if (a.type === "Type") {
           max = speciesData.species.filter(
             (s) =>
-              s.habitat === achievementData.achievements[x].attribute &&
-              s.region === achievementData.achievements[x].region &&
-              s.shiny === achievementData.achievements[x].shiny
+              (s.typeOne === a.attribute || s.typeTwo === a.attribute) &&
+              s.region === a.region &&
+              s.shiny === a.shiny
           ).length;
           value = instanceData.filter(
             (i) =>
-              i.species.habitat === achievementData.achievements[x].attribute &&
-              i.species.region === achievementData.achievements[x].region &&
-              i.species.shiny === achievementData.achievements[x].shiny
-          ).length;
-        } else if (achievementData.achievements[x].type === "Type") {
-          max = speciesData.species.filter(
-            (s) =>
-              (s.typeOne === achievementData.achievements[x].attribute ||
-                s.typeTwo === achievementData.achievements[x].attribute) &&
-              s.region === achievementData.achievements[x].region &&
-              s.shiny === achievementData.achievements[x].shiny
-          ).length;
-          value = instanceData.filter(
-            (i) =>
-              (i.species.typeOne ===
-                achievementData.achievements[x].attribute ||
-                i.species.typeTwo ===
-                  achievementData.achievements[x].attribute) &&
-              i.species.region === achievementData.achievements[x].region &&
-              i.species.shiny === achievementData.achievements[x].shiny
+              (i.species.typeOne === a.attribute ||
+                i.species.typeTwo === a.attribute) &&
+              i.species.region === a.region &&
+              i.species.shiny === a.shiny
           ).length;
         }
 
@@ -120,11 +113,11 @@ export default function Achievements() {
         const high = 0.7 * max;
         const percent = Math.round((value / max) * 100);
         const achieved = userAchievementData.userAchievements.some(
-          (u) => u.achievementId === achievementData.achievements[x].id
+          (u) => u.achievementId === a.id
         );
 
         full.push({
-          achievement: achievementData.achievements[x],
+          achievement: a,
           max: max,
           value: value,
           low: low,
@@ -148,7 +141,7 @@ export default function Achievements() {
   }, [instanceData, speciesData, achievementData, userAchievementData]);
 
   const updateYield = () => {
-    utils.profile.getProfile.invalidate();
+    void utils.profile.getProfile.invalidate();
   };
 
   if (status === "loading" || loading) return <Loading />;

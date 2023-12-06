@@ -34,6 +34,7 @@ export default function Topbar() {
             <p>You have {getProfile.data?.commonCards} Common wildcards.</p>
             <img
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png"
+              alt="common-wildcard"
               height={25}
               width={25}
             />
@@ -42,6 +43,7 @@ export default function Topbar() {
             <p>You have {getProfile.data?.rareCards} Rare wildcards.</p>
             <img
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png"
+              alt="rare-wildcard"
               height={25}
               width={25}
             />
@@ -50,6 +52,7 @@ export default function Topbar() {
             <p>You have {getProfile.data?.epicCards} Epic wildcards.</p>
             <img
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png"
+              alt="epic-wildcard"
               height={25}
               width={25}
             />
@@ -60,6 +63,7 @@ export default function Topbar() {
             </p>
             <img
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png"
+              alt="legendary-wildcard"
               height={25}
               width={25}
             />

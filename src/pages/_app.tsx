@@ -1,15 +1,16 @@
 import "@/src/styles/globals.css";
-import type { AppProps, AppType } from "next/app";
+import type { AppType } from "next/app";
 import { SessionProvider } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import React from "react";
 import { Router } from "next/router";
 import Loading from "../components/Loading";
+import { type Session } from "next-auth";
 
-const App: AppType = ({
+const App: AppType<{ session: Session | null }> = ({
   Component,
   pageProps: { session, ...pageProps }
-}: AppProps) => {
+}) => {
   const [loading, setLoading] = React.useState(false);
   React.useEffect(() => {
     const start = () => {

@@ -10,22 +10,22 @@ import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../components/Modal";
 import { useInView } from "react-intersection-observer";
-import Dropdown, { IDropdowns } from "../components/Dropdown";
+import Dropdown, { type IDropdowns } from "../components/Dropdown";
 import {
   RegionsList,
   RaritiesList,
   TypesList,
   HabitatList
 } from "../constants";
-import { z } from "zod";
+import { type z } from "zod";
 import {
-  ZodHabitat,
-  ZodRarity,
-  ZodRegion,
-  ZodSpeciesType,
-  ZodTime
+  type ZodHabitat,
+  type ZodRarity,
+  type ZodRegion,
+  type ZodSpeciesType,
+  type ZodTime
 } from "@/src/zod";
-import { selectSpeciesSchema } from "../server/db/schema";
+import { type selectSpeciesSchema } from "../server/db/schema";
 
 interface IPurchased {
   modal: boolean;
@@ -38,7 +38,7 @@ export default function Pokedex() {
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/");
+      void router.push("/");
     }
   });
 
@@ -106,8 +106,9 @@ export default function Pokedex() {
   // Infinite scroll
   useEffect(() => {
     if (inView && getPokedex.hasNextPage) {
-      getPokedex.fetchNextPage();
+      void getPokedex.fetchNextPage();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, getPokedex.hasNextPage]);
 
   // Handle Dropdowns State
@@ -243,8 +244,8 @@ export default function Pokedex() {
   // Handle Purchase with Wildcards
   const handlePurchase = (species: z.infer<typeof selectSpeciesSchema>) => {
     setPurchased({ modal: true, species: species });
-    utils.profile.getProfile.invalidate();
-    utils.species.getPokedex.invalidate();
+    void utils.profile.getProfile.invalidate();
+    void utils.species.getPokedex.invalidate();
   };
 
   if (status === "loading" || timeLoading) return <Loading />;
@@ -285,7 +286,7 @@ export default function Pokedex() {
             )}
             <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
               {getPokedex.data?.pages.map((p) => (
-                <Fragment key={p.nextCursor}>
+                <Fragment key={p.nextCursor?.id ?? 0}>
                   {p.pokemon.map((c) => (
                     <Card
                       key={c.species.id}

@@ -11,23 +11,23 @@ import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
-import { z } from "zod";
+import { type z } from "zod";
 import {
-  ZodHabitat,
-  ZodRarity,
-  ZodRegion,
-  ZodSort,
-  ZodSpeciesType,
-  ZodTime
+  type ZodHabitat,
+  type ZodRarity,
+  type ZodRegion,
+  type ZodSort,
+  type ZodSpeciesType,
+  type ZodTime
 } from "@/src/zod";
-import Dropdown, { IDropdowns } from "../components/Dropdown";
+import Dropdown, { type IDropdowns } from "../components/Dropdown";
 import {
   RegionsList,
   RaritiesList,
   TypesList,
   HabitatList
 } from "../constants";
-import { selectInstanceSchema } from "../server/db/schema";
+import { type selectInstanceSchema } from "../server/db/schema";
 
 export default function Game() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function Game() {
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/");
+      void router.push("/");
     }
   });
 
@@ -122,24 +122,25 @@ export default function Game() {
   // Infinite scroll
   useEffect(() => {
     if (inView && getGame.hasNextPage) {
-      getGame.fetchNextPage();
+      void getGame.fetchNextPage();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView, getGame.hasNextPage]);
 
   // Display starter and updated yield
   const addStarter = () => {
-    utils.instance.getGame.invalidate();
-    utils.profile.getProfile.invalidate();
+    void utils.instance.getGame.invalidate();
+    void utils.profile.getProfile.invalidate();
   };
 
   // Claim Daily and Nightly Reward
-  const claimReward = async () => {
+  const claimReward = () => {
     if (time === "day") {
       rewardMutation.mutate(
         { time: time },
         {
-          onSuccess(data, variables, context) {
-            utils.profile.getProfile.invalidate();
+          onSuccess(data) {
+            void utils.profile.getProfile.invalidate();
             setDailyReward({
               modal: true,
               reward: data.reward,
@@ -152,8 +153,8 @@ export default function Game() {
       rewardMutation.mutate(
         { time: time },
         {
-          onSuccess(data, variables, context) {
-            utils.profile.getProfile.invalidate();
+          onSuccess(data) {
+            void utils.profile.getProfile.invalidate();
             setNightlyReward({
               modal: true,
               reward: data.reward,
@@ -182,13 +183,13 @@ export default function Game() {
     sellMutation.mutate(
       { ids: deleteList },
       {
-        onSuccess(data, variables, context) {
+        onSuccess() {
           setError(null);
           setDeleteList([]);
-          utils.instance.getGame.invalidate();
-          utils.profile.getProfile.invalidate();
+          void utils.instance.getGame.invalidate();
+          void utils.profile.getProfile.invalidate();
         },
-        onError(error, variables, context) {
+        onError(error) {
           setError(error.message);
         }
       }
@@ -201,10 +202,10 @@ export default function Game() {
     usernameMutation.mutate(
       { username: username },
       {
-        onSuccess(data, variables, context) {
-          utils.profile.getProfile.invalidate();
+        onSuccess() {
+          void utils.profile.getProfile.invalidate();
         },
-        onError(error, variables, context) {
+        onError(error) {
           setUsernameError(error.message);
         }
       }
@@ -525,6 +526,18 @@ export default function Game() {
                     (nightlyReward.modal && nightlyReward.card === "Epic")
                   ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
                   : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
+              }
+              alt={
+                (dailyReward.modal && dailyReward.card === "Common") ||
+                (nightlyReward.modal && nightlyReward.card === "Common")
+                  ? `common-wildcard`
+                  : (dailyReward.modal && dailyReward.card === "Rare") ||
+                    (nightlyReward.modal && nightlyReward.card === "Rare")
+                  ? `rare-wildcard`
+                  : (dailyReward.modal && dailyReward.card === "Epic") ||
+                    (nightlyReward.modal && nightlyReward.card === "Epic")
+                  ? `epic-wildcard`
+                  : `legendary-wildcard`
               }
             />
           </div>

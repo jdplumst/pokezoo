@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import { useRouter } from "next/router";
 import Topbar from "../components/Topbar";
-import { z } from "zod";
-import { ZodTime } from "@/src/zod";
+import { type z } from "zod";
+import { type ZodTime } from "@/src/zod";
 
 export default function PatchNotes() {
   const router = useRouter();
@@ -14,7 +14,7 @@ export default function PatchNotes() {
   const { status } = useSession({
     required: true,
     onUnauthenticated() {
-      router.push("/");
+      void router.push("/");
     }
   });
 
@@ -258,7 +258,8 @@ export default function PatchNotes() {
                 selling multiple Pokémon at once.
               </p>
               <p className="px-4">
-                Updated all user's total yields to be their correct total yield.
+                Updated all user&apos;s total yields to be their correct total
+                yield.
               </p>
             </section>
             <hr className="border-black pb-4"></hr>
@@ -432,7 +433,7 @@ export default function PatchNotes() {
               <h3 className="p-4 text-4xl font-bold">3.18 (July 7, 2023)</h3>
               <hr className="border-black"></hr>
               <p className="px-4 pt-4">
-                Added "Select All" option to Pokédex dropdowns.
+                Added &quot;Select All&quot; option to Pokédex dropdowns.
               </p>
             </section>
             <hr className="border-black pb-4"></hr>
@@ -824,7 +825,7 @@ export default function PatchNotes() {
                 Changed Shiny card borders from Pink to Gold.
               </p>
               <p className="px-4">
-                Removed space from bottom of cards when sell button isn't
+                Removed space from bottom of cards when sell button isn&apos;t
                 present.
               </p>
             </section>
@@ -963,8 +964,8 @@ export default function PatchNotes() {
                 Added button to shop modal that closes the modal when pressed.
               </p>
               <p className="px-4">
-                Changed shop modal message to say "an" instead of "a" when the
-                species shown starts with a vowel.
+                Changed shop modal message to say &quot;an&quot; instead of
+                &quot;a&quot; when the species shown starts with a vowel.
               </p>
             </section>
             <hr className="border-black pb-4"></hr>

@@ -2,8 +2,8 @@ import { useState } from "react";
 import Card from "./Card";
 import Modal from "./Modal";
 import { trpc } from "../utils/trpc";
-import { z } from "zod";
-import { ZodRegion } from "../zod";
+import { type z } from "zod";
+import { type ZodRegion } from "../zod";
 
 interface IStarter {
   region: z.infer<typeof ZodRegion>;
@@ -12,7 +12,7 @@ interface IStarter {
 
 export default function Start({ region, addStarter }: IStarter) {
   const [starter, setStarter] = useState<Starter | null>(null);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
   const [disabled, setDisabled] = useState(false);
 
   const getStarters = trpc.species.getStarters.useQuery({ region });
@@ -53,26 +53,29 @@ export default function Start({ region, addStarter }: IStarter) {
       ? "piplup"
       : "oshawott";
 
-  const handleClose = async () => {
+  const handleClose = () => {
     setDisabled(true);
     if (starter) {
       const speciesId =
         starter === "Grass"
-          ? getStarters.data?.starters.find((s) => s.name === grassStarter)?.id!
+          ? getStarters.data?.starters.find((s) => s.name === grassStarter)
+              ?.id ?? ""
           : starter === "Fire"
-          ? getStarters.data?.starters.find((s) => s.name === fireStarter)?.id!
+          ? getStarters.data?.starters.find((s) => s.name === fireStarter)
+              ?.id ?? ""
           : starter === "Water"
-          ? getStarters.data?.starters.find((s) => s.name === waterStarter)?.id!
+          ? getStarters.data?.starters.find((s) => s.name === waterStarter)
+              ?.id ?? ""
           : "";
 
       if (region === "Kanto") {
         purchaseMutation.mutate(
           { speciesId: speciesId, cost: 0 },
           {
-            onSuccess(data, variables, context) {
+            onSuccess() {
               addStarter();
             },
-            onError(error, variables, context) {
+            onError(error) {
               setError(error.message);
               setDisabled(false);
             }
@@ -82,10 +85,10 @@ export default function Start({ region, addStarter }: IStarter) {
         starterMutation.mutate(
           { speciesId: speciesId, region: region },
           {
-            onSuccess(data, variables, context) {
+            onSuccess() {
               addStarter();
             },
-            onError(error, variables, context) {
+            onError(error) {
               setError(error.message);
               setDisabled(false);
             }
@@ -98,7 +101,7 @@ export default function Start({ region, addStarter }: IStarter) {
     }
   };
 
-  if (getStarters.isLoading) return <div></div>;
+  if (getStarters.isLoading || !getStarters.data) return <div></div>;
 
   return (
     <Modal size="Small">
@@ -125,7 +128,9 @@ export default function Start({ region, addStarter }: IStarter) {
           <button onClick={() => setStarter("Grass")}>
             <Card
               species={
-                getStarters.data?.starters.find((s) => s.name === grassStarter)!
+                getStarters.data.starters.find(
+                  (s) => s.name === grassStarter
+                ) ?? getStarters.data.starters[0]
               }
             />
           </button>
@@ -137,7 +142,7 @@ export default function Start({ region, addStarter }: IStarter) {
           <button onClick={() => setStarter("Fire")}>
             <Card
               species={
-                getStarters.data?.starters.find((s) => s.name === fireStarter)!
+                getStarters.data.starters.find((s) => s.name === fireStarter)!
               }
             />
           </button>
@@ -149,7 +154,7 @@ export default function Start({ region, addStarter }: IStarter) {
           <button onClick={() => setStarter("Water")}>
             <Card
               species={
-                getStarters.data?.starters.find((s) => s.name === waterStarter)!
+                getStarters.data.starters.find((s) => s.name === waterStarter)!
               }
             />
           </button>

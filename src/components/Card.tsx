@@ -1,8 +1,11 @@
 import Image from "next/image";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
-import { z } from "zod";
-import { selectSpeciesSchema, selectInstanceSchema } from "../server/db/schema";
+import { type z } from "zod";
+import {
+  type selectSpeciesSchema,
+  type selectInstanceSchema
+} from "../server/db/schema";
 
 interface ICard {
   species: z.infer<typeof selectSpeciesSchema>;
@@ -11,7 +14,7 @@ interface ICard {
     instance: z.infer<typeof selectInstanceSchema>,
     sell: boolean
   ) => void;
-  caught?: Boolean;
+  caught?: boolean;
   handlePurchase?: (species: z.infer<typeof selectSpeciesSchema>) => void;
 }
 
@@ -203,24 +206,28 @@ export default function Card({
               {species.rarity === "Common" ? (
                 <img
                   src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png"
+                  alt="common-wildcard"
                   height={25}
                   width={25}
                 />
               ) : species.rarity === "Rare" ? (
                 <img
                   src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png"
+                  alt="rare-wildcard"
                   height={25}
                   width={25}
                 />
               ) : species.rarity === "Epic" ? (
                 <img
                   src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png"
+                  alt="epic-wildcard"
                   height={25}
                   width={25}
                 />
               ) : (
                 <img
                   src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png"
+                  alt="legendary-wildcard"
                   height={25}
                   width={25}
                 />

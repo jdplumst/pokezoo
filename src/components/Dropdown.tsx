@@ -1,11 +1,10 @@
-import { z } from "zod";
+import { type z } from "zod";
 import DrowpdownItem from "./DropdownItem";
 import {
-  DBRegion,
-  ZodHabitat,
-  ZodRarity,
-  ZodRegion,
-  ZodSpeciesType
+  type ZodHabitat,
+  type ZodRarity,
+  type ZodRegion,
+  type ZodSpeciesType
 } from "../zod";
 import {
   HabitatList,
