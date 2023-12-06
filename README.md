@@ -17,3 +17,4 @@ The app is currently on version 5.12.
 - NextAuth.js
 - tRPC
 - React Query
+- Upstash
