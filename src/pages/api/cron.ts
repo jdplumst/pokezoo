@@ -3,13 +3,11 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { profiles } from "@/src/server/db/schema";
 import { eq } from "drizzle-orm";
 import { MAX_BALANCE } from "@/src/constants";
+import { env } from "@/src/env";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const { authorization } = req.headers;
-  if (
-    !authorization ||
-    authorization.split(" ")[1] !== process.env.CRON_TOKEN
-  ) {
+  if (!authorization || authorization.split(" ")[1] !== env.CRON_TOKEN) {
     throw new Error("Not authorized to make this request.");
   }
   switch (req.method) {

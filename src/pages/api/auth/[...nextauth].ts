@@ -6,6 +6,7 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/src/server/db/index";
 import { profiles } from "@/src/server/db/schema";
 import { eq } from "drizzle-orm";
+import { env } from "@/src/env";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -21,16 +22,16 @@ export const authOptions: NextAuthOptions = {
   adapter: DrizzleAdapter(db),
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_ID,
-      clientSecret: process.env.GITHUB_SECRET
+      clientId: env.GITHUB_ID,
+      clientSecret: env.GITHUB_SECRET
     }),
     TwitchProvider({
-      clientId: process.env.TWITCH_CLIENT_ID,
-      clientSecret: process.env.TWITCH_CLIENT_SECRET
+      clientId: env.TWITCH_CLIENT_ID,
+      clientSecret: env.TWITCH_CLIENT_SECRET
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET
+      clientId: env.GOOGLE_CLIENT_ID,
+      clientSecret: env.GOOGLE_CLIENT_SECRET
     })
   ],
   callbacks: {
@@ -51,7 +52,7 @@ export const authOptions: NextAuthOptions = {
     }
   },
   pages: { signOut: "/" },
-  secret: process.env.NEXTAUTH_SECRET
+  secret: env.NEXTAUTH_SECRET
 };
 
 export default NextAuth(authOptions);
