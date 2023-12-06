@@ -328,7 +328,8 @@ export default function Game() {
     }
   };
 
-  if (status === "loading" || loading) return <Loading />;
+  if (status === "loading" || loading || getProfile.isInitialLoading)
+    return <Loading />;
 
   return (
     <>
