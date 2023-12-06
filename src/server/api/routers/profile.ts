@@ -3,7 +3,7 @@ import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { MAX_BALANCE } from "@/src/constants";
 import { profiles } from "../../db/schema";
-import { ZodTime } from "@/types/zod";
+import { ZodTime } from "@/src/zod";
 import { eq } from "drizzle-orm";
 
 export const profileRouter = router({

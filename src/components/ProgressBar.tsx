@@ -1,10 +1,11 @@
-import { Achievement, Instance, Rarity, Species, User } from "@prisma/client";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "./LoadingSpinner";
+import { z } from "zod";
+import { selectAchievementSchema } from "../server/db/schema";
 
 export interface FullAchievement {
-  achievement: Achievement;
+  achievement: z.infer<typeof selectAchievementSchema>;
   max: number;
   value: number;
   low: number;

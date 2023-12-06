@@ -1,8 +1,9 @@
-import { Ball } from "@prisma/client";
 import { ReactNode, useState } from "react";
+import { z } from "zod";
+import { selectBallSchema } from "../server/db/schema";
 
 interface ITooltip {
-  ball: Ball;
+  ball: z.infer<typeof selectBallSchema>;
   children: ReactNode;
 }
 

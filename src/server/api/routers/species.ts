@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/types/zod";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/src/zod";
 import { instances, species } from "../../db/schema";
 import {
   and,

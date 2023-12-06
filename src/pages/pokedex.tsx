@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { Habitat, Rarity, Region, Species, SpeciesType } from "@prisma/client";
 import Modal from "../components/Modal";
 import { useInView } from "react-intersection-observer";
 import Dropdown, { IDropdowns } from "../components/Dropdown";
@@ -19,11 +18,18 @@ import {
   HabitatList
 } from "../constants";
 import { z } from "zod";
-import { ZodTime } from "@/types/zod";
+import {
+  ZodHabitat,
+  ZodRarity,
+  ZodRegion,
+  ZodSpeciesType,
+  ZodTime
+} from "@/src/zod";
+import { selectSpeciesSchema } from "../server/db/schema";
 
 interface IPurchased {
   modal: boolean;
-  species: Species | null;
+  species: z.infer<typeof selectSpeciesSchema> | null;
 }
 
 export default function Pokedex() {
@@ -53,10 +59,14 @@ export default function Pokedex() {
     Uncaught: true
   });
   const [shiny, setShiny] = useState(false);
-  const [regions, setRegions] = useState<Region[]>(RegionsList);
-  const [rarities, setRarities] = useState<Rarity[]>(RaritiesList);
-  const [types, setTypes] = useState<SpeciesType[]>(TypesList);
-  const [habitats, setHabitats] = useState<Habitat[]>(HabitatList);
+  const [regions, setRegions] =
+    useState<z.infer<typeof ZodRegion>[]>(RegionsList);
+  const [rarities, setRarities] =
+    useState<z.infer<typeof ZodRarity>[]>(RaritiesList);
+  const [types, setTypes] =
+    useState<z.infer<typeof ZodSpeciesType>[]>(TypesList);
+  const [habitats, setHabitats] =
+    useState<z.infer<typeof ZodHabitat>[]>(HabitatList);
 
   // Dropdown open state
   const [dropdowns, setDropdowns] = useState<IDropdowns>({
@@ -141,7 +151,7 @@ export default function Pokedex() {
 
   // Handle Region State
   const handleRegion = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor as Region;
+    const label = e.target.labels![0].htmlFor as z.infer<typeof ZodRegion>;
     const checked = e.target.checked;
     if (label.startsWith("all") && regions === RegionsList) {
       setRegions([]);
@@ -156,7 +166,7 @@ export default function Pokedex() {
 
   // Handle Rarity State
   const handleRarity = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor as Rarity;
+    const label = e.target.labels![0].htmlFor as z.infer<typeof ZodRarity>;
     const checked = e.target.checked;
     if (label.startsWith("all") && rarities === RaritiesList) {
       setRarities([]);
@@ -171,7 +181,7 @@ export default function Pokedex() {
 
   // Handle Type State
   const handleType = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor as SpeciesType;
+    const label = e.target.labels![0].htmlFor as z.infer<typeof ZodSpeciesType>;
     const checked = e.target.checked;
     if (label.startsWith("all") && types === TypesList) {
       setTypes([]);
@@ -187,7 +197,7 @@ export default function Pokedex() {
   // Handle Habitat State
   const handleHabitat = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor as
-      | Habitat
+      | z.infer<typeof ZodHabitat>
       | "Waters-Edge"
       | "Rough-Terrain";
     const checked = e.target.checked;
@@ -226,12 +236,12 @@ export default function Pokedex() {
     ) {
       setHabitats([...habitats, "RoughTerrain"]);
     } else {
-      setHabitats([...habitats, label as Habitat]);
+      setHabitats([...habitats, label as z.infer<typeof ZodHabitat>]);
     }
   };
 
   // Handle Purchase with Wildcards
-  const handlePurchase = (species: Species) => {
+  const handlePurchase = (species: z.infer<typeof selectSpeciesSchema>) => {
     setPurchased({ modal: true, species: species });
     utils.profile.getProfile.invalidate();
     utils.species.getPokedex.invalidate();

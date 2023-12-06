@@ -6,7 +6,7 @@ import Loading from "../components/Loading";
 import { useRouter } from "next/router";
 import Topbar from "../components/Topbar";
 import { z } from "zod";
-import { ZodTime } from "@/types/zod";
+import { ZodTime } from "@/src/zod";
 
 export default function PatchNotes() {
   const router = useRouter();

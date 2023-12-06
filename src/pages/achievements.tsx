@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { z } from "zod";
-import { ZodTime } from "@/types/zod";
+import { ZodTime } from "@/src/zod";
 
 export default function Achievements() {
   const router = useRouter();

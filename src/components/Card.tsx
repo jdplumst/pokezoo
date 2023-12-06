@@ -1,14 +1,18 @@
-import { Rarity, Species, Instance } from "@prisma/client";
 import Image from "next/image";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
+import { z } from "zod";
+import { selectSpeciesSchema, selectInstanceSchema } from "../server/db/schema";
 
 interface ICard {
-  species: Species;
-  instance?: Instance;
-  modifyDeleteList?: (instance: Instance, sell: boolean) => void;
+  species: z.infer<typeof selectSpeciesSchema>;
+  instance?: z.infer<typeof selectInstanceSchema>;
+  modifyDeleteList?: (
+    instance: z.infer<typeof selectInstanceSchema>,
+    sell: boolean
+  ) => void;
   caught?: Boolean;
-  handlePurchase?: (species: Species) => void;
+  handlePurchase?: (species: z.infer<typeof selectSpeciesSchema>) => void;
 }
 
 export default function Card({
@@ -26,13 +30,13 @@ export default function Card({
   return (
     <div
       className={`${
-        species.rarity === Rarity.Common
+        species.rarity === "Common"
           ? `bg-common-unfocus hover:bg-common-focus`
-          : species.rarity === Rarity.Rare
+          : species.rarity === "Rare"
           ? `bg-rare-unfocus hover:bg-rare-focus`
-          : species.rarity === Rarity.Epic
+          : species.rarity === "Epic"
           ? `bg-epic-unfocus hover:bg-epic-focus`
-          : species.rarity === Rarity.Legendary
+          : species.rarity === "Legendary"
           ? `bg-legendary-unfocus hover:bg-legendary-focus`
           : ``
       } card-hover h-fit w-[260px] border-2 ${

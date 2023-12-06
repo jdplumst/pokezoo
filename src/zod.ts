@@ -1,11 +1,3 @@
-import {
-  AchievementType,
-  Attribute,
-  Habitat,
-  Rarity,
-  Region,
-  SpeciesType
-} from "@prisma/client";
 import { z } from "zod";
 
 export const ZodSort = z.enum([

@@ -9,7 +9,7 @@ import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../components/Modal";
 import { z } from "zod";
-import { ZodTime } from "@/types/zod";
+import { ZodTime } from "@/src/zod";
 
 export default function Trades() {
   const router = useRouter();

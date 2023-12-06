@@ -2,7 +2,6 @@ import Head from "next/head";
 import Card from "@/src/components/Card";
 import Start from "@/src/components/Start";
 import { Fragment, useEffect, useState } from "react";
-import { Habitat, Instance, Rarity, Region, SpeciesType } from "@prisma/client";
 import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
@@ -13,7 +12,14 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
-import { ZodSort, ZodTime } from "@/types/zod";
+import {
+  ZodHabitat,
+  ZodRarity,
+  ZodRegion,
+  ZodSort,
+  ZodSpeciesType,
+  ZodTime
+} from "@/src/zod";
 import Dropdown, { IDropdowns } from "../components/Dropdown";
 import {
   RegionsList,
@@ -21,6 +27,7 @@ import {
   TypesList,
   HabitatList
 } from "../constants";
+import { selectInstanceSchema } from "../server/db/schema";
 
 export default function Game() {
   const router = useRouter();
@@ -67,10 +74,14 @@ export default function Game() {
   const usernameMutation = trpc.profile.selectUsername.useMutation();
 
   const [shiny, setShiny] = useState(false);
-  const [regions, setRegions] = useState<Region[]>(RegionsList);
-  const [rarities, setRarities] = useState<Rarity[]>(RaritiesList);
-  const [types, setTypes] = useState<SpeciesType[]>(TypesList);
-  const [habitats, setHabitats] = useState<Habitat[]>(HabitatList);
+  const [regions, setRegions] =
+    useState<z.infer<typeof ZodRegion>[]>(RegionsList);
+  const [rarities, setRarities] =
+    useState<z.infer<typeof ZodRarity>[]>(RaritiesList);
+  const [types, setTypes] =
+    useState<z.infer<typeof ZodSpeciesType>[]>(TypesList);
+  const [habitats, setHabitats] =
+    useState<z.infer<typeof ZodHabitat>[]>(HabitatList);
 
   // Dropdown open state
   const [dropdowns, setDropdowns] = useState<IDropdowns>({
@@ -160,7 +171,10 @@ export default function Game() {
   };
 
   // Add or remove instances from array of instances to be deleted
-  const modifyDeleteList = (i: Instance, sell: boolean) => {
+  const modifyDeleteList = (
+    i: z.infer<typeof selectInstanceSchema>,
+    sell: boolean
+  ) => {
     if (sell) {
       setDeleteList([...deleteList, i.id]);
     } else {
@@ -231,7 +245,7 @@ export default function Game() {
 
   // Handle Region State
   const handleRegion = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor as Region;
+    const label = e.target.labels![0].htmlFor as z.infer<typeof ZodRegion>;
     const checked = e.target.checked;
     if (label.startsWith("all") && regions === RegionsList) {
       setRegions([]);
@@ -246,7 +260,7 @@ export default function Game() {
 
   // Handle Rarity State
   const handleRarity = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor as Rarity;
+    const label = e.target.labels![0].htmlFor as z.infer<typeof ZodRarity>;
     const checked = e.target.checked;
     if (label.startsWith("all") && rarities === RaritiesList) {
       setRarities([]);
@@ -261,7 +275,7 @@ export default function Game() {
 
   // Handle Type State
   const handleType = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor as SpeciesType;
+    const label = e.target.labels![0].htmlFor as z.infer<typeof ZodSpeciesType>;
     const checked = e.target.checked;
     if (label.startsWith("all") && types === TypesList) {
       setTypes([]);
@@ -277,7 +291,7 @@ export default function Game() {
   // Handle Habitat State
   const handleHabitat = (e: React.ChangeEvent<HTMLInputElement>) => {
     const label = e.target.labels![0].htmlFor as
-      | Habitat
+      | z.infer<typeof ZodHabitat>
       | "Waters-Edge"
       | "Rough-Terrain";
     const checked = e.target.checked;
@@ -316,7 +330,7 @@ export default function Game() {
     ) {
       setHabitats([...habitats, "RoughTerrain"]);
     } else {
-      setHabitats([...habitats, label as Habitat]);
+      setHabitats([...habitats, label as z.infer<typeof ZodHabitat>]);
     }
   };
 

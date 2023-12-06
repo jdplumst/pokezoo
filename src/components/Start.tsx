@@ -1,12 +1,12 @@
 import { useState } from "react";
 import Card from "./Card";
-import { Species, Instance, Region } from "@prisma/client";
 import Modal from "./Modal";
 import { trpc } from "../utils/trpc";
-import { User } from "next-auth";
+import { z } from "zod";
+import { ZodRegion } from "../zod";
 
 interface IStarter {
-  region: Region;
+  region: z.infer<typeof ZodRegion>;
   addStarter: () => void;
 }
 

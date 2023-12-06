@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
-import { Ball, Rarity, Species } from "@prisma/client";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
 import Modal from "@/src/components/Modal";
@@ -13,7 +12,8 @@ import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { z } from "zod";
-import { ZodTime } from "@/types/zod";
+import { ZodRarity, ZodTime } from "@/src/zod";
+import { selectBallSchema, selectSpeciesSchema } from "../server/db/schema";
 
 enum region {
   None,
@@ -47,12 +47,14 @@ export default function Shop() {
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState<string | null>(null);
-  const [boughtBall, setBoughtBall] = useState<Ball>();
+  const [boughtBall, setBoughtBall] =
+    useState<z.infer<typeof selectBallSchema>>();
   const purchaseMutation = trpc.instance.purchaseInstanceWithBall.useMutation();
 
   // Modal variables
   const [openModal, setOpenModal] = useState(false);
-  const [newSpecies, setNewSpecies] = useState<Species>();
+  const [newSpecies, setNewSpecies] =
+    useState<z.infer<typeof selectSpeciesSchema>>();
 
   // Premier Ball
   const [regionOpen, setRegionOpen] = useState(false);
@@ -71,7 +73,7 @@ export default function Shop() {
     setLoading(false);
   }, []);
 
-  const purchaseBall = async (ball: Ball) => {
+  const purchaseBall = async (ball: z.infer<typeof selectBallSchema>) => {
     setBoughtBall(ball);
 
     if (ball.name === "Premier" && !regionCurr) {
@@ -131,7 +133,7 @@ export default function Shop() {
     }
 
     // Determine rarity
-    const randomizer: Rarity[] = [];
+    const randomizer: z.infer<typeof ZodRarity>[] = [];
     for (let i = 0; i < ball.commonChance; i++) {
       randomizer.push("Common");
     }
@@ -150,31 +152,31 @@ export default function Shop() {
     let newInstance = speciesData?.species[0];
     if (rarity === "Common" && !shiny) {
       const commonSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === Rarity.Common && !s.shiny
+        (s) => s.rarity === "Common" && !s.shiny
       );
       newInstance =
         commonSpecies![Math.floor(Math.random() * commonSpecies!.length)];
     } else if (rarity === "Rare" && !shiny) {
       const rareSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === Rarity.Rare && !s.shiny
+        (s) => s.rarity === "Rare" && !s.shiny
       );
       newInstance =
         rareSpecies![Math.floor(Math.random() * rareSpecies!.length)];
     } else if (rarity === "Epic" && !shiny) {
       const epicSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === Rarity.Epic && !s.shiny
+        (s) => s.rarity === "Epic" && !s.shiny
       );
       newInstance =
         epicSpecies![Math.floor(Math.random() * epicSpecies!.length)];
     } else if (rarity === "Legendary" && !shiny) {
       const legendarySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === Rarity.Legendary && !s.shiny
+        (s) => s.rarity === "Legendary" && !s.shiny
       );
       newInstance =
         legendarySpecies![Math.floor(Math.random() * legendarySpecies!.length)];
     } else if (rarity === "Common" && shiny) {
       const commonShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === Rarity.Common && s.shiny
+        (s) => s.rarity === "Common" && s.shiny
       );
       newInstance =
         commonShinySpecies![
@@ -182,19 +184,19 @@ export default function Shop() {
         ];
     } else if (rarity === "Rare" && shiny) {
       const rareShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === Rarity.Rare && s.shiny
+        (s) => s.rarity === "Rare" && s.shiny
       );
       newInstance =
         rareShinySpecies![Math.floor(Math.random() * rareShinySpecies!.length)];
     } else if (rarity === "Epic" && shiny) {
       const epicShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === Rarity.Epic && s.shiny
+        (s) => s.rarity === "Epic" && s.shiny
       );
       newInstance =
         epicShinySpecies![Math.floor(Math.random() * epicShinySpecies!.length)];
     } else if (rarity === "Legendary" && shiny) {
       const legendaryShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === Rarity.Legendary && s.shiny
+        (s) => s.rarity === "Legendary" && s.shiny
       );
       newInstance =
         legendaryShinySpecies![

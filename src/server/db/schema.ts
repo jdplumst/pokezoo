@@ -20,8 +20,11 @@ import {
   DBRarity,
   DBRegion,
   DBSpeciesType
-} from "@/types/zod";
+} from "@/src/zod";
 import { AdapterAccount } from "next-auth/adapters";
+import { createSelectSchema } from "drizzle-zod";
+
+// Next Auth Tables
 
 export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
@@ -102,6 +105,8 @@ export const verificationTokens = mysqlTable(
     })
   })
 );
+
+// PokeZoo Tables
 
 export const achievements = mysqlTable(
   "achievement",
@@ -291,3 +296,12 @@ export const userAchievements = mysqlTable(
     };
   }
 );
+
+// Drizzle Zod Table Types
+export const selectAchievementSchema = createSelectSchema(achievements);
+export const selectBallSchema = createSelectSchema(balls);
+export const selectInstanceSchema = createSelectSchema(instances);
+export const selectProfileSchema = createSelectSchema(profiles);
+export const selectSpeciesSchema = createSelectSchema(species);
+export const selectTradesSchema = createSelectSchema(trades);
+export const selectUserAchievementSchema = createSelectSchema(userAchievements);

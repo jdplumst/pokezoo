@@ -17,7 +17,7 @@ import {
   ZodRegion,
   ZodSort,
   ZodSpeciesType
-} from "@/types/zod";
+} from "@/src/zod";
 import { instances, profiles, species } from "../../db/schema";
 import {
   and,

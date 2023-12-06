@@ -1,10 +1,17 @@
-import { Habitat, Rarity, Region, SpeciesType } from "@prisma/client";
+import { z } from "zod";
 import DrowpdownItem from "./DropdownItem";
 import {
-  RegionsList,
+  DBRegion,
+  ZodHabitat,
+  ZodRarity,
+  ZodRegion,
+  ZodSpeciesType
+} from "../zod";
+import {
+  HabitatList,
   RaritiesList,
-  TypesList,
-  HabitatList
+  RegionsList,
+  TypesList
 } from "../constants";
 
 export interface IDropdowns {
@@ -25,10 +32,10 @@ interface IDropdownProps {
     Uncaught: boolean;
   };
   shiny: boolean;
-  regions: Region[];
-  rarities: Rarity[];
-  types: SpeciesType[];
-  habitats: Habitat[];
+  regions: z.infer<typeof ZodRegion>[];
+  rarities: z.infer<typeof ZodRarity>[];
+  types: z.infer<typeof ZodSpeciesType>[];
+  habitats: z.infer<typeof ZodHabitat>[];
   handleCaught?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleShiny: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleRegion: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -127,11 +134,11 @@ export default function Dropdown({
                 colour={"green"}
               />
             </li>
-            {Object.values(Region).map((r, index) => (
+            {RegionsList.map((r, index) => (
               <li
                 key={r}
                 className={`${
-                  index === Object.values(Region).length - 1 && `border-b-2`
+                  index === RegionsList.length - 1 && `border-b-2`
                 } border-black`}>
                 <DrowpdownItem
                   label={r}
@@ -160,12 +167,11 @@ export default function Dropdown({
                 colour="orange"
               />
             </li>
-            {Object.values(Rarity).map((r, index) => (
+            {RaritiesList.map((r, index) => (
               <li
                 key={r}
                 className={`${
-                  index === Object.values(Rarity).length - 1 &&
-                  `border-b-2 border-black`
+                  index === RaritiesList.length - 1 && `border-b-2 border-black`
                 }`}>
                 <DrowpdownItem
                   label={r}
@@ -194,12 +200,11 @@ export default function Dropdown({
                 colour="blue"
               />
             </li>
-            {Object.values(SpeciesType).map((t, index) => (
+            {TypesList.map((t, index) => (
               <li
                 key={t}
                 className={`${
-                  index === Object.values(SpeciesType).length - 1 &&
-                  `border-b-2 border-black`
+                  index === TypesList.length - 1 && `border-b-2 border-black`
                 }`}>
                 <DrowpdownItem
                   label={t}
@@ -228,12 +233,11 @@ export default function Dropdown({
                 colour="lime"
               />
             </li>
-            {Object.values(Habitat).map((h, index) => (
+            {HabitatList.map((h, index) => (
               <li
                 key={h}
                 className={`${
-                  index === Object.values(SpeciesType).length - 10 &&
-                  `border-b-2 border-black`
+                  index === HabitatList.length - 10 && `border-b-2 border-black`
                 }`}>
                 <DrowpdownItem
                   label={
