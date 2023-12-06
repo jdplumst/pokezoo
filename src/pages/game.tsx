@@ -69,7 +69,6 @@ export default function Game() {
 
   // Variables associated with setting username
   const [username, setUsername] = useState("");
-  const [usernameModal, setUsernameModal] = useState(false);
   const [usernameError, setUsernameError] = useState<null | string>(null);
   const usernameMutation = trpc.profile.selectUsername.useMutation();
 
@@ -110,7 +109,6 @@ export default function Game() {
 
   // Set time and user data
   useEffect(() => {
-    if (getProfile.isInitialLoading) return;
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
@@ -119,10 +117,7 @@ export default function Game() {
       setTime("night");
     }
     setLoading(false);
-    if (!getProfile.data?.username) {
-      setUsernameModal(true);
-    }
-  }, [getProfile]);
+  }, []);
 
   // Infinite scroll
   useEffect(() => {
@@ -207,7 +202,6 @@ export default function Game() {
       { username: username },
       {
         onSuccess(data, variables, context) {
-          setUsernameModal(false);
           utils.profile.getProfile.invalidate();
         },
         onError(error, variables, context) {
@@ -547,7 +541,7 @@ export default function Game() {
       )}
 
       {/* Modal for Username */}
-      {usernameModal && (
+      {!getProfile.data?.username && (
         <Modal size="Small">
           <form
             onSubmit={(e) => handleUsername(e)}
