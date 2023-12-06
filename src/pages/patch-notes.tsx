@@ -51,6 +51,16 @@ export default function PatchNotes() {
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
+                5.12 (December 6, 2023)
+              </h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Fixed Pokédex page skipping over Pokémon.
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">
                 5.11 (November 29, 2023)
               </h3>
               <hr className="border-black"></hr>
