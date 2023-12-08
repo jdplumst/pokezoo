@@ -63,6 +63,14 @@ export default function Home() {
             </span>
           </button>
         </div>
+        <div className="absolute bottom-2 w-screen text-center text-white">
+          Image from{" "}
+          <a href="https://unsplash.com/photos/two-red-and-white-balls-sitting-in-the-grass-1fZC2rYbpsU">
+            <span className="text-white underline">
+              Bahnijit Barman on Unsplash
+            </span>
+          </a>
+        </div>
       </main>
     </>
   );
