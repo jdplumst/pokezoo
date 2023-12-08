@@ -1,12 +1,17 @@
 import { type ReactNode, createContext, useState } from "react";
 import { type z } from "zod";
-import { type ZodTime } from "../zod";
+import { ZodTheme, type ZodTime } from "../zod";
 
 export const ThemeContext = createContext<{
   time: z.infer<typeof ZodTime>;
-  handleTheme: (t: z.infer<typeof ZodTime>) => void;
+  theme: z.infer<typeof ZodTheme>;
+  handleTheme: (
+    time: z.infer<typeof ZodTime>,
+    theme: z.infer<typeof ZodTheme>
+  ) => void;
 }>({
   time: "day",
+  theme: "blue",
   handleTheme: () => {
     return;
   }
@@ -20,12 +25,18 @@ export default function ThemeContextProvider({
   children
 }: IThemeContextProviderProps) {
   const [time, setTime] = useState<z.infer<typeof ZodTime>>("day");
+  const [theme, setTheme] = useState<z.infer<typeof ZodTheme>>("blue");
 
-  const handleTheme = (t: z.infer<typeof ZodTime>) => {
-    setTime(t);
+  const handleTheme = (
+    time: z.infer<typeof ZodTime>,
+    theme: z.infer<typeof ZodTheme>
+  ) => {
+    setTime(time);
+    setTheme(theme);
   };
   return (
-    <ThemeContext.Provider value={{ time: time, handleTheme: handleTheme }}>
+    <ThemeContext.Provider
+      value={{ time: time, theme: theme, handleTheme: handleTheme }}>
       {children}
     </ThemeContext.Provider>
   );

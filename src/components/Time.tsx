@@ -1,13 +1,15 @@
 import { type ReactNode, useContext, useEffect, useState } from "react";
 import Loading from "./Loading";
 import { ThemeContext } from "./ThemeContextProvider";
+import { ZodTheme } from "../zod";
+import { z } from "zod";
 
 interface ITimeProps {
   children: ReactNode;
 }
 
 export default function Time({ children }: ITimeProps) {
-  const { time, handleTheme } = useContext(ThemeContext);
+  const { time, theme, handleTheme } = useContext(ThemeContext);
 
   const [loading, setLoading] = useState(true);
 
@@ -15,18 +17,28 @@ export default function Time({ children }: ITimeProps) {
     const today = new Date();
     const hour = today.getHours();
     if (hour >= 6 && hour <= 17) {
-      handleTheme("day");
+      let dayTheme = localStorage.getItem("day-theme");
+      if (!ZodTheme.safeParse(dayTheme).success) {
+        localStorage.setItem("day-theme", "blue");
+        dayTheme = "blue";
+      }
+      handleTheme("day", dayTheme as z.infer<typeof ZodTheme>);
     } else {
-      handleTheme("night");
+      let nightTheme = localStorage.getItem("night-theme");
+      if (!ZodTheme.safeParse(nightTheme).success) {
+        localStorage.setItem("night-theme", "purple");
+        nightTheme = "purple";
+      }
+      handleTheme("night", nightTheme as z.infer<typeof ZodTheme>);
     }
     setLoading(false);
-  }, [handleTheme]);
+  }, []);
 
   if (loading) return <Loading />;
 
   return (
     <div
-      className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
+      className={`${time} ${theme} min-h-screen bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
       {children}
     </div>
   );

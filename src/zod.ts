@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const ZodTheme = z.enum(["blue", "purple", "green", "orange"]);
+
 export const ZodSort = z.enum([
   "Oldest",
   "Newest",
