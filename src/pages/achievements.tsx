@@ -9,8 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { type z } from "zod";
-import { type ZodTime } from "@/src/zod";
+import Time from "../components/Time";
 
 export default function Achievements() {
   const router = useRouter();
@@ -35,21 +34,7 @@ export default function Achievements() {
   const { data: userAchievementData } =
     trpc.userAchievement.getUserAchievements.useQuery();
 
-  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
-  const [loading, setLoading] = useState(true);
   const [fullAchievements, setFullAchievements] = useState<FullAchievement[]>();
-
-  // Set time
-  useEffect(() => {
-    const today = new Date();
-    const hour = today.getHours();
-    if (hour >= 6 && hour <= 17) {
-      setTime("day");
-    } else {
-      setTime("night");
-    }
-    setLoading(false);
-  }, []);
 
   // Set full achievements to display progress bars
   useEffect(() => {
@@ -144,7 +129,7 @@ export default function Achievements() {
     void utils.profile.getProfile.invalidate();
   };
 
-  if (status === "loading" || loading) return <Loading />;
+  if (status === "loading") return <Loading />;
 
   return (
     <>
@@ -154,8 +139,7 @@ export default function Achievements() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div
-        className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
+      <Time>
         <Sidebar page="Achievements">
           <Topbar />
           <main className="p-4">
@@ -187,7 +171,7 @@ export default function Achievements() {
             )}
           </main>
         </Sidebar>
-      </div>
+      </Time>
     </>
   );
 }

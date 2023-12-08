@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
 import Modal from "@/src/components/Modal";
@@ -12,11 +12,13 @@ import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { type z } from "zod";
-import { type ZodRegion, type ZodRarity, type ZodTime } from "@/src/zod";
+import { type ZodRegion, type ZodRarity } from "@/src/zod";
 import {
   type selectBallSchema,
   type selectSpeciesSchema
 } from "../server/db/schema";
+import { ThemeContext } from "../components/ThemeContextProvider";
+import Time from "../components/Time";
 
 export default function Shop() {
   const router = useRouter();
@@ -30,15 +32,14 @@ export default function Shop() {
 
   const utils = trpc.useUtils();
 
+  const { time } = useContext(ThemeContext);
+
   const { data: speciesData } = trpc.species.getSpecies.useQuery({
     order: null
   });
 
   const { data: ballData, isLoading: ballLoading } =
     trpc.ball.getBalls.useQuery();
-
-  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
-  const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState<string | null>(null);
   const [boughtBall, setBoughtBall] =
@@ -57,17 +58,6 @@ export default function Shop() {
   > | null>(null);
   const [regionError, setRegionError] = useState(false);
   const premierRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const today = new Date();
-    const hour = today.getHours();
-    if (hour >= 6 && hour <= 17) {
-      setTime("day");
-    } else {
-      setTime("night");
-    }
-    setLoading(false);
-  }, []);
 
   const purchaseBall = (ball: z.infer<typeof selectBallSchema>) => {
     setBoughtBall(ball);
@@ -221,7 +211,7 @@ export default function Shop() {
     );
   };
 
-  if (status === "loading" || loading) return <Loading />;
+  if (status === "loading") return <Loading />;
 
   return (
     <>
@@ -231,8 +221,7 @@ export default function Shop() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div
-        className={`z-0 min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
+      <Time>
         <Sidebar page="Shop">
           <Topbar />
           <main className="p-4">
@@ -292,7 +281,7 @@ export default function Shop() {
             )}
           </main>
         </Sidebar>
-      </div>
+      </Time>
 
       {/* Modal for Bought Instance */}
       {openModal && newSpecies && (

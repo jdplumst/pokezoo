@@ -1,12 +1,10 @@
 import Head from "next/head";
 import Sidebar from "../components/Sidebar";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
-import { type z } from "zod";
-import { type ZodTime } from "@/src/zod";
+import Time from "../components/Time";
 
 export default function Tutorial() {
   const router = useRouter();
@@ -18,21 +16,7 @@ export default function Tutorial() {
     }
   });
 
-  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const today = new Date();
-    const hour = today.getHours();
-    if (hour >= 6 && hour <= 17) {
-      setTime("day");
-    } else {
-      setTime("night");
-    }
-    setLoading(false);
-  }, []);
-
-  if (status === "loading" || loading) return <Loading />;
+  if (status === "loading") return <Loading />;
 
   return (
     <>
@@ -42,8 +26,7 @@ export default function Tutorial() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div
-        className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
+      <Time>
         <Sidebar page="Tutorial">
           <Topbar />
           <main className="px-8">
@@ -216,7 +199,7 @@ export default function Tutorial() {
             </p>
           </main>
         </Sidebar>
-      </div>
+      </Time>
     </>
   );
 }

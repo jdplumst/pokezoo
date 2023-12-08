@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Card from "@/src/components/Card";
 import Start from "@/src/components/Start";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
@@ -17,8 +17,7 @@ import {
   type ZodRarity,
   type ZodRegion,
   type ZodSort,
-  type ZodSpeciesType,
-  type ZodTime
+  type ZodSpeciesType
 } from "@/src/zod";
 import Dropdown, { type IDropdowns } from "../components/Dropdown";
 import {
@@ -28,11 +27,11 @@ import {
   HabitatList
 } from "../constants";
 import { type selectInstanceSchema } from "../server/db/schema";
+import Time from "../components/Time";
+import { ThemeContext } from "../components/ThemeContextProvider";
 
 export default function Game() {
   const router = useRouter();
-
-  const utils = trpc.useUtils();
 
   const { status } = useSession({
     required: true,
@@ -41,10 +40,11 @@ export default function Game() {
     }
   });
 
+  const utils = trpc.useUtils();
+
   const { ref, inView } = useInView();
 
-  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
-  const [loading, setLoading] = useState(true);
+  const { time } = useContext(ThemeContext);
 
   // Variables associated with cards
   const [error, setError] = useState<string | null>(null);
@@ -106,18 +106,6 @@ export default function Game() {
   );
 
   const getProfile = trpc.profile.getProfile.useQuery();
-
-  // Set time and user data
-  useEffect(() => {
-    const today = new Date();
-    const hour = today.getHours();
-    if (hour >= 6 && hour <= 17) {
-      setTime("day");
-    } else {
-      setTime("night");
-    }
-    setLoading(false);
-  }, []);
 
   // Infinite scroll
   useEffect(() => {
@@ -329,8 +317,7 @@ export default function Game() {
     }
   };
 
-  if (status === "loading" || loading || getProfile.isInitialLoading)
-    return <Loading />;
+  if (status === "loading" || getProfile.isInitialLoading) return <Loading />;
 
   return (
     <>
@@ -342,8 +329,7 @@ export default function Game() {
       </Head>
 
       {/* Main Game Screen */}
-      <div
-        className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
+      <Time>
         <Sidebar page="Game">
           <Topbar />
           {deleteList.length > 0 && (
@@ -487,7 +473,7 @@ export default function Game() {
             )}
           </main>
         </Sidebar>
-      </div>
+      </Time>
 
       {/* Modal for New Players */}
       {getProfile.data?.instanceCount === 0 && (

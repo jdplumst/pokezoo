@@ -22,10 +22,10 @@ import {
   type ZodHabitat,
   type ZodRarity,
   type ZodRegion,
-  type ZodSpeciesType,
-  type ZodTime
+  type ZodSpeciesType
 } from "@/src/zod";
 import { type selectSpeciesSchema } from "../server/db/schema";
+import Time from "../components/Time";
 
 interface IPurchased {
   modal: boolean;
@@ -45,9 +45,6 @@ export default function Pokedex() {
   const utils = trpc.useUtils();
 
   const { ref, inView } = useInView();
-
-  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
-  const [timeLoading, setTimeLoading] = useState(true);
 
   const [purchased, setPurchased] = useState<IPurchased>({
     modal: false,
@@ -90,18 +87,6 @@ export default function Pokedex() {
     },
     { getNextPageParam: (lastPage) => lastPage.nextCursor }
   );
-
-  // Set time
-  useEffect(() => {
-    const today = new Date();
-    const hour = today.getHours();
-    if (hour >= 6 && hour <= 17) {
-      setTime("day");
-    } else {
-      setTime("night");
-    }
-    setTimeLoading(false);
-  }, []);
 
   // Infinite scroll
   useEffect(() => {
@@ -248,7 +233,7 @@ export default function Pokedex() {
     void utils.species.getPokedex.invalidate();
   };
 
-  if (status === "loading" || timeLoading) return <Loading />;
+  if (status === "loading") return <Loading />;
 
   return (
     <>
@@ -258,8 +243,7 @@ export default function Pokedex() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <div
-        className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
+      <Time>
         <Sidebar page="Pokedex">
           <Topbar />
           <main className="p-4">
@@ -332,7 +316,7 @@ export default function Pokedex() {
             </div>
           </Modal>
         )}
-      </div>
+      </Time>
     </>
   );
 }

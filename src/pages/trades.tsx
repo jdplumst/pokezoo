@@ -1,15 +1,15 @@
 import Head from "next/head";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Loading from "../components/Loading";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../components/Modal";
-import { type z } from "zod";
-import { type ZodTime } from "@/src/zod";
+import Time from "../components/Time";
+import { ThemeContext } from "../components/ThemeContextProvider";
 
 export default function Trades() {
   const router = useRouter();
@@ -22,6 +22,8 @@ export default function Trades() {
   });
 
   const utils = trpc.useUtils();
+
+  const { time } = useContext(ThemeContext);
 
   const { data: tradeData, isLoading: tradeLoading } =
     trpc.trade.getTrades.useQuery();
@@ -44,23 +46,9 @@ export default function Trades() {
 
   const [tradeId, setTradeId] = useState("-1");
 
-  const [time, setTime] = useState<z.infer<typeof ZodTime>>("night");
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<null | string>(null);
 
-  // Set time and user data
-  useEffect(() => {
-    const today = new Date();
-    const hour = today.getHours();
-    if (hour >= 6 && hour <= 17) {
-      setTime("day");
-    } else {
-      setTime("night");
-    }
-    setLoading(false);
-  }, []);
-
-  if (status === "loading" || loading) return <Loading />;
+  if (status === "loading") return <Loading />;
 
   return (
     <>
@@ -72,8 +60,7 @@ export default function Trades() {
       </Head>
 
       {/* Main Trading Screen */}
-      <div
-        className={`min-h-screen ${time} bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
+      <Time>
         <Sidebar page="Trades">
           <Topbar />
           <main className="p-4">
@@ -371,7 +358,7 @@ export default function Trades() {
             )}
           </Modal>
         )}
-      </div>
+      </Time>
     </>
   );
 }

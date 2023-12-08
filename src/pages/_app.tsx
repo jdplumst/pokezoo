@@ -6,6 +6,7 @@ import React from "react";
 import { Router } from "next/router";
 import Loading from "../components/Loading";
 import { type Session } from "next-auth";
+import ThemeContextProvider from "../components/ThemeContextProvider";
 
 const App: AppType<{ session: Session | null }> = ({
   Component,
@@ -34,7 +35,9 @@ const App: AppType<{ session: Session | null }> = ({
         <Loading />
       ) : (
         <SessionProvider session={session} refetchOnWindowFocus={false}>
-          <Component {...pageProps} />
+          <ThemeContextProvider>
+            <Component {...pageProps} />
+          </ThemeContextProvider>
         </SessionProvider>
       )}
     </>
