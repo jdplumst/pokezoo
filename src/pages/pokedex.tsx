@@ -25,7 +25,7 @@ import {
   type ZodSpeciesType
 } from "@/src/zod";
 import { type selectSpeciesSchema } from "../server/db/schema";
-import Time from "../components/Time";
+import ThemeWrapper from "../components/ThemeWrapper";
 
 interface IPurchased {
   modal: boolean;
@@ -243,7 +243,7 @@ export default function Pokedex() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <Time>
+      <ThemeWrapper>
         <Sidebar page="Pokedex">
           <Topbar />
           <main className="p-4">
@@ -316,7 +316,7 @@ export default function Pokedex() {
             </div>
           </Modal>
         )}
-      </Time>
+      </ThemeWrapper>
     </>
   );
 }

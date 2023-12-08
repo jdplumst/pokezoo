@@ -8,8 +8,8 @@ import Loading from "../components/Loading";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Modal from "../components/Modal";
-import Time from "../components/Time";
 import { ThemeContext } from "../components/ThemeContextProvider";
+import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Trades() {
   const router = useRouter();
@@ -60,7 +60,7 @@ export default function Trades() {
       </Head>
 
       {/* Main Trading Screen */}
-      <Time>
+      <ThemeWrapper>
         <Sidebar page="Trades">
           <Topbar />
           <main className="p-4">
@@ -358,7 +358,7 @@ export default function Trades() {
             )}
           </Modal>
         )}
-      </Time>
+      </ThemeWrapper>
     </>
   );
 }

@@ -9,7 +9,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
-import Time from "../components/Time";
+import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Achievements() {
   const router = useRouter();
@@ -139,7 +139,7 @@ export default function Achievements() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <Time>
+      <ThemeWrapper>
         <Sidebar page="Achievements">
           <Topbar />
           <main className="p-4">
@@ -171,7 +171,7 @@ export default function Achievements() {
             )}
           </main>
         </Sidebar>
-      </Time>
+      </ThemeWrapper>
     </>
   );
 }

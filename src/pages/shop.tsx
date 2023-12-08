@@ -18,7 +18,7 @@ import {
   type selectSpeciesSchema
 } from "../server/db/schema";
 import { ThemeContext } from "../components/ThemeContextProvider";
-import Time from "../components/Time";
+import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Shop() {
   const router = useRouter();
@@ -221,7 +221,7 @@ export default function Shop() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <Time>
+      <ThemeWrapper>
         <Sidebar page="Shop">
           <Topbar />
           <main className="p-4">
@@ -281,7 +281,7 @@ export default function Shop() {
             )}
           </main>
         </Sidebar>
-      </Time>
+      </ThemeWrapper>
 
       {/* Modal for Bought Instance */}
       {openModal && newSpecies && (

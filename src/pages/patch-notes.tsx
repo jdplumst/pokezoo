@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import Loading from "../components/Loading";
 import { useRouter } from "next/router";
 import Topbar from "../components/Topbar";
-import Time from "../components/Time";
+import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function PatchNotes() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function PatchNotes() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <Time>
+      <ThemeWrapper>
         <Sidebar page="PatchNotes">
           <Topbar />
           <main className="px-8">
@@ -1033,7 +1033,7 @@ export default function PatchNotes() {
             </p>
           </main>
         </Sidebar>
-      </Time>
+      </ThemeWrapper>
     </>
   );
 }

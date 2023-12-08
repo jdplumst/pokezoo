@@ -27,8 +27,8 @@ import {
   HabitatList
 } from "../constants";
 import { type selectInstanceSchema } from "../server/db/schema";
-import Time from "../components/Time";
 import { ThemeContext } from "../components/ThemeContextProvider";
+import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Game() {
   const router = useRouter();
@@ -329,7 +329,7 @@ export default function Game() {
       </Head>
 
       {/* Main Game Screen */}
-      <Time>
+      <ThemeWrapper>
         <Sidebar page="Game">
           <Topbar />
           {deleteList.length > 0 && (
@@ -473,7 +473,7 @@ export default function Game() {
             )}
           </main>
         </Sidebar>
-      </Time>
+      </ThemeWrapper>
 
       {/* Modal for New Players */}
       {getProfile.data?.instanceCount === 0 && (

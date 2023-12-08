@@ -1,6 +1,6 @@
 import { type ReactNode, createContext, useState } from "react";
 import { type z } from "zod";
-import { ZodTheme, type ZodTime } from "../zod";
+import { type ZodTheme, type ZodTime } from "../zod";
 
 export const ThemeContext = createContext<{
   time: z.infer<typeof ZodTime>;

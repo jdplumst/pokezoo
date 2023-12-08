@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import Loading from "../components/Loading";
 import Topbar from "../components/Topbar";
 import { useRouter } from "next/router";
-import Time from "../components/Time";
+import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Tutorial() {
   const router = useRouter();
@@ -26,7 +26,7 @@ export default function Tutorial() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.png" />
       </Head>
-      <Time>
+      <ThemeWrapper>
         <Sidebar page="Tutorial">
           <Topbar />
           <main className="px-8">
@@ -199,7 +199,7 @@ export default function Tutorial() {
             </p>
           </main>
         </Sidebar>
-      </Time>
+      </ThemeWrapper>
     </>
   );
 }

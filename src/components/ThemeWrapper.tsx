@@ -2,13 +2,13 @@ import { type ReactNode, useContext, useEffect, useState } from "react";
 import Loading from "./Loading";
 import { ThemeContext } from "./ThemeContextProvider";
 import { ZodTheme } from "../zod";
-import { z } from "zod";
+import { type z } from "zod";
 
 interface ITimeProps {
   children: ReactNode;
 }
 
-export default function Time({ children }: ITimeProps) {
+export default function ThemeWrapper({ children }: ITimeProps) {
   const { time, theme, handleTheme } = useContext(ThemeContext);
 
   const [loading, setLoading] = useState(true);
@@ -32,6 +32,7 @@ export default function Time({ children }: ITimeProps) {
       handleTheme("night", nightTheme as z.infer<typeof ZodTheme>);
     }
     setLoading(false);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   if (loading) return <Loading />;
