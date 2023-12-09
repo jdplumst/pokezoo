@@ -39,10 +39,15 @@
     --color-dragon: #6f35fc;
     --color-steel: #b7b7ce;
     --color-flying: #a98ff3;
+
+    /* Modal Button */
+    --color-red-btn-focus: #dc2626;
+    --color-red-btn-unfocus: #ef4444;
   }
 }
 
-.day {
+html .day,
+div .day {
   --color-purple-btn-focus: #7c3aed;
   --color-purple-btn-unfocus: #8b5cf6;
   --color-blue-btn-focus: #4f46e5;
