@@ -48,7 +48,7 @@ export default function Settings() {
 
   return (
     <ThemeWrapper>
-      <Sidebar page="settings">
+      <Sidebar page="Settings">
         <Topbar />
         <main className="p-8">
           <div className="flex justify-around">
