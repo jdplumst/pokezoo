@@ -106,28 +106,40 @@ export default function Settings() {
               <p className="text-3xl font-bold">Night Theme</p>
               <div className="flex gap-5">
                 <button
-                  onClick={() => setNightTheme("blue")}
+                  onClick={() => {
+                    setNightTheme("blue");
+                    handleTheme("night", "blue");
+                  }}
                   className={`h-20 w-20 border-2 border-black ${
                     nightTheme === "blue" ? `bg-blue-600` : `bg-blue-500`
                   } hover:bg-blue-600 `}>
                   Blue
                 </button>
                 <button
-                  onClick={() => setNightTheme("purple")}
+                  onClick={() => {
+                    setNightTheme("purple");
+                    handleTheme("night", "purple");
+                  }}
                   className={`h-20 w-20 border-2 border-black ${
                     nightTheme === "purple" ? `bg-purple-600` : `bg-purple-500`
                   } hover:bg-purple-600`}>
                   Purple
                 </button>
                 <button
-                  onClick={() => setNightTheme("green")}
+                  onClick={() => {
+                    setNightTheme("green");
+                    handleTheme("night", "green");
+                  }}
                   className={`h-20 w-20 border-2 border-black ${
                     nightTheme === "green" ? `bg-green-600` : `bg-green-500`
                   } hover:bg-green-600`}>
                   Green
                 </button>
                 <button
-                  onClick={() => setNightTheme("orange")}
+                  onClick={() => {
+                    setNightTheme("orange");
+                    handleTheme("night", "orange");
+                  }}
                   className={`h-20 w-20 border-2 border-black ${
                     nightTheme === "orange" ? `bg-orange-600` : `bg-orange-500`
                   } hover:bg-orange-600`}>
