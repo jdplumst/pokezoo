@@ -4,7 +4,6 @@ import Card from "../components/Card";
 import React, { Fragment, useEffect, useState } from "react";
 import Loading from "../components/Loading";
 import Topbar from "../components/Topbar";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -33,13 +32,8 @@ interface IPurchased {
 }
 
 export default function Pokedex() {
-  const router = useRouter();
-
   const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      void router.push("/");
-    }
+    required: true
   });
 
   const utils = trpc.useUtils();

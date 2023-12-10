@@ -8,7 +8,6 @@ import Sidebar from "../components/Sidebar";
 import Loading from "../components/Loading";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Topbar from "../components/Topbar";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
 import { type z } from "zod";
@@ -31,13 +30,8 @@ import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Game() {
-  const router = useRouter();
-
   const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      void router.push("/");
-    }
+    required: true
   });
 
   const utils = trpc.useUtils();

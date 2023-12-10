@@ -2,7 +2,6 @@ import Head from "next/head";
 import Sidebar from "../components/Sidebar";
 import Topbar from "../components/Topbar";
 import { useContext, useState } from "react";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import Loading from "../components/Loading";
 import { trpc } from "../utils/trpc";
@@ -12,13 +11,8 @@ import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Trades() {
-  const router = useRouter();
-
   const { data: session, status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      void router.push("/");
-    }
+    required: true
   });
 
   const utils = trpc.useUtils();

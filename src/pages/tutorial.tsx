@@ -3,17 +3,11 @@ import Sidebar from "../components/Sidebar";
 import { useSession } from "next-auth/react";
 import Loading from "../components/Loading";
 import Topbar from "../components/Topbar";
-import { useRouter } from "next/router";
 import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Tutorial() {
-  const router = useRouter();
-
   const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      void router.push("/");
-    }
+    required: true
   });
 
   if (status === "loading") return <Loading />;

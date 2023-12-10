@@ -6,19 +6,13 @@ import ProgressBar from "../components/ProgressBar";
 import { type FullAchievement } from "../components/ProgressBar";
 import Topbar from "../components/Topbar";
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "../components/LoadingSpinner";
 import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Achievements() {
-  const router = useRouter();
-
   const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      void router.push("/");
-    }
+    required: true
   });
 
   const utils = trpc.useUtils();

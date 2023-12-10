@@ -9,7 +9,6 @@ import Tooltip from "../components/Tooltip";
 import Image from "next/image";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Topbar from "../components/Topbar";
-import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { type z } from "zod";
 import { type ZodRegion, type ZodRarity } from "@/src/zod";
@@ -21,13 +20,8 @@ import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Shop() {
-  const router = useRouter();
-
   const { status } = useSession({
-    required: true,
-    onUnauthenticated() {
-      void router.push("/");
-    }
+    required: true
   });
 
   const utils = trpc.useUtils();
