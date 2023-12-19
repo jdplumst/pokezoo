@@ -12,7 +12,8 @@ import {
   isNull,
   min,
   notInArray,
-  or
+  or,
+  sql
 } from "drizzle-orm";
 import {
   HabitatList,
@@ -46,7 +47,7 @@ export const speciesRouter = router({
       z.object({
         limit: z.number().min(1).max(100).nullish(),
         cursor: z
-          .object({ pokedexNumber: z.number(), id: z.string() })
+          .object({ pokedexNumber: z.number(), name: z.string() })
           .nullish(),
         caught: z.object({ Caught: z.boolean(), Uncaught: z.boolean() }),
         shiny: z.boolean(),
@@ -92,7 +93,9 @@ export const speciesRouter = router({
               : !input.caught.Caught && input.caught.Uncaught
               ? isNull(i.speciesId)
               : undefined,
-            and(gte(species.pokedexNumber, input.cursor?.pokedexNumber ?? 0))
+            sql`(${species.pokedexNumber}, ${species.name}) >= (${
+              input.cursor?.pokedexNumber ?? 0
+            }, ${input.cursor?.name ?? ""})`
           )
         )
         .limit(limit + 1)
@@ -103,7 +106,7 @@ export const speciesRouter = router({
         const nextItem = pokemon.pop()!;
         nextCursor = {
           pokedexNumber: nextItem?.species.pokedexNumber,
-          id: nextItem?.species.id
+          name: nextItem?.species.name
         };
       }
 
