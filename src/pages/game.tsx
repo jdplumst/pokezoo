@@ -447,8 +447,8 @@ export default function Game() {
               </div>
             )}
             <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
-              {getGame.data?.pages.map((p) => (
-                <Fragment key={p.nextCursor}>
+              {getGame.data?.pages.map((p, index) => (
+                <Fragment key={index}>
                   {p.instancesData.map((c) => (
                     <Card
                       key={c.instance.id}

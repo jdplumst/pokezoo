@@ -263,8 +263,8 @@ export default function Pokedex() {
               </div>
             )}
             <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
-              {getPokedex.data?.pages.map((p) => (
-                <Fragment key={p.nextCursor?.id ?? 0}>
+              {getPokedex.data?.pages.map((p, index) => (
+                <Fragment key={index}>
                   {p.pokemon.map((c) => (
                     <Card
                       key={c.species.id}

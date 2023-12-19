@@ -31,14 +31,6 @@ const config = {
       }
     ],
 
-    // fix getGame input schema then remove these
-    "@typescript-eslint/no-unsafe-argument": "warn",
-    "@typescript-eslint/prefer-optional-chain": "warn",
-    "@typescript-eslint/no-redundant-type-constituents": "warn",
-    "@typescript-eslint/no-unsafe-member-access": "warn",
-    "@typescript-eslint/no-unsafe-assignment": "warn",
-    "@typescript-eslint/no-unsafe-return": "warn",
-
     "@next/next/no-img-element": "off"
   }
 };

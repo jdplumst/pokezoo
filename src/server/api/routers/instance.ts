@@ -181,31 +181,31 @@ export const instanceRouter = router({
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (instancesData.length > limit) {
-        const nextItem = instancesData.pop();
+        const nextItem = instancesData.pop()!;
         nextCursor =
           input.order === "Oldest" || input.order === "Newest"
             ? {
-                modifyDate: nextItem?.instance.modifyDate!,
+                modifyDate: nextItem.instance.modifyDate,
                 name: null,
                 pokedexNumber: null,
                 rarity: null
               }
             : input.order === "Pokedex" || input.order === "PokedexDesc"
             ? {
-                modifyDate: nextItem?.instance.modifyDate!,
-                name: nextItem?.species.name,
-                pokedexNumber: nextItem?.species.pokedexNumber,
+                modifyDate: nextItem.instance.modifyDate,
+                name: nextItem.species.name,
+                pokedexNumber: nextItem.species.pokedexNumber,
                 rarity: null
               }
             : input.order === "Rarity" || input.order === "RarityDesc"
             ? {
-                modifyDate: nextItem?.instance.modifyDate!,
-                name: nextItem?.species.name,
-                pokedexNumber: nextItem?.species.pokedexNumber,
-                rarity: nextItem?.species.rarity
+                modifyDate: nextItem.instance.modifyDate,
+                name: nextItem.species.name,
+                pokedexNumber: nextItem.species.pokedexNumber,
+                rarity: nextItem.species.rarity
               }
             : {
-                modifyDate: nextItem?.instance.modifyDate!,
+                modifyDate: nextItem.instance.modifyDate,
                 name: null,
                 pokedexNumber: null,
                 rarity: null
