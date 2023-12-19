@@ -19,17 +19,7 @@ import {
   ZodSpeciesType
 } from "@/src/zod";
 import { instances, profiles, species } from "../../db/schema";
-import {
-  and,
-  asc,
-  desc,
-  eq,
-  gte,
-  inArray,
-  lte,
-  notInArray,
-  or
-} from "drizzle-orm";
+import { and, asc, desc, eq, inArray, notInArray, or, sql } from "drizzle-orm";
 
 export const instanceRouter = router({
   getInstanceSpecies: protectedProcedure.query(async ({ ctx }) => {
@@ -63,7 +53,14 @@ export const instanceRouter = router({
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.any().nullish(),
+        cursor: z
+          .object({
+            modifyDate: z.date(),
+            name: z.string().nullish(),
+            pokedexNumber: z.number().nullish(),
+            rarity: ZodRarity.nullish()
+          })
+          .nullish(),
         order: ZodSort,
         shiny: z.boolean(),
         regions: z.array(ZodRegion),
@@ -73,6 +70,24 @@ export const instanceRouter = router({
       })
     )
     .query(async ({ ctx, input }) => {
+      if (input.cursor?.name?.includes(" ")) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Invalid cursor name"
+        });
+      }
+
+      const rarityCursor =
+        input.cursor?.rarity === "Common"
+          ? 1
+          : input.cursor?.rarity === "Rare"
+          ? 2
+          : input.cursor?.rarity === "Epic"
+          ? 3
+          : input.cursor?.rarity === "Legendary"
+          ? 4
+          : null;
+
       const limit = input.limit ?? 50;
 
       const instancesData = await ctx.db
@@ -99,34 +114,51 @@ export const instanceRouter = router({
               ? inArray(species.habitat, input.habitats)
               : notInArray(species.habitat, HabitatList),
             input.order === "Oldest"
-              ? gte(
-                  instances.modifyDate,
-                  input.cursor ?? new Date("2020-12-03 17:20:11.049")
-                )
+              ? sql`${instances.modifyDate} >= ${
+                  input.cursor?.modifyDate ??
+                  new Date("2020-12-03 17:20:11.049")
+                }`
               : input.order === "Newest"
-              ? lte(
-                  instances.modifyDate,
-                  input.cursor ?? new Date("2050-12-03 17:20:11.049")
-                )
+              ? sql`${instances.modifyDate} <= ${
+                  input.cursor?.modifyDate ??
+                  new Date("2050-12-03 17:20:11.049")
+                }`
               : input.order === "Pokedex"
-              ? gte(species.pokedexNumber, input.cursor ?? "")
+              ? sql`(${species.pokedexNumber}, ${species.name}, ${
+                  instances.modifyDate
+                }) >= (${input.cursor?.pokedexNumber ?? 0}, ${
+                  input.cursor?.name ?? ""
+                }, ${
+                  input.cursor?.modifyDate ??
+                  new Date("2020-12-03 17:20:11.049")
+                })`
               : input.order === "PokedexDesc"
-              ? lte(species.pokedexNumber, input.cursor ?? "10000")
+              ? sql`(${species.pokedexNumber}, ${species.name}, ${
+                  instances.modifyDate
+                }) <= (${input.cursor?.pokedexNumber ?? 10000}, ${
+                  input.cursor?.name ?? "{"
+                }, ${
+                  input.cursor?.modifyDate ??
+                  new Date("2050-12-03 17:20:11.049")
+                })`
               : input.order === "Rarity"
-              ? and(
-                  gte(
-                    species.pokedexNumber,
-                    input.cursor?.pokedexNumber
-                      ? input.cursor.pokedexNumber
-                      : ""
-                  ),
-                  gte(
-                    species.rarity,
-                    input.cursor?.rarity ? input.cursor.rarity : ""
-                  )
-                )
+              ? sql`(${species.rarity}+0, ${species.pokedexNumber}, ${
+                  species.name
+                }, ${instances.modifyDate}) >= (${rarityCursor ?? 0}, ${
+                  input.cursor?.pokedexNumber ?? 0
+                }, ${input.cursor?.name ?? ""}, ${
+                  input.cursor?.modifyDate ??
+                  new Date("2020-12-03 17:20:11.049")
+                })`
               : input.order === "RarityDesc"
-              ? lte(species.pokedexNumber, input.cursor ?? "")
+              ? sql`(${species.rarity}+0, ${species.pokedexNumber}, ${
+                  species.name
+                }, ${instances.modifyDate}) <= (${rarityCursor ?? 4}, ${
+                  input.cursor?.pokedexNumber ?? 10000
+                }, ${input.cursor?.name ?? "{"}, ${
+                  input.cursor?.modifyDate ??
+                  new Date("2050-12-03 17:20:11.049")
+                })`
               : undefined
           )
         )
@@ -136,18 +168,14 @@ export const instanceRouter = router({
             : input.order === "Newest"
             ? desc(instances.modifyDate)
             : input.order === "Pokedex"
-            ? (asc(species.name), asc(species.pokedexNumber))
+            ? sql`${species.pokedexNumber} asc, ${species.name} asc, ${instances.modifyDate} asc`
             : input.order === "PokedexDesc"
-            ? (asc(species.name), desc(species.pokedexNumber))
+            ? sql`${species.pokedexNumber} desc, ${species.name} desc, ${instances.modifyDate} desc`
             : input.order === "Rarity"
-            ? (asc(species.name),
-              asc(species.pokedexNumber),
-              asc(species.rarity))
+            ? sql`${species.rarity} asc, ${species.pokedexNumber} asc, ${species.name} asc, ${instances.modifyDate} asc`
             : input.order === "RarityDesc"
-            ? (asc(species.name),
-              asc(species.pokedexNumber),
-              desc(species.rarity))
-            : asc(instances.id)
+            ? sql`${species.rarity} desc, ${species.pokedexNumber} desc, ${species.name} desc, ${instances.modifyDate} desc`
+            : asc(instances.modifyDate)
         )
         .limit(limit + 1);
 
@@ -156,15 +184,32 @@ export const instanceRouter = router({
         const nextItem = instancesData.pop();
         nextCursor =
           input.order === "Oldest" || input.order === "Newest"
-            ? nextItem?.instance.modifyDate
+            ? {
+                modifyDate: nextItem?.instance.modifyDate!,
+                name: null,
+                pokedexNumber: null,
+                rarity: null
+              }
             : input.order === "Pokedex" || input.order === "PokedexDesc"
-            ? nextItem?.species.pokedexNumber
+            ? {
+                modifyDate: nextItem?.instance.modifyDate!,
+                name: nextItem?.species.name,
+                pokedexNumber: nextItem?.species.pokedexNumber,
+                rarity: null
+              }
             : input.order === "Rarity" || input.order === "RarityDesc"
             ? {
-                rarity: nextItem?.species.rarity,
-                pokedexNumber: nextItem?.species.pokedexNumber
+                modifyDate: nextItem?.instance.modifyDate!,
+                name: nextItem?.species.name,
+                pokedexNumber: nextItem?.species.pokedexNumber,
+                rarity: nextItem?.species.rarity
               }
-            : nextItem?.instance.id;
+            : {
+                modifyDate: nextItem?.instance.modifyDate!,
+                name: null,
+                pokedexNumber: null,
+                rarity: null
+              };
       }
 
       return { instancesData, nextCursor };

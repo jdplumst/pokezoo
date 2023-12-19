@@ -6,7 +6,6 @@ import {
   and,
   asc,
   eq,
-  gte,
   inArray,
   isNotNull,
   isNull,
