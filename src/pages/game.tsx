@@ -26,13 +26,11 @@ import {
   HabitatList
 } from "../constants";
 import {
-  selectSpeciesSchema,
+  type selectSpeciesSchema,
   type selectInstanceSchema
 } from "../server/db/schema";
 import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";
-import { inferRouterOutputs } from "@trpc/server";
-import { AppRouter } from "../server/api/_app";
 
 export default function Game() {
   const { status } = useSession({
@@ -610,7 +608,7 @@ export default function Game() {
               !
             </div>
           )}
-          <Card species={eventModal.reward!} />
+          <Card species={eventModal.reward} />
           <div className="flex justify-center pt-4">
             <button
               onClick={() => setEventModal({ modal: false, reward: null })}
