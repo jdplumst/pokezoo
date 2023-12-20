@@ -56,7 +56,7 @@ export const achievementRouter = router({
 
       if (exists) {
         throw new TRPCError({
-          code: "FORBIDDEN",
+          code: "CONFLICT",
           message: "You have already claimed this achievement."
         });
       }

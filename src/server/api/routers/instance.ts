@@ -547,17 +547,17 @@ export const instanceRouter = router({
 
       if (input.region === "Johto" && currUser.johtoStarter) {
         throw new TRPCError({
-          code: "FORBIDDEN",
+          code: "CONFLICT",
           message: "You have already received a Johto starter."
         });
       } else if (input.region === "Hoenn" && currUser.hoennStarter) {
         throw new TRPCError({
-          code: "FORBIDDEN",
+          code: "CONFLICT",
           message: "You have already received a Hoenn starter."
         });
       } else if (input.region === "Sinnoh" && currUser.sinnohStarter) {
         throw new TRPCError({
-          code: "FORBIDDEN",
+          code: "CONFLICT",
           message: "You have already received a Sinnoh starter."
         });
       }
