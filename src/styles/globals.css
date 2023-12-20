@@ -317,3 +317,28 @@ button {
     z-index: 0;
   }
 }
+
+/* Candy Cane https://codemyui.com/css-only-candy-cane-text-animation/ */
+.candy-cane {
+  font-family: "Open Sans", sans-serif;
+  background: repeating-linear-gradient(
+    45deg,
+    white,
+    white 30px,
+    red 30px,
+    red 60px
+  );
+  background-clip: text;
+  color: transparent;
+  -webkit-background-clip: text;
+  animation: 40s linear 0s infinite move;
+}
+
+@keyframes move {
+  from {
+    background-position: 0px;
+  }
+  to {
+    background-position: 1000px;
+  }
+}

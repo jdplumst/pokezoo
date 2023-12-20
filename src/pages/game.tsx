@@ -40,6 +40,10 @@ export default function Game() {
 
   const { time } = useContext(ThemeContext);
 
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+
   // Variables associated with cards
   const [error, setError] = useState<string | null>(null);
   const [sort, setSort] = useState<z.infer<typeof ZodSort>>("Oldest");
@@ -370,6 +374,21 @@ export default function Game() {
             ) : (
               <></>
             )}
+            {day === 20 &&
+              month === 12 &&
+              (!getProfile.data?.claimedEvent ? (
+                <div className="pt-4">
+                  <button className="w-60 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold">
+                    Claim Christmas Present
+                  </button>
+                </div>
+              ) : (
+                <div className="pt-4">
+                  <div className="candy-cane text-center text-7xl">
+                    Merry Christmas!
+                  </div>
+                </div>
+              ))}
             {error && <p>{error}</p>}
             <Dropdown
               dropdowns={dropdowns}
