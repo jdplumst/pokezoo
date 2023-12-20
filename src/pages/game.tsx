@@ -403,7 +403,7 @@ export default function Game() {
             ) : (
               <></>
             )}
-            {day === 20 &&
+            {day >= 25 &&
               month === 12 &&
               (!getProfile.data?.claimedEvent ? (
                 <div className="pt-4">
