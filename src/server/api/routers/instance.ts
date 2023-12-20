@@ -606,5 +606,62 @@ export const instanceRouter = router({
       });
 
       return { message: "Successfully obtained starter" };
-    })
+    }),
+
+  claimEvent: protectedProcedure.mutation(async ({ ctx }) => {
+    const currUser = (
+      await ctx.db
+        .select({
+          totalYield: profiles.totalYield,
+          instanceCount: profiles.instanceCount,
+          claimedEvent: profiles.claimedEvent
+        })
+        .from(profiles)
+        .where(eq(profiles.userId, ctx.session.user.id))
+    )[0];
+
+    if (!currUser) {
+      throw new TRPCError({
+        code: "UNAUTHORIZED",
+        message: "Not authorized to make this request"
+      });
+    }
+
+    if (currUser.claimedEvent) {
+      throw new TRPCError({
+        code: "FORBIDDEN",
+        message: "Event reward already claimed"
+      });
+    }
+
+    const reward = (
+      await ctx.db
+        .select()
+        .from(species)
+        .where(eq(species.shiny, true))
+        .orderBy(sql`RAND()`)
+        .limit(1)
+    )[0];
+
+    const newYield =
+      currUser.totalYield + reward.yield > MAX_YIELD
+        ? MAX_YIELD
+        : currUser.totalYield + reward.yield;
+
+    await ctx.db.transaction(async (tx) => {
+      await tx
+        .update(profiles)
+        .set({
+          totalYield: newYield,
+          instanceCount: currUser.instanceCount + 1
+        })
+        .where(eq(profiles.userId, ctx.session.user.id));
+
+      await tx
+        .insert(instances)
+        .values({ userId: ctx.session.user.id, speciesId: reward.id });
+    });
+
+    return { reward };
+  })
 });
