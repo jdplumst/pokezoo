@@ -653,7 +653,8 @@ export const instanceRouter = router({
         .update(profiles)
         .set({
           totalYield: newYield,
-          instanceCount: currUser.instanceCount + 1
+          instanceCount: currUser.instanceCount + 1,
+          claimedEvent: true
         })
         .where(eq(profiles.userId, ctx.session.user.id));
 

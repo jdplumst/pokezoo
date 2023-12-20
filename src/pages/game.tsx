@@ -25,9 +25,14 @@ import {
   TypesList,
   HabitatList
 } from "../constants";
-import { type selectInstanceSchema } from "../server/db/schema";
+import {
+  selectSpeciesSchema,
+  type selectInstanceSchema
+} from "../server/db/schema";
 import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";
+import { inferRouterOutputs } from "@trpc/server";
+import { AppRouter } from "../server/api/_app";
 
 export default function Game() {
   const { status } = useSession({
@@ -39,10 +44,6 @@ export default function Game() {
   const { ref, inView } = useInView();
 
   const { time } = useContext(ThemeContext);
-
-  const date = new Date();
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
 
   // Variables associated with cards
   const [error, setError] = useState<string | null>(null);
@@ -60,6 +61,20 @@ export default function Game() {
     card: "Common"
   });
   const rewardMutation = trpc.profile.claimReward.useMutation();
+
+  // Variables associated with event rewards
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const [eventModal, setEventModal] = useState<{
+    modal: boolean;
+    reward: null | z.infer<typeof selectSpeciesSchema>;
+    // reward: null | inferRouterOutputs<AppRouter>["instance"]["claimEvent"];
+  }>({
+    modal: false,
+    reward: null
+  });
+  const eventMutation = trpc.instance.claimEvent.useMutation();
 
   // Variables associated with selling an instance
   const [deleteList, setDeleteList] = useState<string[]>([]);
@@ -150,6 +165,20 @@ export default function Game() {
         }
       );
     }
+  };
+
+  // Claim Event Reward
+  const claimEvent = () => {
+    eventMutation.mutate(undefined, {
+      onSuccess(data) {
+        void utils.profile.getProfile.invalidate();
+        void utils.instance.getGame.invalidate();
+        setEventModal({ modal: true, reward: data.reward });
+      },
+      onError(error) {
+        setError(error.message);
+      }
+    });
   };
 
   // Add or remove instances from array of instances to be deleted
@@ -378,13 +407,20 @@ export default function Game() {
               month === 12 &&
               (!getProfile.data?.claimedEvent ? (
                 <div className="pt-4">
-                  <button className="w-60 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold">
-                    Claim Christmas Present
+                  <button
+                    onClick={() => claimEvent()}
+                    disabled={eventMutation.isLoading}
+                    className="w-60 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold">
+                    {eventMutation.isLoading ? (
+                      <LoadingSpinner />
+                    ) : (
+                      "Claim Christmas Present"
+                    )}
                   </button>
                 </div>
               ) : (
                 <div className="pt-4">
-                  <div className="candy-cane text-center text-7xl">
+                  <div className="candy-cane pb-4 text-center text-7xl">
                     Merry Christmas!
                   </div>
                 </div>
@@ -546,6 +582,38 @@ export default function Game() {
                 setDailyReward({ ...dailyReward, modal: false });
                 setNightlyReward({ ...nightlyReward, modal: false });
               }}
+              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+              Got it!
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      {/* Modal for Event Reward */}
+      {eventModal.modal && eventModal.reward && (
+        <Modal size="Small">
+          <div className="candy-cane p-2 text-3xl font-bold">
+            Merry Christmas!
+          </div>
+          {"aeiou".includes(eventModal.reward.name[0]) ? (
+            <div className="text-center text-xl font-bold">
+              You got an{" "}
+              {eventModal.reward.name[0].toUpperCase() +
+                eventModal.reward.name.slice(1).toLowerCase()}
+              !{" "}
+            </div>
+          ) : (
+            <div className="text-center text-xl font-bold">
+              You got a{" "}
+              {eventModal.reward.name[0].toUpperCase() +
+                eventModal.reward.name.slice(1).toLowerCase()}
+              !
+            </div>
+          )}
+          <Card species={eventModal.reward!} />
+          <div className="flex justify-center pt-4">
+            <button
+              onClick={() => setEventModal({ modal: false, reward: null })}
               className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
               Got it!
             </button>
