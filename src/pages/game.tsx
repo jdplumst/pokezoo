@@ -423,6 +423,28 @@ export default function Game() {
                   </div>
                 </div>
               ))}
+            {day <= 7 &&
+              month === 1 &&
+              (!getProfile.data?.claimedEvent ? (
+                <div className="pt-4">
+                  <button
+                    onClick={() => claimEvent()}
+                    disabled={eventMutation.isLoading}
+                    className="w-60 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold">
+                    {eventMutation.isLoading ? (
+                      <LoadingSpinner />
+                    ) : (
+                      "Claim New Year's Present"
+                    )}
+                  </button>
+                </div>
+              ) : (
+                <div className="pt-4">
+                  <div className="new-year pb-4 text-center text-7xl">
+                    Happy New Year!
+                  </div>
+                </div>
+              ))}
             {error && <p>{error}</p>}
             <Dropdown
               dropdowns={dropdowns}

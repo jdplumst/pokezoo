@@ -342,3 +342,19 @@ button {
     background-position: 1000px;
   }
 }
+
+/* https://www.youtube.com/watch?v=eMPNVtsBY_o */
+.new-year {
+  font-family: "Open Sans", sans-serif;
+  text-shadow: 0 0 10px yellow, 0 0 25px yellow;
+  animation: glow 2.5s linear infinite;
+}
+
+@keyframes glow {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
