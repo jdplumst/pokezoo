@@ -16,6 +16,18 @@ export default async function handler(
   switch (req.method) {
     case "POST":
       try {
+        const date = new Date();
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+
+        let completedEvent = null;
+
+        if ((day === 25 && month === 12) || (day === 1 && month === 1)) {
+          completedEvent = false;
+        } else if (day === 8 && month === 1) {
+          completedEvent = true;
+        }
+
         const profilesData = await db.select().from(profiles);
 
         for (const profile of profilesData) {
@@ -29,7 +41,8 @@ export default async function handler(
             .set({
               balance: newBalance,
               claimedDaily: false,
-              claimedNightly: false
+              claimedNightly: false,
+              claimedEvent: completedEvent ?? profile.claimedEvent
             })
             .where(eq(profiles.id, profile.id));
         }
