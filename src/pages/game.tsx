@@ -612,9 +612,16 @@ export default function Game() {
       {/* Modal for Event Reward */}
       {eventModal.modal && eventModal.reward && (
         <Modal size="Small">
-          <div className="candy-cane p-2 text-3xl font-bold">
-            Merry Christmas!
-          </div>
+          {day >= 25 && month === 12 && (
+            <div className="candy-cane p-2 text-3xl font-bold">
+              Merry Christmas!
+            </div>
+          )}
+          {day <= 7 && month === 1 && (
+            <div className="new-year p-2 text-3xl font-bold">
+              Happy New Year!
+            </div>
+          )}
           {"aeiou".includes(eventModal.reward.name[0]) ? (
             <div className="text-center text-xl font-bold">
               You got an{" "}
