@@ -7,7 +7,7 @@ import { db } from "@/src/server/db/index";
 import { profiles } from "@/src/server/db/schema";
 import { eq } from "drizzle-orm";
 import { env } from "@/src/env";
-
+import type { Adapter } from "next-auth/adapters";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: User & DefaultSession["user"];
@@ -19,7 +19,7 @@ declare module "next-auth" {
 }
 
 export const authOptions: NextAuthOptions = {
-  adapter: DrizzleAdapter(db),
+  adapter: DrizzleAdapter(db) as Adapter,
   providers: [
     GithubProvider({
       clientId: env.GITHUB_ID,
