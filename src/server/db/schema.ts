@@ -201,7 +201,8 @@ export const profiles = mysqlTable(
     legendaryCards: int("legendaryCards").default(0).notNull(),
     rareCards: int("rareCards").default(0).notNull(),
     userId: varchar("userId", { length: 191 }).notNull(),
-    claimedEvent: boolean("claimedEvent").default(true).notNull()
+    claimedEvent: boolean("claimedEvent").default(true).notNull(),
+    kalosStarter: boolean("kalosStarter").default(true).notNull()
   },
   (table) => {
     return {

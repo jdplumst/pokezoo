@@ -14,7 +14,14 @@ export const ZodSort = z.enum([
 export const ZodTime = z.enum(["day", "night"]);
 
 // Drizzle enums
-export const DBRegion = ["Kanto", "Johto", "Hoenn", "Sinnoh", "Unova"] as const;
+export const DBRegion = [
+  "Kanto",
+  "Johto",
+  "Hoenn",
+  "Sinnoh",
+  "Unova",
+  "Kalos"
+] as const;
 export const ZodRegion = z.enum(DBRegion);
 
 export const DBRarity = ["Common", "Rare", "Epic", "Legendary"] as const;
