@@ -13,7 +13,6 @@ interface IStarter {
 export default function Start({ region, addStarter }: IStarter) {
   const [starter, setStarter] = useState<Starter | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [disabled, setDisabled] = useState(false);
 
   const getStarters = trpc.species.getStarters.useQuery({ region });
 
@@ -29,7 +28,9 @@ export default function Start({ region, addStarter }: IStarter) {
       ? "treecko"
       : region === "Sinnoh"
       ? "turtwig"
-      : "snivy";
+      : region === "Unova"
+      ? "snivy"
+      : "chespin";
 
   const fireStarter =
     region === "Kanto"
@@ -40,7 +41,9 @@ export default function Start({ region, addStarter }: IStarter) {
       ? "torchic"
       : region === "Sinnoh"
       ? "chimchar"
-      : "tepig";
+      : region === "Unova"
+      ? "tepig"
+      : "fennekin";
 
   const waterStarter =
     region === "Kanto"
@@ -51,10 +54,11 @@ export default function Start({ region, addStarter }: IStarter) {
       ? "mudkip"
       : region === "Sinnoh"
       ? "piplup"
-      : "oshawott";
+      : region === "Unova"
+      ? "oshawott"
+      : "froakie";
 
   const handleClose = () => {
-    setDisabled(true);
     if (starter) {
       const speciesId =
         starter === "Grass"
@@ -77,7 +81,6 @@ export default function Start({ region, addStarter }: IStarter) {
             },
             onError(error) {
               setError(error.message);
-              setDisabled(false);
             }
           }
         );
@@ -90,14 +93,12 @@ export default function Start({ region, addStarter }: IStarter) {
             },
             onError(error) {
               setError(error.message);
-              setDisabled(false);
             }
           }
         );
       }
     } else if (!starter) {
       setError("Must pick a starter Pokémon");
-      setDisabled(false);
     }
   };
 
@@ -163,7 +164,7 @@ export default function Start({ region, addStarter }: IStarter) {
       <div className="flex justify-center pt-4">
         <button
           onClick={() => handleClose()}
-          disabled={disabled}
+          disabled={purchaseMutation.isLoading || starterMutation.isLoading}
           className="pointer-events-auto rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
           Confirm Selection
         </button>

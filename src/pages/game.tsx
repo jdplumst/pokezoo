@@ -691,6 +691,11 @@ export default function Game() {
       {!getProfile.data?.unovaStarter && (
         <Start region="Unova" addStarter={addStarter} />
       )}
+
+      {/* Modal for Kalos Starter */}
+      {!getProfile.data?.kalosStarter && (
+        <Start region="Kalos" addStarter={addStarter} />
+      )}
     </>
   );
 }

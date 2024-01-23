@@ -532,7 +532,8 @@ export const instanceRouter = router({
             johtoStarter: profiles.johtoStarter,
             hoennStarter: profiles.hoennStarter,
             sinnohStarter: profiles.sinnohStarter,
-            unovaStarter: profiles.unovaStarter
+            unovaStarter: profiles.unovaStarter,
+            kalosStarter: profiles.kalosStarter
           })
           .from(profiles)
           .where(eq(profiles.userId, ctx.session.user.id))
@@ -559,6 +560,16 @@ export const instanceRouter = router({
         throw new TRPCError({
           code: "CONFLICT",
           message: "You have already received a Sinnoh starter."
+        });
+      } else if (input.region === "Unova" && currUser.unovaStarter) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You have already received a Unova starter."
+        });
+      } else if (input.region === "Kalos" && currUser.kalosStarter) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You have already received a Kalos starter."
         });
       }
 
@@ -596,7 +607,9 @@ export const instanceRouter = router({
             sinnohStarter:
               input.region === "Sinnoh" ? true : currUser.sinnohStarter,
             unovaStarter:
-              input.region === "Unova" ? true : currUser.unovaStarter
+              input.region === "Unova" ? true : currUser.unovaStarter,
+            kalosStarter:
+              input.region === "Kalos" ? true : currUser.kalosStarter
           })
           .where(eq(profiles.userId, ctx.session.user.id));
 
