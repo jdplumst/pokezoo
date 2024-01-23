@@ -28,6 +28,21 @@ export default function PatchNotes() {
             <hr className="border-black pb-4"></hr>
             <section className="pb-4">
               <h3 className="p-4 text-4xl font-bold">
+                6.00 (January 23, 2023)
+              </h3>
+              <hr className="border-black"></hr>
+              <p className="px-4 pt-4">
+                Added Kalos Pokémon! Start collecting Pokémon from Kalos
+                alongside Pokémon from Kanto, Johto, Hoenn, Sinnoh and Unova.
+              </p>
+              <p className="px-4">
+                All exising users will get to choose a Unova starter between
+                Chespin, Fennekin, and Froakie for free!
+              </p>
+            </section>
+            <hr className="border-black pb-4"></hr>
+            <section className="pb-4">
+              <h3 className="p-4 text-4xl font-bold">
                 5.15 (January 21, 2023)
               </h3>
               <hr className="border-black"></hr>
