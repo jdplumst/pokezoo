@@ -24,7 +24,13 @@ export const DBRegion = [
 ] as const;
 export const ZodRegion = z.enum(DBRegion);
 
-export const DBRarity = ["Common", "Rare", "Epic", "Legendary"] as const;
+export const DBRarity = [
+  "Common",
+  "Rare",
+  "Epic",
+  "Legendary",
+  "Mega"
+] as const;
 export const ZodRarity = z.enum(DBRarity);
 
 export const DBSpeciesType = [
