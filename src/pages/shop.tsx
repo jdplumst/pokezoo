@@ -18,6 +18,7 @@ import {
 } from "../server/db/schema";
 import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";
+import { RegionsList } from "../constants";
 
 export default function Shop() {
   const { status } = useSession({
@@ -311,51 +312,17 @@ export default function Shop() {
         <Modal size="Small">
           <p className="text-xl font-bold">Select a Region</p>
           <div className="flex gap-5 pt-5">
-            <button
-              onClick={() => {
-                setRegionCurr("Kanto");
-                setRegionOpen(false);
-                premierRef.current!.scrollIntoView();
-              }}
-              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-              Kanto
-            </button>
-            <button
-              onClick={() => {
-                setRegionCurr("Johto");
-                setRegionOpen(false);
-                premierRef.current!.scrollIntoView();
-              }}
-              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-              Johto
-            </button>
-            <button
-              onClick={() => {
-                setRegionCurr("Hoenn");
-                setRegionOpen(false);
-                premierRef.current!.scrollIntoView();
-              }}
-              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-              Hoenn
-            </button>
-            <button
-              onClick={() => {
-                setRegionCurr("Sinnoh");
-                setRegionOpen(false);
-                premierRef.current!.scrollIntoView();
-              }}
-              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-              Sinnoh
-            </button>
-            <button
-              onClick={() => {
-                setRegionCurr("Unova");
-                setRegionOpen(false);
-                premierRef.current!.scrollIntoView();
-              }}
-              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-              Unova
-            </button>
+            {RegionsList.map((r) => (
+              <button
+                onClick={() => {
+                  setRegionCurr(r);
+                  setRegionOpen(false);
+                  premierRef.current!.scrollIntoView();
+                }}
+                className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+                {r}
+              </button>
+            ))}
           </div>
         </Modal>
       )}
