@@ -19,6 +19,8 @@
     --color-epic-unfocus: #a855f7;
     --color-legendary-focus: #059669;
     --color-legendary-unfocus: #10b981;
+    --color-mega-focus: #dc2626;
+    --color-mega-unfocus: #ef4444;
 
     /* Pokemon Type Colours */
     --color-normal: #a8a77a;
@@ -346,7 +348,9 @@ button {
 /* https://www.youtube.com/watch?v=eMPNVtsBY_o */
 .new-year {
   font-family: "Open Sans", sans-serif;
-  text-shadow: 0 0 10px yellow, 0 0 25px yellow;
+  text-shadow:
+    0 0 10px yellow,
+    0 0 25px yellow;
   animation: glow 2.5s linear infinite;
 }
 
