@@ -64,7 +64,8 @@ export default function Tutorial() {
             </p>
             <br></br>
             <p>
-              Pokémon rarity is calculated as following (using terms from{" "}
+              Pokémon rarity is calculated as following in order (using terms
+              from{" "}
               <a href="https://bulbapedia.bulbagarden.net/wiki/Experience">
                 <span>Bulbapedia</span>
               </a>
@@ -72,8 +73,8 @@ export default function Tutorial() {
             </p>
             <ul className="list-disc">
               <li className="ml-4">
-                If a Pokémon is Legendary or Mythical, then it has Legendary
-                rarity.
+                If a Pokémon is Legendary or Mythical or Ash-Greninja, then it
+                has Legendary rarity.
               </li>
               <li className="ml-4">
                 If a Pokémon is in the Medium-Fast experience group, then it has
