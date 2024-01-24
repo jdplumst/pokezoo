@@ -314,6 +314,7 @@ export default function Shop() {
           <div className="flex gap-5 pt-5">
             {RegionsList.map((r) => (
               <button
+                key={r}
                 onClick={() => {
                   setRegionCurr(r);
                   setRegionOpen(false);
