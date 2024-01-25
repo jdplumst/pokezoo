@@ -145,7 +145,8 @@ export const balls = mysqlTable(
     commonChance: int("commonChance").notNull(),
     rareChance: int("rareChance").notNull(),
     epicChance: int("epicChance").notNull(),
-    legendaryChance: int("legendaryChance").notNull()
+    legendaryChance: int("legendaryChance").notNull(),
+    megaChance: int("megaChance").notNull().default(0)
   },
   (table) => {
     return {
