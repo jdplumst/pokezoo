@@ -127,6 +127,9 @@ export default function Shop() {
     for (let i = 0; i < ball.legendaryChance; i++) {
       randomizer.push("Legendary");
     }
+    for (let i = 0; i < ball.megaChance; i++) {
+      randomizer.push("Mega");
+    }
     const rarity = randomizer[Math.floor(Math.random() * 100)];
 
     // Determine the new species the user gets
@@ -155,6 +158,12 @@ export default function Shop() {
       );
       newInstance =
         legendarySpecies![Math.floor(Math.random() * legendarySpecies!.length)];
+    } else if (rarity === "Mega" && !shiny) {
+      const megaSpecies = filteredSpecies?.filter(
+        (s) => s.rarity === "Mega" && !s.shiny
+      );
+      newInstance =
+        megaSpecies![Math.floor(Math.random() * megaSpecies!.length)];
     } else if (rarity === "Common" && shiny) {
       const commonShinySpecies = filteredSpecies?.filter(
         (s) => s.rarity === "Common" && s.shiny
@@ -183,6 +192,12 @@ export default function Shop() {
         legendaryShinySpecies![
           Math.floor(Math.random() * legendaryShinySpecies!.length)
         ];
+    } else if (rarity === "Mega" && shiny) {
+      const megaShinySpecies = filteredSpecies?.filter(
+        (s) => s.rarity === "Mega" && s.shiny
+      );
+      newInstance =
+        megaShinySpecies![Math.floor(Math.random() * megaShinySpecies!.length)];
     }
 
     // Create new instance
@@ -283,17 +298,11 @@ export default function Shop() {
         <Modal size="Small">
           {"aeiou".includes(newSpecies.name[0]) ? (
             <div className="text-center text-xl font-bold">
-              You got an{" "}
-              {newSpecies.name[0].toUpperCase() +
-                newSpecies.name.slice(1).toLowerCase()}
-              !{" "}
+              You got an <span className="capitalize">{newSpecies.name}!</span>{" "}
             </div>
           ) : (
             <div className="text-center text-xl font-bold">
-              You got a{" "}
-              {newSpecies.name[0].toUpperCase() +
-                newSpecies.name.slice(1).toLowerCase()}
-              !
+              You got a <span className="capitalize">{newSpecies.name}!</span>
             </div>
           )}
           <Card species={newSpecies} />
