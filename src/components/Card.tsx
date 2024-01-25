@@ -191,54 +191,59 @@ export default function Card({
             Unsell Pokémon
           </button>
         )}
-        {handlePurchase && (
-          <button
-            onClick={() =>
-              purchaseMutation.mutate(
-                { speciesId: species.id },
-                {
-                  onSuccess() {
-                    handlePurchase(species);
+        {handlePurchase &&
+          (["Common", "Rare", "Epic", "Legendary"].includes(species.rarity) ? (
+            <button
+              onClick={() =>
+                purchaseMutation.mutate(
+                  { speciesId: species.id },
+                  {
+                    onSuccess() {
+                      handlePurchase(species);
+                    }
                   }
-                }
-              )
-            }
-            disabled={purchaseMutation.isLoading}
-            className="rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold text-white hover:bg-blue-btn-focus">
-            <div className="flex flex-row">
-              {species.rarity === "Common" ? (
-                <img
-                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png"
-                  alt="common-wildcard"
-                  height={25}
-                  width={25}
-                />
-              ) : species.rarity === "Rare" ? (
-                <img
-                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png"
-                  alt="rare-wildcard"
-                  height={25}
-                  width={25}
-                />
-              ) : species.rarity === "Epic" ? (
-                <img
-                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png"
-                  alt="epic-wildcard"
-                  height={25}
-                  width={25}
-                />
-              ) : (
-                <img
-                  src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png"
-                  alt="legendary-wildcard"
-                  height={25}
-                  width={25}
-                />
-              )}
-              {species.shiny ? `100` : `10`}
+                )
+              }
+              disabled={purchaseMutation.isLoading}
+              className="rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 h-12 w-[70px] font-bold text-white hover:bg-blue-btn-focus">
+              <div className="flex flex-row">
+                {species.rarity === "Common" ? (
+                  <img
+                    src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png"
+                    alt="common-wildcard"
+                    height={25}
+                    width={25}
+                  />
+                ) : species.rarity === "Rare" ? (
+                  <img
+                    src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png"
+                    alt="rare-wildcard"
+                    height={25}
+                    width={25}
+                  />
+                ) : species.rarity === "Epic" ? (
+                  <img
+                    src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png"
+                    alt="epic-wildcard"
+                    height={25}
+                    width={25}
+                  />
+                ) : (
+                  <img
+                    src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png"
+                    alt="legendary-wildcard"
+                    height={25}
+                    width={25}
+                  />
+                )}
+                {species.shiny ? `100` : `10`}
+              </div>
+            </button>
+          ) : (
+            <div className="flex justify-center items-center rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 h-12 w-[70px] font-bold text-white hover:bg-blue-btn-focus">
+              N/A
             </div>
-          </button>
-        )}
+          ))}
         {purchaseMutation.error && (
           <div className="font-medium text-red-600">
             {purchaseMutation.error.message}
