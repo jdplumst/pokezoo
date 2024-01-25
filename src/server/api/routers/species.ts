@@ -90,15 +90,19 @@ export const speciesRouter = router({
             input.caught.Caught && !input.caught.Uncaught
               ? isNotNull(i.speciesId)
               : !input.caught.Caught && input.caught.Uncaught
-              ? isNull(i.speciesId)
-              : undefined,
+                ? isNull(i.speciesId)
+                : undefined,
             sql`(${species.pokedexNumber}, ${species.name}) >= (${
               input.cursor?.pokedexNumber ?? 0
             }, ${input.cursor?.name ?? ""})`
           )
         )
         .limit(limit + 1)
-        .orderBy(asc(species.pokedexNumber), asc(species.name));
+        .orderBy(
+          asc(species.pokedexNumber),
+          asc(species.rarity),
+          asc(species.name)
+        );
 
       let nextCursor: typeof input.cursor | undefined = undefined;
       if (pokemon.length > limit) {
