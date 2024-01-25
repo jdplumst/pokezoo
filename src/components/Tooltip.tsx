@@ -56,6 +56,10 @@ export default function Tooltip({ ball, children }: ITooltip) {
               {ball.legendaryChance}% Chance{" "}
               <span className="text-legendary-unfocus">Legendary</span>
             </p>
+            <p>
+              {ball.megaChance}% Chance{" "}
+              <span className="text-mega-unfocus">Mega</span>
+            </p>
           </div>
         </div>
       )}
