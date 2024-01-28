@@ -4,6 +4,7 @@ import { TRPCError } from "@trpc/server";
 import { MAX_YIELD } from "@/src/constants";
 import { achievements, profiles, userAchievements } from "../../db/schema";
 import { and, eq } from "drizzle-orm";
+import calcNewYield from "@/src/utils/calcNewYield";
 
 export const achievementRouter = router({
   getAchievements: protectedProcedure.query(async ({ ctx }) => {
@@ -61,10 +62,7 @@ export const achievementRouter = router({
         });
       }
 
-      const newYield =
-        currUser.totalYield + achievementData.yield > MAX_YIELD
-          ? MAX_YIELD
-          : currUser.totalYield + achievementData.yield;
+      const newYield = calcNewYield(currUser.totalYield, achievementData.yield);
 
       await ctx.db.transaction(async (tx) => {
         await tx
