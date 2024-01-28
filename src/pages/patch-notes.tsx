@@ -27,6 +27,9 @@ export default function PatchNotes() {
           <Topbar />
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
+            <Patch patch="6.05" date="January 28, 2024">
+              <Note note="Added Sinnoh Megas." />
+            </Patch>
             <Patch patch="6.04" date="January 27, 2024">
               <Note note="Added Hoenn Megas." />
             </Patch>
