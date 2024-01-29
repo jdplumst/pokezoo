@@ -21,6 +21,7 @@ import {
 import { instances, profiles, species } from "../../db/schema";
 import { and, asc, desc, eq, inArray, notInArray, or, sql } from "drizzle-orm";
 import calcNewYield from "@/src/utils/calcNewYield";
+import { withinInstanceLimit } from "@/src/utils/withinInstanceLimit";
 
 export const instanceRouter = router({
   getInstanceSpecies: protectedProcedure.query(async ({ ctx }) => {
@@ -263,7 +264,7 @@ export const instanceRouter = router({
         });
       }
 
-      if (currUser.instanceCount >= 2000) {
+      if (!withinInstanceLimit(currUser.instanceCount)) {
         throw new TRPCError({
           code: "CONFLICT",
           message:
@@ -376,7 +377,7 @@ export const instanceRouter = router({
         });
       }
 
-      if (currUser.instanceCount >= 2000) {
+      if (!withinInstanceLimit(currUser.instanceCount)) {
         throw new TRPCError({
           code: "CONFLICT",
           message:
