@@ -37,3 +37,8 @@ yarn-error.log*
 next-env.d.ts
 
 .vscode
+/test-results/
+/tests-examples/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
