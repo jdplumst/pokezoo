@@ -4,7 +4,6 @@ import { TRPCError } from "@trpc/server";
 import {
   HabitatList,
   MAX_BALANCE,
-  MAX_YIELD,
   RaritiesList,
   RegionsList,
   SHINY_WILDCARD_COST,
@@ -20,7 +19,7 @@ import {
 } from "@/src/zod";
 import { instances, profiles, species } from "../../db/schema";
 import { and, asc, desc, eq, inArray, notInArray, or, sql } from "drizzle-orm";
-import calcNewYield from "@/src/utils/calcNewYield";
+import { calcNewYield } from "@/src/utils/calcNewYield";
 import { withinInstanceLimit } from "@/src/utils/withinInstanceLimit";
 
 export const instanceRouter = router({

@@ -1,10 +1,9 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { MAX_YIELD } from "@/src/constants";
 import { achievements, profiles, userAchievements } from "../../db/schema";
 import { and, eq } from "drizzle-orm";
-import calcNewYield from "@/src/utils/calcNewYield";
+import { calcNewYield } from "@/src/utils/calcNewYield";
 
 export const achievementRouter = router({
   getAchievements: protectedProcedure.query(async ({ ctx }) => {
