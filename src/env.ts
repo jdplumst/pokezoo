@@ -23,7 +23,10 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string(),
     CRON_TOKEN: z.string(),
     UPSTASH_REDIS_REST_URL: z.string().url(),
-    UPSTASH_REDIS_REST_TOKEN: z.string()
+    UPSTASH_REDIS_REST_TOKEN: z.string(),
+    TEST_NAME: z.string(),
+    TEST_VALUE: z.string(),
+    TEST_UNAME: z.string()
   },
   client: {},
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
@@ -40,7 +43,10 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     CRON_TOKEN: process.env.CRON_TOKEN,
     UPSTASH_REDIS_REST_URL: process.env.UPSTASH_REDIS_REST_URL,
-    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN
+    UPSTASH_REDIS_REST_TOKEN: process.env.UPSTASH_REDIS_REST_TOKEN,
+    TEST_NAME: process.env.TEST_NAME,
+    TEST_VALUE: process.env.TEST_VALUE,
+    TEST_UNAME: process.env.TEST_UNAME
   },
   emptyStringAsUndefined: true
   // For Next.js >= 13.4.4, you only need to destructure client variables:

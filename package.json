@@ -11,7 +11,9 @@
     "db:push": "dotenv drizzle-kit push:mysql",
     "db:pull": "dotenv drizzle-kit introspect:mysql",
     "db:studio": "dotenv drizzle-kit studio",
-    "script": "dotenv ts-node"
+    "script": "dotenv ts-node",
+    "test": "playwright test",
+    "test:ui": "playwright test --ui"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^0.3.16",
