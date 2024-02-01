@@ -41,10 +41,16 @@ export default function Achievements() {
 
         if (a.type === "All") {
           max = speciesData.species.filter(
-            (s) => s.region === a.region && s.shiny === a.shiny
+            (s) =>
+              s.region === a.region &&
+              s.shiny === a.shiny &&
+              s.rarity !== "Mega"
           ).length;
           value = instanceData.filter(
-            (i) => i.species.region === a.region && i.species.shiny === a.shiny
+            (i) =>
+              i.species.region === a.region &&
+              i.species.shiny === a.shiny &&
+              i.species.rarity !== "Mega"
           ).length;
         } else if (a.type === "Rarity") {
           max = speciesData.species.filter(
@@ -64,27 +70,31 @@ export default function Achievements() {
             (s) =>
               s.habitat === a.attribute &&
               s.region === a.region &&
-              s.shiny === a.shiny
+              s.shiny === a.shiny &&
+              s.rarity !== "Mega"
           ).length;
           value = instanceData.filter(
             (i) =>
               i.species.habitat === a.attribute &&
               i.species.region === a.region &&
-              i.species.shiny === a.shiny
+              i.species.shiny === a.shiny &&
+              i.species.rarity !== "Mega"
           ).length;
         } else if (a.type === "Type") {
           max = speciesData.species.filter(
             (s) =>
               (s.typeOne === a.attribute || s.typeTwo === a.attribute) &&
               s.region === a.region &&
-              s.shiny === a.shiny
+              s.shiny === a.shiny &&
+              s.rarity !== "Mega"
           ).length;
           value = instanceData.filter(
             (i) =>
               (i.species.typeOne === a.attribute ||
                 i.species.typeTwo === a.attribute) &&
               i.species.region === a.region &&
-              i.species.shiny === a.shiny
+              i.species.shiny === a.shiny &&
+              i.species.rarity !== "Mega"
           ).length;
         }
 
