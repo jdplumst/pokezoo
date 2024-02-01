@@ -27,6 +27,9 @@ export default function PatchNotes() {
           <Topbar />
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
+            <Patch patch="6.07" date="January 31, 2024">
+              <Note note="Excluded Megas from achievements." />
+            </Patch>
             <Patch patch="6.06" date="January 29, 2024">
               <Note note="Added Unova and Kalos Megas." />
             </Patch>
