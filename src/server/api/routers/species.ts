@@ -128,7 +128,7 @@ export const speciesRouter = router({
         .from(species)
         .where(and(eq(species.shiny, false), eq(species.region, input.region)))
         .orderBy(asc(species.pokedexNumber))
-        .limit(9);
+        .limit(15);
 
       return { starters };
     }),
