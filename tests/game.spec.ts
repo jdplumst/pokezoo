@@ -16,6 +16,18 @@ test.beforeAll("login", async ({ browser }) => {
   ]);
   await page.reload();
   await expect(page.getByText(env.TEST_UNAME)).toBeVisible();
+
+  if ((await page.getByText("Sell Pokémon").count()) > 0) {
+    for (const btn of await page.getByText("Sell Pokémon").all()) {
+      await btn.click();
+    }
+
+    await page.getByText("Confirm Delete").click();
+  }
+  await expect(page.getByText("You have 0 / 2,000 Pokémon.")).toBeVisible();
+  await page.getByText("Bulbasaur").click();
+  await page.getByText("Confirm Selection").click();
+  await expect(page.getByText("You have 1 / 2,000 Pokémon.")).toBeVisible();
 });
 
 test("test", async () => {
