@@ -30,6 +30,7 @@ export default function Card({
   const purchaseMutation =
     trpc.instance.purchaseInstanceWithWildcards.useMutation();
 
+  if (!species) return <></>;
   return (
     <div
       className={`${
