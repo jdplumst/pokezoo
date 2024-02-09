@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { db } from "@/src/server/db";
 import { achievements } from "@/src/server/db/schema";
 import { ZodAchievementType, ZodAttribute, ZodRegion } from "@/src/zod";
