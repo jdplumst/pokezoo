@@ -175,6 +175,7 @@ export const profiles = pgTable(
     instanceCount: integer("instanceCount").notNull().default(0),
     claimedDaily: boolean("claimedDaily").notNull().default(false),
     claimedNightly: boolean("claimedNightly").notNull().default(false),
+    claimedEvent: boolean("claimedEvent").notNull().default(true),
     commonCards: integer("commonCards").notNull().default(0),
     rareCards: integer("rareCards").notNull().default(0),
     epicCards: integer("epicCards").notNull().default(0),
