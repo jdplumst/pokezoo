@@ -116,7 +116,7 @@ export const balls = pgTable("ball", {
     .$defaultFn(() => createId())
     .primaryKey(),
   name: text("name").notNull().unique(),
-  img: text("name").notNull(),
+  img: text("img").notNull(),
   cost: integer("cost").notNull(),
   commonChance: integer("commonChance").notNull(),
   rareChance: integer("rareChance").notNull(),
