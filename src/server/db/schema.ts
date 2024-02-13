@@ -87,7 +87,7 @@ export const achievements = pgTable(
     attributeId: integer("attributeId")
       .notNull()
       .references(() => attributes.id, { onDelete: "cascade" }),
-    regionId: integer("regionid")
+    regionId: integer("regionId")
       .notNull()
       .references(() => regions.id, { onDelete: "cascade" }),
     shiny: boolean("shiny").notNull(),
