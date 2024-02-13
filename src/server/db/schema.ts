@@ -222,9 +222,9 @@ export const species = pgTable(
     typeOneId: integer("typeOneId")
       .notNull()
       .references(() => types.id, { onDelete: "cascade" }),
-    typeTwoId: integer("typeTwoId")
-      .notNull()
-      .references(() => types.id, { onDelete: "cascade" }),
+    typeTwoId: integer("typeTwoId").references(() => types.id, {
+      onDelete: "cascade"
+    }),
     generation: integer("generation").notNull(),
     habitatId: integer("habitatId")
       .notNull()
