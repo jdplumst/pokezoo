@@ -48,9 +48,9 @@ export default function Achievements() {
           ).length;
           value = instanceData.filter(
             (i) =>
-              i.species.region === a.region &&
-              i.species.shiny === a.shiny &&
-              i.species.rarity !== "Mega"
+              i.region === a.region &&
+              i.shiny === a.shiny &&
+              i.rarity !== "Mega"
           ).length;
         } else if (a.type === "Rarity") {
           max = speciesData.species.filter(
@@ -61,9 +61,9 @@ export default function Achievements() {
           ).length;
           value = instanceData.filter(
             (i) =>
-              i.species.rarity === a.attribute &&
-              i.species.region === a.region &&
-              i.species.shiny === a.shiny
+              i.rarity === a.attribute &&
+              i.region === a.region &&
+              i.shiny === a.shiny
           ).length;
         } else if (a.type === "Habitat") {
           max = speciesData.species.filter(
@@ -75,10 +75,10 @@ export default function Achievements() {
           ).length;
           value = instanceData.filter(
             (i) =>
-              i.species.habitat === a.attribute &&
-              i.species.region === a.region &&
-              i.species.shiny === a.shiny &&
-              i.species.rarity !== "Mega"
+              i.habitat === a.attribute &&
+              i.region === a.region &&
+              i.shiny === a.shiny &&
+              i.rarity !== "Mega"
           ).length;
         } else if (a.type === "Type") {
           max = speciesData.species.filter(
@@ -90,11 +90,10 @@ export default function Achievements() {
           ).length;
           value = instanceData.filter(
             (i) =>
-              (i.species.typeOne === a.attribute ||
-                i.species.typeTwo === a.attribute) &&
-              i.species.region === a.region &&
-              i.species.shiny === a.shiny &&
-              i.species.rarity !== "Mega"
+              (i.typeOne === a.attribute || i.typeTwo === a.attribute) &&
+              i.region === a.region &&
+              i.shiny === a.shiny &&
+              i.rarity !== "Mega"
           ).length;
         }
 

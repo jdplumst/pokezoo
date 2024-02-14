@@ -85,22 +85,22 @@ export default function Trades() {
                         </div>
                         <div
                           className={`h-48 border-2 border-solid border-black p-2 ${
-                            t.initiatorInstance.rarity === `Common`
+                            t.initiatorRarity.name === `Common`
                               ? `bg-common-unfocus`
-                              : t.initiatorInstance.rarity === `Rare`
-                              ? `bg-rare-unfocus`
-                              : t.initiatorInstance.rarity === `Epic`
-                              ? `bg-epic-unfocus`
-                              : `bg-legendary-unfocus`
+                              : t.initiatorRarity.name === `Rare`
+                                ? `bg-rare-unfocus`
+                                : t.initiatorRarity.name === `Epic`
+                                  ? `bg-epic-unfocus`
+                                  : `bg-legendary-unfocus`
                           }`}>
                           <img
-                            src={t.initiatorInstance.img!}
-                            alt={t.initiatorInstance.name!}
+                            src={t.initiatorSpecies.img}
+                            alt={t.initiatorSpecies.name}
                             width={150}
                             height={150}></img>
                           <div className="text-center font-bold capitalize">
-                            {t.initiatorInstance.name}
-                            {t.initiatorInstance.shiny && `⭐`}
+                            {t.initiatorSpecies.name}
+                            {t.initiatorSpecies.shiny && `⭐`}
                           </div>
                         </div>
                         <div className="h-8 text-xl">{t.trade.description}</div>
@@ -125,29 +125,32 @@ export default function Trades() {
                         )}
                       </div>
                       <div className="h-full w-[1px] border-2 border-solid border-black"></div>
-                      {t.offerer && t.offererInstance ? (
+                      {t.offerer &&
+                      t.offererInstance &&
+                      t.offererSpecies &&
+                      t.offererRarity ? (
                         <div className="flex w-1/2 flex-col items-center justify-between gap-5">
                           <div className="h-8 text-center text-xl font-bold">
                             {t.offerer.username} has an offer!
                           </div>
                           <div
                             className={`h-48 border-2 border-solid border-black p-2 ${
-                              t.offererInstance.rarity === `Common`
+                              t.offererRarity.name === `Common`
                                 ? `bg-common-unfocus`
-                                : t.offererInstance.rarity === `Rare`
-                                ? `bg-rare-unfocus`
-                                : t.offererInstance.rarity === `Epic`
-                                ? `bg-epic-unfocus`
-                                : `bg-legendary-unfocus`
+                                : t.offererRarity.name === `Rare`
+                                  ? `bg-rare-unfocus`
+                                  : t.offererRarity.name === `Epic`
+                                    ? `bg-epic-unfocus`
+                                    : `bg-legendary-unfocus`
                             }`}>
                             <img
-                              src={t.offererInstance.img!}
-                              alt={t.offererInstance.name!}
+                              src={t.offererSpecies.img}
+                              alt={t.offererSpecies.name}
                               width={150}
                               height={150}></img>
                             <div className="text-center font-bold capitalize">
-                              {t.offererInstance.name}
-                              {t.offererInstance.shiny && `⭐`}
+                              {t.offererSpecies.name}
+                              {t.offererSpecies.shiny && `⭐`}
                             </div>
                           </div>
                           <div className="h-8"></div>
@@ -273,10 +276,10 @@ export default function Trades() {
                       i.rarity === `Common`
                         ? `bg-common-unfocus`
                         : i.rarity === `Rare`
-                        ? `bg-rare-unfocus`
-                        : i.rarity === `Epic`
-                        ? `bg-epic-unfocus`
-                        : `bg-legendary-unfocus`
+                          ? `bg-rare-unfocus`
+                          : i.rarity === `Epic`
+                            ? `bg-epic-unfocus`
+                            : `bg-legendary-unfocus`
                     }`}>
                     <div className="text-center text-xl font-bold capitalize">
                       {i.name}

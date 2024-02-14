@@ -58,11 +58,11 @@ export const ZodSpeciesType = z.enum(DBSpeciesType);
 export const DBHabitat = [
   "Grassland",
   "Forest",
-  "WatersEdge",
+  "Waters-Edge",
   "Sea",
   "Cave",
   "Mountain",
-  "RoughTerrain",
+  "Rough-Terrain",
   "Urban",
   "Rare"
 ] as const;
@@ -75,11 +75,11 @@ export const DBAttribute = [
   "Legendary",
   "Grassland",
   "Forest",
-  "WatersEdge",
+  "Waters-Edge",
   "Sea",
   "Cave",
   "Mountain",
-  "RoughTerrain",
+  "Rough-Terrain",
   "Urban",
   "Normal",
   "Fire",
@@ -105,3 +105,31 @@ export const ZodAttribute = z.enum(DBAttribute);
 
 export const DBAchivementType = ["Rarity", "Habitat", "Type", "All"] as const;
 export const ZodAchievementType = z.enum(DBAchivementType);
+
+export const ZodSpecies = z.object({
+  id: z.string(),
+  pokedexNumber: z.number(),
+  name: z.string(),
+  rarity: z.string(),
+  yield: z.number(),
+  img: z.string(),
+  sellPrice: z.number(),
+  shiny: z.boolean(),
+  typeOne: z.string(),
+  typeTwo: z.string().nullish(),
+  generation: z.number(),
+  habitat: z.string(),
+  region: z.string()
+});
+
+export const ZodAchievement = z.object({
+  id: z.string(),
+  description: z.string(),
+  tier: z.number(),
+  yield: z.number(),
+  type: z.string(),
+  attribute: z.string(),
+  region: z.string(),
+  shiny: z.boolean(),
+  generation: z.number()
+});

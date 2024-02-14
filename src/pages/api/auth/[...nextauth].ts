@@ -24,7 +24,7 @@ declare module "next-auth" {
     id: string;
   }
 }
-// @ts-expect-error
+// @ts-expect-error for drizzle table prefix
 const mapAdapter = (name, columns, extraConfig) => {
   switch (name) {
     case "user":
@@ -36,12 +36,13 @@ const mapAdapter = (name, columns, extraConfig) => {
     case "verification_token":
       return verificationTokens;
     default:
+      // eslint-disable-next-line
       return pgTable(name, columns, extraConfig);
   }
 };
 
 export const authOptions: NextAuthOptions = {
-  // @ts-expect-error
+  // @ts-expect-error for drizzle table prefix
   adapter: DrizzleAdapter(db, mapAdapter) as Adapter,
   providers: [
     GithubProvider({

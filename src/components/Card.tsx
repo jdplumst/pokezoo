@@ -2,20 +2,19 @@ import Image from "next/image";
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import { type z } from "zod";
-import {
-  type selectSpeciesSchema,
-  type selectInstanceSchema
-} from "../server/db/schema";
+import { type selectInstanceSchema } from "../server/db/schema";
+import { type ZodSpecies } from "../zod";
 
 interface ICard {
-  species: z.infer<typeof selectSpeciesSchema>;
+  species: z.infer<typeof ZodSpecies>;
+  // species: inferRouterOutputs<AppRouter>["species"]["getPokedex"];
   instance?: z.infer<typeof selectInstanceSchema>;
   modifyDeleteList?: (
     instance: z.infer<typeof selectInstanceSchema>,
     sell: boolean
   ) => void;
   caught?: boolean;
-  handlePurchase?: (species: z.infer<typeof selectSpeciesSchema>) => void;
+  handlePurchase?: (species: z.infer<typeof ZodSpecies>) => void;
 }
 
 export default function Card({
