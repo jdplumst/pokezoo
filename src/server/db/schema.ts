@@ -120,7 +120,7 @@ export const balls = pgTable("ball", {
   cost: integer("cost").notNull(),
   commonChance: integer("commonChance").notNull(),
   rareChance: integer("rareChance").notNull(),
-  epicChancce: integer("epicChance").notNull(),
+  epicChance: integer("epicChance").notNull(),
   legendaryChance: integer("legendaryChance").notNull(),
   megaChance: integer("megaChance").notNull()
 });
@@ -266,10 +266,13 @@ export const trades = pgTable(
     description: text("description"),
     initiatorInstanceId: text("initiatorInstanceId")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-    offererInstanceId: text("offererInstanceId").references(() => users.id, {
-      onDelete: "set null"
-    })
+      .references(() => instances.id, { onDelete: "cascade" }),
+    offererInstanceId: text("offererInstanceId").references(
+      () => instances.id,
+      {
+        onDelete: "set null"
+      }
+    )
   },
   (t) => {
     return {
