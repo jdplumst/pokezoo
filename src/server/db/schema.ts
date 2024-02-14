@@ -1,301 +1,321 @@
 import {
-  mysqlTable,
   index,
   primaryKey,
-  unique,
-  varchar,
   text,
-  int,
-  mysqlEnum,
-  datetime,
+  integer,
   boolean,
-  timestamp
-} from "drizzle-orm/mysql-core";
-import { relations, sql } from "drizzle-orm";
+  timestamp,
+  pgTableCreator,
+  serial
+} from "drizzle-orm/pg-core";
+import { sql } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
-import {
-  DBAchivementType,
-  DBAttribute,
-  DBHabitat,
-  DBRarity,
-  DBRegion,
-  DBSpeciesType
-} from "@/src/zod";
 import { type AdapterAccount } from "next-auth/adapters";
 import { createSelectSchema } from "drizzle-zod";
 
+export const pgTable = pgTableCreator((name) => `pokezoo_${name}`);
+
 // Next Auth Tables
 
-export const users = mysqlTable("user", {
-  id: varchar("id", { length: 255 }).notNull().primaryKey(),
-  name: varchar("name", { length: 255 }),
-  email: varchar("email", { length: 255 }).notNull(),
-  emailVerified: timestamp("emailVerified", {
-    mode: "date",
-    fsp: 3
-  }).default(sql`CURRENT_TIMESTAMP(3)`),
-  image: varchar("image", { length: 255 })
+export const users = pgTable("user", {
+  id: text("id").notNull().primaryKey(),
+  name: text("name"),
+  email: text("email").notNull(),
+  emailVerified: timestamp("emailVerified", { mode: "date" }),
+  image: text("image")
 });
 
-export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
-  sessions: many(sessions)
-}));
-
-export const accounts = mysqlTable(
+export const accounts = pgTable(
   "account",
   {
-    userId: varchar("userId", { length: 255 }).notNull(),
-    type: varchar("type", { length: 255 })
-      .$type<AdapterAccount["type"]>()
-      .notNull(),
-    provider: varchar("provider", { length: 255 }).notNull(),
-    providerAccountId: varchar("providerAccountId", { length: 255 }).notNull(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    type: text("type").$type<AdapterAccount["type"]>().notNull(),
+    provider: text("provider").notNull(),
+    providerAccountId: text("providerAccountId").notNull(),
     refresh_token: text("refresh_token"),
     access_token: text("access_token"),
-    expires_at: int("expires_at"),
-    token_type: varchar("token_type", { length: 255 }),
-    scope: varchar("scope", { length: 255 }),
+    expires_at: integer("expires_at"),
+    token_type: text("token_type"),
+    scope: text("scope"),
     id_token: text("id_token"),
-    session_state: varchar("session_state", { length: 255 }),
-    refresh_token_expires_in: int("refresh_token_expires_in")
+    session_state: text("session_state")
   },
   (account) => ({
     compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId],
-      name: "Account_pk"
-    }),
-    userIdIdx: index("userId_idx").on(account.userId)
+      columns: [account.provider, account.providerAccountId]
+    })
   })
 );
 
-export const accountsRelations = relations(accounts, ({ one }) => ({
-  user: one(users, { fields: [accounts.userId], references: [users.id] })
-}));
+export const sessions = pgTable("session", {
+  sessionToken: text("sessionToken").notNull().primaryKey(),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  expires: timestamp("expires", { mode: "date" }).notNull()
+});
 
-export const sessions = mysqlTable(
-  "session",
-  {
-    sessionToken: varchar("sessionToken", { length: 255 })
-      .notNull()
-      .primaryKey(),
-    userId: varchar("userId", { length: 255 }).notNull(),
-    expires: timestamp("expires", { mode: "date" }).notNull()
-  },
-  (session) => ({
-    userIdIdx: index("userId_idx").on(session.userId)
-  })
-);
-
-export const sessionsRelations = relations(sessions, ({ one }) => ({
-  user: one(users, { fields: [sessions.userId], references: [users.id] })
-}));
-
-export const verificationTokens = mysqlTable(
+export const verificationTokens = pgTable(
   "verificationToken",
   {
-    identifier: varchar("identifier", { length: 255 }).notNull(),
-    token: varchar("token", { length: 255 }).notNull(),
+    identifier: text("identifier").notNull(),
+    token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull()
   },
   (vt) => ({
-    compoundKey: primaryKey({
-      columns: [vt.identifier, vt.token],
-      name: "VerificationToken_pk"
-    })
+    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] })
   })
 );
 
 // PokeZoo Tables
 
-export const achievements = mysqlTable(
+export const achievements = pgTable(
   "achievement",
   {
-    id: varchar("id", { length: 191 })
+    id: text("id")
       .notNull()
-      .$defaultFn(() => createId()),
-    description: varchar("description", { length: 191 }).notNull(),
-    tier: int("tier").notNull(),
-    yield: int("yield").notNull(),
-    type: mysqlEnum("type", DBAchivementType).notNull(),
-    attribute: mysqlEnum("attribute", DBAttribute).notNull(),
-    generation: int("generation").notNull(),
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    description: text("description").notNull(),
+    tier: integer("tier").notNull(),
+    yield: integer("yield").notNull(),
+    typeId: integer("typeId")
+      .notNull()
+      .references(() => achievementTypes.id, { onDelete: "cascade" }),
+    attributeId: integer("attributeId")
+      .notNull()
+      .references(() => attributes.id, { onDelete: "cascade" }),
+    regionId: integer("regionId")
+      .notNull()
+      .references(() => regions.id, { onDelete: "cascade" }),
     shiny: boolean("shiny").notNull(),
-    region: mysqlEnum("region", DBRegion).notNull()
+    generation: integer("generation").notNull()
   },
-  (table) => {
-    return {
-      achievementIdPk: primaryKey({
-        columns: [table.id],
-        name: "Achievement_id_pk"
-      })
-    };
-  }
+  (a) => ({
+    typeIdIdx: index("Achievement_typeId_idx").on(a.typeId),
+    attributeIdIdx: index("Achievement_attributeId_id").on(a.attributeId),
+    regionIdIdx: index("Achievement_regionId_idx").on(a.regionId)
+  })
 );
 
-export const balls = mysqlTable(
-  "ball",
-  {
-    id: varchar("id", { length: 191 })
-      .notNull()
-      .$defaultFn(() => createId()),
-    name: varchar("name", { length: 191 }).notNull(),
-    img: varchar("img", { length: 191 }).notNull(),
-    cost: int("cost").notNull(),
-    commonChance: int("commonChance").notNull(),
-    rareChance: int("rareChance").notNull(),
-    epicChance: int("epicChance").notNull(),
-    legendaryChance: int("legendaryChance").notNull(),
-    megaChance: int("megaChance").notNull().default(0)
-  },
-  (table) => {
-    return {
-      ballIdPk: primaryKey({ columns: [table.id], name: "Ball_id_pk" }),
-      ballNameKey: unique("Ball_name_key").on(table.name)
-    };
-  }
-);
+export const achievementTypes = pgTable("achievementType", {
+  id: serial("id").notNull().primaryKey(),
+  name: text("name").notNull().unique()
+});
 
-export const instances = mysqlTable(
+export const attributes = pgTable("attribute", {
+  id: serial("id").notNull().primaryKey(),
+  name: text("name").notNull().unique()
+});
+
+export const balls = pgTable("ball", {
+  id: text("id")
+    .notNull()
+    .$defaultFn(() => createId())
+    .primaryKey(),
+  name: text("name").notNull().unique(),
+  img: text("img").notNull(),
+  cost: integer("cost").notNull(),
+  commonChance: integer("commonChance").notNull(),
+  rareChance: integer("rareChance").notNull(),
+  epicChance: integer("epicChance").notNull(),
+  legendaryChance: integer("legendaryChance").notNull(),
+  megaChance: integer("megaChance").notNull()
+});
+
+export const habitats = pgTable("habitat", {
+  id: serial("id").notNull().primaryKey(),
+  name: text("name").notNull().unique()
+});
+
+export const instances = pgTable(
   "instance",
   {
-    id: varchar("id", { length: 191 })
+    id: text("id")
       .notNull()
-      .$defaultFn(() => createId()),
-    userId: varchar("userId", { length: 191 }).notNull(),
-    speciesId: varchar("speciesId", { length: 191 }).notNull(),
-    createDate: datetime("createDate", { mode: "date", fsp: 3 })
-      .default(sql`CURRENT_TIMESTAMP(3)`)
-      .notNull(),
-    modifyDate: datetime("modifyDate", { mode: "date", fsp: 3 })
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    userId: text("userId")
       .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    speciesId: text("speciesId")
+      .notNull()
+      .references(() => species.id, { onDelete: "cascade" }),
+    createDate: timestamp("createDate", { mode: "date" })
+      .notNull()
+      .default(sql`now()`),
+    modifyDate: timestamp("modifyDate", { mode: "date" })
+      .notNull()
+      .default(sql`now()`)
   },
-  (table) => {
+  (i) => {
     return {
-      userIdIdx: index("Instance_userId_idx").on(table.userId),
-      speciesIdIdx: index("Instance_speciesId_idx").on(table.speciesId),
-      instanceIdPk: primaryKey({ columns: [table.id], name: "Instance_id_pk" })
+      userIdIdx: index("Instance_userId_idx").on(i.userId),
+      speciesIdIdx: index("Instance_speciesId_idx").on(i.speciesId)
     };
   }
 );
 
-export const profiles = mysqlTable(
+export const profiles = pgTable(
   "profile",
   {
-    id: varchar("id", { length: 191 })
+    id: text("id")
       .notNull()
-      .$defaultFn(() => createId()),
-    totalYield: int("totalYield").default(0).notNull(),
-    balance: int("balance").default(0).notNull(),
-    claimedDaily: boolean("claimedDaily").default(false).notNull(),
-    johtoStarter: boolean("johtoStarter").default(true).notNull(),
-    claimedNightly: boolean("claimedNightly").default(false).notNull(),
-    admin: boolean("admin").default(false).notNull(),
-    hoennStarter: boolean("hoennStarter").default(true).notNull(),
-    sinnohStarter: boolean("sinnohStarter").default(true).notNull(),
-    username: varchar("username", { length: 191 }),
-    instanceCount: int("instanceCount").default(0).notNull(),
-    unovaStarter: boolean("unovaStarter").default(true).notNull(),
-    commonCards: int("commonCards").default(0).notNull(),
-    epicCards: int("epicCards").default(0).notNull(),
-    legendaryCards: int("legendaryCards").default(0).notNull(),
-    rareCards: int("rareCards").default(0).notNull(),
-    userId: varchar("userId", { length: 191 }).notNull(),
-    claimedEvent: boolean("claimedEvent").default(true).notNull(),
-    kalosStarter: boolean("kalosStarter").default(true).notNull()
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    username: text("username"),
+    admin: boolean("admin").notNull().default(false),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    totalYield: integer("totalYield").notNull().default(0),
+    balance: integer("balance").notNull().default(0),
+    instanceCount: integer("instanceCount").notNull().default(0),
+    claimedDaily: boolean("claimedDaily").notNull().default(false),
+    claimedNightly: boolean("claimedNightly").notNull().default(false),
+    claimedEvent: boolean("claimedEvent").notNull().default(true),
+    commonCards: integer("commonCards").notNull().default(0),
+    rareCards: integer("rareCards").notNull().default(0),
+    epicCards: integer("epicCards").notNull().default(0),
+    legendaryCards: integer("legendaryCards").notNull().default(0),
+    johtoStarter: boolean("johtoStarter").notNull().default(true),
+    hoennStarter: boolean("hoennStarter").notNull().default(true),
+    sinnohStarter: boolean("sinnohStarter").notNull().default(true),
+    unovaStarter: boolean("unovaStarter").notNull().default(true),
+    kalosStarter: boolean("kalosStarter").notNull().default(true)
   },
-  (table) => {
+  (p) => {
     return {
-      userIdIdx: index("Profile_userId_idx").on(table.userId),
-      profileIdPk: primaryKey({ columns: [table.id], name: "Profile_id_pk" })
+      userIdIdx: index("Profile_userId_idx").on(p.userId)
     };
   }
 );
 
-export const species = mysqlTable(
+export const rarities = pgTable("rarity", {
+  id: serial("id").notNull().primaryKey(),
+  name: text("name").notNull().unique()
+});
+
+export const regions = pgTable("region", {
+  id: serial("id").notNull().primaryKey(),
+  name: text("name").notNull().unique()
+});
+
+export const species = pgTable(
   "species",
   {
-    id: varchar("id", { length: 191 })
+    id: text("id")
       .notNull()
-      .$defaultFn(() => createId()),
-    pokedexNumber: int("pokedexNumber").notNull(),
-    name: varchar("name", { length: 191 }).notNull(),
-    rarity: mysqlEnum("rarity", DBRarity).notNull(),
-    yield: int("yield").notNull(),
-    img: varchar("img", { length: 191 }).notNull(),
-    sellPrice: int("sellPrice").notNull(),
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    pokedexNumber: integer("pokedexNumber").notNull(),
+    name: text("name").notNull(),
+    rarityId: serial("rarityId")
+      .notNull()
+      .references(() => rarities.id, { onDelete: "cascade" }),
+    yield: integer("yield").notNull(),
+    img: text("img").notNull(),
+    sellPrice: integer("sellPrice").notNull(),
     shiny: boolean("shiny").notNull(),
-    typeOne: mysqlEnum("typeOne", DBSpeciesType).notNull(),
-    typeTwo: mysqlEnum("typeTwo", DBSpeciesType),
-    generation: int("generation").notNull(),
-    habitat: mysqlEnum("habitat", DBHabitat).notNull(),
-    region: mysqlEnum("region", DBRegion).notNull()
+    typeOneId: integer("typeOneId")
+      .notNull()
+      .references(() => types.id, { onDelete: "cascade" }),
+    typeTwoId: integer("typeTwoId").references(() => types.id, {
+      onDelete: "cascade"
+    }),
+    generation: integer("generation").notNull(),
+    habitatId: integer("habitatId")
+      .notNull()
+      .references(() => habitats.id, { onDelete: "cascade" }),
+    regionId: integer("regionId")
+      .notNull()
+      .references(() => regions.id, { onDelete: "cascade" })
   },
-  (table) => {
+  (s) => {
     return {
-      speciesIdPk: primaryKey({ columns: [table.id], name: "Species_id_pk" })
+      rarityIdIdx: index("Species_rarityId_idx").on(s.rarityId),
+      typeOneIdIdx: index("Species_typeOneId_idx").on(s.typeOneId),
+      typeTwoIdIdx: index("Species_typeTwoId_idx").on(s.typeTwoId),
+      habitatIdIdx: index("Species_habitatId_idx").on(s.habitatId),
+      regionIdIdx: index("Species_regionId_idx").on(s.regionId)
     };
   }
 );
 
-export const trades = mysqlTable(
+export const trades = pgTable(
   "trade",
   {
-    id: varchar("id", { length: 191 })
+    id: text("id")
       .notNull()
-      .$defaultFn(() => createId()),
-    initiatorId: varchar("initiatorId", { length: 191 }).notNull(),
-    offererId: varchar("offererId", { length: 191 }),
-    createDate: datetime("createDate", { mode: "date", fsp: 3 })
-      .default(sql`CURRENT_TIMESTAMP(3)`)
-      .notNull(),
-    modifyDate: datetime("modifyDate", { mode: "date", fsp: 3 })
-      .default(sql`CURRENT_TIMESTAMP(3)`)
-      .notNull(),
-    description: varchar("description", { length: 191 }),
-    initiatorInstanceId: varchar("initiatorInstanceId", {
-      length: 191
-    }).notNull(),
-    offererInstanceId: varchar("offererInstanceId", { length: 191 })
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    initiatorId: text("initiatorId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    offererId: text("offererId").references(() => users.id, {
+      onDelete: "set null"
+    }),
+    createDate: timestamp("createDate", { mode: "date" })
+      .notNull()
+      .default(sql`now()`),
+    modifyDate: timestamp("modifyDate", { mode: "date" })
+      .notNull()
+      .default(sql`now()`),
+    description: text("description"),
+    initiatorInstanceId: text("initiatorInstanceId")
+      .notNull()
+      .references(() => instances.id, { onDelete: "cascade" }),
+    offererInstanceId: text("offererInstanceId").references(
+      () => instances.id,
+      {
+        onDelete: "set null"
+      }
+    )
   },
-  (table) => {
+  (t) => {
     return {
-      initiatorIdIdx: index("Trade_initiatorId_idx").on(table.initiatorId),
-      offererIdIdx: index("Trade_offererId_idx").on(table.offererId),
+      initiatorIdIdx: index("Trade_initiatorId_idx").on(t.initiatorId),
+      offererIdIdx: index("Trade_offererId_idx").on(t.offererId),
       initiatorInstanceIdIdx: index("Trade_initiatorInstanceId_idx").on(
-        table.initiatorInstanceId
+        t.initiatorInstanceId
       ),
       offererInstanceIdIdx: index("Trade_offererInstanceId_idx").on(
-        table.offererInstanceId
-      ),
-      tradeIdPk: primaryKey({ columns: [table.id], name: "Trade_id_pk" })
+        t.offererInstanceId
+      )
     };
   }
 );
 
-export const userAchievements = mysqlTable(
+export const types = pgTable("type", {
+  id: serial("id").notNull().primaryKey(),
+  name: text("name").notNull().unique()
+});
+
+export const userAchievements = pgTable(
   "userAchievement",
   {
-    id: varchar("id", { length: 191 })
+    id: text("id")
       .notNull()
-      .$defaultFn(() => createId()),
-    userId: varchar("userId", { length: 191 }).notNull(),
-    achievementId: varchar("achievementId", { length: 191 }).notNull(),
-    createDate: datetime("createDate", { mode: "date", fsp: 3 })
-      .default(sql`CURRENT_TIMESTAMP(3)`)
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    userId: text("userId")
       .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    achievementId: text("achievementId")
+      .notNull()
+      .references(() => achievements.id, { onDelete: "cascade" }),
+    createDate: timestamp("createDate", { mode: "date" })
+      .notNull()
+      .default(sql`now()`)
   },
-  (table) => {
+  (ua) => {
     return {
-      userIdIdx: index("UserAchievement_userId_idx").on(table.userId),
+      userIdIdx: index("UserAchievement_userId_idx").on(ua.userId),
       achievementIdIdx: index("UserAchievement_achievementId_idx").on(
-        table.achievementId
-      ),
-      userAchievementIdPk: primaryKey({
-        columns: [table.id],
-        name: "UserAchievement_id_pk"
-      })
+        ua.achievementId
+      )
     };
   }
 );

@@ -17,28 +17,45 @@ import {
   ZodSort,
   ZodSpeciesType
 } from "@/src/zod";
-import { instances, profiles, species } from "../../db/schema";
+import {
+  habitats,
+  instances,
+  profiles,
+  rarities,
+  regions,
+  species,
+  types
+} from "../../db/schema";
 import { and, asc, desc, eq, inArray, notInArray, or, sql } from "drizzle-orm";
 import { calcNewYield } from "@/src/utils/calcNewYield";
 import { withinInstanceLimit } from "@/src/utils/withinInstanceLimit";
+import { alias } from "drizzle-orm/pg-core";
 
 export const instanceRouter = router({
   getInstanceSpecies: protectedProcedure.query(async ({ ctx }) => {
+    const typeOne = alias(types, "typeOne");
+    const typeTwo = alias(types, "typeTwo");
+
     const instancesData = await ctx.db
       .select({
         instanceId: instances.id,
         speciesId: species.id,
-        region: species.region,
+        region: regions.name,
         shiny: species.shiny,
-        rarity: species.rarity,
-        habitat: species.habitat,
-        typeOne: species.typeOne,
-        typeTwo: species.typeTwo,
+        rarity: rarities.name,
+        habitat: habitats.name,
+        typeOne: typeOne.name,
+        typeTwo: typeTwo.name,
         name: species.name,
         img: species.img
       })
       .from(instances)
       .innerJoin(species, eq(instances.speciesId, species.id))
+      .innerJoin(regions, eq(species.regionId, regions.id))
+      .innerJoin(rarities, eq(species.rarityId, rarities.id))
+      .innerJoin(habitats, eq(species.habitatId, habitats.id))
+      .innerJoin(typeOne, eq(species.typeOneId, typeOne.id))
+      .leftJoin(typeTwo, eq(species.typeTwoId, typeTwo.id))
       .where(and(eq(instances.userId, ctx.session.user.id)))
       .orderBy(
         asc(species.pokedexNumber),
@@ -59,7 +76,7 @@ export const instanceRouter = router({
             modifyDate: z.date(),
             name: z.string().nullish(),
             pokedexNumber: z.number().nullish(),
-            rarity: ZodRarity.nullish()
+            rarity: z.string().nullish()
           })
           .nullish(),
         order: ZodSort,
@@ -91,29 +108,52 @@ export const instanceRouter = router({
 
       const limit = input.limit ?? 50;
 
+      const typeOne = alias(types, "typeOne");
+      const typeTwo = alias(types, "typeTwo");
+
       const instancesData = await ctx.db
-        .select()
+        .select({
+          id: species.id,
+          pokedexNumber: species.pokedexNumber,
+          name: species.name,
+          rarity: rarities.name,
+          yield: species.yield,
+          img: species.img,
+          sellPrice: species.sellPrice,
+          shiny: species.shiny,
+          typeOne: typeOne.name,
+          typeTwo: typeTwo.name,
+          generation: species.generation,
+          habitat: habitats.name,
+          region: regions.name,
+          instance: instances
+        })
         .from(instances)
         .innerJoin(species, eq(instances.speciesId, species.id))
+        .innerJoin(regions, eq(species.regionId, regions.id))
+        .innerJoin(rarities, eq(species.rarityId, rarities.id))
+        .innerJoin(typeOne, eq(species.typeOneId, typeOne.id))
+        .leftJoin(typeTwo, eq(species.typeTwoId, typeTwo.id))
+        .innerJoin(habitats, eq(species.habitatId, habitats.id))
         .where(
           and(
             eq(instances.userId, ctx.session.user.id),
             eq(species.shiny, input.shiny),
             input.regions.length > 0
-              ? inArray(species.region, input.regions)
-              : notInArray(species.region, RegionsList),
+              ? inArray(regions.name, input.regions)
+              : notInArray(regions.name, RegionsList),
             input.rarities.length > 0
-              ? inArray(species.rarity, input.rarities)
-              : notInArray(species.rarity, RaritiesList),
+              ? inArray(rarities.name, input.rarities)
+              : notInArray(rarities.name, RaritiesList),
             input.types.length > 0
               ? or(
-                  inArray(species.typeOne, input.types),
-                  inArray(species.typeTwo, input.types)
+                  inArray(typeOne.name, input.types),
+                  inArray(typeTwo.name, input.types)
                 )
-              : notInArray(species.typeOne, TypesList),
+              : notInArray(typeOne.name, TypesList),
             input.habitats.length > 0
-              ? inArray(species.habitat, input.habitats)
-              : notInArray(species.habitat, HabitatList),
+              ? inArray(habitats.name, input.habitats)
+              : notInArray(habitats.name, HabitatList),
             input.order === "Oldest"
               ? sql`${instances.modifyDate} >= ${
                   input.cursor?.modifyDate ??
@@ -143,7 +183,7 @@ export const instanceRouter = router({
                         new Date("2050-12-03 17:20:11.049")
                       })`
                     : input.order === "Rarity"
-                      ? sql`(${species.rarity}+0, ${species.pokedexNumber}, ${
+                      ? sql`(${rarities.id}, ${species.pokedexNumber}, ${
                           species.name
                         }, ${instances.modifyDate}) >= (${rarityCursor ?? 0}, ${
                           input.cursor?.pokedexNumber ?? 0
@@ -152,7 +192,7 @@ export const instanceRouter = router({
                           new Date("2020-12-03 17:20:11.049")
                         })`
                       : input.order === "RarityDesc"
-                        ? sql`(${species.rarity}+0, ${species.pokedexNumber}, ${
+                        ? sql`(${rarities.id}, ${species.pokedexNumber}, ${
                             species.name
                           }, ${instances.modifyDate}) <= (${rarityCursor ?? 4}, ${
                             input.cursor?.pokedexNumber ?? 10000
@@ -173,9 +213,9 @@ export const instanceRouter = router({
                 : input.order === "PokedexDesc"
                   ? sql`${species.pokedexNumber} desc, ${species.name} desc, ${instances.modifyDate} desc`
                   : input.order === "Rarity"
-                    ? sql`${species.rarity} asc, ${species.pokedexNumber} asc, ${species.name} asc, ${instances.modifyDate} asc`
+                    ? sql`${rarities.id} asc, ${species.pokedexNumber} asc, ${species.name} asc, ${instances.modifyDate} asc`
                     : input.order === "RarityDesc"
-                      ? sql`${species.rarity} desc, ${species.pokedexNumber} desc, ${species.name} desc, ${instances.modifyDate} desc`
+                      ? sql`${rarities.id} desc, ${species.pokedexNumber} desc, ${species.name} desc, ${instances.modifyDate} desc`
                       : asc(instances.modifyDate)
         )
         .limit(limit + 1);
@@ -194,16 +234,16 @@ export const instanceRouter = router({
             : input.order === "Pokedex" || input.order === "PokedexDesc"
               ? {
                   modifyDate: nextItem.instance.modifyDate,
-                  name: nextItem.species.name,
-                  pokedexNumber: nextItem.species.pokedexNumber,
+                  name: nextItem.name,
+                  pokedexNumber: nextItem.pokedexNumber,
                   rarity: null
                 }
               : input.order === "Rarity" || input.order === "RarityDesc"
                 ? {
                     modifyDate: nextItem.instance.modifyDate,
-                    name: nextItem.species.name,
-                    pokedexNumber: nextItem.species.pokedexNumber,
-                    rarity: nextItem.species.rarity
+                    name: nextItem.name,
+                    pokedexNumber: nextItem.pokedexNumber,
+                    rarity: nextItem.rarity
                   }
                 : {
                     modifyDate: nextItem.instance.modifyDate,
@@ -334,6 +374,7 @@ export const instanceRouter = router({
         await ctx.db
           .select()
           .from(species)
+          .leftJoin(rarities, eq(species.rarityId, rarities.id))
           .where(eq(species.id, input.speciesId))
       )[0];
 
@@ -345,29 +386,29 @@ export const instanceRouter = router({
       }
 
       if (
-        (speciesData.rarity === "Common" &&
-          !speciesData.shiny &&
+        (speciesData.rarity?.name === "Common" &&
+          !speciesData.species.shiny &&
           currUser.commonCards < WILDCARD_COST) ||
-        (speciesData.rarity === "Common" &&
-          speciesData.shiny &&
+        (speciesData.rarity?.name === "Common" &&
+          speciesData.species.shiny &&
           currUser.commonCards < SHINY_WILDCARD_COST) ||
-        (speciesData.rarity === "Rare" &&
-          !speciesData.shiny &&
+        (speciesData.rarity?.name === "Rare" &&
+          !speciesData.species.shiny &&
           currUser.rareCards < WILDCARD_COST) ||
-        (speciesData.rarity === "Rare" &&
-          speciesData.shiny &&
+        (speciesData.rarity?.name === "Rare" &&
+          speciesData.species.shiny &&
           currUser.rareCards < SHINY_WILDCARD_COST) ||
-        (speciesData.rarity === "Epic" &&
-          !speciesData.shiny &&
+        (speciesData.rarity?.name === "Epic" &&
+          !speciesData.species.shiny &&
           currUser.epicCards < WILDCARD_COST) ||
-        (speciesData.rarity === "Epic" &&
-          speciesData.shiny &&
+        (speciesData.rarity?.name === "Epic" &&
+          speciesData.species.shiny &&
           currUser.epicCards < SHINY_WILDCARD_COST) ||
-        (speciesData.rarity === "Legendary" &&
-          !speciesData.shiny &&
+        (speciesData.rarity?.name === "Legendary" &&
+          !speciesData.species.shiny &&
           currUser.legendaryCards < WILDCARD_COST) ||
-        (speciesData.rarity === "Legendary" &&
-          speciesData.shiny &&
+        (speciesData.rarity?.name === "Legendary" &&
+          speciesData.species.shiny &&
           currUser.legendaryCards < SHINY_WILDCARD_COST)
       ) {
         throw new TRPCError({
@@ -384,7 +425,10 @@ export const instanceRouter = router({
         });
       }
 
-      const newYield = calcNewYield(currUser.totalYield, speciesData.yield);
+      const newYield = calcNewYield(
+        currUser.totalYield,
+        speciesData.species.yield
+      );
 
       await ctx.db.transaction(async (tx) => {
         await tx
@@ -392,27 +436,33 @@ export const instanceRouter = router({
           .set({
             totalYield: newYield,
             commonCards:
-              speciesData.rarity === "Common" && !speciesData.shiny
+              speciesData.rarity?.name === "Common" &&
+              !speciesData.species.shiny
                 ? currUser.commonCards - WILDCARD_COST
-                : speciesData.rarity === "Common" && speciesData.shiny
+                : speciesData.rarity?.name === "Common" &&
+                    speciesData.species.shiny
                   ? currUser.commonCards - SHINY_WILDCARD_COST
                   : currUser.commonCards,
             rareCards:
-              speciesData.rarity === "Rare" && !speciesData.shiny
+              speciesData.rarity?.name === "Rare" && !speciesData.species.shiny
                 ? currUser.rareCards - WILDCARD_COST
-                : speciesData.rarity === "Rare" && speciesData.shiny
+                : speciesData.rarity?.name === "Rare" &&
+                    speciesData.species.shiny
                   ? currUser.rareCards - SHINY_WILDCARD_COST
                   : currUser.rareCards,
             epicCards:
-              speciesData.rarity === "Epic" && !speciesData.shiny
+              speciesData.rarity?.name === "Epic" && !speciesData.species.shiny
                 ? currUser.epicCards - WILDCARD_COST
-                : speciesData.rarity === "Epic" && speciesData.shiny
+                : speciesData.rarity?.name === "Epic" &&
+                    speciesData.species.shiny
                   ? currUser.epicCards - SHINY_WILDCARD_COST
                   : currUser.epicCards,
             legendaryCards:
-              speciesData.rarity === "Legendary" && !speciesData.shiny
+              speciesData.rarity?.name === "Legendary" &&
+              !speciesData.species.shiny
                 ? currUser.legendaryCards - WILDCARD_COST
-                : speciesData.rarity === "Legendary" && speciesData.shiny
+                : speciesData.rarity?.name === "Legendary" &&
+                    speciesData.species.shiny
                   ? currUser.legendaryCards - SHINY_WILDCARD_COST
                   : currUser.legendaryCards,
             instanceCount: currUser.instanceCount + 1
@@ -572,6 +622,7 @@ export const instanceRouter = router({
         await ctx.db
           .select()
           .from(species)
+          .leftJoin(regions, eq(species.regionId, regions.id))
           .where(eq(species.id, input.speciesId))
       )[0];
 
@@ -582,7 +633,7 @@ export const instanceRouter = router({
         });
       }
 
-      if (speciesData.region !== input.region) {
+      if (speciesData.region?.name !== input.region) {
         throw new TRPCError({
           code: "BAD_REQUEST",
           message: `Species does not come from ${input.region}`
@@ -593,7 +644,7 @@ export const instanceRouter = router({
         await tx
           .update(profiles)
           .set({
-            totalYield: currUser.totalYield + speciesData.yield,
+            totalYield: currUser.totalYield + speciesData.species.yield,
             instanceCount: currUser.instanceCount + 1,
             johtoStarter:
               input.region === "Johto" ? true : currUser.johtoStarter,
@@ -642,10 +693,32 @@ export const instanceRouter = router({
       });
     }
 
+    const typeOne = alias(types, "typeOne");
+    const typeTwo = alias(types, "typeTwo");
+
     const reward = (
       await ctx.db
-        .select()
+        .select({
+          id: species.id,
+          pokedexNumber: species.pokedexNumber,
+          name: species.name,
+          rarity: rarities.name,
+          yield: species.yield,
+          img: species.img,
+          sellPrice: species.sellPrice,
+          shiny: species.shiny,
+          typeOne: typeOne.name,
+          typeTwo: typeTwo.name,
+          generation: species.generation,
+          habitat: habitats.name,
+          region: regions.name
+        })
         .from(species)
+        .innerJoin(regions, eq(species.regionId, regions.id))
+        .innerJoin(rarities, eq(species.rarityId, rarities.name))
+        .innerJoin(habitats, eq(species.habitatId, habitats.id))
+        .innerJoin(typeOne, eq(species.typeOneId, typeOne.id))
+        .leftJoin(typeTwo, eq(species.typeTwoId, typeTwo.id))
         .where(eq(species.shiny, true))
         .orderBy(sql`RAND()`)
         .limit(1)

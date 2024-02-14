@@ -3,8 +3,9 @@ import { env } from "./src/env";
 
 export default {
   schema: "./src/server/db/schema.ts",
-  driver: "mysql2",
+  driver: "pg",
   dbCredentials: {
-    uri: env.DATABASE_URL as string
-  }
+    connectionString: env.DATABASE_URL
+  },
+  tablesFilter: ["pokezoo_*"]
 } satisfies Config;

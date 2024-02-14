@@ -239,13 +239,7 @@ export default function Dropdown({
                   index === HabitatList.length - 10 && `border-b-2 border-black`
                 }`}>
                 <DrowpdownItem
-                  label={
-                    h === "WatersEdge"
-                      ? "Waters-Edge"
-                      : h === "RoughTerrain"
-                      ? "Rough-Terrain"
-                      : h
-                  }
+                  label={h}
                   fn={handleHabitat}
                   checked={habitats.includes(h)}
                   colour="lime"

@@ -12,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";
 import { type z } from "zod";
 import {
+  type ZodSpecies,
   type ZodHabitat,
   type ZodRarity,
   type ZodRegion,
@@ -25,10 +26,7 @@ import {
   TypesList,
   HabitatList
 } from "../constants";
-import {
-  type selectSpeciesSchema,
-  type selectInstanceSchema
-} from "../server/db/schema";
+import { type selectInstanceSchema } from "../server/db/schema";
 import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";
 
@@ -66,7 +64,7 @@ export default function Game() {
   const month = date.getMonth() + 1;
   const [eventModal, setEventModal] = useState<{
     modal: boolean;
-    reward: null | z.infer<typeof selectSpeciesSchema>;
+    reward: null | z.infer<typeof ZodSpecies>;
     // reward: null | inferRouterOutputs<AppRouter>["instance"]["claimEvent"];
   }>({
     modal: false,
@@ -298,45 +296,14 @@ export default function Game() {
 
   // Handle Habitat State
   const handleHabitat = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor as
-      | z.infer<typeof ZodHabitat>
-      | "Waters-Edge"
-      | "Rough-Terrain";
+    const label = e.target.labels![0].htmlFor as z.infer<typeof ZodHabitat>;
     const checked = e.target.checked;
     if (label.startsWith("all") && habitats === HabitatList) {
       setHabitats([]);
     } else if (label.startsWith("all") && habitats !== HabitatList) {
       setHabitats(HabitatList);
-    } else if (
-      label !== "Waters-Edge" &&
-      label !== "Rough-Terrain" &&
-      habitats.includes(label)
-    ) {
+    } else if (!checked && habitats.includes(label)) {
       setHabitats(habitats.filter((h) => h !== label));
-    } else if (
-      label === "Waters-Edge" &&
-      !checked &&
-      habitats.includes("WatersEdge")
-    ) {
-      setHabitats(habitats.filter((h) => h !== "WatersEdge"));
-    } else if (
-      label === "Rough-Terrain" &&
-      !checked &&
-      habitats.includes("RoughTerrain")
-    ) {
-      setHabitats(habitats.filter((h) => h !== "RoughTerrain"));
-    } else if (
-      label === "Waters-Edge" &&
-      checked &&
-      !habitats.includes("WatersEdge")
-    ) {
-      setHabitats([...habitats, "WatersEdge"]);
-    } else if (
-      label === "Rough-Terrain" &&
-      checked &&
-      !habitats.includes("RoughTerrain")
-    ) {
-      setHabitats([...habitats, "RoughTerrain"]);
     } else {
       setHabitats([...habitats, label as z.infer<typeof ZodHabitat>]);
     }
@@ -528,7 +495,7 @@ export default function Game() {
                     <Card
                       key={c.instance.id}
                       instance={c.instance}
-                      species={c.species}
+                      species={c}
                       modifyDeleteList={modifyDeleteList}
                     />
                   ))}
@@ -575,24 +542,24 @@ export default function Game() {
                 (nightlyReward.modal && nightlyReward.card === "Common")
                   ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png`
                   : (dailyReward.modal && dailyReward.card === "Rare") ||
-                    (nightlyReward.modal && nightlyReward.card === "Rare")
-                  ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
-                  : (dailyReward.modal && dailyReward.card === "Epic") ||
-                    (nightlyReward.modal && nightlyReward.card === "Epic")
-                  ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
-                  : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
+                      (nightlyReward.modal && nightlyReward.card === "Rare")
+                    ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
+                    : (dailyReward.modal && dailyReward.card === "Epic") ||
+                        (nightlyReward.modal && nightlyReward.card === "Epic")
+                      ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
+                      : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
               }
               alt={
                 (dailyReward.modal && dailyReward.card === "Common") ||
                 (nightlyReward.modal && nightlyReward.card === "Common")
                   ? `common-wildcard`
                   : (dailyReward.modal && dailyReward.card === "Rare") ||
-                    (nightlyReward.modal && nightlyReward.card === "Rare")
-                  ? `rare-wildcard`
-                  : (dailyReward.modal && dailyReward.card === "Epic") ||
-                    (nightlyReward.modal && nightlyReward.card === "Epic")
-                  ? `epic-wildcard`
-                  : `legendary-wildcard`
+                      (nightlyReward.modal && nightlyReward.card === "Rare")
+                    ? `rare-wildcard`
+                    : (dailyReward.modal && dailyReward.card === "Epic") ||
+                        (nightlyReward.modal && nightlyReward.card === "Epic")
+                      ? `epic-wildcard`
+                      : `legendary-wildcard`
               }
             />
           </div>

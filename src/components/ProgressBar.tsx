@@ -2,10 +2,10 @@ import { useState } from "react";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "./LoadingSpinner";
 import { type z } from "zod";
-import { type selectAchievementSchema } from "../server/db/schema";
+import { type ZodAchievement } from "../zod";
 
 export interface FullAchievement {
-  achievement: z.infer<typeof selectAchievementSchema>;
+  achievement: z.infer<typeof ZodAchievement>;
   max: number;
   value: number;
   low: number;

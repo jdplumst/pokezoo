@@ -1,38 +1,26 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { instances, profiles, species, trades } from "../../db/schema";
+import {
+  instances,
+  profiles,
+  rarities,
+  species,
+  trades
+} from "../../db/schema";
 import { and, desc, eq, or } from "drizzle-orm";
-import { alias } from "drizzle-orm/mysql-core";
+import { alias } from "drizzle-orm/pg-core";
 
 export const tradeRouter = router({
   getTrades: protectedProcedure.query(async ({ ctx }) => {
     const initiator = alias(profiles, "initiator");
     const offerer = alias(profiles, "offerer");
-
-    const initiatorInstance = ctx.db
-      .select({
-        id: instances.id,
-        name: species.name,
-        img: species.img,
-        rarity: species.rarity,
-        shiny: species.shiny
-      })
-      .from(instances)
-      .leftJoin(species, eq(instances.speciesId, species.id))
-      .as("initiatorInstance");
-
-    const offererInstance = ctx.db
-      .select({
-        id: instances.id,
-        name: species.name,
-        img: species.img,
-        rarity: species.rarity,
-        shiny: species.shiny
-      })
-      .from(instances)
-      .leftJoin(species, eq(instances.speciesId, species.id))
-      .as("offererInstance");
+    const initiatorInstance = alias(instances, "initiatorInstance");
+    const offererInstance = alias(instances, "offererInstance");
+    const initiatorSpecies = alias(species, "initiatorSpecies");
+    const offererSpecies = alias(species, "offererSpecies");
+    const initiatorRarity = alias(rarities, "initiatorRarity");
+    const offererRarity = alias(rarities, "offererRarity");
 
     const tradesData = await ctx.db
       .select()
@@ -43,10 +31,23 @@ export const tradeRouter = router({
         initiatorInstance,
         eq(trades.initiatorInstanceId, initiatorInstance.id)
       )
+      .innerJoin(
+        initiatorSpecies,
+        eq(initiatorInstance.speciesId, initiatorSpecies.id)
+      )
+      .innerJoin(
+        initiatorRarity,
+        eq(initiatorSpecies.rarityId, initiatorRarity.id)
+      )
       .leftJoin(
         offererInstance,
         eq(trades.offererInstanceId, offererInstance.id)
       )
+      .leftJoin(
+        offererSpecies,
+        eq(offererInstance.speciesId, offererSpecies.id)
+      )
+      .leftJoin(offererRarity, eq(offererSpecies.rarityId, offererRarity.id))
       .orderBy(desc(trades.modifyDate));
 
     return { trades: tradesData };

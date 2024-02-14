@@ -18,17 +18,17 @@ import {
 } from "../constants";
 import { type z } from "zod";
 import {
+  type ZodSpecies,
   type ZodHabitat,
   type ZodRarity,
   type ZodRegion,
   type ZodSpeciesType
 } from "@/src/zod";
-import { type selectSpeciesSchema } from "../server/db/schema";
 import ThemeWrapper from "../components/ThemeWrapper";
 
 interface IPurchased {
   modal: boolean;
-  species: z.infer<typeof selectSpeciesSchema> | null;
+  species: z.infer<typeof ZodSpecies> | null;
 }
 
 export default function Pokedex() {
@@ -176,52 +176,21 @@ export default function Pokedex() {
 
   // Handle Habitat State
   const handleHabitat = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const label = e.target.labels![0].htmlFor as
-      | z.infer<typeof ZodHabitat>
-      | "Waters-Edge"
-      | "Rough-Terrain";
+    const label = e.target.labels![0].htmlFor as z.infer<typeof ZodHabitat>;
     const checked = e.target.checked;
     if (label.startsWith("all") && habitats === HabitatList) {
       setHabitats([]);
     } else if (label.startsWith("all") && habitats !== HabitatList) {
       setHabitats(HabitatList);
-    } else if (
-      label !== "Waters-Edge" &&
-      label !== "Rough-Terrain" &&
-      habitats.includes(label)
-    ) {
+    } else if (!checked && habitats.includes(label)) {
       setHabitats(habitats.filter((h) => h !== label));
-    } else if (
-      label === "Waters-Edge" &&
-      !checked &&
-      habitats.includes("WatersEdge")
-    ) {
-      setHabitats(habitats.filter((h) => h !== "WatersEdge"));
-    } else if (
-      label === "Rough-Terrain" &&
-      !checked &&
-      habitats.includes("RoughTerrain")
-    ) {
-      setHabitats(habitats.filter((h) => h !== "RoughTerrain"));
-    } else if (
-      label === "Waters-Edge" &&
-      checked &&
-      !habitats.includes("WatersEdge")
-    ) {
-      setHabitats([...habitats, "WatersEdge"]);
-    } else if (
-      label === "Rough-Terrain" &&
-      checked &&
-      !habitats.includes("RoughTerrain")
-    ) {
-      setHabitats([...habitats, "RoughTerrain"]);
     } else {
       setHabitats([...habitats, label as z.infer<typeof ZodHabitat>]);
     }
   };
 
   // Handle Purchase with Wildcards
-  const handlePurchase = (species: z.infer<typeof selectSpeciesSchema>) => {
+  const handlePurchase = (species: z.infer<typeof ZodSpecies>) => {
     setPurchased({ modal: true, species: species });
     void utils.profile.getProfile.invalidate();
     void utils.species.getPokedex.invalidate();
@@ -267,9 +236,9 @@ export default function Pokedex() {
                 <Fragment key={index}>
                   {p.pokemon.map((c) => (
                     <Card
-                      key={c.species.id}
-                      species={c.species}
-                      caught={!!c.i}
+                      key={c.id}
+                      species={c}
+                      caught={!!c.instance}
                       handlePurchase={handlePurchase}
                     />
                   ))}

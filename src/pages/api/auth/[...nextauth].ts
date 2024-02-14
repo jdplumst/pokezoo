@@ -4,10 +4,17 @@ import TwitchProvider from "next-auth/providers/twitch";
 import GoogleProvider from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/src/server/db/index";
-import { profiles } from "@/src/server/db/schema";
+import {
+  accounts,
+  profiles,
+  sessions,
+  users,
+  verificationTokens
+} from "@/src/server/db/schema";
 import { eq } from "drizzle-orm";
 import { env } from "@/src/env";
 import type { Adapter } from "next-auth/adapters";
+import { pgTable } from "drizzle-orm/pg-core";
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: User & DefaultSession["user"];
@@ -17,9 +24,26 @@ declare module "next-auth" {
     id: string;
   }
 }
+// @ts-expect-error for drizzle table prefix
+const mapAdapter = (name, columns, extraConfig) => {
+  switch (name) {
+    case "user":
+      return users;
+    case "account":
+      return accounts;
+    case "session":
+      return sessions;
+    case "verification_token":
+      return verificationTokens;
+    default:
+      // eslint-disable-next-line
+      return pgTable(name, columns, extraConfig);
+  }
+};
 
 export const authOptions: NextAuthOptions = {
-  adapter: DrizzleAdapter(db) as Adapter,
+  // @ts-expect-error for drizzle table prefix
+  adapter: DrizzleAdapter(db, mapAdapter) as Adapter,
   providers: [
     GithubProvider({
       clientId: env.GITHUB_ID,

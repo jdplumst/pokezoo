@@ -1,13 +1,35 @@
 import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import { achievements, profiles, userAchievements } from "../../db/schema";
+import {
+  achievementTypes,
+  achievements,
+  attributes,
+  profiles,
+  regions,
+  userAchievements
+} from "../../db/schema";
 import { and, eq } from "drizzle-orm";
 import { calcNewYield } from "@/src/utils/calcNewYield";
 
 export const achievementRouter = router({
   getAchievements: protectedProcedure.query(async ({ ctx }) => {
-    const achievementsData = await ctx.db.select().from(achievements);
+    const achievementsData = await ctx.db
+      .select({
+        id: achievements.id,
+        description: achievements.description,
+        tier: achievements.tier,
+        yield: achievements.yield,
+        type: achievementTypes.name,
+        attribute: attributes.name,
+        region: regions.name,
+        shiny: achievements.shiny,
+        generation: achievements.generation
+      })
+      .from(achievements)
+      .innerJoin(achievementTypes, eq(achievements.typeId, achievementTypes.id))
+      .innerJoin(attributes, eq(achievements.attributeId, attributes.id))
+      .innerJoin(regions, eq(achievements.regionId, regions.id));
     return { achievements: achievementsData };
   }),
 

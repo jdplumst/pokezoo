@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { PokemonClient } from "pokenode-ts";
 import { type ZodRarity, type ZodSpeciesType } from "@/src/zod";
 import { z } from "zod";

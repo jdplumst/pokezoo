@@ -11,11 +11,8 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import Topbar from "../components/Topbar";
 import { useSession } from "next-auth/react";
 import { type z } from "zod";
-import { type ZodRegion, type ZodRarity } from "@/src/zod";
-import {
-  type selectBallSchema,
-  type selectSpeciesSchema
-} from "../server/db/schema";
+import { type ZodRegion, type ZodRarity, type ZodSpecies } from "@/src/zod";
+import { type selectBallSchema } from "../server/db/schema";
 import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";
 import { RegionsList } from "../constants";
@@ -43,8 +40,7 @@ export default function Shop() {
 
   // Modal variables
   const [openModal, setOpenModal] = useState(false);
-  const [newSpecies, setNewSpecies] =
-    useState<z.infer<typeof selectSpeciesSchema>>();
+  const [newSpecies, setNewSpecies] = useState<z.infer<typeof ZodSpecies>>();
 
   // Premier Ball
   const [regionOpen, setRegionOpen] = useState(false);
