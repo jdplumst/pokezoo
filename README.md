@@ -12,7 +12,7 @@ The app is currently on version 6.07.
 - Next.js
 - TypeScript
 - TailwindCSS
-- MySQL with PlanetScale
+- PostgreSQL with Supabase (Previously MySQL with PlanetScale)
 - Drizzle (Previously Prisma)
 - NextAuth.js
 - tRPC
