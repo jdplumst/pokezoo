@@ -336,3 +336,4 @@ export const selectProfileSchema = createSelectSchema(profiles);
 export const selectSpeciesSchema = createSelectSchema(species);
 export const selectTradesSchema = createSelectSchema(trades);
 export const selectUserAchievementSchema = createSelectSchema(userAchievements);
+export const selectCharmSchema = createSelectSchema(charms);
