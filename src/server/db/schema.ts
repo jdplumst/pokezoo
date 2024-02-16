@@ -125,6 +125,14 @@ export const balls = pgTable("ball", {
   megaChance: integer("megaChance").notNull()
 });
 
+export const charms = pgTable("charm", {
+  id: serial("id").notNull().primaryKey(),
+  name: text("name").notNull().unique(),
+  img: text("img").notNull(),
+  cost: integer("cost").notNull(),
+  description: text("description").notNull()
+});
+
 export const habitats = pgTable("habitat", {
   id: serial("id").notNull().primaryKey(),
   name: text("name").notNull().unique()
