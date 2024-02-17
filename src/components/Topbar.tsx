@@ -17,9 +17,8 @@ export default function Topbar() {
 
   return (
     <nav
-      className={`relative ${
-        getProfile.data?.admin ? `h-56` : `h-32`
-      } w-full py-4 shadow-lg`}>
+      className={`relative ${getProfile.data?.admin ? `h-56` : `h-32`
+        } w-full py-4 shadow-lg`}>
       {getProfile.data?.admin && (
         <div className="flex flex-col items-center gap-5">
           <div className="flex gap-5">
@@ -62,7 +61,8 @@ export default function Topbar() {
         <div className="flex flex-col">
           <p>Hi {getProfile.data?.username ?? ""}!</p>
           <p>
-            You have {getProfile.data?.instanceCount.toLocaleString()} / 2,000
+            You have {getProfile.data?.instanceCount.toLocaleString()} /{" "}
+            {getProfile.data?.ovalCharm ? "3,000 " : "2,000 "}
             Pokémon.
           </p>
           <p>

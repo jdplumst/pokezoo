@@ -2,16 +2,43 @@ import { z } from "zod";
 import { protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { MAX_BALANCE } from "@/src/constants";
-import { profiles } from "../../db/schema";
+import { profiles, userCharms } from "../../db/schema";
 import { ZodTime } from "@/src/zod";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 
 export const profileRouter = router({
   getProfile: protectedProcedure.query(async ({ ctx }) => {
+    const ovalCharm = alias(userCharms, "ovalCharm");
+
     const profileData = (
       await ctx.db
-        .select()
+        .select({
+          id: profiles.id,
+          username: profiles.username,
+          admin: profiles.admin,
+          totalYield: profiles.totalYield,
+          balance: profiles.balance,
+          instanceCount: profiles.instanceCount,
+          claimedDaily: profiles.claimedDaily,
+          claimedNightly: profiles.claimedNightly,
+          claimedEvent: profiles.claimedEvent,
+          commonCards: profiles.commonCards,
+          rareCards: profiles.rareCards,
+          epicCards: profiles.epicCards,
+          legendaryCards: profiles.legendaryCards,
+          johtoStarter: profiles.johtoStarter,
+          hoennStarter: profiles.hoennStarter,
+          sinnohStarter: profiles.sinnohStarter,
+          unovaStarter: profiles.unovaStarter,
+          kalosStarter: profiles.kalosStarter,
+          ovalCharm: ovalCharm.charmId
+        })
         .from(profiles)
+        .leftJoin(
+          ovalCharm,
+          and(eq(profiles.userId, ovalCharm.userId), eq(ovalCharm.charmId, 1))
+        )
         .where(eq(profiles.userId, ctx.session.user.id))
     )[0];
 
@@ -46,8 +73,8 @@ export const profileRouter = router({
 
       const reward = Math.round(
         Math.random() *
-          (0.125 * currUser.totalYield - 0.075 * currUser.totalYield) +
-          0.075 * currUser.totalYield
+        (0.125 * currUser.totalYield - 0.075 * currUser.totalYield) +
+        0.075 * currUser.totalYield
       );
       const newBalance = reward > MAX_BALANCE ? MAX_BALANCE : reward;
 

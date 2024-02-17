@@ -24,7 +24,8 @@ import {
   rarities,
   regions,
   species,
-  types
+  types,
+  userCharms
 } from "../../db/schema";
 import { and, asc, desc, eq, inArray, notInArray, or, sql } from "drizzle-orm";
 import { calcNewYield } from "@/src/utils/calcNewYield";
@@ -147,58 +148,44 @@ export const instanceRouter = router({
               : notInArray(rarities.name, RaritiesList),
             input.types.length > 0
               ? or(
-                  inArray(typeOne.name, input.types),
-                  inArray(typeTwo.name, input.types)
-                )
+                inArray(typeOne.name, input.types),
+                inArray(typeTwo.name, input.types)
+              )
               : notInArray(typeOne.name, TypesList),
             input.habitats.length > 0
               ? inArray(habitats.name, input.habitats)
               : notInArray(habitats.name, HabitatList),
             input.order === "Oldest"
-              ? sql`${instances.modifyDate} >= ${
-                  input.cursor?.modifyDate ??
-                  new Date("2020-12-03 17:20:11.049")
+              ? sql`${instances.modifyDate} >= ${input.cursor?.modifyDate ??
+                new Date("2020-12-03 17:20:11.049")
                 }`
               : input.order === "Newest"
-                ? sql`${instances.modifyDate} <= ${
-                    input.cursor?.modifyDate ??
-                    new Date("2050-12-03 17:20:11.049")
+                ? sql`${instances.modifyDate} <= ${input.cursor?.modifyDate ??
+                  new Date("2050-12-03 17:20:11.049")
                   }`
                 : input.order === "Pokedex"
-                  ? sql`(${species.pokedexNumber}, ${species.name}, ${
-                      instances.modifyDate
-                    }) >= (${input.cursor?.pokedexNumber ?? 0}, ${
-                      input.cursor?.name ?? ""
-                    }, ${
-                      input.cursor?.modifyDate ??
-                      new Date("2020-12-03 17:20:11.049")
+                  ? sql`(${species.pokedexNumber}, ${species.name}, ${instances.modifyDate
+                    }) >= (${input.cursor?.pokedexNumber ?? 0}, ${input.cursor?.name ?? ""
+                    }, ${input.cursor?.modifyDate ??
+                    new Date("2020-12-03 17:20:11.049")
                     })`
                   : input.order === "PokedexDesc"
-                    ? sql`(${species.pokedexNumber}, ${species.name}, ${
-                        instances.modifyDate
-                      }) <= (${input.cursor?.pokedexNumber ?? 10000}, ${
-                        input.cursor?.name ?? "{"
-                      }, ${
-                        input.cursor?.modifyDate ??
-                        new Date("2050-12-03 17:20:11.049")
+                    ? sql`(${species.pokedexNumber}, ${species.name}, ${instances.modifyDate
+                      }) <= (${input.cursor?.pokedexNumber ?? 10000}, ${input.cursor?.name ?? "{"
+                      }, ${input.cursor?.modifyDate ??
+                      new Date("2050-12-03 17:20:11.049")
                       })`
                     : input.order === "Rarity"
-                      ? sql`(${rarities.id}, ${species.pokedexNumber}, ${
-                          species.name
-                        }, ${instances.modifyDate}) >= (${rarityCursor ?? 0}, ${
-                          input.cursor?.pokedexNumber ?? 0
-                        }, ${input.cursor?.name ?? ""}, ${
-                          input.cursor?.modifyDate ??
-                          new Date("2020-12-03 17:20:11.049")
+                      ? sql`(${rarities.id}, ${species.pokedexNumber}, ${species.name
+                        }, ${instances.modifyDate}) >= (${rarityCursor ?? 0}, ${input.cursor?.pokedexNumber ?? 0
+                        }, ${input.cursor?.name ?? ""}, ${input.cursor?.modifyDate ??
+                        new Date("2020-12-03 17:20:11.049")
                         })`
                       : input.order === "RarityDesc"
-                        ? sql`(${rarities.id}, ${species.pokedexNumber}, ${
-                            species.name
-                          }, ${instances.modifyDate}) <= (${rarityCursor ?? 4}, ${
-                            input.cursor?.pokedexNumber ?? 10000
-                          }, ${input.cursor?.name ?? "{"}, ${
-                            input.cursor?.modifyDate ??
-                            new Date("2050-12-03 17:20:11.049")
+                        ? sql`(${rarities.id}, ${species.pokedexNumber}, ${species.name
+                          }, ${instances.modifyDate}) <= (${rarityCursor ?? 4}, ${input.cursor?.pokedexNumber ?? 10000
+                          }, ${input.cursor?.name ?? "{"}, ${input.cursor?.modifyDate ??
+                          new Date("2050-12-03 17:20:11.049")
                           })`
                         : undefined
           )
@@ -226,31 +213,31 @@ export const instanceRouter = router({
         nextCursor =
           input.order === "Oldest" || input.order === "Newest"
             ? {
-                modifyDate: nextItem.instance.modifyDate,
-                name: null,
-                pokedexNumber: null,
-                rarity: null
-              }
+              modifyDate: nextItem.instance.modifyDate,
+              name: null,
+              pokedexNumber: null,
+              rarity: null
+            }
             : input.order === "Pokedex" || input.order === "PokedexDesc"
               ? {
+                modifyDate: nextItem.instance.modifyDate,
+                name: nextItem.name,
+                pokedexNumber: nextItem.pokedexNumber,
+                rarity: null
+              }
+              : input.order === "Rarity" || input.order === "RarityDesc"
+                ? {
                   modifyDate: nextItem.instance.modifyDate,
                   name: nextItem.name,
                   pokedexNumber: nextItem.pokedexNumber,
-                  rarity: null
+                  rarity: nextItem.rarity
                 }
-              : input.order === "Rarity" || input.order === "RarityDesc"
-                ? {
-                    modifyDate: nextItem.instance.modifyDate,
-                    name: nextItem.name,
-                    pokedexNumber: nextItem.pokedexNumber,
-                    rarity: nextItem.rarity
-                  }
                 : {
-                    modifyDate: nextItem.instance.modifyDate,
-                    name: null,
-                    pokedexNumber: null,
-                    rarity: null
-                  };
+                  modifyDate: nextItem.instance.modifyDate,
+                  name: null,
+                  pokedexNumber: null,
+                  rarity: null
+                };
       }
 
       return { instancesData, nextCursor };
@@ -264,14 +251,20 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const ovalCharm = alias(userCharms, "ovalCharm");
       const currUser = (
         await ctx.db
           .select({
             totalYield: profiles.totalYield,
             balance: profiles.balance,
-            instanceCount: profiles.instanceCount
+            instanceCount: profiles.instanceCount,
+            ovalCharm: ovalCharm.charmId
           })
           .from(profiles)
+          .leftJoin(
+            ovalCharm,
+            and(eq(profiles.userId, ovalCharm.userId), eq(ovalCharm.charmId, 1))
+          )
           .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
 
@@ -303,7 +296,7 @@ export const instanceRouter = router({
         });
       }
 
-      if (!withinInstanceLimit(currUser.instanceCount)) {
+      if (!withinInstanceLimit(currUser.instanceCount, !!currUser.ovalCharm)) {
         throw new TRPCError({
           code: "CONFLICT",
           message:
@@ -349,6 +342,8 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
+      const ovalCharm = alias(userCharms, "ovalCharm");
+
       const currUser = (
         await ctx.db
           .select({
@@ -357,9 +352,14 @@ export const instanceRouter = router({
             commonCards: profiles.commonCards,
             rareCards: profiles.rareCards,
             epicCards: profiles.epicCards,
-            legendaryCards: profiles.legendaryCards
+            legendaryCards: profiles.legendaryCards,
+            ovalCharm: ovalCharm.charmId
           })
           .from(profiles)
+          .leftJoin(
+            ovalCharm,
+            and(eq(profiles.userId, ovalCharm.userId), eq(ovalCharm.charmId, 1))
+          )
           .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
 
@@ -417,7 +417,7 @@ export const instanceRouter = router({
         });
       }
 
-      if (!withinInstanceLimit(currUser.instanceCount)) {
+      if (!withinInstanceLimit(currUser.instanceCount, !!currUser.ovalCharm)) {
         throw new TRPCError({
           code: "CONFLICT",
           message:
@@ -437,32 +437,32 @@ export const instanceRouter = router({
             totalYield: newYield,
             commonCards:
               speciesData.rarity?.name === "Common" &&
-              !speciesData.species.shiny
+                !speciesData.species.shiny
                 ? currUser.commonCards - WILDCARD_COST
                 : speciesData.rarity?.name === "Common" &&
-                    speciesData.species.shiny
+                  speciesData.species.shiny
                   ? currUser.commonCards - SHINY_WILDCARD_COST
                   : currUser.commonCards,
             rareCards:
               speciesData.rarity?.name === "Rare" && !speciesData.species.shiny
                 ? currUser.rareCards - WILDCARD_COST
                 : speciesData.rarity?.name === "Rare" &&
-                    speciesData.species.shiny
+                  speciesData.species.shiny
                   ? currUser.rareCards - SHINY_WILDCARD_COST
                   : currUser.rareCards,
             epicCards:
               speciesData.rarity?.name === "Epic" && !speciesData.species.shiny
                 ? currUser.epicCards - WILDCARD_COST
                 : speciesData.rarity?.name === "Epic" &&
-                    speciesData.species.shiny
+                  speciesData.species.shiny
                   ? currUser.epicCards - SHINY_WILDCARD_COST
                   : currUser.epicCards,
             legendaryCards:
               speciesData.rarity?.name === "Legendary" &&
-              !speciesData.species.shiny
+                !speciesData.species.shiny
                 ? currUser.legendaryCards - WILDCARD_COST
                 : speciesData.rarity?.name === "Legendary" &&
-                    speciesData.species.shiny
+                  speciesData.species.shiny
                   ? currUser.legendaryCards - SHINY_WILDCARD_COST
                   : currUser.legendaryCards,
             instanceCount: currUser.instanceCount + 1
