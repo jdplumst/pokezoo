@@ -6,7 +6,7 @@ import {
   boolean,
   timestamp,
   pgTableCreator,
-  serial
+  serial,
 } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
@@ -22,7 +22,7 @@ export const users = pgTable("user", {
   name: text("name"),
   email: text("email").notNull(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
-  image: text("image")
+  image: text("image"),
 });
 
 export const accounts = pgTable(
@@ -40,13 +40,13 @@ export const accounts = pgTable(
     token_type: text("token_type"),
     scope: text("scope"),
     id_token: text("id_token"),
-    session_state: text("session_state")
+    session_state: text("session_state"),
   },
   (account) => ({
     compoundKey: primaryKey({
-      columns: [account.provider, account.providerAccountId]
-    })
-  })
+      columns: [account.provider, account.providerAccountId],
+    }),
+  }),
 );
 
 export const sessions = pgTable("session", {
@@ -54,7 +54,7 @@ export const sessions = pgTable("session", {
   userId: text("userId")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  expires: timestamp("expires", { mode: "date" }).notNull()
+  expires: timestamp("expires", { mode: "date" }).notNull(),
 });
 
 export const verificationTokens = pgTable(
@@ -62,11 +62,11 @@ export const verificationTokens = pgTable(
   {
     identifier: text("identifier").notNull(),
     token: text("token").notNull(),
-    expires: timestamp("expires", { mode: "date" }).notNull()
+    expires: timestamp("expires", { mode: "date" }).notNull(),
   },
   (vt) => ({
-    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] })
-  })
+    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
+  }),
 );
 
 // PokeZoo Tables
@@ -91,23 +91,23 @@ export const achievements = pgTable(
       .notNull()
       .references(() => regions.id, { onDelete: "cascade" }),
     shiny: boolean("shiny").notNull(),
-    generation: integer("generation").notNull()
+    generation: integer("generation").notNull(),
   },
   (a) => ({
     typeIdIdx: index("Achievement_typeId_idx").on(a.typeId),
     attributeIdIdx: index("Achievement_attributeId_id").on(a.attributeId),
-    regionIdIdx: index("Achievement_regionId_idx").on(a.regionId)
-  })
+    regionIdIdx: index("Achievement_regionId_idx").on(a.regionId),
+  }),
 );
 
 export const achievementTypes = pgTable("achievementType", {
   id: serial("id").notNull().primaryKey(),
-  name: text("name").notNull().unique()
+  name: text("name").notNull().unique(),
 });
 
 export const attributes = pgTable("attribute", {
   id: serial("id").notNull().primaryKey(),
-  name: text("name").notNull().unique()
+  name: text("name").notNull().unique(),
 });
 
 export const balls = pgTable("ball", {
@@ -122,7 +122,7 @@ export const balls = pgTable("ball", {
   rareChance: integer("rareChance").notNull(),
   epicChance: integer("epicChance").notNull(),
   legendaryChance: integer("legendaryChance").notNull(),
-  megaChance: integer("megaChance").notNull()
+  megaChance: integer("megaChance").notNull(),
 });
 
 export const charms = pgTable("charm", {
@@ -130,12 +130,12 @@ export const charms = pgTable("charm", {
   name: text("name").notNull().unique(),
   img: text("img").notNull(),
   cost: integer("cost").notNull(),
-  description: text("description").notNull()
+  description: text("description").notNull(),
 });
 
 export const habitats = pgTable("habitat", {
   id: serial("id").notNull().primaryKey(),
-  name: text("name").notNull().unique()
+  name: text("name").notNull().unique(),
 });
 
 export const instances = pgTable(
@@ -156,14 +156,14 @@ export const instances = pgTable(
       .default(sql`now()`),
     modifyDate: timestamp("modifyDate", { mode: "date" })
       .notNull()
-      .default(sql`now()`)
+      .default(sql`now()`),
   },
   (i) => {
     return {
       userIdIdx: index("Instance_userId_idx").on(i.userId),
-      speciesIdIdx: index("Instance_speciesId_idx").on(i.speciesId)
+      speciesIdIdx: index("Instance_speciesId_idx").on(i.speciesId),
     };
-  }
+  },
 );
 
 export const profiles = pgTable(
@@ -192,23 +192,23 @@ export const profiles = pgTable(
     hoennStarter: boolean("hoennStarter").notNull().default(true),
     sinnohStarter: boolean("sinnohStarter").notNull().default(true),
     unovaStarter: boolean("unovaStarter").notNull().default(true),
-    kalosStarter: boolean("kalosStarter").notNull().default(true)
+    kalosStarter: boolean("kalosStarter").notNull().default(true),
   },
   (p) => {
     return {
-      userIdIdx: index("Profile_userId_idx").on(p.userId)
+      userIdIdx: index("Profile_userId_idx").on(p.userId),
     };
-  }
+  },
 );
 
 export const rarities = pgTable("rarity", {
   id: serial("id").notNull().primaryKey(),
-  name: text("name").notNull().unique()
+  name: text("name").notNull().unique(),
 });
 
 export const regions = pgTable("region", {
   id: serial("id").notNull().primaryKey(),
-  name: text("name").notNull().unique()
+  name: text("name").notNull().unique(),
 });
 
 export const species = pgTable(
@@ -231,7 +231,7 @@ export const species = pgTable(
       .notNull()
       .references(() => types.id, { onDelete: "cascade" }),
     typeTwoId: integer("typeTwoId").references(() => types.id, {
-      onDelete: "cascade"
+      onDelete: "cascade",
     }),
     generation: integer("generation").notNull(),
     habitatId: integer("habitatId")
@@ -239,7 +239,7 @@ export const species = pgTable(
       .references(() => habitats.id, { onDelete: "cascade" }),
     regionId: integer("regionId")
       .notNull()
-      .references(() => regions.id, { onDelete: "cascade" })
+      .references(() => regions.id, { onDelete: "cascade" }),
   },
   (s) => {
     return {
@@ -247,9 +247,9 @@ export const species = pgTable(
       typeOneIdIdx: index("Species_typeOneId_idx").on(s.typeOneId),
       typeTwoIdIdx: index("Species_typeTwoId_idx").on(s.typeTwoId),
       habitatIdIdx: index("Species_habitatId_idx").on(s.habitatId),
-      regionIdIdx: index("Species_regionId_idx").on(s.regionId)
+      regionIdIdx: index("Species_regionId_idx").on(s.regionId),
     };
-  }
+  },
 );
 
 export const trades = pgTable(
@@ -263,7 +263,7 @@ export const trades = pgTable(
       .notNull()
       .references(() => users.id, { onDelete: "cascade" }),
     offererId: text("offererId").references(() => users.id, {
-      onDelete: "set null"
+      onDelete: "set null",
     }),
     createDate: timestamp("createDate", { mode: "date" })
       .notNull()
@@ -278,27 +278,27 @@ export const trades = pgTable(
     offererInstanceId: text("offererInstanceId").references(
       () => instances.id,
       {
-        onDelete: "set null"
-      }
-    )
+        onDelete: "set null",
+      },
+    ),
   },
   (t) => {
     return {
       initiatorIdIdx: index("Trade_initiatorId_idx").on(t.initiatorId),
       offererIdIdx: index("Trade_offererId_idx").on(t.offererId),
       initiatorInstanceIdIdx: index("Trade_initiatorInstanceId_idx").on(
-        t.initiatorInstanceId
+        t.initiatorInstanceId,
       ),
       offererInstanceIdIdx: index("Trade_offererInstanceId_idx").on(
-        t.offererInstanceId
-      )
+        t.offererInstanceId,
+      ),
     };
-  }
+  },
 );
 
 export const types = pgTable("type", {
   id: serial("id").notNull().primaryKey(),
-  name: text("name").notNull().unique()
+  name: text("name").notNull().unique(),
 });
 
 export const userAchievements = pgTable(
@@ -316,16 +316,41 @@ export const userAchievements = pgTable(
       .references(() => achievements.id, { onDelete: "cascade" }),
     createDate: timestamp("createDate", { mode: "date" })
       .notNull()
-      .default(sql`now()`)
+      .default(sql`now()`),
   },
   (ua) => {
     return {
       userIdIdx: index("UserAchievement_userId_idx").on(ua.userId),
       achievementIdIdx: index("UserAchievement_achievementId_idx").on(
-        ua.achievementId
-      )
+        ua.achievementId,
+      ),
     };
-  }
+  },
+);
+
+export const userCharms = pgTable(
+  "userCharm",
+  {
+    id: text("id")
+      .notNull()
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    charmId: integer("charmId")
+      .notNull()
+      .references(() => charms.id, { onDelete: "cascade" }),
+    createDate: timestamp("createDate", { mode: "date" })
+      .notNull()
+      .default(sql`now()`),
+  },
+  (uc) => {
+    return {
+      userIdIdx: index("UserCharm_userId_idx").on(uc.userId),
+      charmIdIdx: index("UserCharm_charmId_idx").on(uc.charmId),
+    };
+  },
 );
 
 // Drizzle Zod Table Types
