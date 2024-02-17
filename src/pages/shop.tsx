@@ -12,7 +12,10 @@ import Topbar from "../components/Topbar";
 import { useSession } from "next-auth/react";
 import { type z } from "zod";
 import { type ZodRegion, type ZodRarity, type ZodSpecies } from "@/src/zod";
-import { type selectBallSchema } from "../server/db/schema";
+import {
+  type selectCharmSchema,
+  type selectBallSchema
+} from "../server/db/schema";
 import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";
 import { RegionsList } from "../constants";
@@ -33,14 +36,24 @@ export default function Shop() {
   const { data: ballData, isLoading: ballLoading } =
     trpc.ball.getBalls.useQuery();
 
+  const { data: charmData, isLoading: charmLoading } =
+    trpc.charm.getCharms.useQuery();
+
   const [error, setError] = useState<string | null>(null);
+
   const [boughtBall, setBoughtBall] =
     useState<z.infer<typeof selectBallSchema>>();
-  const purchaseMutation = trpc.instance.purchaseInstanceWithBall.useMutation();
+  const ballMutation = trpc.instance.purchaseInstanceWithBall.useMutation();
+
+  const [boughtCharm, setBoughtCharm] =
+    useState<z.infer<typeof selectCharmSchema>>();
+  const charmMutation = trpc.charm.purchaseCharm.useMutation();
 
   // Modal variables
   const [openModal, setOpenModal] = useState(false);
-  const [newSpecies, setNewSpecies] = useState<z.infer<typeof ZodSpecies>>();
+  const [newSpecies, setNewSpecies] = useState<
+    z.infer<typeof ZodSpecies> | null | undefined
+  >(null);
 
   // Premier Ball
   const [regionOpen, setRegionOpen] = useState(false);
@@ -166,7 +179,7 @@ export default function Shop() {
       );
       newInstance =
         commonShinySpecies![
-          Math.floor(Math.random() * commonShinySpecies!.length)
+        Math.floor(Math.random() * commonShinySpecies!.length)
         ];
     } else if (rarity === "Rare" && shiny) {
       const rareShinySpecies = filteredSpecies?.filter(
@@ -186,7 +199,7 @@ export default function Shop() {
       );
       newInstance =
         legendaryShinySpecies![
-          Math.floor(Math.random() * legendaryShinySpecies!.length)
+        Math.floor(Math.random() * legendaryShinySpecies!.length)
         ];
     } else if (rarity === "Mega" && shiny) {
       const megaShinySpecies = filteredSpecies?.filter(
@@ -197,7 +210,7 @@ export default function Shop() {
     }
 
     // Create new instance
-    purchaseMutation.mutate(
+    ballMutation.mutate(
       { speciesId: newInstance!.id, cost: ball.cost },
       {
         onSuccess(data) {
@@ -207,6 +220,23 @@ export default function Shop() {
               (s) => s.id === data.instance.speciesId
             )[0]
           );
+          setOpenModal(true);
+          setError(null);
+        },
+        onError(error) {
+          setError(error.message);
+        }
+      }
+    );
+  };
+
+  const purchaseCharm = (c: z.infer<typeof selectCharmSchema>) => {
+    setBoughtCharm(c);
+    charmMutation.mutate(
+      { charmId: c.id },
+      {
+        onSuccess() {
+          void utils.profile.getProfile.invalidate();
           setOpenModal(true);
           setError(null);
         },
@@ -232,7 +262,7 @@ export default function Shop() {
           <Topbar />
           <main className="p-4">
             {error && <p className="font-bold text-red-500">{error}</p>}
-            {ballLoading ? (
+            {ballLoading || charmLoading ? (
               <div className="flex items-center justify-center pt-5">
                 <LoadingSpinner />
               </div>
@@ -262,23 +292,53 @@ export default function Shop() {
                               onClick={() => {
                                 setRegionOpen((p) => !p);
                               }}
-                              className={`w-24 rounded-lg border-2 ${
-                                regionError ? "border-red-500" : "border-black"
-                              } bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus`}>
+                              className={`w-24 rounded-lg border-2 ${regionError ? "border-red-500" : "border-black"
+                                } bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus`}>
                               {regionCurr ?? "Region"}
                             </button>
                           )}
                           <button
                             onClick={() => purchaseBall(b)}
-                            disabled={purchaseMutation.isLoading}
+                            disabled={ballMutation.isLoading}
                             className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
-                            {purchaseMutation.isLoading && boughtBall === b ? (
+                            {ballMutation.isLoading && boughtBall === b ? (
                               <LoadingSpinner />
                             ) : (
                               "Buy"
                             )}
                           </button>
                         </div>
+                      </div>
+                    </div>
+                  </Tooltip>
+                ))}
+                {charmData?.charms.map((c) => (
+                  <Tooltip key={c.id} charm={c}>
+                    <div className="h-72 w-72 border-2 border-black bg-ball p-2">
+                      <div className="flex h-full flex-col items-center justify-around">
+                        <img
+                          src={c.img}
+                          alt={c.name}
+                          width={112}
+                          height={112}
+                          className="pixelated"
+                        />
+                        <p className="text-center text-3xl font-bold">
+                          {c.name} Charm
+                        </p>
+                        <p className="text-center text-2xl font-bold">
+                          P{c.cost.toLocaleString()}
+                        </p>
+                        <button
+                          onClick={() => purchaseCharm(c)}
+                          disabled={charmMutation.isLoading}
+                          className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          {charmMutation.isLoading && boughtCharm === c ? (
+                            <LoadingSpinner />
+                          ) : (
+                            "Buy"
+                          )}
+                        </button>
                       </div>
                     </div>
                   </Tooltip>
@@ -304,7 +364,10 @@ export default function Shop() {
           <Card species={newSpecies} />
           <div className="flex justify-center pt-4">
             <button
-              onClick={() => setOpenModal(false)}
+              onClick={() => {
+                setOpenModal(false);
+                setNewSpecies(null);
+              }}
               className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
               Got it!
             </button>
@@ -329,6 +392,32 @@ export default function Shop() {
                 {r}
               </button>
             ))}
+          </div>
+        </Modal>
+      )}
+
+      {/* Modal for Bought Charm */}
+      {openModal && !newSpecies && boughtCharm && (
+        <Modal size="Small">
+          <div className="flex flex-col items-center gap-4">
+            <div className="text-xl font-bold text-center">
+              You Have Obtained the {boughtCharm?.name} Charm!
+            </div>
+            <img
+              src={boughtCharm.img}
+              alt={boughtCharm.name}
+              width={112}
+              height={112}
+              className="pixelated"
+            />
+            <button
+              onClick={() => {
+                setOpenModal(false);
+                setNewSpecies(null);
+              }}
+              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+              Got it!
+            </button>
           </div>
         </Modal>
       )}

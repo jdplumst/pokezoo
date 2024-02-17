@@ -38,15 +38,17 @@ export const charmRouter = router({
         });
       }
 
-      const exists = await ctx.db
-        .select()
-        .from(userCharms)
-        .where(
-          and(
-            eq(userCharms.charmId, input.charmId),
-            eq(userCharms.userId, ctx.session.user.id)
+      const exists = (
+        await ctx.db
+          .select()
+          .from(userCharms)
+          .where(
+            and(
+              eq(userCharms.charmId, input.charmId),
+              eq(userCharms.userId, ctx.session.user.id)
+            )
           )
-        );
+      )[0];
 
       if (exists) {
         throw new TRPCError({
