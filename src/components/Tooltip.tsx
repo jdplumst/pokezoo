@@ -1,6 +1,9 @@
 import { type ReactNode, useState } from "react";
 import { type z } from "zod";
-import { selectCharmSchema, type selectBallSchema } from "../server/db/schema";
+import {
+  type selectCharmSchema,
+  type selectBallSchema
+} from "../server/db/schema";
 
 interface ITooltip {
   ball?: z.infer<typeof selectBallSchema>;
