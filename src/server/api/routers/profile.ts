@@ -48,6 +48,8 @@ export const profileRouter = router({
   claimReward: protectedProcedure
     .input(z.object({ time: ZodTime }))
     .mutation(async ({ ctx, input }) => {
+      const markCharm = alias(userCharms, "markCharm");
+
       const currUser = (
         await ctx.db
           .select({
@@ -58,9 +60,11 @@ export const profileRouter = router({
             commonCards: profiles.commonCards,
             rareCards: profiles.rareCards,
             epicCards: profiles.epicCards,
-            legendaryCards: profiles.legendaryCards
+            legendaryCards: profiles.legendaryCards,
+            markCharm: markCharm.charmId
           })
           .from(profiles)
+          .leftJoin(markCharm, eq(profiles.userId, markCharm.userId))
           .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
 
@@ -78,17 +82,19 @@ export const profileRouter = router({
       );
       const newBalance = reward > MAX_BALANCE ? MAX_BALANCE : reward;
 
-      type Card = "Common" | "Rare" | "Epic" | "Legendary";
-      const random = Math.random();
-      let card: Card = "Common";
-      if (random < 0.5) {
-        card = "Common";
-      } else if (random < 0.85) {
-        card = "Rare";
-      } else if (random < 0.99) {
-        card = "Epic";
-      } else {
-        card = "Legendary";
+      const loopNum = currUser.markCharm ? 3 : 1;
+      const cards = { "Common": 0, "Rare": 0, "Epic": 0, "Legendary": 0 }
+      for (let i = 0; i < loopNum; i++) {
+        const random = Math.random();
+        if (random < 0.5) {
+          cards.Common += 1;
+        } else if (random < 0.85) {
+          cards.Rare += 1;
+        } else if (random < 0.99) {
+          cards.Epic += 1;
+        } else {
+          cards.Legendary += 1;
+        }
       }
 
       if (input.time === "day") {
@@ -103,18 +109,10 @@ export const profileRouter = router({
           .set({
             balance: currUser.balance + newBalance,
             claimedDaily: true,
-            commonCards:
-              card === "Common"
-                ? currUser.commonCards + 1
-                : currUser.commonCards,
-            rareCards:
-              card === "Rare" ? currUser.rareCards + 1 : currUser.rareCards,
-            epicCards:
-              card === "Epic" ? currUser.epicCards + 1 : currUser.epicCards,
-            legendaryCards:
-              card === "Legendary"
-                ? currUser.legendaryCards + 1
-                : currUser.legendaryCards
+            commonCards: currUser.commonCards + cards.Common,
+            rareCards: currUser.rareCards + cards.Rare,
+            epicCards: currUser.epicCards + cards.Epic,
+            legendaryCards: currUser.legendaryCards + cards.Legendary
           })
           .where(eq(profiles.userId, ctx.session.user.id));
       } else {
@@ -129,25 +127,17 @@ export const profileRouter = router({
           .set({
             balance: currUser.balance + newBalance,
             claimedNightly: true,
-            commonCards:
-              card === "Common"
-                ? currUser.commonCards + 1
-                : currUser.commonCards,
-            rareCards:
-              card === "Rare" ? currUser.rareCards + 1 : currUser.rareCards,
-            epicCards:
-              card === "Epic" ? currUser.epicCards + 1 : currUser.epicCards,
-            legendaryCards:
-              card === "Legendary"
-                ? currUser.legendaryCards + 1
-                : currUser.legendaryCards
+            commonCards: currUser.commonCards + cards.Common,
+            rareCards: currUser.rareCards + cards.Rare,
+            epicCards: currUser.epicCards + cards.Epic,
+            legendaryCards: currUser.legendaryCards + cards.Legendary
           })
           .where(eq(profiles.userId, ctx.session.user.id));
       }
 
       return {
         reward: reward,
-        card: card
+        cards: cards
       };
     }),
 
