@@ -23,6 +23,7 @@ jobs:
         TEST_NAME: ${{ secrets.TEST_NAME }}
         TEST_UNAME: ${{ secrets.TEST_UNAME }}
         TEST_VALUE: ${{ secrets.TEST_VALUE }}
+        SKIP_VALIDATION: "true"
       run: npx playwright test
     - uses: actions/upload-artifact@v3
       if: always()
