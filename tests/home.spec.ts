@@ -1,11 +1,10 @@
-import { env } from "@/src/env";
-import { test, expect, Page } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 
 let page: Page;
 
 test.beforeAll("go to home page", async ({ browser }) => {
   page = await browser.newPage();
-  await page.goto(env.NEXTAUTH_URL);
+  await page.goto(process.env.NEXTAUTH_URL!);
 });
 
 test("has title", async () => {

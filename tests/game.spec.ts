@@ -1,4 +1,3 @@
-import { env } from "@/src/env";
 import test, { type Page, type BrowserContext, expect } from "@playwright/test";
 
 let page: Page
@@ -7,16 +6,16 @@ let context: BrowserContext
 test.beforeAll("login", async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
-  await page.goto(env.NEXTAUTH_URL);
+  await page.goto(process.env.NEXTAUTH_URL!);
   await context.addCookies([
     {
-      name: env.TEST_NAME,
-      value: env.TEST_VALUE,
-      url: env.NEXTAUTH_URL
+      name: process.env.TEST_NAME!,
+      value: process.env.TEST_VALUE!,
+      url: process.env.NEXTAUTH_URL!
     }
   ]);
   await page.reload();
-  await expect(page.getByText(env.TEST_UNAME)).toBeVisible();
+  await expect(page.getByText(process.env.TEST_UNAME!)).toBeVisible();
 
   if ((await page.getByText("Sell Pokémon").count()) > 0) {
     for (const btn of await page.getByText("Sell Pokémon").all()) {
