@@ -62,7 +62,7 @@ export default function Topbar() {
           <p>Hi {getProfile.data?.username ?? ""}!</p>
           <p>
             You have {getProfile.data?.instanceCount.toLocaleString()} /{" "}
-            {getProfile.data?.ovalCharm ? "3,000 " : "2,000 "}
+            {getProfile.data?.catchingCharm ? "3,000 " : "2,000 "}
             Pokémon.
           </p>
           <p>

@@ -157,9 +157,9 @@ export const speciesRouter = router({
               : notInArray(rarities.name, RaritiesList),
             input.types.length > 0
               ? or(
-                  inArray(typeOne.name, input.types),
-                  inArray(typeTwo.name, input.types)
-                )
+                inArray(typeOne.name, input.types),
+                inArray(typeTwo.name, input.types)
+              )
               : notInArray(typeOne.name, TypesList),
             input.habitats.length > 0
               ? inArray(habitats.name, input.habitats)
@@ -169,9 +169,8 @@ export const speciesRouter = router({
               : !input.caught.Caught && input.caught.Uncaught
                 ? isNull(i.speciesId)
                 : undefined,
-            sql`(${species.pokedexNumber}, ${species.name}) >= (${
-              input.cursor?.pokedexNumber ?? 0
-            }, ${input.cursor?.name ?? ""})`
+            sql`(${species.pokedexNumber}, ${species.name}) >= (${input.cursor?.pokedexNumber ?? 0
+              }, ${input.cursor?.name ?? ""})`
           )
         )
         .limit(limit + 1)

@@ -49,12 +49,12 @@ export default function Game() {
   const [dailyReward, setDailyReward] = useState({
     modal: false,
     reward: 0,
-    card: "Common"
+    cards: { "Common": 0, "Rare": 0, "Epic": 0, "Legendary": 0 }
   });
   const [nightlyReward, setNightlyReward] = useState({
     modal: false,
     reward: 0,
-    card: "Common"
+    cards: { "Common": 0, "Rare": 0, "Epic": 0, "Legendary": 0 }
   });
   const rewardMutation = trpc.profile.claimReward.useMutation();
 
@@ -141,7 +141,7 @@ export default function Game() {
             setDailyReward({
               modal: true,
               reward: data.reward,
-              card: data.card
+              cards: data.cards
             });
           }
         }
@@ -155,7 +155,7 @@ export default function Game() {
             setNightlyReward({
               modal: true,
               reward: data.reward,
-              card: data.card
+              cards: data.cards
             });
           }
         }
@@ -430,56 +430,50 @@ export default function Game() {
             <div className="flex justify-center gap-5 pt-5">
               <button
                 onClick={() => setSort("Oldest")}
-                className={`${
-                  sort === "Oldest"
-                    ? `bg-purple-btn-focus`
-                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                className={`${sort === "Oldest"
+                  ? `bg-purple-btn-focus`
+                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Oldest
               </button>
               <button
                 onClick={() => setSort("Newest")}
-                className={`${
-                  sort === "Newest"
-                    ? `bg-purple-btn-focus`
-                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                className={`${sort === "Newest"
+                  ? `bg-purple-btn-focus`
+                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Newest
               </button>
               <button
                 onClick={() => setSort("Pokedex")}
-                className={`${
-                  sort === "Pokedex"
-                    ? `bg-purple-btn-focus`
-                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                className={`${sort === "Pokedex"
+                  ? `bg-purple-btn-focus`
+                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Pokédex #
               </button>
               <button
                 onClick={() => setSort("PokedexDesc")}
-                className={`${
-                  sort === "PokedexDesc"
-                    ? `bg-purple-btn-focus`
-                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                className={`${sort === "PokedexDesc"
+                  ? `bg-purple-btn-focus`
+                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Pokédex # Desc.
               </button>
               <button
                 onClick={() => setSort("Rarity")}
-                className={`${
-                  sort === "Rarity"
-                    ? `bg-purple-btn-focus`
-                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                className={`${sort === "Rarity"
+                  ? `bg-purple-btn-focus`
+                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Rarity
               </button>
               <button
                 onClick={() => setSort("RarityDesc")}
-                className={`${
-                  sort === "RarityDesc"
-                    ? `bg-purple-btn-focus`
-                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                className={`${sort === "RarityDesc"
+                  ? `bg-purple-btn-focus`
+                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
                 Rarity Desc.
               </button>
             </div>
@@ -530,39 +524,74 @@ export default function Game() {
             {""}
             {nightlyReward.modal && nightlyReward.reward.toLocaleString()}!
           </div>
-          <div className="flex">
-            <div className="text-xl font-medium">
-              You received 1 {dailyReward.modal && dailyReward.card}
-              {""}
-              {nightlyReward.modal && nightlyReward.card} wildcard!
-            </div>
-            <img
-              src={
-                (dailyReward.modal && dailyReward.card === "Common") ||
-                (nightlyReward.modal && nightlyReward.card === "Common")
-                  ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png`
-                  : (dailyReward.modal && dailyReward.card === "Rare") ||
-                      (nightlyReward.modal && nightlyReward.card === "Rare")
-                    ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
-                    : (dailyReward.modal && dailyReward.card === "Epic") ||
-                        (nightlyReward.modal && nightlyReward.card === "Epic")
-                      ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
-                      : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
-              }
-              alt={
-                (dailyReward.modal && dailyReward.card === "Common") ||
-                (nightlyReward.modal && nightlyReward.card === "Common")
-                  ? `common-wildcard`
-                  : (dailyReward.modal && dailyReward.card === "Rare") ||
-                      (nightlyReward.modal && nightlyReward.card === "Rare")
-                    ? `rare-wildcard`
-                    : (dailyReward.modal && dailyReward.card === "Epic") ||
-                        (nightlyReward.modal && nightlyReward.card === "Epic")
-                      ? `epic-wildcard`
-                      : `legendary-wildcard`
-              }
-            />
-          </div>
+          {dailyReward.modal && Object.keys(dailyReward.cards).map((key) => {
+            return (
+              <div key={key} className="flex">
+                {dailyReward.cards[key as keyof typeof dailyReward.cards] > 0 && (
+                  <>
+                    <div className="text-xl font-medium">
+                      You received {dailyReward.cards[key as keyof typeof dailyReward.cards]} {key} {" "}
+                      wildcard{dailyReward.cards[key as keyof typeof dailyReward.cards] > 1 && "s"}!
+                    </div>
+                    <img
+                      src={
+                        (key === "Common")
+                          ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png`
+                          : (key === "Rare")
+                            ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
+                            : (key === "Epic")
+                              ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
+                              : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
+                      }
+                      alt={
+                        (key === "Common")
+                          ? `common-wildcard`
+                          : (key === "Rare")
+                            ? `rare-wildcard`
+                            : (key === "Epic")
+                              ? `epic-wildcard`
+                              : `legendary-wildcard`
+                      }
+                    />
+                  </>
+                )}
+              </div>
+            )
+          })}
+          {nightlyReward.modal && Object.keys(nightlyReward.cards).map((key) => {
+            return (
+              <div key={key} className="flex">
+                {nightlyReward.cards[key as keyof typeof nightlyReward.cards] > 0 && (
+                  <>
+                    <div className="text-xl font-medium">
+                      You received {nightlyReward.cards[key as keyof typeof nightlyReward.cards]} {key} {" "}
+                      wildcard{nightlyReward.cards[key as keyof typeof nightlyReward.cards] > 1 && "s"}!
+                    </div>
+                    <img
+                      src={
+                        (key === "Common")
+                          ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png`
+                          : (key === "Rare")
+                            ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
+                            : (key === "Epic")
+                              ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
+                              : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
+                      }
+                      alt={
+                        (key === "Common")
+                          ? `common-wildcard`
+                          : (key === "Rare")
+                            ? `rare-wildcard`
+                            : (key === "Epic")
+                              ? `epic-wildcard`
+                              : `legendary-wildcard`
+                      }
+                    />
+                  </>
+                )}
+              </div>
+            )
+          })}
           <div className="pt-4">
             <button
               onClick={() => {
@@ -573,96 +602,111 @@ export default function Game() {
               Got it!
             </button>
           </div>
-        </Modal>
-      )}
+        </Modal >
+      )
+      }
 
       {/* Modal for Event Reward */}
-      {eventModal.modal && eventModal.reward && (
-        <Modal size="Small">
-          {day >= 25 && month === 12 && (
-            <div className="candy-cane p-2 text-3xl font-bold">
-              Merry Christmas!
+      {
+        eventModal.modal && eventModal.reward && (
+          <Modal size="Small">
+            {day >= 25 && month === 12 && (
+              <div className="candy-cane p-2 text-3xl font-bold">
+                Merry Christmas!
+              </div>
+            )}
+            {day <= 7 && month === 1 && (
+              <div className="new-year p-2 text-3xl font-bold">
+                Happy New Year!
+              </div>
+            )}
+            {"aeiou".includes(eventModal.reward.name[0]) ? (
+              <div className="text-center text-xl font-bold">
+                You got an{" "}
+                {eventModal.reward.name[0].toUpperCase() +
+                  eventModal.reward.name.slice(1).toLowerCase()}
+                !{" "}
+              </div>
+            ) : (
+              <div className="text-center text-xl font-bold">
+                You got a{" "}
+                {eventModal.reward.name[0].toUpperCase() +
+                  eventModal.reward.name.slice(1).toLowerCase()}
+                !
+              </div>
+            )}
+            <Card species={eventModal.reward} />
+            <div className="flex justify-center pt-4">
+              <button
+                onClick={() => setEventModal({ modal: false, reward: null })}
+                className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+                Got it!
+              </button>
             </div>
-          )}
-          {day <= 7 && month === 1 && (
-            <div className="new-year p-2 text-3xl font-bold">
-              Happy New Year!
-            </div>
-          )}
-          {"aeiou".includes(eventModal.reward.name[0]) ? (
-            <div className="text-center text-xl font-bold">
-              You got an{" "}
-              {eventModal.reward.name[0].toUpperCase() +
-                eventModal.reward.name.slice(1).toLowerCase()}
-              !{" "}
-            </div>
-          ) : (
-            <div className="text-center text-xl font-bold">
-              You got a{" "}
-              {eventModal.reward.name[0].toUpperCase() +
-                eventModal.reward.name.slice(1).toLowerCase()}
-              !
-            </div>
-          )}
-          <Card species={eventModal.reward} />
-          <div className="flex justify-center pt-4">
-            <button
-              onClick={() => setEventModal({ modal: false, reward: null })}
-              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-              Got it!
-            </button>
-          </div>
-        </Modal>
-      )}
+          </Modal>
+        )
+      }
 
       {/* Modal for Username */}
-      {!getProfile.data?.username && (
-        <Modal size="Small">
-          <form
-            onSubmit={(e) => handleUsername(e)}
-            className="flex w-full flex-col items-center gap-5">
-            <p className="text-xl font-bold">Enter a Username</p>
-            <input
-              onChange={(e) => setUsername(e.target.value)}
-              className="p-2 text-black"></input>
-            <button
-              disabled={usernameMutation.isLoading}
-              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 text-xl font-bold hover:bg-red-btn-focus">
-              {usernameMutation.isLoading ? <LoadingSpinner /> : "Confirm"}
-            </button>
-          </form>
-          {usernameError && (
-            <div className="flex justify-center font-bold text-red-500">
-              {usernameError}
-            </div>
-          )}
-        </Modal>
-      )}
+      {
+        !getProfile.data?.username && (
+          <Modal size="Small">
+            <form
+              onSubmit={(e) => handleUsername(e)}
+              className="flex w-full flex-col items-center gap-5">
+              <p className="text-xl font-bold">Enter a Username</p>
+              <input
+                onChange={(e) => setUsername(e.target.value)}
+                className="p-2 text-black"></input>
+              <button
+                disabled={usernameMutation.isLoading}
+                className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 text-xl font-bold hover:bg-red-btn-focus">
+                {usernameMutation.isLoading ? <LoadingSpinner /> : "Confirm"}
+              </button>
+            </form>
+            {usernameError && (
+              <div className="flex justify-center font-bold text-red-500">
+                {usernameError}
+              </div>
+            )}
+          </Modal>
+        )
+      }
 
       {/* Modal for Johto Starter */}
-      {!getProfile.data?.johtoStarter && (
-        <Start region="Johto" addStarter={addStarter} />
-      )}
+      {
+        !getProfile.data?.johtoStarter && (
+          <Start region="Johto" addStarter={addStarter} />
+        )
+      }
 
       {/* Modal for Hoenn Starter */}
-      {!getProfile.data?.hoennStarter && (
-        <Start region="Hoenn" addStarter={addStarter} />
-      )}
+      {
+        !getProfile.data?.hoennStarter && (
+          <Start region="Hoenn" addStarter={addStarter} />
+        )
+      }
 
       {/* Modal for Sinnoh Starter */}
-      {!getProfile.data?.sinnohStarter && (
-        <Start region="Sinnoh" addStarter={addStarter} />
-      )}
+      {
+        !getProfile.data?.sinnohStarter && (
+          <Start region="Sinnoh" addStarter={addStarter} />
+        )
+      }
 
       {/* Modal for Unova Starter */}
-      {!getProfile.data?.unovaStarter && (
-        <Start region="Unova" addStarter={addStarter} />
-      )}
+      {
+        !getProfile.data?.unovaStarter && (
+          <Start region="Unova" addStarter={addStarter} />
+        )
+      }
 
       {/* Modal for Kalos Starter */}
-      {!getProfile.data?.kalosStarter && (
-        <Start region="Kalos" addStarter={addStarter} />
-      )}
+      {
+        !getProfile.data?.kalosStarter && (
+          <Start region="Kalos" addStarter={addStarter} />
+        )
+      }
     </>
   );
 }

@@ -251,19 +251,19 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const ovalCharm = alias(userCharms, "ovalCharm");
+      const catchingCharm = alias(userCharms, "catchingCharm");
       const currUser = (
         await ctx.db
           .select({
             totalYield: profiles.totalYield,
             balance: profiles.balance,
             instanceCount: profiles.instanceCount,
-            ovalCharm: ovalCharm.charmId
+            catchingCharm: catchingCharm.charmId
           })
           .from(profiles)
           .leftJoin(
-            ovalCharm,
-            and(eq(profiles.userId, ovalCharm.userId), eq(ovalCharm.charmId, 1))
+            catchingCharm,
+            and(eq(profiles.userId, catchingCharm.userId), eq(catchingCharm.charmId, 1))
           )
           .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
@@ -296,7 +296,7 @@ export const instanceRouter = router({
         });
       }
 
-      if (!withinInstanceLimit(currUser.instanceCount, !!currUser.ovalCharm)) {
+      if (!withinInstanceLimit(currUser.instanceCount, !!currUser.catchingCharm)) {
         throw new TRPCError({
           code: "CONFLICT",
           message:
@@ -342,7 +342,7 @@ export const instanceRouter = router({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const ovalCharm = alias(userCharms, "ovalCharm");
+      const catchingCharm = alias(userCharms, "catchingCharm");
 
       const currUser = (
         await ctx.db
@@ -353,12 +353,12 @@ export const instanceRouter = router({
             rareCards: profiles.rareCards,
             epicCards: profiles.epicCards,
             legendaryCards: profiles.legendaryCards,
-            ovalCharm: ovalCharm.charmId
+            catchingCharm: catchingCharm.charmId
           })
           .from(profiles)
           .leftJoin(
-            ovalCharm,
-            and(eq(profiles.userId, ovalCharm.userId), eq(ovalCharm.charmId, 1))
+            catchingCharm,
+            and(eq(profiles.userId, catchingCharm.userId), eq(catchingCharm.charmId, 1))
           )
           .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
@@ -417,7 +417,7 @@ export const instanceRouter = router({
         });
       }
 
-      if (!withinInstanceLimit(currUser.instanceCount, !!currUser.ovalCharm)) {
+      if (!withinInstanceLimit(currUser.instanceCount, !!currUser.catchingCharm)) {
         throw new TRPCError({
           code: "CONFLICT",
           message:
