@@ -64,7 +64,7 @@ export const profileRouter = router({
             markCharm: markCharm.charmId
           })
           .from(profiles)
-          .leftJoin(markCharm, eq(profiles.userId, markCharm.userId))
+          .leftJoin(markCharm, and(eq(profiles.userId, markCharm.userId), eq(markCharm.charmId, 2)))
           .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
 
