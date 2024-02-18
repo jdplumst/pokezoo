@@ -27,9 +27,12 @@ export default function PatchNotes() {
           <Topbar />
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
+            <Patch patch="6.09" date="February 18, 2024">
+              <Note note="Added Mark Charm." />
+            </Patch>
             <Patch patch="6.08" date="February 17, 2024">
               <Note note="Added Charms! Go to the Shop page to start buying charms" />
-              <Note note="Added Oval Charm." />
+              <Note note="Added Catching Charm." />
             </Patch>
             <Patch patch="6.07" date="January 31, 2024">
               <Note note="Excluded Megas from achievements." />
