@@ -23,6 +23,9 @@ jobs:
         TEST_NAME: ${{ secrets.TEST_NAME }}
         TEST_UNAME: ${{ secrets.TEST_UNAME }}
         TEST_VALUE: ${{ secrets.TEST_VALUE }}
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL}}
+        UPSTASH_REDIS_REST_TOKE: ${{ secrets.UPSTASH_REDIS_REST_TOKE}}
         SKIP_VALIDATION: "true"
       run: npx playwright test
     - uses: actions/upload-artifact@v3
