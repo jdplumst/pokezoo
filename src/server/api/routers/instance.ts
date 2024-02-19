@@ -24,6 +24,7 @@ import {
   rarities,
   regions,
   species,
+  trades,
   types,
   userCharms
 } from "../../db/schema";
@@ -500,7 +501,7 @@ export const instanceRouter = router({
         await ctx.db.transaction(async (tx) => {
           const exists = (
             await tx
-              .select({ speciesId: instances.speciesId })
+              .select({ id: instances.id, speciesId: instances.speciesId })
               .from(instances)
               .where(eq(instances.id, i))
           )[0];
@@ -541,6 +542,12 @@ export const instanceRouter = router({
               message: "Not authorized to make this request"
             });
           }
+
+          await tx.update(trades)
+            .set({ offererId: null, offererInstanceId: null })
+            .where(eq(trades.offererInstanceId, exists.id))
+
+          await tx.delete(trades).where(eq(trades.initiatorInstanceId, exists.id))
 
           await tx
             .update(profiles)
