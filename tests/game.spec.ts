@@ -1,21 +1,23 @@
+import { env } from "@/src/env";
 import test, { type Page, type BrowserContext, expect } from "@playwright/test";
 
 let page: Page
 let context: BrowserContext
 
 test.beforeAll("login", async ({ browser }) => {
+  test.setTimeout(120000)
   context = await browser.newContext();
   page = await context.newPage();
-  await page.goto(process.env.NEXTAUTH_URL!);
+  await page.goto(env.NEXTAUTH_URL);
   await context.addCookies([
     {
-      name: process.env.TEST_NAME!,
-      value: process.env.TEST_VALUE!,
-      url: process.env.NEXTAUTH_URL!
+      name: env.TEST_NAME,
+      value: env.TEST_VALUE,
+      url: env.NEXTAUTH_URL
     }
   ]);
   await page.reload();
-  await expect(page.getByText(process.env.TEST_UNAME!)).toBeVisible();
+  await expect(page.getByText(env.TEST_UNAME)).toBeVisible();
 
   if ((await page.getByText("Sell Pokémon").count()) > 0) {
     for (const btn of await page.getByText("Sell Pokémon").all()) {
@@ -24,7 +26,7 @@ test.beforeAll("login", async ({ browser }) => {
 
     await page.getByText("Confirm Delete").click();
   }
-  await expect(page.getByText("You have 0 / 2,000 Pokémon.")).toBeVisible();
+  await expect(page.getByText("You have 0 / 2,000 Pokémon.")).toBeVisible({ timeout: 60000 });
 });
 
 test("select initial starters", async () => {
@@ -62,6 +64,12 @@ test("select initial starters", async () => {
   await expect(page.getByText("You have 0 / 2,000 Pokémon.")).toBeVisible();
 
 });
+
+test("sorting buttons", async () => {
+  await page.goto(env.NEXTAUTH_URL + "/api/trpc/instance.seedInstances")
+  await page.goto(env.NEXTAUTH_URL)
+  await expect(page.getByText("You have 46 / 2,000 Pokémon.")).toBeVisible();
+})
 
 test.afterAll("close context and page", async () => {
   await context.close()
