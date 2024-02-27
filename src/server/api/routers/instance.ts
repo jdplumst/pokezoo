@@ -806,7 +806,7 @@ export const instanceRouter = router({
 
       await tx.update(profiles)
         .set({ instanceCount: 46 })
-        .where(eq(profiles.username, env.TEST_UNAME))
+        .where(eq(profiles.username, env.TEST_UNAME1))
     })
     return { message: "Instances seeded successfully" };
   })
