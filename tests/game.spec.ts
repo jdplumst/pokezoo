@@ -4,6 +4,25 @@ import test, { type Page, type BrowserContext, expect } from "@playwright/test";
 let page: Page
 let context: BrowserContext
 
+test.beforeAll("reset accounts", async ({ browser }) => {
+  context = await browser.newContext();
+  page = await context.newPage();
+  await page.goto(env.NEXTAUTH_URL);
+  await context.addCookies([
+    {
+      name: env.TEST_NAME,
+      value: env.TEST_VALUE1,
+      url: env.NEXTAUTH_URL
+    }
+  ]);
+  await page.reload();
+  await expect(page.getByText(env.TEST_UNAME1)).toBeVisible();
+  await page.goto(env.TEST_RESET)
+  await expect(page.getByText("Test accounts reset successfully")).toBeVisible()
+  await context.close()
+  await page.close()
+})
+
 test("select initial starters", async ({ browser }) => {
   context = await browser.newContext();
   page = await context.newPage();
