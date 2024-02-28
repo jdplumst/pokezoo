@@ -1,22 +1,10 @@
 import { env } from "@/src/env";
-import test, { type Page, type BrowserContext, expect } from "@playwright/test";
+import test, { expect } from "@playwright/test";
+import { login } from "./helpers/login";
 
-let page: Page
-let context: BrowserContext
 
 test.beforeAll("reset accounts", async ({ browser }) => {
-  context = await browser.newContext();
-  page = await context.newPage();
-  await page.goto(env.NEXTAUTH_URL);
-  await context.addCookies([
-    {
-      name: env.TEST_NAME,
-      value: env.TEST_VALUE1,
-      url: env.NEXTAUTH_URL
-    }
-  ]);
-  await page.reload();
-  await expect(page.getByText(env.TEST_UNAME1)).toBeVisible();
+  const [page, context] = await login(browser, 1)
   await page.goto(env.TEST_RESET)
   await expect(page.getByText("Test accounts reset successfully")).toBeVisible()
   await context.close()
@@ -24,17 +12,8 @@ test.beforeAll("reset accounts", async ({ browser }) => {
 })
 
 test("select initial starters", async ({ browser }) => {
-  context = await browser.newContext();
-  page = await context.newPage();
-  await page.goto(env.NEXTAUTH_URL);
-  await context.addCookies([
-    {
-      name: env.TEST_NAME,
-      value: env.TEST_VALUE2,
-      url: env.NEXTAUTH_URL
-    }
-  ]);
-  await page.reload();
+  const [page, context] = await login(browser, 2)
+  await page.goto(env.NEXTAUTH_URL)
   await expect(page.getByText(env.TEST_UNAME2)).toBeVisible();
 
   /*
@@ -78,17 +57,8 @@ await page.getByText("Charmander").click();
 });
 
 test("sorting buttons", async ({ browser }) => {
-  context = await browser.newContext();
-  page = await context.newPage();
-  await page.goto(env.NEXTAUTH_URL);
-  await context.addCookies([
-    {
-      name: env.TEST_NAME,
-      value: env.TEST_VALUE1,
-      url: env.NEXTAUTH_URL
-    }
-  ]);
-  await page.reload();
+  const [page, context] = await login(browser, 1)
+  await page.goto(env.NEXTAUTH_URL)
   await expect(page.getByText(env.TEST_UNAME1)).toBeVisible();
 
   await expect(page.getByText("You have 46 / 2,000 Pokémon.")).toBeVisible();
