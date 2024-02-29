@@ -16,9 +16,8 @@ test("select initial starters", async ({ browser }) => {
   await page.goto(env.NEXTAUTH_URL)
   await expect(page.getByText(env.TEST_UNAME2)).toBeVisible();
 
-  /*
   // Select Bulbasaur
-    await page.getByText("Bulbasaur").click();
+  await page.getByText("Bulbasaur").click();
   await page.getByText("Confirm Selection").click();
   await expect(page.getByText("You have 1 / 2,000 Pokémon.")).toBeVisible();
   await page.reload();
@@ -29,7 +28,7 @@ test("select initial starters", async ({ browser }) => {
   await expect(page.getByText("You have 0 / 2,000 Pokémon.")).toBeVisible();
 
   // Select Charmander
-await page.getByText("Charmander").click();
+  await page.getByText("Charmander").click();
   await page.getByText("Confirm Selection").click();
   await expect(page.getByText("You have 1 / 2,000 Pokémon.")).toBeVisible();
   await page.reload();
@@ -49,7 +48,6 @@ await page.getByText("Charmander").click();
   await page.getByText("Sell Pokémon").click()
   await page.getByText("Confirm Delete").click()
   await expect(page.getByText("You have 0 / 2,000 Pokémon.")).toBeVisible();
-*/
 
   await context.close()
   await page.close()
