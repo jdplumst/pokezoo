@@ -175,7 +175,7 @@ export const instanceRouter = router({
                     })`
                   : input.order === "PokedexDesc"
                     ? sql`(${species.pokedexNumber}, ${rarities.id}, ${species.name}, ${instances.modifyDate
-                      }) <= (${input.cursor?.pokedexNumber ?? 10000}, ${rarityCursor ?? 10} ${input.cursor?.name ?? "{"
+                      }) <= (${input.cursor?.pokedexNumber ?? 10000}, ${rarityCursor ?? 10}, ${input.cursor?.name ?? "{"
                       }, ${input.cursor?.modifyDate ??
                       new Date("2050-12-03 17:20:11.049")
                       })`
