@@ -2,7 +2,6 @@ import { env } from "@/src/env";
 import test, { expect } from "@playwright/test";
 import { login } from "./helpers/login";
 
-
 test.beforeAll("reset accounts", async ({ browser }) => {
   const [page, context] = await login(browser, 1)
   await page.goto(env.TEST_RESET)
@@ -60,6 +59,32 @@ test("sorting buttons", async ({ browser }) => {
   await expect(page.getByText(env.TEST_UNAME1)).toBeVisible();
 
   await expect(page.getByText("You have 46 / 2,000 Pokémon.")).toBeVisible();
+  await expect(page.getByText("#").locator("nth=48")).not.toBeVisible()
+
+  // Pokedex # 
+  await page.getByText("Pokédex #", { exact: true }).click()
+  await expect(page.getByText("#").locator("nth=2")).toContainText("venusaur")
+  await expect(page.getByText("#").locator("nth=2")).not.toContainText("mega")
+  await expect(page.getByText("#").locator("nth=3")).toContainText("mega-venusaur")
+  await expect(page.getByText("#").locator("nth=7")).toContainText("mewtwo")
+  await expect(page.getByText("#").locator("nth=7")).not.toContainText("mega")
+  await expect(page.getByText("#").locator("nth=8")).toContainText("mega-mewtwo-x")
+  await expect(page.getByText("#").locator("nth=9")).toContainText("mega-mewtwo-y")
+  await expect(page.getByText("#").locator("nth=22")).toContainText("castform")
+  await expect(page.getByText("#").locator("nth=23")).toContainText("castform-rainy")
+  await expect(page.getByText("#").locator("nth=24")).toContainText("castform-snowy")
+  await expect(page.getByText("#").locator("nth=25")).toContainText("castform-sunny")
+  await expect(page.getByText("#").locator("nth=28")).toContainText("kyogre")
+  await expect(page.getByText("#").locator("nth=28")).not.toContainText("primal")
+  await expect(page.getByText("#").locator("nth=29")).toContainText("primal-kyogre")
+  await expect(page.getByText("#").locator("nth=34")).toContainText("rotom")
+  await expect(page.getByText("#").locator("nth=35")).toContainText("rotom-fan")
+  await expect(page.getByText("#").locator("nth=36")).toContainText("rotom-frost")
+  await expect(page.getByText("#").locator("nth=37")).toContainText("rotom-heat")
+  await expect(page.getByText("#").locator("nth=38")).toContainText("rotom-mow")
+  await expect(page.getByText("#").locator("nth=39")).toContainText("rotom-wash")
+  await expect(page.getByText("#").locator("nth=46")).toContainText("meowstic-female")
+  await expect(page.getByText("#").locator("nth=47")).toContainText("meowstic-male")
 
   await context.close()
   await page.close()
