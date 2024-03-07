@@ -62,7 +62,7 @@ test("sorting buttons", async ({ browser }) => {
   await expect(page.getByText("#").locator("nth=48")).not.toBeVisible()
 
   // Pokedex # 
-  await page.getByText("Pokédex #", { exact: true }).click()
+  await page.getByTestId("pokedex-sort").click()
   await expect(page.getByText("#").locator("nth=2")).toContainText("venusaur")
   await expect(page.getByText("#").locator("nth=2")).not.toContainText("mega")
   await expect(page.getByText("#").locator("nth=3")).toContainText("mega-venusaur")
@@ -87,7 +87,7 @@ test("sorting buttons", async ({ browser }) => {
   await expect(page.getByText("#").locator("nth=47")).toContainText("meowstic-male")
 
   // Pokedex # Desc
-  await page.getByText("Pokédex # Desc.", { exact: true }).click()
+  await page.getByTestId("pokedex-desc-sort").click()
   await expect(page.getByText("#").locator("nth=2")).toContainText("meowstic-male")
   await expect(page.getByText("#").locator("nth=3")).toContainText("meowstic-female")
   await expect(page.getByText("#").locator("nth=10")).toContainText("rotom-wash")
@@ -110,6 +110,23 @@ test("sorting buttons", async ({ browser }) => {
   await expect(page.getByText("#").locator("nth=46")).toContainText("mega-venusaur")
   await expect(page.getByText("#").locator("nth=47")).toContainText("venusaur")
   await expect(page.getByText("#").locator("nth=47")).not.toContainText("mega")
+
+  // Rarity
+  await page.getByTestId("rarity-sort").click()
+  await expect(page.getByText("#").locator("nth=2")).toContainText("caterpie")
+  await expect(page.getByText("#").locator("nth=6")).toContainText("castform")
+  await expect(page.getByText("#").locator("nth=7")).toContainText("castform-rainy")
+  await expect(page.getByText("#").locator("nth=8")).toContainText("castform-snowy")
+  await expect(page.getByText("#").locator("nth=9")).toContainText("castform-sunny")
+  await expect(page.getByText("#").locator("nth=22")).toContainText("meowstic-male")
+  await expect(page.getByText("#").locator("nth=23")).toContainText("venusaur")
+  await expect(page.getByText("#").locator("nth=28")).toContainText("greninja")
+  await expect(page.getByText("#").locator("nth=29")).toContainText("growlithe")
+  await expect(page.getByText("#").locator("nth=34")).toContainText("hippowdon-m")
+  await expect(page.getByText("#").locator("nth=35")).toContainText("articuno")
+  await expect(page.getByText("#").locator("nth=41")).toContainText("ash-greninja")
+  await expect(page.getByText("#").locator("nth=42")).toContainText("mega-venusaur")
+  await expect(page.getByText("#").locator("nth=47")).toContainText("primal-kyogre")
 
   await context.close()
   await page.close()
