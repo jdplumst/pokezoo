@@ -61,6 +61,21 @@ test("sorting buttons", async ({ browser }) => {
   await expect(page.getByText("You have 46 / 2,000 Pokémon.")).toBeVisible();
   await expect(page.getByText("#").locator("nth=48")).not.toBeVisible()
 
+  // Oldest
+  await page.getByTestId("oldest-sort").click()
+  await expect(page.getByText("#").locator("nth=2")).toContainText("articuno")
+  await expect(page.getByText("#").locator("nth=3")).toContainText("mewtwo")
+  await expect(page.getByText("#").locator("nth=4")).toContainText("mega-mewtwo-x")
+  await expect(page.getByText("#").locator("nth=17")).toContainText("umbreon")
+  await expect(page.getByText("#").locator("nth=21")).toContainText("meowstic-female")
+  await expect(page.getByText("#").locator("nth=27")).toContainText("rotom-frost")
+  await expect(page.getByText("#").locator("nth=31")).toContainText("victini")
+  await expect(page.getByText("#").locator("nth=34")).toContainText("hippowdon-m")
+  await expect(page.getByText("#").locator("nth=37")).toContainText("mega-mawile")
+  await expect(page.getByText("#").locator("nth=40")).toContainText("rotom-mow")
+  await expect(page.getByText("#").locator("nth=44")).toContainText("metagross")
+  await expect(page.getByText("#").locator("nth=47")).toContainText("castform-sunny")
+
   // Pokedex # 
   await page.getByTestId("pokedex-sort").click()
   await expect(page.getByText("#").locator("nth=2")).toContainText("venusaur")
