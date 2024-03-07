@@ -76,6 +76,21 @@ test("sorting buttons", async ({ browser }) => {
   await expect(page.getByText("#").locator("nth=44")).toContainText("metagross")
   await expect(page.getByText("#").locator("nth=47")).toContainText("castform-sunny")
 
+  // Newest
+  await page.getByTestId("newest-sort").click()
+  await expect(page.getByText("#").locator("nth=2")).toContainText("castform-sunny")
+  await expect(page.getByText("#").locator("nth=3")).toContainText("castform-snowy")
+  await expect(page.getByText("#").locator("nth=4")).toContainText("castform-rainy")
+  await expect(page.getByText("#").locator("nth=17")).toContainText("ducklett")
+  await expect(page.getByText("#").locator("nth=21")).toContainText("furret")
+  await expect(page.getByText("#").locator("nth=27")).toContainText("growlithe")
+  await expect(page.getByText("#").locator("nth=31")).toContainText("raikou")
+  await expect(page.getByText("#").locator("nth=34")).toContainText("caterpie")
+  await expect(page.getByText("#").locator("nth=37")).toContainText("greninja")
+  await expect(page.getByText("#").locator("nth=40")).toContainText("kyogre")
+  await expect(page.getByText("#").locator("nth=44")).toContainText("togepi")
+  await expect(page.getByText("#").locator("nth=47")).toContainText("articuno")
+
   // Pokedex # 
   await page.getByTestId("pokedex-sort").click()
   await expect(page.getByText("#").locator("nth=2")).toContainText("venusaur")
