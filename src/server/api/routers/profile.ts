@@ -205,52 +205,52 @@ export const profileRouter = router({
     await ctx.db.transaction(async (tx) => {
 
       await tx.insert(instances)
-        .values([{ userId: test1.userId, speciesId: "clfyshzqj0004nsk4chot6pqs" }, // venusaur
-        { userId: test1.userId, speciesId: "pe6bkapnh3epk8lamm66f09x" }, // mega venusaur
-        { userId: test1.userId, speciesId: "clfysi0v0000insk4eftjqexl" }, // caterpie
-        { userId: test1.userId, speciesId: "clfysi8xi0036nsk4ibiscs84" }, // growlithe
-        { userId: test1.userId, speciesId: "clfysinxa007ynsk4zjeg92np" }, // articuno
-        { userId: test1.userId, speciesId: "clfysip03008ansk4z1ydgeig" }, // mewtwo
-        { userId: test1.userId, speciesId: "yjeup9ivefukn1ksdperh61j" }, // mega mewtwo x 
-        { userId: test1.userId, speciesId: "oz37qaolixehlv3w9g7jfjuk" }, // mega mewtwo y 
-        { userId: test1.userId, speciesId: "clgz4r0ug000ons60pauizq8x" }, // totodile
-        { userId: test1.userId, speciesId: "clgz4sf630004nszczb8by3l4" }, // furret
-        { userId: test1.userId, speciesId: "clgz4sj81001knszcs677k3ql" }, // togepi
-        { userId: test1.userId, speciesId: "clgz4smhb002onszckmvcc5bh" }, // sudowoodo
-        { userId: test1.userId, speciesId: "clgz4sq9d0040nszc87ar6163" }, // umbreon
-        { userId: test1.userId, speciesId: "vwzl4l5v77gqa4xgq6tducpd" }, // heracross
-        { userId: test1.userId, speciesId: "clgz4t5o50094nszcg9krd8rv" }, // raikou
-        { userId: test1.userId, speciesId: "clgz4t7b9009onszcvjth7bn1" }, // tyranitar
-        { userId: test1.userId, speciesId: "clgz4t7l5009snszcrw2g3dvt" }, // lugia
-        { userId: test1.userId, speciesId: "clhu77xl20004ns4yybjj0na6" }, // grovyle
-        { userId: test1.userId, speciesId: "clhu784as003cns4y0hhame7z" }, // gardevoir
-        { userId: test1.userId, speciesId: "mdhkisuwk4l62nzqpu7cbpkx" }, // mega mawile
-        { userId: test1.userId, speciesId: "clhu78ka900b0ns4y2rp3rcaf" }, // castform
-        { userId: test1.userId, speciesId: "cljwyppdl0000nsivbl8z6gpi" }, // castform sunny
-        { userId: test1.userId, speciesId: "cljwyppdm0004nsivbpl1e6z8" }, // castform rainy
-        { userId: test1.userId, speciesId: "cljwyppdm0008nsivni2547jo" }, // castform snowy
-        { userId: test1.userId, speciesId: "clhu78np000ckns4ykjs1ybng" }, // walrein
-        { userId: test1.userId, speciesId: "clhu78qa100dsns4yc0cgleqf" }, // metagross
-        { userId: test1.userId, speciesId: "clhu78roo00egns4ykypkl78c" }, // kyogre
-        { userId: test1.userId, speciesId: "k7njnnlah5nb25enytqc11x4" }, // primal kyogre
-        { userId: test1.userId, speciesId: "cljuwt6yd002onsqrwj0exw05" }, // shellos west
-        { userId: test1.userId, speciesId: "cljuxq2ib000kns1uca337dhg" }, // shellos east
-        { userId: test1.userId, speciesId: "cln3kqfj10004nsmbge4ngd2j" }, // hippowdon female
-        { userId: test1.userId, speciesId: "cljuwthiu005snsqrndwfocxc" }, // hippowdon male
-        { userId: test1.userId, speciesId: "cljuwtr8q0090nsqrhbw3nxkz" }, // rotom
-        { userId: test1.userId, speciesId: "cljuy74dd000sns1uenpabxgy" }, // rotom heat 
-        { userId: test1.userId, speciesId: "cljuy74dd000wns1ujwvalfj1" }, // rotom wash
-        { userId: test1.userId, speciesId: "cljuy74dd0010ns1uk68ntzpx" }, // rotom frost
-        { userId: test1.userId, speciesId: "cljuy74dd0014ns1ub2q2pyio" }, // rotom fan
-        { userId: test1.userId, speciesId: "cljuy74de0018ns1uncx14ovw" }, // rotom mow
-        { userId: test1.userId, speciesId: "cln26ctib0000ns4rsdmmdzu1" }, // vicitini
-        { userId: test1.userId, speciesId: "cln26dfjv0068ns4rgq5n2epn" }, // basculin red striped
-        { userId: test1.userId, speciesId: "cln26sao60000nshsau8x5snh" }, // basculin blue striped
-        { userId: test1.userId, speciesId: "cln26dr7g009kns4r2czei6wo" }, // ducklett
-        { userId: test1.userId, speciesId: "yuhe8mlzn1zthu5c6j82dg1z" }, // greninja
-        { userId: test1.userId, speciesId: "g30cbiomlk2c9xjhofwrzo5s" }, // ash greninja
-        { userId: test1.userId, speciesId: "c1fgrigg5jypq4q31mh801ce" }, // meowstic female
-        { userId: test1.userId, speciesId: "ltczoemho73745k9w44k4u5b" } // meowstic male)
+        .values([{ userId: test1.userId, speciesId: "clfyshzqj0004nsk4chot6pqs", modifyDate: new Date("2025-01-10") }, // venusaur
+        { userId: test1.userId, speciesId: "pe6bkapnh3epk8lamm66f09x", modifyDate: new Date("2025-01-09") }, // mega venusaur
+        { userId: test1.userId, speciesId: "clfysi0v0000insk4eftjqexl", modifyDate: new Date("2025-02-01") }, // caterpie
+        { userId: test1.userId, speciesId: "clfysi8xi0036nsk4ibiscs84", modifyDate: new Date("2025-02-25") }, // growlithe
+        { userId: test1.userId, speciesId: "clfysinxa007ynsk4zjeg92np", modifyDate: new Date("2025-01-01") }, // articuno
+        { userId: test1.userId, speciesId: "clfysip03008ansk4z1ydgeig", modifyDate: new Date("2025-01-03") }, // mewtwo
+        { userId: test1.userId, speciesId: "yjeup9ivefukn1ksdperh61j", modifyDate: new Date("2025-01-07") }, // mega mewtwo x 
+        { userId: test1.userId, speciesId: "oz37qaolixehlv3w9g7jfjuk", modifyDate: new Date("2025-01-20") }, // mega mewtwo y 
+        { userId: test1.userId, speciesId: "clgz4r0ug000ons60pauizq8x", modifyDate: new Date("2025-02-15") }, // totodile
+        { userId: test1.userId, speciesId: "clgz4sf630004nszczb8by3l4", modifyDate: new Date("2025-03-21") }, // furret
+        { userId: test1.userId, speciesId: "clgz4sj81001knszcs677k3ql", modifyDate: new Date("2025-01-08") }, // togepi
+        { userId: test1.userId, speciesId: "clgz4smhb002onszckmvcc5bh", modifyDate: new Date("2025-01-11") }, // sudowoodo
+        { userId: test1.userId, speciesId: "clgz4sq9d0040nszc87ar6163", modifyDate: new Date("2025-02-11") }, // umbreon
+        { userId: test1.userId, speciesId: "vwzl4l5v77gqa4xgq6tducpd", modifyDate: new Date("2025-03-11") }, // heracross
+        { userId: test1.userId, speciesId: "clgz4t5o50094nszcg9krd8rv", modifyDate: new Date("2025-02-12") }, // raikou
+        { userId: test1.userId, speciesId: "clgz4t7b9009onszcvjth7bn1", modifyDate: new Date("2025-03-12") }, // tyranitar
+        { userId: test1.userId, speciesId: "clgz4t7l5009snszcrw2g3dvt", modifyDate: new Date("2025-01-25") }, // lugia
+        { userId: test1.userId, speciesId: "clhu77xl20004ns4yybjj0na6", modifyDate: new Date("2025-08-01") }, // grovyle
+        { userId: test1.userId, speciesId: "clhu784as003cns4y0hhame7z", modifyDate: new Date("2025-07-01") }, // gardevoir
+        { userId: test1.userId, speciesId: "mdhkisuwk4l62nzqpu7cbpkx", modifyDate: new Date("2025-05-01") }, // mega mawile
+        { userId: test1.userId, speciesId: "clhu78ka900b0ns4y2rp3rcaf", modifyDate: new Date("2025-05-02") }, // castform
+        { userId: test1.userId, speciesId: "cljwyppdl0000nsivbl8z6gpi", modifyDate: new Date("2025-12-01") }, // castform sunny
+        { userId: test1.userId, speciesId: "cljwyppdm0004nsivbpl1e6z8", modifyDate: new Date("2025-11-01") }, // castform rainy
+        { userId: test1.userId, speciesId: "cljwyppdm0008nsivni2547jo", modifyDate: new Date("2025-11-11") }, // castform snowy
+        { userId: test1.userId, speciesId: "clhu78np000ckns4ykjs1ybng", modifyDate: new Date("2025-06-01") }, // walrein
+        { userId: test1.userId, speciesId: "clhu78qa100dsns4yc0cgleqf", modifyDate: new Date("2025-10-01") }, // metagross
+        { userId: test1.userId, speciesId: "clhu78roo00egns4ykypkl78c", modifyDate: new Date("2025-01-17") }, // kyogre
+        { userId: test1.userId, speciesId: "k7njnnlah5nb25enytqc11x4", modifyDate: new Date("2025-03-17") }, // primal kyogre
+        { userId: test1.userId, speciesId: "cljuwt6yd002onsqrwj0exw05", modifyDate: new Date("2025-02-17") }, // shellos west
+        { userId: test1.userId, speciesId: "cljuxq2ib000kns1uca337dhg", modifyDate: new Date("2025-04-02") }, // shellos east
+        { userId: test1.userId, speciesId: "cln3kqfj10004nsmbge4ngd2j", modifyDate: new Date("2025-05-20") }, // hippowdon female
+        { userId: test1.userId, speciesId: "cljuwthiu005snsqrndwfocxc", modifyDate: new Date("2025-04-20") }, // hippowdon male
+        { userId: test1.userId, speciesId: "cljuwtr8q0090nsqrhbw3nxkz", modifyDate: new Date("2025-04-11") }, // rotom
+        { userId: test1.userId, speciesId: "cljuy74dd000sns1uenpabxgy", modifyDate: new Date("2025-04-21") }, // rotom heat 
+        { userId: test1.userId, speciesId: "cljuy74dd000wns1ujwvalfj1", modifyDate: new Date("2025-01-19") }, // rotom wash
+        { userId: test1.userId, speciesId: "cljuy74dd0010ns1uk68ntzpx", modifyDate: new Date("2025-03-19") }, // rotom frost
+        { userId: test1.userId, speciesId: "cljuy74dd0014ns1ub2q2pyio", modifyDate: new Date("2025-04-25") }, // rotom fan
+        { userId: test1.userId, speciesId: "cljuy74de0018ns1uncx14ovw", modifyDate: new Date("2025-05-25") }, // rotom mow
+        { userId: test1.userId, speciesId: "cln26ctib0000ns4rsdmmdzu1", modifyDate: new Date("2025-04-03") }, // vicitini
+        { userId: test1.userId, speciesId: "cln26dfjv0068ns4rgq5n2epn", modifyDate: new Date("2025-02-08") }, // basculin red striped
+        { userId: test1.userId, speciesId: "cln26sao60000nshsau8x5snh", modifyDate: new Date("2025-03-08") }, // basculin blue striped
+        { userId: test1.userId, speciesId: "cln26dr7g009kns4r2czei6wo", modifyDate: new Date("2025-04-08") }, // ducklett
+        { userId: test1.userId, speciesId: "yuhe8mlzn1zthu5c6j82dg1z", modifyDate: new Date("2025-01-22") }, // greninja
+        { userId: test1.userId, speciesId: "g30cbiomlk2c9xjhofwrzo5s", modifyDate: new Date("2025-01-23") }, // ash greninja
+        { userId: test1.userId, speciesId: "c1fgrigg5jypq4q31mh801ce", modifyDate: new Date("2025-02-22") }, // meowstic female
+        { userId: test1.userId, speciesId: "ltczoemho73745k9w44k4u5b", modifyDate: new Date("2025-03-22") } // meowstic male)
         ])
 
       await tx.update(profiles)

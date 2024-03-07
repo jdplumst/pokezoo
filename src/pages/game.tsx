@@ -433,7 +433,8 @@ export default function Game() {
                 className={`${sort === "Oldest"
                   ? `bg-purple-btn-focus`
                   : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="oldest-sort">
                 Oldest
               </button>
               <button
@@ -441,7 +442,8 @@ export default function Game() {
                 className={`${sort === "Newest"
                   ? `bg-purple-btn-focus`
                   : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="newest-sort">
                 Newest
               </button>
               <button
@@ -449,7 +451,8 @@ export default function Game() {
                 className={`${sort === "Pokedex"
                   ? `bg-purple-btn-focus`
                   : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="pokedex-sort">
                 Pokédex #
               </button>
               <button
@@ -457,7 +460,8 @@ export default function Game() {
                 className={`${sort === "PokedexDesc"
                   ? `bg-purple-btn-focus`
                   : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="pokedex-desc-sort">
                 Pokédex # Desc.
               </button>
               <button
@@ -465,7 +469,8 @@ export default function Game() {
                 className={`${sort === "Rarity"
                   ? `bg-purple-btn-focus`
                   : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="rarity-sort">
                 Rarity
               </button>
               <button
@@ -473,7 +478,8 @@ export default function Game() {
                 className={`${sort === "RarityDesc"
                   ? `bg-purple-btn-focus`
                   : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}>
+                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="rarity-desc-sort">
                 Rarity Desc.
               </button>
             </div>
