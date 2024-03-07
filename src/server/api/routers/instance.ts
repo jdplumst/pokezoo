@@ -105,10 +105,13 @@ export const instanceRouter = router({
           break
         case "Rare":
           rarityCursor = 2
+          break
         case "Epic":
           rarityCursor = 3
+          break
         case "Legendary":
           rarityCursor = 4
+          break
       }
 
       const limit = input.limit ?? 50;
