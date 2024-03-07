@@ -128,6 +128,20 @@ test("sorting buttons", async ({ browser }) => {
   await expect(page.getByText("#").locator("nth=42")).toContainText("mega-venusaur")
   await expect(page.getByText("#").locator("nth=47")).toContainText("primal-kyogre")
 
+  // Rarity Desc
+  await page.getByTestId("rarity-desc-sort").click()
+  await expect(page.getByText("#").locator("nth=2")).toContainText("primal-kyogre")
+  await expect(page.getByText("#").locator("nth=3")).toContainText("mega-mawile")
+  await expect(page.getByText("#").locator("nth=7")).toContainText("mega-venusaur")
+  await expect(page.getByText("#").locator("nth=8")).toContainText("ash-greninja")
+  await expect(page.getByText("#").locator("nth=14")).toContainText("articuno")
+  await expect(page.getByText("#").locator("nth=15")).toContainText("hippowdon-m")
+  await expect(page.getByText("#").locator("nth=20")).toContainText("growlithe")
+  await expect(page.getByText("#").locator("nth=21")).toContainText("greninja")
+  await expect(page.getByText("#").locator("nth=26")).toContainText("venusaur")
+  await expect(page.getByText("#").locator("nth=27")).toContainText("meowstic-male")
+  await expect(page.getByText("#").locator("nth=47")).toContainText("caterpie")
+
   await context.close()
   await page.close()
 
