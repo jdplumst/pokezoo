@@ -15,6 +15,7 @@ export default function Wildcard({ wildcard, width, height }: IWildcardProps) {
         alt="common-wildcard"
         height={height}
         width={width}
+        className="pixelated"
       />
     case "Rare":
       return <img
@@ -22,6 +23,7 @@ export default function Wildcard({ wildcard, width, height }: IWildcardProps) {
         alt="rare-wildcard"
         height={height}
         width={width}
+        className="pixelated"
       />
     case "Epic":
       return <img
@@ -29,6 +31,7 @@ export default function Wildcard({ wildcard, width, height }: IWildcardProps) {
         alt="epic-wildcard"
         height={height}
         width={width}
+        className="pixelated"
       />
     case "Legendary":
       return <img
@@ -36,6 +39,7 @@ export default function Wildcard({ wildcard, width, height }: IWildcardProps) {
         alt="legendary-wildcard"
         height={height}
         width={width}
+        className="pixelated"
       />
     default:
       return <></>
