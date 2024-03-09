@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { trpc } from "../utils/trpc";
 import LoadingSpinner from "./LoadingSpinner";
 import { ThemeContext } from "./ThemeContextProvider";
+import Wildcard from "./Wildcard";
 
 export default function Topbar() {
   const { time, theme, handleTheme } = useContext(ThemeContext);
@@ -77,41 +78,21 @@ export default function Topbar() {
         <div className="flex flex-col text-right">
           <div className="flex flex-row items-end justify-end">
             <p>You have {getProfile.data?.commonCards} Common wildcards.</p>
-            <img
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png"
-              alt="common-wildcard"
-              height={25}
-              width={25}
-            />
+            <Wildcard wildcard="Common" height={25} width={25} />
           </div>
           <div className="flex flex-row items-end justify-end">
             <p>You have {getProfile.data?.rareCards} Rare wildcards.</p>
-            <img
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png"
-              alt="rare-wildcard"
-              height={25}
-              width={25}
-            />
+            <Wildcard wildcard="Rare" height={25} width={25} />
           </div>
           <div className="flex flex-row items-end justify-end">
             <p>You have {getProfile.data?.epicCards} Epic wildcards.</p>
-            <img
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png"
-              alt="epic-wildcard"
-              height={25}
-              width={25}
-            />
+            <Wildcard wildcard="Epic" height={25} width={25} />
           </div>
           <div className="flex flex-row items-end justify-end">
             <p>
               You have {getProfile.data?.legendaryCards} Legendary wildcards.
             </p>
-            <img
-              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png"
-              alt="legendary-wildcard"
-              height={25}
-              width={25}
-            />
+            <Wildcard wildcard="Legendary" height={25} width={25} />
           </div>
         </div>
       </div>
