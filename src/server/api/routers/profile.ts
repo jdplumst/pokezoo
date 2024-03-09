@@ -262,14 +262,14 @@ export const profileRouter = router({
           break;
 
         case "Rare, Epic":
-          if (currUser.rareCards < 2) {
+          if (currUser.rareCards < 3) {
             throw new TRPCError({
               code: "CONFLICT",
               message: "You cannot afford this wildcard"
             })
           }
           await ctx.db.update(profiles)
-            .set({ rareCards: currUser.rareCards - 2, epicCards: currUser.epicCards + 1 })
+            .set({ rareCards: currUser.rareCards - 3, epicCards: currUser.epicCards + 1 })
             .where(eq(profiles.userId, ctx.session.user.id))
           break;
 
