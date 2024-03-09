@@ -3,7 +3,7 @@ import { adminProcedure, protectedProcedure, router } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { MAX_BALANCE } from "@/src/constants";
 import { instances, profiles, userCharms } from "../../db/schema";
-import { ZodTime } from "@/src/zod";
+import { ZodRarity, ZodTime } from "@/src/zod";
 import { and, eq, or } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { env } from "@/src/env";
@@ -188,6 +188,185 @@ export const profileRouter = router({
         .where(eq(profiles.userId, ctx.session.user.id));
 
       return { message: "Username set successfully" };
+    }),
+
+  purchaseWildcards: protectedProcedure
+    .input(z.object({
+      tradedCard: ZodRarity,
+      purchasedCard: ZodRarity
+    }))
+    .mutation(async ({ ctx, input }) => {
+      const currUser = (await ctx.db.select({
+        commonCards: profiles.commonCards,
+        rareCards: profiles.rareCards,
+        epicCards: profiles.epicCards,
+        legendaryCards: profiles.legendaryCards,
+      })
+        .from(profiles)
+        .where(eq(profiles.userId, ctx.session.user.id)))[0]
+
+      if (!currUser) {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "Not authorized to make this request"
+        });
+      }
+
+      switch (input.tradedCard + ", " + input.purchasedCard) {
+        case "Common, Rare":
+          if (currUser.commonCards < 2) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ commonCards: currUser.commonCards - 2, rareCards: currUser.rareCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Common, Epic":
+          if (currUser.commonCards < 4) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ commonCards: currUser.commonCards - 4, epicCards: currUser.epicCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Common, Legendary":
+          if (currUser.commonCards < 50) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ commonCards: currUser.commonCards - 50, legendaryCards: currUser.legendaryCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Rare, Common":
+          if (currUser.rareCards < 1) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ rareCards: currUser.rareCards - 1, commonCards: currUser.commonCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Rare, Epic":
+          if (currUser.rareCards < 2) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ rareCards: currUser.rareCards - 2, epicCards: currUser.epicCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Rare, Legendary":
+          if (currUser.rareCards < 35) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ rareCards: currUser.rareCards - 35, legendaryCards: currUser.legendaryCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Epic, Common":
+          if (currUser.epicCards < 1) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ epicCards: currUser.epicCards - 1, commonCards: currUser.commonCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Epic, Rare":
+          if (currUser.epicCards < 1) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ epicCards: currUser.epicCards - 1, rareCards: currUser.rareCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Epic, Legendary":
+          if (currUser.epicCards < 15) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ epicCards: currUser.epicCards - 15, legendaryCards: currUser.legendaryCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Legendary, Common":
+          if (currUser.legendaryCards < 1) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ legendaryCards: currUser.legendaryCards - 1, commonCards: currUser.commonCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Legendary, Rare":
+          if (currUser.legendaryCards < 1) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ legendaryCards: currUser.legendaryCards - 1, rareCards: currUser.rareCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        case "Legendary, Epic":
+          if (currUser.legendaryCards < 1) {
+            throw new TRPCError({
+              code: "CONFLICT",
+              message: "You cannot afford this wildcard"
+            })
+          }
+          await ctx.db.update(profiles)
+            .set({ legendaryCards: currUser.legendaryCards - 1, epicCards: currUser.epicCards + 1 })
+            .where(eq(profiles.userId, ctx.session.user.id))
+          break;
+
+        default:
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: "Invalid wildcard trade"
+          })
+      }
+
+      return {
+        message: "Successfully traded wildcard"
+      }
     }),
 
   resetTestAccounts: adminProcedure.query(async ({ ctx }) => {
