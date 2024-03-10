@@ -27,6 +27,10 @@ export default function PatchNotes() {
           <Topbar />
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
+            <Patch patch="6.10" date="March 10, 2024">
+              <Note note="Added Wildcards to Shop! Users can now trade in 
+                their wildcards for wildcards of other rarities." />
+            </Patch>
             <Patch patch="6.09" date="February 18, 2024">
               <Note note="Added Mark Charm." />
             </Patch>
