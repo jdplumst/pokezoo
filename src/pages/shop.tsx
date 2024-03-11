@@ -406,7 +406,7 @@ export default function Shop() {
                   <div className="h-72 w-72 border-2 border-black bg-ball p-2">
                     <div className="flex h-full flex-col items-center justify-around">
                       <Wildcard wildcard="Rare" width={112} height={112} />
-                      <p className="text-center text-3xl font-bold">Common Wildcard</p>
+                      <p className="text-center text-3xl font-bold">Rare Wildcard</p>
                       <div className="flex gap-5">
                         <button
                           onClick={() => purchaseWildcard("Common", "Rare")}
@@ -440,7 +440,7 @@ export default function Shop() {
                   <div className="h-72 w-72 border-2 border-black bg-ball p-2">
                     <div className="flex h-full flex-col items-center justify-around">
                       <Wildcard wildcard="Epic" width={112} height={112} />
-                      <p className="text-center text-3xl font-bold">Common Wildcard</p>
+                      <p className="text-center text-3xl font-bold">Epic Wildcard</p>
                       <div className="flex gap-5">
                         <button
                           onClick={() => purchaseWildcard("Common", "Epic")}
@@ -474,13 +474,12 @@ export default function Shop() {
                   <div className="h-72 w-72 border-2 border-black bg-ball p-2">
                     <div className="flex h-full flex-col items-center justify-around">
                       <Wildcard wildcard="Legendary" width={112} height={112} />
-                      <p className="text-center text-3xl font-bold">Common Wildcard</p>
+                      <p className="text-center text-3xl font-bold">Legendary Wildcard</p>
                       <div className="flex gap-5">
                         <button
                           onClick={() => purchaseWildcard("Common", "Legendary")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 ro
-                            unded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
                           <div className="flex justify-center"><span>50</span>
                             <Wildcard wildcard="Common" height={25} width={25} />
                           </div>
