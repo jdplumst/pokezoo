@@ -94,7 +94,10 @@ export const charmRouter = router({
     }
 
     try {
-      const charmsData = await ctx.db.select().from(userCharms).leftJoin(charms, eq(userCharms.charmId, charms.id))
+      const charmsData = await ctx.db.select()
+        .from(userCharms)
+        .leftJoin(charms, eq(userCharms.charmId, charms.id))
+        .where(eq(userCharms.userId, ctx.session.user.id))
       return { charmsData }
     } catch (err) {
       throw new TRPCError({
