@@ -27,6 +27,9 @@ export default function PatchNotes() {
           <Topbar />
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
+            <Patch patch="6.11" date="March 16, 2024">
+              <Note note="Removed buy button on shop page for charms that a user has already purchased." />
+            </Patch>
             <Patch patch="6.10" date="March 10, 2024">
               <Note note="Added Wildcards to Shop! Users can now trade in 
                 their wildcards for wildcards of other rarities." />

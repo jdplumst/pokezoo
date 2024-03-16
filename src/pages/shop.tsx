@@ -40,6 +40,8 @@ export default function Shop() {
   const { data: charmData, isLoading: charmLoading } =
     trpc.charm.getCharms.useQuery();
 
+  const { data: userCharmData, isLoading: userCharmLoading } = trpc.charm.getUserCharms.useQuery();
+
   const [error, setError] = useState<string | null>(null);
 
   const [boughtBall, setBoughtBall] =
@@ -283,7 +285,7 @@ export default function Shop() {
           <Topbar />
           <main className="p-4">
             {error && <p className="font-bold text-red-500">{error}</p>}
-            {ballLoading || charmLoading ? (
+            {ballLoading || charmLoading || userCharmLoading ? (
               <div className="flex items-center justify-center pt-5">
                 <LoadingSpinner />
               </div>
@@ -353,16 +355,22 @@ export default function Shop() {
                           <p className="text-center text-2xl font-bold">
                             P{c.cost.toLocaleString()}
                           </p>
-                          <button
-                            onClick={() => purchaseCharm(c)}
-                            disabled={charmMutation.isLoading}
-                            className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
-                            {charmMutation.isLoading && boughtCharm === c ? (
-                              <LoadingSpinner />
-                            ) : (
-                              "Buy"
-                            )}
-                          </button>
+                          {userCharmData?.charmsData.some(u => u.charm?.id === c.id) ?
+                            <p className="text-center text-xl">
+                              You have already purchased this charm
+                            </p>
+                            :
+                            <button
+                              onClick={() => purchaseCharm(c)}
+                              disabled={charmMutation.isLoading}
+                              className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                              {charmMutation.isLoading && boughtCharm === c ? (
+                                <LoadingSpinner />
+                              ) : (
+                                "Buy"
+                              )}
+                            </button>
+                          }
                         </div>
                       </div>
                     </Tooltip>
