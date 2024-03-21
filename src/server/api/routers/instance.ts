@@ -714,12 +714,12 @@ export const instanceRouter = router({
         })
         .from(species)
         .innerJoin(regions, eq(species.regionId, regions.id))
-        .innerJoin(rarities, eq(species.rarityId, rarities.name))
+        .innerJoin(rarities, eq(species.rarityId, rarities.id))
         .innerJoin(habitats, eq(species.habitatId, habitats.id))
         .innerJoin(typeOne, eq(species.typeOneId, typeOne.id))
         .leftJoin(typeTwo, eq(species.typeTwoId, typeTwo.id))
         .where(eq(species.shiny, true))
-        .orderBy(sql`RAND()`)
+        .orderBy(sql`RANDOM()`)
         .limit(1)
     )[0];
 
