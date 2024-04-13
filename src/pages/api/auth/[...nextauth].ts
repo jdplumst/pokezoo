@@ -9,12 +9,13 @@ import {
   profiles,
   sessions,
   users,
-  verificationTokens
+  verificationTokens,
 } from "@/src/server/db/schema";
 import { eq } from "drizzle-orm";
 import { env } from "@/src/env";
 import type { Adapter } from "next-auth/adapters";
 import { pgTable } from "drizzle-orm/pg-core";
+
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: User & DefaultSession["user"];
@@ -24,6 +25,7 @@ declare module "next-auth" {
     id: string;
   }
 }
+
 // @ts-expect-error for drizzle table prefix
 const mapAdapter = (name, columns, extraConfig) => {
   switch (name) {
@@ -47,16 +49,25 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GithubProvider({
       clientId: env.GITHUB_ID,
-      clientSecret: env.GITHUB_SECRET
+      clientSecret: env.GITHUB_SECRET,
+      httpOptions: {
+        timeout: 40000,
+      },
     }),
     TwitchProvider({
       clientId: env.TWITCH_CLIENT_ID,
-      clientSecret: env.TWITCH_CLIENT_SECRET
+      clientSecret: env.TWITCH_CLIENT_SECRET,
+      httpOptions: {
+        timeout: 40000,
+      },
     }),
     GoogleProvider({
       clientId: env.GOOGLE_CLIENT_ID,
-      clientSecret: env.GOOGLE_CLIENT_SECRET
-    })
+      clientSecret: env.GOOGLE_CLIENT_SECRET,
+      httpOptions: {
+        timeout: 40000,
+      },
+    }),
   ],
   callbacks: {
     async session({ session, user }) {
@@ -70,13 +81,13 @@ export const authOptions: NextAuthOptions = {
         ...session,
         user: {
           ...session.user,
-          id: user.id
-        }
+          id: user.id,
+        },
       };
-    }
+    },
   },
   pages: { signOut: "/" },
-  secret: env.NEXTAUTH_SECRET
+  secret: env.NEXTAUTH_SECRET,
 };
 
 export default NextAuth(authOptions);
