@@ -39,7 +39,8 @@ export default function ThemeWrapper({ children }: ITimeProps) {
 
   return (
     <div
-      className={`${time} ${theme} min-h-screen bg-gradient-to-r from-bg-left to-bg-right text-color-text`}>
+      className={`${time} ${theme} min-h-screen bg-gradient-to-r from-bg-left to-bg-right text-color-text`}
+    >
       {children}
     </div>
   );

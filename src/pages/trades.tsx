@@ -12,7 +12,7 @@ import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Trades() {
   const { data: session, status } = useSession({
-    required: true
+    required: true,
   });
 
   const utils = trpc.useUtils();
@@ -48,9 +48,18 @@ export default function Trades() {
     <>
       <Head>
         <title>PokéZoo - Trades</title>
-        <meta name="description" content="PokéZoo" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
+        <meta
+          name="description"
+          content="PokéZoo"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+        <link
+          rel="icon"
+          href="/favicon.png"
+        />
       </Head>
 
       {/* Main Trading Screen */}
@@ -65,7 +74,8 @@ export default function Trades() {
                 time === `day`
                   ? `bg-yellow-btn-unfocus hover:bg-yellow-btn-focus`
                   : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-              }`}>
+              }`}
+            >
               Add Trade
             </button>
             {tradeLoading ? (
@@ -77,7 +87,8 @@ export default function Trades() {
                 {tradeData?.trades.map((t) => (
                   <div
                     key={t.trade.id}
-                    className="h-76 w-[600px] border-2 border-solid border-black bg-rose-600 p-2">
+                    className="h-76 w-[600px] border-2 border-solid border-black bg-rose-600 p-2"
+                  >
                     <div className="flex h-full w-full justify-between">
                       <div className="flex w-1/2 flex-col items-center justify-between gap-5">
                         <div className="h-8 text-center text-xl font-bold">
@@ -92,12 +103,14 @@ export default function Trades() {
                                 : t.initiatorRarity.name === `Epic`
                                   ? `bg-epic-unfocus`
                                   : `bg-legendary-unfocus`
-                          }`}>
+                          }`}
+                        >
                           <img
                             src={t.initiatorSpecies.img}
                             alt={t.initiatorSpecies.name}
                             width={150}
-                            height={150}></img>
+                            height={150}
+                          ></img>
                           <div className="text-center font-bold capitalize">
                             {t.initiatorSpecies.name}
                             {t.initiatorSpecies.shiny && `⭐`}
@@ -112,12 +125,13 @@ export default function Trades() {
                                 {
                                   onSuccess() {
                                     void utils.trade.getTrades.invalidate();
-                                  }
-                                }
+                                  },
+                                },
                               )
                             }
                             disabled={cancelMutation.isLoading}
-                            className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                            className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                          >
                             Cancel
                           </button>
                         ) : (
@@ -142,12 +156,14 @@ export default function Trades() {
                                   : t.offererRarity.name === `Epic`
                                     ? `bg-epic-unfocus`
                                     : `bg-legendary-unfocus`
-                            }`}>
+                            }`}
+                          >
                             <img
                               src={t.offererSpecies.img}
                               alt={t.offererSpecies.name}
                               width={150}
-                              height={150}></img>
+                              height={150}
+                            ></img>
                             <div className="text-center font-bold capitalize">
                               {t.offererSpecies.name}
                               {t.offererSpecies.shiny && `⭐`}
@@ -162,12 +178,13 @@ export default function Trades() {
                                   {
                                     onSuccess() {
                                       void utils.trade.getTrades.invalidate();
-                                    }
-                                  }
+                                    },
+                                  },
                                 )
                               }
                               disabled={withdrawMutation.isLoading}
-                              className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                              className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                            >
                               Withdraw
                             </button>
                           ) : t.trade.offererId &&
@@ -181,12 +198,13 @@ export default function Trades() {
                                       onSuccess() {
                                         void utils.trade.getTrades.invalidate();
                                         void utils.profile.getProfile.invalidate();
-                                      }
-                                    }
+                                      },
+                                    },
                                   )
                                 }
                                 disabled={acceptMutation.isLoading}
-                                className="w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus">
+                                className="w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus"
+                              >
                                 Accept
                               </button>
                               <button
@@ -196,12 +214,13 @@ export default function Trades() {
                                     {
                                       onSuccess() {
                                         void utils.trade.getTrades.invalidate();
-                                      }
-                                    }
+                                      },
+                                    },
                                   )
                                 }
                                 disabled={rejectMutation.isLoading}
-                                className="w-24 rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+                                className="w-24 rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
+                              >
                                 Reject
                               </button>
                             </div>
@@ -221,7 +240,8 @@ export default function Trades() {
                               setTradeId(t.trade.id);
                             }}
                             disabled={offerModal}
-                            className="w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus">
+                            className="w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus"
+                          >
                             Add Offer
                           </button>
                         </div>
@@ -245,7 +265,8 @@ export default function Trades() {
                 setDescription("");
                 setTradeId("-1");
               }}
-              className="absolute right-4 top-4 text-3xl font-bold">
+              className="absolute right-4 top-4 text-3xl font-bold"
+            >
               X
             </button>
             <div className="p-2 text-3xl font-bold">Select a Pokémon</div>
@@ -280,19 +301,23 @@ export default function Trades() {
                           : i.rarity === `Epic`
                             ? `bg-epic-unfocus`
                             : `bg-legendary-unfocus`
-                    }`}>
+                    }`}
+                  >
                     <div className="text-center text-xl font-bold capitalize">
                       {i.name}
                       {i.shiny && `⭐`}
                     </div>
-                    <img src={i.img} alt={i.name} />
+                    <img
+                      src={i.img}
+                      alt={i.name}
+                    />
                     {initiateModal && (
                       <button
                         onClick={() =>
                           initiateMutation.mutate(
                             {
                               instanceId: i.instanceId,
-                              description: description
+                              description: description,
                             },
                             {
                               onSuccess() {
@@ -303,12 +328,13 @@ export default function Trades() {
                               },
                               onError() {
                                 setError("This Pokémon is already in a trade");
-                              }
-                            }
+                              },
+                            },
                           )
                         }
                         disabled={initiateMutation.isLoading}
-                        className="pointer-events-auto w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus">
+                        className="pointer-events-auto w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus"
+                      >
                         Trade
                       </button>
                     )}
@@ -318,7 +344,7 @@ export default function Trades() {
                           offerMutation.mutate(
                             {
                               instanceId: i.instanceId,
-                              tradeId: tradeId
+                              tradeId: tradeId,
                             },
                             {
                               onSuccess() {
@@ -333,19 +359,20 @@ export default function Trades() {
                                   "You can't give an offer for your own trade"
                                 ) {
                                   setError(
-                                    "You can't give an offer for your own trade"
+                                    "You can't give an offer for your own trade",
                                   );
                                 } else {
                                   setError(
-                                    "This Pokémon is already in a trade"
+                                    "This Pokémon is already in a trade",
                                   );
                                 }
-                              }
-                            }
+                              },
+                            },
                           )
                         }
                         disabled={offerMutation.isLoading}
-                        className="pointer-events-auto w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus">
+                        className="pointer-events-auto w-24 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold hover:bg-green-btn-focus"
+                      >
                         Offer
                       </button>
                     )}

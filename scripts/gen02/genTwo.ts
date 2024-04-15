@@ -7,11 +7,11 @@ import { Rarity } from "@prisma/client";
 const populateGenTwoDB = async () => {
   for (let i = 152; i <= 251; i++) {
     const speciesResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${i}/`
+      `https://pokeapi.co/api/v2/pokemon-species/${i}/`,
     );
     const speciesData = await speciesResponse.json();
     const pokemonResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${i}`
+      `https://pokeapi.co/api/v2/pokemon/${i}`,
     );
     const pokemonData = await pokemonResponse.json();
     let rarity: Rarity = "Common";
@@ -53,8 +53,8 @@ const populateGenTwoDB = async () => {
           shiny: false,
           typeOne: pokemonData.types[0].type.name,
           typeTwo: pokemonData.types[1].type.name,
-          generation: 2
-        }
+          generation: 2,
+        },
       });
       const shinySpecies = await prisma.species.create({
         data: {
@@ -67,8 +67,8 @@ const populateGenTwoDB = async () => {
           shiny: true,
           typeOne: pokemonData.types[0].type.name,
           typeTwo: pokemonData.types[1].type.name,
-          generation: 2
-        }
+          generation: 2,
+        },
       });
       console.log(species);
       console.log(shinySpecies);
@@ -83,8 +83,8 @@ const populateGenTwoDB = async () => {
           sellPrice: sell,
           shiny: false,
           typeOne: pokemonData.types[0].type.name,
-          generation: 2
-        }
+          generation: 2,
+        },
       });
       const shinySpecies = await prisma.species.create({
         data: {
@@ -96,8 +96,8 @@ const populateGenTwoDB = async () => {
           sellPrice: sell * 2,
           shiny: true,
           typeOne: pokemonData.types[0].type.name,
-          generation: 2
-        }
+          generation: 2,
+        },
       });
       console.log(species);
       console.log(shinySpecies);

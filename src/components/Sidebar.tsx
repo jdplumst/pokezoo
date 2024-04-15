@@ -26,12 +26,14 @@ export default function Sidebar({ children, page }: ISidebar) {
       <nav
         className={`${
           open ? `w-1/5` : `w-1/12`
-        } sidebar sticky top-0 flex h-screen max-h-screen flex-col gap-2 overflow-auto p-4 shadow-lg`}>
+        } sidebar sticky top-0 flex h-screen max-h-screen flex-col gap-2 overflow-auto p-4 shadow-lg`}
+      >
         <div className="flex items-center pb-10">
           <h1
             className={`${
               open ? `block w-1/5` : `hidden w-1/12`
-            } text-4xl font-bold`}>
+            } text-4xl font-bold`}
+          >
             PokéZoo
           </h1>
           <AiOutlineMenu
@@ -46,7 +48,8 @@ export default function Sidebar({ children, page }: ISidebar) {
           <div
             className={`${
               page === "Game" && `bg-sidebar-focus`
-            } flex w-full items-center hover:bg-sidebar-unfocus`}>
+            } flex w-full items-center hover:bg-sidebar-unfocus`}
+          >
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/master-ball.png"
               alt="game"
@@ -63,7 +66,8 @@ export default function Sidebar({ children, page }: ISidebar) {
           <div
             className={`${
               page === "Shop" && `bg-sidebar-focus`
-            } flex w-full items-center hover:bg-sidebar-unfocus`}>
+            } flex w-full items-center hover:bg-sidebar-unfocus`}
+          >
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/coin-case.png"
               alt="shop"
@@ -80,7 +84,8 @@ export default function Sidebar({ children, page }: ISidebar) {
           <div
             className={`${
               page === "Achievements" && `bg-sidebar-focus`
-            } flex w-full items-center hover:bg-sidebar-unfocus`}>
+            } flex w-full items-center hover:bg-sidebar-unfocus`}
+          >
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/badges/29.png"
               alt="shop"
@@ -97,7 +102,8 @@ export default function Sidebar({ children, page }: ISidebar) {
           <div
             className={`${
               page === "Pokedex" && `bg-sidebar-focus`
-            } flex w-full items-center hover:bg-sidebar-unfocus`}>
+            } flex w-full items-center hover:bg-sidebar-unfocus`}
+          >
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-radar.png"
               alt="pokedex"
@@ -114,7 +120,8 @@ export default function Sidebar({ children, page }: ISidebar) {
           <div
             className={`${
               page === "Trades" && `bg-sidebar-focus`
-            } flex w-full items-center hover:bg-sidebar-unfocus`}>
+            } flex w-full items-center hover:bg-sidebar-unfocus`}
+          >
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/bloom-mail.png"
               alt="trades"
@@ -131,7 +138,8 @@ export default function Sidebar({ children, page }: ISidebar) {
           <div
             className={`${
               page === "Tutorial" && `bg-sidebar-focus`
-            } flex w-full items-center hover:bg-sidebar-unfocus`}>
+            } flex w-full items-center hover:bg-sidebar-unfocus`}
+          >
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/wide-lens.png"
               alt="tutorial"
@@ -148,7 +156,8 @@ export default function Sidebar({ children, page }: ISidebar) {
           <div
             className={`${
               page === "PatchNotes" && `bg-sidebar-focus`
-            } flex w-full items-center hover:bg-sidebar-unfocus`}>
+            } flex w-full items-center hover:bg-sidebar-unfocus`}
+          >
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/pal-pad.png"
               alt="patch_notes"
@@ -165,7 +174,8 @@ export default function Sidebar({ children, page }: ISidebar) {
           <div
             className={`${
               page === "Settings" && `bg-sidebar-focus`
-            } flex w-full items-center hover:bg-sidebar-unfocus`}>
+            } flex w-full items-center hover:bg-sidebar-unfocus`}
+          >
             <Image
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/blue-card.png"
               alt="patch_notes"
@@ -179,7 +189,10 @@ export default function Sidebar({ children, page }: ISidebar) {
           </div>
         </Link>
         <div className="mt-auto flex flex-col gap-2">
-          <a href="https://pokeapi.co/" target="_blank">
+          <a
+            href="https://pokeapi.co/"
+            target="_blank"
+          >
             <div className="flex items-center hover:bg-sidebar-unfocus">
               <Image
                 src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png"
@@ -193,7 +206,10 @@ export default function Sidebar({ children, page }: ISidebar) {
               </h2>
             </div>
           </a>
-          <a href="https://github.com/jdplumst/pokezoo" target="_blank">
+          <a
+            href="https://github.com/jdplumst/pokezoo"
+            target="_blank"
+          >
             <div className="flex items-center py-2 hover:bg-sidebar-unfocus">
               <AiOutlineGithub
                 size={30}
@@ -202,7 +218,8 @@ export default function Sidebar({ children, page }: ISidebar) {
               <h2
                 className={`${
                   open ? `block pl-2` : `hidden`
-                } text-2xl font-bold`}>
+                } text-2xl font-bold`}
+              >
                 GitHub
               </h2>
             </div>
@@ -211,15 +228,15 @@ export default function Sidebar({ children, page }: ISidebar) {
             onClick={() => signOut()}
             className={`${
               open ? `` : `ml-auto mr-auto`
-            } pixelated flex w-full items-center py-1 hover:bg-sidebar-unfocus`}>
+            } pixelated flex w-full items-center py-1 hover:bg-sidebar-unfocus`}
+          >
             <GoSignOut
               size={30}
               className={`${open ? `ml-3` : `ml-auto mr-auto`} pixelated mt-1`}
             />
             <h2
-              className={`${
-                open ? `block` : `hidden`
-              } pl-2 text-2xl font-bold`}>
+              className={`${open ? `block` : `hidden`} pl-2 text-2xl font-bold`}
+            >
               Sign Out
             </h2>
           </button>

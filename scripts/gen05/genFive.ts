@@ -11,11 +11,11 @@ function capitalize(s: string) {
 const populateGenFiveDB = async () => {
   for (let i = 494; i <= 649; i++) {
     const speciesResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${i}/`
+      `https://pokeapi.co/api/v2/pokemon-species/${i}/`,
     );
     const speciesData = await speciesResponse.json();
     const pokemonResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${i}`
+      `https://pokeapi.co/api/v2/pokemon/${i}`,
     );
     const pokemonData = await pokemonResponse.json();
     let rarity: Rarity = "Common";
@@ -59,8 +59,8 @@ const populateGenFiveDB = async () => {
           typeTwo: capitalize(pokemonData.types[1].type.name) as SpeciesType,
           generation: 5,
           habitat: "Cave",
-          region: "Unova"
-        }
+          region: "Unova",
+        },
       });
       const shinySpecies = await prisma.species.create({
         data: {
@@ -75,8 +75,8 @@ const populateGenFiveDB = async () => {
           typeTwo: capitalize(pokemonData.types[1].type.name) as SpeciesType,
           generation: 5,
           habitat: "Cave",
-          region: "Unova"
-        }
+          region: "Unova",
+        },
       });
       console.log(species);
       console.log(shinySpecies);
@@ -93,8 +93,8 @@ const populateGenFiveDB = async () => {
           typeOne: capitalize(pokemonData.types[0].type.name) as SpeciesType,
           generation: 5,
           habitat: "Cave",
-          region: "Unova"
-        }
+          region: "Unova",
+        },
       });
       const shinySpecies = await prisma.species.create({
         data: {
@@ -108,8 +108,8 @@ const populateGenFiveDB = async () => {
           typeOne: capitalize(pokemonData.types[0].type.name) as SpeciesType,
           generation: 5,
           habitat: "Cave",
-          region: "Unova"
-        }
+          region: "Unova",
+        },
       });
       console.log(species);
       console.log(shinySpecies);

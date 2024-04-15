@@ -14,7 +14,7 @@ import {
   RegionsList,
   RaritiesList,
   TypesList,
-  HabitatList
+  HabitatList,
 } from "../constants";
 import { type z } from "zod";
 import {
@@ -22,7 +22,7 @@ import {
   type ZodHabitat,
   type ZodRarity,
   type ZodRegion,
-  type ZodSpeciesType
+  type ZodSpeciesType,
 } from "@/src/zod";
 import ThemeWrapper from "../components/ThemeWrapper";
 
@@ -33,7 +33,7 @@ interface IPurchased {
 
 export default function Pokedex() {
   const { status } = useSession({
-    required: true
+    required: true,
   });
 
   const utils = trpc.useUtils();
@@ -42,12 +42,12 @@ export default function Pokedex() {
 
   const [purchased, setPurchased] = useState<IPurchased>({
     modal: false,
-    species: null
+    species: null,
   });
 
   const [caught, setCaught] = useState({
     Caught: true,
-    Uncaught: true
+    Uncaught: true,
   });
   const [shiny, setShiny] = useState(false);
   const [regions, setRegions] =
@@ -66,7 +66,7 @@ export default function Pokedex() {
     Region: false,
     Rarity: false,
     Type: false,
-    Habitat: false
+    Habitat: false,
   });
 
   const getPokedex = trpc.species.getPokedex.useInfiniteQuery(
@@ -77,9 +77,9 @@ export default function Pokedex() {
       regions: regions,
       rarities: rarities,
       types: types,
-      habitats: habitats
+      habitats: habitats,
     },
-    { getNextPageParam: (lastPage) => lastPage.nextCursor }
+    { getNextPageParam: (lastPage) => lastPage.nextCursor },
   );
 
   // Infinite scroll
@@ -99,7 +99,7 @@ export default function Pokedex() {
     } else {
       const newDropdowns: IDropdowns = {} as IDropdowns;
       Object.keys(dropdowns).forEach((x) =>
-        x === d ? (newDropdowns[x] = true) : (newDropdowns[x] = false)
+        x === d ? (newDropdowns[x] = true) : (newDropdowns[x] = false),
       );
       setDropdowns(newDropdowns);
     }
@@ -202,9 +202,18 @@ export default function Pokedex() {
     <>
       <Head>
         <title>PokéZoo - Pokédex</title>
-        <meta name="description" content="PokéZoo" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
+        <meta
+          name="description"
+          content="PokéZoo"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+        <link
+          rel="icon"
+          href="/favicon.png"
+        />
       </Head>
       <ThemeWrapper>
         <Sidebar page="Pokedex">
@@ -246,7 +255,10 @@ export default function Pokedex() {
               ))}
             </div>
             {getPokedex.hasNextPage && (
-              <div ref={ref} className="flex h-16 justify-center pt-4">
+              <div
+                ref={ref}
+                className="flex h-16 justify-center pt-4"
+              >
                 {getPokedex.isFetchingNextPage && <LoadingSpinner />}
               </div>
             )}
@@ -273,7 +285,8 @@ export default function Pokedex() {
             <div className="flex justify-center pt-4">
               <button
                 onClick={() => setPurchased({ modal: false, species: null })}
-                className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+                className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
+              >
                 Got it!
               </button>
             </div>

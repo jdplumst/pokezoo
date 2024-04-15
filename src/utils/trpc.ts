@@ -39,15 +39,15 @@ export const trpc = createTRPCNext<AppRouter>({
         loggerLink({
           enabled: (opts) =>
             process.env.NODE_ENV === "development" ||
-            (opts.direction === "down" && opts.result instanceof Error)
+            (opts.direction === "down" && opts.result instanceof Error),
         }),
         httpBatchLink({
-          url: `${getBaseUrl()}/api/trpc`
-        })
+          url: `${getBaseUrl()}/api/trpc`,
+        }),
       ],
       queryClientConfig: {
-        defaultOptions: { queries: { refetchOnWindowFocus: false } }
-      }
+        defaultOptions: { queries: { refetchOnWindowFocus: false } },
+      },
     };
   },
   /**
@@ -55,5 +55,5 @@ export const trpc = createTRPCNext<AppRouter>({
    *
    * @see https://trpc.io/docs/nextjs#ssr-boolean-default-false
    */
-  ssr: false
+  ssr: false,
 });

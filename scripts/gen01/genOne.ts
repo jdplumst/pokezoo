@@ -7,11 +7,11 @@ import { Rarity } from "@prisma/client";
 const populateGenOneDB = async () => {
   for (let i = 1; i <= 151; i++) {
     const speciesResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${i}/`
+      `https://pokeapi.co/api/v2/pokemon-species/${i}/`,
     );
     const speciesData = await speciesResponse.json();
     const pokemonResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${i}`
+      `https://pokeapi.co/api/v2/pokemon/${i}`,
     );
     const pokemonData = await pokemonResponse.json();
     let rarity: Rarity = "Common";
@@ -42,8 +42,8 @@ const populateGenOneDB = async () => {
         name: pokemonData.name,
         rarity: rarity,
         yield: income,
-        img: pokemonData.sprites.front_default
-      }
+        img: pokemonData.sprites.front_default,
+      },
     });
     console.log(species);
   }

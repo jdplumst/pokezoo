@@ -8,14 +8,14 @@ import {
   RegionsList,
   SHINY_WILDCARD_COST,
   TypesList,
-  WILDCARD_COST
+  WILDCARD_COST,
 } from "@/src/constants";
 import {
   ZodHabitat,
   ZodRarity,
   ZodRegion,
   ZodSort,
-  ZodSpeciesType
+  ZodSpeciesType,
 } from "@/src/zod";
 import {
   habitats,
@@ -26,7 +26,7 @@ import {
   species,
   trades,
   types,
-  userCharms
+  userCharms,
 } from "../../db/schema";
 import { and, asc, desc, eq, inArray, notInArray, or, sql } from "drizzle-orm";
 import { calcNewYield } from "@/src/utils/calcNewYield";
@@ -50,7 +50,7 @@ export const instanceRouter = router({
         typeOne: typeOne.name,
         typeTwo: typeTwo.name,
         name: species.name,
-        img: species.img
+        img: species.img,
       })
       .from(instances)
       .innerJoin(species, eq(instances.speciesId, species.id))
@@ -63,7 +63,7 @@ export const instanceRouter = router({
       .orderBy(
         asc(species.pokedexNumber),
         asc(species.name),
-        desc(species.shiny)
+        desc(species.shiny),
       );
 
     return { instances: instancesData };
@@ -79,7 +79,7 @@ export const instanceRouter = router({
             modifyDate: z.date(),
             name: z.string().nullish(),
             pokedexNumber: z.number().nullish(),
-            rarity: z.string().nullish()
+            rarity: z.string().nullish(),
           })
           .nullish(),
         order: ZodSort,
@@ -87,31 +87,31 @@ export const instanceRouter = router({
         regions: z.array(ZodRegion),
         rarities: z.array(ZodRarity),
         types: z.array(ZodSpeciesType),
-        habitats: z.array(ZodHabitat)
-      })
+        habitats: z.array(ZodHabitat),
+      }),
     )
     .query(async ({ ctx, input }) => {
       if (input.cursor?.name?.includes(" ")) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Invalid cursor name"
+          message: "Invalid cursor name",
         });
       }
 
       let rarityCursor;
       switch (input.cursor?.rarity) {
         case "Common":
-          rarityCursor = 1
-          break
+          rarityCursor = 1;
+          break;
         case "Rare":
-          rarityCursor = 2
-          break
+          rarityCursor = 2;
+          break;
         case "Epic":
-          rarityCursor = 3
-          break
+          rarityCursor = 3;
+          break;
         case "Legendary":
-          rarityCursor = 4
-          break
+          rarityCursor = 4;
+          break;
       }
 
       const limit = input.limit ?? 50;
@@ -134,7 +134,7 @@ export const instanceRouter = router({
           generation: species.generation,
           habitat: habitats.name,
           region: regions.name,
-          instance: instances
+          instance: instances,
         })
         .from(instances)
         .innerJoin(species, eq(instances.speciesId, species.id))
@@ -155,47 +155,61 @@ export const instanceRouter = router({
               : notInArray(rarities.name, RaritiesList),
             input.types.length > 0
               ? or(
-                inArray(typeOne.name, input.types),
-                inArray(typeTwo.name, input.types)
-              )
+                  inArray(typeOne.name, input.types),
+                  inArray(typeTwo.name, input.types),
+                )
               : notInArray(typeOne.name, TypesList),
             input.habitats.length > 0
               ? inArray(habitats.name, input.habitats)
               : notInArray(habitats.name, HabitatList),
             input.order === "Oldest"
-              ? sql`${instances.modifyDate} >= ${input.cursor?.modifyDate ??
-                new Date("2020-12-03 17:20:11.049")
+              ? sql`${instances.modifyDate} >= ${
+                  input.cursor?.modifyDate ??
+                  new Date("2020-12-03 17:20:11.049")
                 }`
               : input.order === "Newest"
-                ? sql`${instances.modifyDate} <= ${input.cursor?.modifyDate ??
-                  new Date("2050-12-03 17:20:11.049")
+                ? sql`${instances.modifyDate} <= ${
+                    input.cursor?.modifyDate ??
+                    new Date("2050-12-03 17:20:11.049")
                   }`
                 : input.order === "Pokedex"
-                  ? sql`(${species.pokedexNumber}, ${rarities.id} ,${species.name}, ${instances.modifyDate
-                    }) >= (${input.cursor?.pokedexNumber ?? 0}, ${rarityCursor ?? 0}, ${input.cursor?.name ?? ""
-                    }, ${input.cursor?.modifyDate ??
-                    new Date("2020-12-03 17:20:11.049")
+                  ? sql`(${species.pokedexNumber}, ${rarities.id} ,${species.name}, ${
+                      instances.modifyDate
+                    }) >= (${input.cursor?.pokedexNumber ?? 0}, ${rarityCursor ?? 0}, ${
+                      input.cursor?.name ?? ""
+                    }, ${
+                      input.cursor?.modifyDate ??
+                      new Date("2020-12-03 17:20:11.049")
                     })`
                   : input.order === "PokedexDesc"
-                    ? sql`(${species.pokedexNumber}, ${rarities.id}, ${species.name}, ${instances.modifyDate
-                      }) <= (${input.cursor?.pokedexNumber ?? 10000}, ${rarityCursor ?? 10}, ${input.cursor?.name ?? "{"
-                      }, ${input.cursor?.modifyDate ??
-                      new Date("2050-12-03 17:20:11.049")
+                    ? sql`(${species.pokedexNumber}, ${rarities.id}, ${species.name}, ${
+                        instances.modifyDate
+                      }) <= (${input.cursor?.pokedexNumber ?? 10000}, ${rarityCursor ?? 10}, ${
+                        input.cursor?.name ?? "{"
+                      }, ${
+                        input.cursor?.modifyDate ??
+                        new Date("2050-12-03 17:20:11.049")
                       })`
                     : input.order === "Rarity"
-                      ? sql`(${rarities.id}, ${species.pokedexNumber}, ${species.name
-                        }, ${instances.modifyDate}) >= (${rarityCursor ?? 0}, ${input.cursor?.pokedexNumber ?? 0
-                        }, ${input.cursor?.name ?? ""}, ${input.cursor?.modifyDate ??
-                        new Date("2020-12-03 17:20:11.049")
+                      ? sql`(${rarities.id}, ${species.pokedexNumber}, ${
+                          species.name
+                        }, ${instances.modifyDate}) >= (${rarityCursor ?? 0}, ${
+                          input.cursor?.pokedexNumber ?? 0
+                        }, ${input.cursor?.name ?? ""}, ${
+                          input.cursor?.modifyDate ??
+                          new Date("2020-12-03 17:20:11.049")
                         })`
                       : input.order === "RarityDesc"
-                        ? sql`(${rarities.id}, ${species.pokedexNumber}, ${species.name
-                          }, ${instances.modifyDate}) <= (${rarityCursor ?? 10}, ${input.cursor?.pokedexNumber ?? 10000
-                          }, ${input.cursor?.name ?? "{"}, ${input.cursor?.modifyDate ??
-                          new Date("2050-12-03 17:20:11.049")
+                        ? sql`(${rarities.id}, ${species.pokedexNumber}, ${
+                            species.name
+                          }, ${instances.modifyDate}) <= (${rarityCursor ?? 10}, ${
+                            input.cursor?.pokedexNumber ?? 10000
+                          }, ${input.cursor?.name ?? "{"}, ${
+                            input.cursor?.modifyDate ??
+                            new Date("2050-12-03 17:20:11.049")
                           })`
-                        : undefined
-          )
+                        : undefined,
+          ),
         )
         .orderBy(
           input.order === "Oldest"
@@ -210,7 +224,7 @@ export const instanceRouter = router({
                     ? sql`${rarities.id} asc, ${species.pokedexNumber} asc, ${species.name} asc, ${instances.modifyDate} asc`
                     : input.order === "RarityDesc"
                       ? sql`${rarities.id} desc, ${species.pokedexNumber} desc, ${species.name} desc, ${instances.modifyDate} desc`
-                      : asc(instances.modifyDate)
+                      : asc(instances.modifyDate),
         )
         .limit(limit + 1);
 
@@ -220,17 +234,17 @@ export const instanceRouter = router({
         nextCursor =
           input.order === "Oldest" || input.order === "Newest"
             ? {
-              modifyDate: nextItem.instance.modifyDate,
-              name: null,
-              pokedexNumber: null,
-              rarity: null
-            }
+                modifyDate: nextItem.instance.modifyDate,
+                name: null,
+                pokedexNumber: null,
+                rarity: null,
+              }
             : {
-              modifyDate: nextItem.instance.modifyDate,
-              name: nextItem.name,
-              pokedexNumber: nextItem.pokedexNumber,
-              rarity: nextItem.rarity
-            }
+                modifyDate: nextItem.instance.modifyDate,
+                name: nextItem.name,
+                pokedexNumber: nextItem.pokedexNumber,
+                rarity: nextItem.rarity,
+              };
       }
 
       return { instancesData, nextCursor };
@@ -240,8 +254,8 @@ export const instanceRouter = router({
     .input(
       z.object({
         speciesId: z.string(),
-        cost: z.number()
-      })
+        cost: z.number(),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const catchingCharm = alias(userCharms, "catchingCharm");
@@ -251,12 +265,15 @@ export const instanceRouter = router({
             totalYield: profiles.totalYield,
             balance: profiles.balance,
             instanceCount: profiles.instanceCount,
-            catchingCharm: catchingCharm.charmId
+            catchingCharm: catchingCharm.charmId,
           })
           .from(profiles)
           .leftJoin(
             catchingCharm,
-            and(eq(profiles.userId, catchingCharm.userId), eq(catchingCharm.charmId, 1))
+            and(
+              eq(profiles.userId, catchingCharm.userId),
+              eq(catchingCharm.charmId, 1),
+            ),
           )
           .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
@@ -264,14 +281,14 @@ export const instanceRouter = router({
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Not authorized to make this request"
+          message: "Not authorized to make this request",
         });
       }
 
       if (currUser.balance < input.cost) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "You cannot afford this ball."
+          message: "You cannot afford this ball.",
         });
       }
 
@@ -285,15 +302,17 @@ export const instanceRouter = router({
       if (!speciesData) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Species does not exist."
+          message: "Species does not exist.",
         });
       }
 
-      if (!withinInstanceLimit(currUser.instanceCount, !!currUser.catchingCharm)) {
+      if (
+        !withinInstanceLimit(currUser.instanceCount, !!currUser.catchingCharm)
+      ) {
         throw new TRPCError({
           code: "CONFLICT",
           message:
-            "You have reached your limit. Sell Pokémon if you want to buy more."
+            "You have reached your limit. Sell Pokémon if you want to buy more.",
         });
       }
       const newYield = calcNewYield(currUser.totalYield, speciesData.yield);
@@ -304,7 +323,7 @@ export const instanceRouter = router({
           .set({
             totalYield: newYield,
             balance: currUser.balance - input.cost,
-            instanceCount: currUser.instanceCount + 1
+            instanceCount: currUser.instanceCount + 1,
           })
           .where(eq(profiles.userId, ctx.session.user.id));
 
@@ -320,8 +339,8 @@ export const instanceRouter = router({
           .where(
             and(
               eq(instances.userId, ctx.session.user.id),
-              eq(instances.speciesId, input.speciesId)
-            )
+              eq(instances.speciesId, input.speciesId),
+            ),
           )
       )[0];
 
@@ -331,8 +350,8 @@ export const instanceRouter = router({
   purchaseInstanceWithWildcards: protectedProcedure
     .input(
       z.object({
-        speciesId: z.string()
-      })
+        speciesId: z.string(),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const catchingCharm = alias(userCharms, "catchingCharm");
@@ -346,12 +365,15 @@ export const instanceRouter = router({
             rareCards: profiles.rareCards,
             epicCards: profiles.epicCards,
             legendaryCards: profiles.legendaryCards,
-            catchingCharm: catchingCharm.charmId
+            catchingCharm: catchingCharm.charmId,
           })
           .from(profiles)
           .leftJoin(
             catchingCharm,
-            and(eq(profiles.userId, catchingCharm.userId), eq(catchingCharm.charmId, 1))
+            and(
+              eq(profiles.userId, catchingCharm.userId),
+              eq(catchingCharm.charmId, 1),
+            ),
           )
           .where(eq(profiles.userId, ctx.session.user.id))
       )[0];
@@ -359,7 +381,7 @@ export const instanceRouter = router({
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Not authorized to make this request"
+          message: "Not authorized to make this request",
         });
       }
 
@@ -374,7 +396,7 @@ export const instanceRouter = router({
       if (!speciesData) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Species does not exist."
+          message: "Species does not exist.",
         });
       }
 
@@ -406,21 +428,23 @@ export const instanceRouter = router({
       ) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "You cannot afford this Pokémon."
+          message: "You cannot afford this Pokémon.",
         });
       }
 
-      if (!withinInstanceLimit(currUser.instanceCount, !!currUser.catchingCharm)) {
+      if (
+        !withinInstanceLimit(currUser.instanceCount, !!currUser.catchingCharm)
+      ) {
         throw new TRPCError({
           code: "CONFLICT",
           message:
-            "You have reached your limit. Sell Pokémon if you want to buy more."
+            "You have reached your limit. Sell Pokémon if you want to buy more.",
         });
       }
 
       const newYield = calcNewYield(
         currUser.totalYield,
-        speciesData.species.yield
+        speciesData.species.yield,
       );
 
       await ctx.db.transaction(async (tx) => {
@@ -430,35 +454,35 @@ export const instanceRouter = router({
             totalYield: newYield,
             commonCards:
               speciesData.rarity?.name === "Common" &&
-                !speciesData.species.shiny
+              !speciesData.species.shiny
                 ? currUser.commonCards - WILDCARD_COST
                 : speciesData.rarity?.name === "Common" &&
-                  speciesData.species.shiny
+                    speciesData.species.shiny
                   ? currUser.commonCards - SHINY_WILDCARD_COST
                   : currUser.commonCards,
             rareCards:
               speciesData.rarity?.name === "Rare" && !speciesData.species.shiny
                 ? currUser.rareCards - WILDCARD_COST
                 : speciesData.rarity?.name === "Rare" &&
-                  speciesData.species.shiny
+                    speciesData.species.shiny
                   ? currUser.rareCards - SHINY_WILDCARD_COST
                   : currUser.rareCards,
             epicCards:
               speciesData.rarity?.name === "Epic" && !speciesData.species.shiny
                 ? currUser.epicCards - WILDCARD_COST
                 : speciesData.rarity?.name === "Epic" &&
-                  speciesData.species.shiny
+                    speciesData.species.shiny
                   ? currUser.epicCards - SHINY_WILDCARD_COST
                   : currUser.epicCards,
             legendaryCards:
               speciesData.rarity?.name === "Legendary" &&
-                !speciesData.species.shiny
+              !speciesData.species.shiny
                 ? currUser.legendaryCards - WILDCARD_COST
                 : speciesData.rarity?.name === "Legendary" &&
-                  speciesData.species.shiny
+                    speciesData.species.shiny
                   ? currUser.legendaryCards - SHINY_WILDCARD_COST
                   : currUser.legendaryCards,
-            instanceCount: currUser.instanceCount + 1
+            instanceCount: currUser.instanceCount + 1,
           })
           .where(eq(profiles.userId, ctx.session.user.id));
 
@@ -473,20 +497,20 @@ export const instanceRouter = router({
         .where(
           and(
             eq(instances.userId, ctx.session.user.id),
-            eq(instances.speciesId, input.speciesId)
-          )
+            eq(instances.speciesId, input.speciesId),
+          ),
         );
 
       return {
-        instance: instanceData
+        instance: instanceData,
       };
     }),
 
   sellInstances: protectedProcedure
     .input(
       z.object({
-        ids: z.array(z.string())
-      })
+        ids: z.array(z.string()),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       for (const i of input.ids) {
@@ -501,7 +525,7 @@ export const instanceRouter = router({
           if (!exists) {
             throw new TRPCError({
               code: "NOT_FOUND",
-              message: "Instance does not exist."
+              message: "Instance does not exist.",
             });
           }
 
@@ -515,7 +539,7 @@ export const instanceRouter = router({
           if (!speciesData) {
             throw new TRPCError({
               code: "NOT_FOUND",
-              message: "Species does not exist."
+              message: "Species does not exist.",
             });
           }
 
@@ -531,15 +555,18 @@ export const instanceRouter = router({
           if (!currUser) {
             throw new TRPCError({
               code: "UNAUTHORIZED",
-              message: "Not authorized to make this request"
+              message: "Not authorized to make this request",
             });
           }
 
-          await tx.update(trades)
+          await tx
+            .update(trades)
             .set({ offererId: null, offererInstanceId: null })
-            .where(eq(trades.offererInstanceId, exists.id))
+            .where(eq(trades.offererInstanceId, exists.id));
 
-          await tx.delete(trades).where(eq(trades.initiatorInstanceId, exists.id))
+          await tx
+            .delete(trades)
+            .where(eq(trades.initiatorInstanceId, exists.id));
 
           await tx
             .update(profiles)
@@ -549,13 +576,13 @@ export const instanceRouter = router({
                 currUser.balance + speciesData.sellPrice > MAX_BALANCE
                   ? MAX_BALANCE
                   : currUser.balance + speciesData.sellPrice,
-              instanceCount: currUser.instanceCount - 1
+              instanceCount: currUser.instanceCount - 1,
             })
             .where(eq(profiles.userId, ctx.session.user.id));
         });
       }
       return {
-        message: "Delete successful"
+        message: "Delete successful",
       };
     }),
 
@@ -563,8 +590,8 @@ export const instanceRouter = router({
     .input(
       z.object({
         speciesId: z.string(),
-        region: z.string()
-      })
+        region: z.string(),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
       const currUser = (
@@ -577,7 +604,7 @@ export const instanceRouter = router({
             hoennStarter: profiles.hoennStarter,
             sinnohStarter: profiles.sinnohStarter,
             unovaStarter: profiles.unovaStarter,
-            kalosStarter: profiles.kalosStarter
+            kalosStarter: profiles.kalosStarter,
           })
           .from(profiles)
           .where(eq(profiles.userId, ctx.session.user.id))
@@ -586,34 +613,34 @@ export const instanceRouter = router({
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Not authorized to make this request"
+          message: "Not authorized to make this request",
         });
       }
 
       if (input.region === "Johto" && currUser.johtoStarter) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "You have already received a Johto starter."
+          message: "You have already received a Johto starter.",
         });
       } else if (input.region === "Hoenn" && currUser.hoennStarter) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "You have already received a Hoenn starter."
+          message: "You have already received a Hoenn starter.",
         });
       } else if (input.region === "Sinnoh" && currUser.sinnohStarter) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "You have already received a Sinnoh starter."
+          message: "You have already received a Sinnoh starter.",
         });
       } else if (input.region === "Unova" && currUser.unovaStarter) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "You have already received a Unova starter."
+          message: "You have already received a Unova starter.",
         });
       } else if (input.region === "Kalos" && currUser.kalosStarter) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "You have already received a Kalos starter."
+          message: "You have already received a Kalos starter.",
         });
       }
 
@@ -628,14 +655,14 @@ export const instanceRouter = router({
       if (!speciesData) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Species does not exist."
+          message: "Species does not exist.",
         });
       }
 
       if (speciesData.region?.name !== input.region) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: `Species does not come from ${input.region}`
+          message: `Species does not come from ${input.region}`,
         });
       }
 
@@ -654,7 +681,7 @@ export const instanceRouter = router({
             unovaStarter:
               input.region === "Unova" ? true : currUser.unovaStarter,
             kalosStarter:
-              input.region === "Kalos" ? true : currUser.kalosStarter
+              input.region === "Kalos" ? true : currUser.kalosStarter,
           })
           .where(eq(profiles.userId, ctx.session.user.id));
 
@@ -672,7 +699,7 @@ export const instanceRouter = router({
         .select({
           totalYield: profiles.totalYield,
           instanceCount: profiles.instanceCount,
-          claimedEvent: profiles.claimedEvent
+          claimedEvent: profiles.claimedEvent,
         })
         .from(profiles)
         .where(eq(profiles.userId, ctx.session.user.id))
@@ -681,14 +708,14 @@ export const instanceRouter = router({
     if (!currUser) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
-        message: "Not authorized to make this request"
+        message: "Not authorized to make this request",
       });
     }
 
     if (currUser.claimedEvent) {
       throw new TRPCError({
         code: "FORBIDDEN",
-        message: "Event reward already claimed"
+        message: "Event reward already claimed",
       });
     }
 
@@ -710,7 +737,7 @@ export const instanceRouter = router({
           typeTwo: typeTwo.name,
           generation: species.generation,
           habitat: habitats.name,
-          region: regions.name
+          region: regions.name,
         })
         .from(species)
         .innerJoin(regions, eq(species.regionId, regions.id))
@@ -731,7 +758,7 @@ export const instanceRouter = router({
         .set({
           totalYield: newYield,
           instanceCount: currUser.instanceCount + 1,
-          claimedEvent: true
+          claimedEvent: true,
         })
         .where(eq(profiles.userId, ctx.session.user.id));
 
@@ -745,16 +772,15 @@ export const instanceRouter = router({
 
   seedInstances: adminProcedure.query(async ({ ctx }) => {
     await ctx.db.transaction(async (tx) => {
-
-      await tx.insert(instances)
-        .values([{ userId: ctx.session.user.id, speciesId: "clfyshzqj0004nsk4chot6pqs" }, // venusaur
+      await tx.insert(instances).values([
+        { userId: ctx.session.user.id, speciesId: "clfyshzqj0004nsk4chot6pqs" }, // venusaur
         { userId: ctx.session.user.id, speciesId: "pe6bkapnh3epk8lamm66f09x" }, // mega venusaur
         { userId: ctx.session.user.id, speciesId: "clfysi0v0000insk4eftjqexl" }, // caterpie
         { userId: ctx.session.user.id, speciesId: "clfysi8xi0036nsk4ibiscs84" }, // growlithe
         { userId: ctx.session.user.id, speciesId: "clfysinxa007ynsk4zjeg92np" }, // articuno
         { userId: ctx.session.user.id, speciesId: "clfysip03008ansk4z1ydgeig" }, // mewtwo
-        { userId: ctx.session.user.id, speciesId: "yjeup9ivefukn1ksdperh61j" }, // mega mewtwo x 
-        { userId: ctx.session.user.id, speciesId: "oz37qaolixehlv3w9g7jfjuk" }, // mega mewtwo y 
+        { userId: ctx.session.user.id, speciesId: "yjeup9ivefukn1ksdperh61j" }, // mega mewtwo x
+        { userId: ctx.session.user.id, speciesId: "oz37qaolixehlv3w9g7jfjuk" }, // mega mewtwo y
         { userId: ctx.session.user.id, speciesId: "clgz4r0ug000ons60pauizq8x" }, // totodile
         { userId: ctx.session.user.id, speciesId: "clgz4sf630004nszczb8by3l4" }, // furret
         { userId: ctx.session.user.id, speciesId: "clgz4sj81001knszcs677k3ql" }, // togepi
@@ -780,7 +806,7 @@ export const instanceRouter = router({
         { userId: ctx.session.user.id, speciesId: "cln3kqfj10004nsmbge4ngd2j" }, // hippowdon female
         { userId: ctx.session.user.id, speciesId: "cljuwthiu005snsqrndwfocxc" }, // hippowdon male
         { userId: ctx.session.user.id, speciesId: "cljuwtr8q0090nsqrhbw3nxkz" }, // rotom
-        { userId: ctx.session.user.id, speciesId: "cljuy74dd000sns1uenpabxgy" }, // rotom heat 
+        { userId: ctx.session.user.id, speciesId: "cljuy74dd000sns1uenpabxgy" }, // rotom heat
         { userId: ctx.session.user.id, speciesId: "cljuy74dd000wns1ujwvalfj1" }, // rotom wash
         { userId: ctx.session.user.id, speciesId: "cljuy74dd0010ns1uk68ntzpx" }, // rotom frost
         { userId: ctx.session.user.id, speciesId: "cljuy74dd0014ns1ub2q2pyio" }, // rotom fan
@@ -792,13 +818,14 @@ export const instanceRouter = router({
         { userId: ctx.session.user.id, speciesId: "yuhe8mlzn1zthu5c6j82dg1z" }, // greninja
         { userId: ctx.session.user.id, speciesId: "g30cbiomlk2c9xjhofwrzo5s" }, // ash greninja
         { userId: ctx.session.user.id, speciesId: "c1fgrigg5jypq4q31mh801ce" }, // meowstic female
-        { userId: ctx.session.user.id, speciesId: "ltczoemho73745k9w44k4u5b" } // meowstic male])
-        ])
+        { userId: ctx.session.user.id, speciesId: "ltczoemho73745k9w44k4u5b" }, // meowstic male])
+      ]);
 
-      await tx.update(profiles)
+      await tx
+        .update(profiles)
         .set({ instanceCount: 46 })
-        .where(eq(profiles.username, env.TEST_UNAME1))
-    })
+        .where(eq(profiles.username, env.TEST_UNAME1));
+    });
     return { message: "Instances seeded successfully" };
-  })
-})
+  }),
+});

@@ -8,7 +8,7 @@ export const ZodSort = z.enum([
   "Pokedex",
   "PokedexDesc",
   "Rarity",
-  "RarityDesc"
+  "RarityDesc",
 ]);
 
 export const ZodTime = z.enum(["day", "night"]);
@@ -20,7 +20,7 @@ export const DBRegion = [
   "Hoenn",
   "Sinnoh",
   "Unova",
-  "Kalos"
+  "Kalos",
 ] as const;
 export const ZodRegion = z.enum(DBRegion);
 
@@ -29,7 +29,7 @@ export const DBRarity = [
   "Rare",
   "Epic",
   "Legendary",
-  "Mega"
+  "Mega",
 ] as const;
 export const ZodRarity = z.enum(DBRarity);
 
@@ -51,7 +51,7 @@ export const DBSpeciesType = [
   "Dark",
   "Dragon",
   "Steel",
-  "Flying"
+  "Flying",
 ] as const;
 export const ZodSpeciesType = z.enum(DBSpeciesType);
 
@@ -64,7 +64,7 @@ export const DBHabitat = [
   "Mountain",
   "Rough-Terrain",
   "Urban",
-  "Rare"
+  "Rare",
 ] as const;
 export const ZodHabitat = z.enum(DBHabitat);
 
@@ -99,7 +99,7 @@ export const DBAttribute = [
   "Steel",
   "Fairy",
   "Dark",
-  "All"
+  "All",
 ] as const;
 export const ZodAttribute = z.enum(DBAttribute);
 
@@ -119,7 +119,7 @@ export const ZodSpecies = z.object({
   typeTwo: z.string().nullish(),
   generation: z.number(),
   habitat: z.string(),
-  region: z.string()
+  region: z.string(),
 });
 
 export const ZodAchievement = z.object({
@@ -131,5 +131,5 @@ export const ZodAchievement = z.object({
   attribute: z.string(),
   region: z.string(),
   shiny: z.boolean(),
-  generation: z.number()
+  generation: z.number(),
 });

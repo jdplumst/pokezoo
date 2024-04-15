@@ -7,7 +7,7 @@ import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Tutorial() {
   const { status } = useSession({
-    required: true
+    required: true,
   });
 
   if (status === "loading") return <Loading />;
@@ -16,9 +16,18 @@ export default function Tutorial() {
     <>
       <Head>
         <title>PokéZoo - Tutorial</title>
-        <meta name="description" content="PokéZoo" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
+        <meta
+          name="description"
+          content="PokéZoo"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+        <link
+          rel="icon"
+          href="/favicon.png"
+        />
       </Head>
       <ThemeWrapper>
         <Sidebar page="Tutorial">

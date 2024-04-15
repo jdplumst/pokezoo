@@ -21,7 +21,7 @@ interface IProgressBar {
 
 export default function ProgressBar({
   fullAchievement,
-  updateYield
+  updateYield,
 }: IProgressBar) {
   const [disabled, setDisabled] = useState(false);
   const [isAchieved, setIsAchieved] = useState(fullAchievement.achieved);
@@ -32,7 +32,7 @@ export default function ProgressBar({
     setDisabled(true);
     achievementMutation.mutate(
       {
-        achievementId: fullAchievement.achievement.id
+        achievementId: fullAchievement.achievement.id,
       },
       {
         onSuccess() {
@@ -43,15 +43,18 @@ export default function ProgressBar({
         onError(error) {
           setError(error.message);
           setDisabled(false);
-        }
-      }
+        },
+      },
     );
   };
 
   return (
     <div className="flex items-center">
       {!isAchieved ? (
-        <label htmlFor={fullAchievement.achievement.id} className="mr-4">
+        <label
+          htmlFor={fullAchievement.achievement.id}
+          className="mr-4"
+        >
           {fullAchievement.value} / {fullAchievement.max} (
           {Math.round(fullAchievement.percent)}%)
         </label>
@@ -63,7 +66,8 @@ export default function ProgressBar({
           <button
             onClick={() => handleClaimAchievement()}
             disabled={disabled}
-            className="mx-auto w-40 rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500">
+            className="mx-auto w-40 rounded-lg border-2 border-black bg-yellow-400 p-2 font-bold hover:bg-yellow-500"
+          >
             {achievementMutation.isLoading ? <LoadingSpinner /> : "Claim"}
           </button>
         </div>
@@ -75,7 +79,8 @@ export default function ProgressBar({
           optimum={fullAchievement.max}
           value={fullAchievement.value}
           low={fullAchievement.low}
-          high={fullAchievement.high}>
+          high={fullAchievement.high}
+        >
           {fullAchievement.percent}%
         </meter>
       ) : isAchieved ? (

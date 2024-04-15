@@ -65,7 +65,7 @@ const populateGenSixDB = async () => {
       typeTwo: typeTwo,
       generation: 6,
       habitat: "Cave",
-      region: "Kalos"
+      region: "Kalos",
     });
 
     await db.insert(species).values({
@@ -80,7 +80,7 @@ const populateGenSixDB = async () => {
       typeTwo: typeTwo,
       generation: 6,
       habitat: "Cave",
-      region: "Kalos"
+      region: "Kalos",
     });
   }
 };

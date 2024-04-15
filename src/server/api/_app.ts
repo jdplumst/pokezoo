@@ -19,7 +19,7 @@ export const appRouter = router({
   userAchievement: userAchievementRouter,
   ball: ballRouter,
   trade: tradeRouter,
-  charm: charmRouter
+  charm: charmRouter,
 });
 
 // export type definition of API

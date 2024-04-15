@@ -17,14 +17,14 @@ import {
   type ZodRarity,
   type ZodRegion,
   type ZodSort,
-  type ZodSpeciesType
+  type ZodSpeciesType,
 } from "@/src/zod";
 import Dropdown, { type IDropdowns } from "../components/Dropdown";
 import {
   RegionsList,
   RaritiesList,
   TypesList,
-  HabitatList
+  HabitatList,
 } from "../constants";
 import { type selectInstanceSchema } from "../server/db/schema";
 import { ThemeContext } from "../components/ThemeContextProvider";
@@ -32,7 +32,7 @@ import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Game() {
   const { status } = useSession({
-    required: true
+    required: true,
   });
 
   const utils = trpc.useUtils();
@@ -49,12 +49,12 @@ export default function Game() {
   const [dailyReward, setDailyReward] = useState({
     modal: false,
     reward: 0,
-    cards: { "Common": 0, "Rare": 0, "Epic": 0, "Legendary": 0 }
+    cards: { Common: 0, Rare: 0, Epic: 0, Legendary: 0 },
   });
   const [nightlyReward, setNightlyReward] = useState({
     modal: false,
     reward: 0,
-    cards: { "Common": 0, "Rare": 0, "Epic": 0, "Legendary": 0 }
+    cards: { Common: 0, Rare: 0, Epic: 0, Legendary: 0 },
   });
   const rewardMutation = trpc.profile.claimReward.useMutation();
 
@@ -68,7 +68,7 @@ export default function Game() {
     // reward: null | inferRouterOutputs<AppRouter>["instance"]["claimEvent"];
   }>({
     modal: false,
-    reward: null
+    reward: null,
   });
   const eventMutation = trpc.instance.claimEvent.useMutation();
 
@@ -98,7 +98,7 @@ export default function Game() {
     Region: false,
     Rarity: false,
     Type: false,
-    Habitat: false
+    Habitat: false,
   });
 
   const getGame = trpc.instance.getGame.useInfiniteQuery(
@@ -109,9 +109,9 @@ export default function Game() {
       regions: regions,
       rarities: rarities,
       types: types,
-      habitats: habitats
+      habitats: habitats,
     },
-    { getNextPageParam: (lastPage) => lastPage.nextCursor }
+    { getNextPageParam: (lastPage) => lastPage.nextCursor },
   );
 
   const getProfile = trpc.profile.getProfile.useQuery();
@@ -141,10 +141,10 @@ export default function Game() {
             setDailyReward({
               modal: true,
               reward: data.reward,
-              cards: data.cards
+              cards: data.cards,
             });
-          }
-        }
+          },
+        },
       );
     } else if (time === "night") {
       rewardMutation.mutate(
@@ -155,10 +155,10 @@ export default function Game() {
             setNightlyReward({
               modal: true,
               reward: data.reward,
-              cards: data.cards
+              cards: data.cards,
             });
-          }
-        }
+          },
+        },
       );
     }
   };
@@ -173,14 +173,14 @@ export default function Game() {
       },
       onError(error) {
         setError(error.message);
-      }
+      },
     });
   };
 
   // Add or remove instances from array of instances to be deleted
   const modifyDeleteList = (
     i: z.infer<typeof selectInstanceSchema>,
-    sell: boolean
+    sell: boolean,
   ) => {
     if (sell) {
       setDeleteList([...deleteList, i.id]);
@@ -202,8 +202,8 @@ export default function Game() {
         },
         onError(error) {
           setError(error.message);
-        }
-      }
+        },
+      },
     );
   };
 
@@ -218,8 +218,8 @@ export default function Game() {
         },
         onError(error) {
           setUsernameError(error.message);
-        }
-      }
+        },
+      },
     );
   };
 
@@ -232,7 +232,7 @@ export default function Game() {
     } else {
       const newDropdowns: IDropdowns = {} as IDropdowns;
       Object.keys(dropdowns).forEach((x) =>
-        x === d ? (newDropdowns[x] = true) : (newDropdowns[x] = false)
+        x === d ? (newDropdowns[x] = true) : (newDropdowns[x] = false),
       );
       setDropdowns(newDropdowns);
     }
@@ -315,9 +315,18 @@ export default function Game() {
     <>
       <Head>
         <title>PokéZoo</title>
-        <meta name="description" content="PokéZoo" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
+        <meta
+          name="description"
+          content="PokéZoo"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+        <link
+          rel="icon"
+          href="/favicon.png"
+        />
       </Head>
 
       {/* Main Game Screen */}
@@ -333,7 +342,8 @@ export default function Game() {
               <button
                 onClick={() => handleDelete()}
                 disabled={sellMutation.isLoading}
-                className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+                className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
+              >
                 {sellMutation.isLoading ? <LoadingSpinner /> : "Confirm Delete"}
               </button>
             </div>
@@ -345,7 +355,8 @@ export default function Game() {
               <button
                 onClick={() => claimReward()}
                 disabled={rewardMutation.isLoading}
-                className="w-48 rounded-lg border-2 border-black bg-yellow-btn-unfocus p-2 font-bold hover:bg-yellow-btn-focus">
+                className="w-48 rounded-lg border-2 border-black bg-yellow-btn-unfocus p-2 font-bold hover:bg-yellow-btn-focus"
+              >
                 {rewardMutation.isLoading ? (
                   <LoadingSpinner />
                 ) : (
@@ -358,7 +369,8 @@ export default function Game() {
               <button
                 onClick={() => claimReward()}
                 disabled={rewardMutation.isLoading}
-                className="w-48 rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus">
+                className="w-48 rounded-lg border-2 border-black bg-purple-btn-unfocus p-2 font-bold hover:bg-purple-btn-focus"
+              >
                 {rewardMutation.isLoading ? (
                   <LoadingSpinner />
                 ) : (
@@ -375,7 +387,8 @@ export default function Game() {
                   <button
                     onClick={() => claimEvent()}
                     disabled={eventMutation.isLoading}
-                    className="w-60 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold">
+                    className="w-60 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold"
+                  >
                     {eventMutation.isLoading ? (
                       <LoadingSpinner />
                     ) : (
@@ -397,7 +410,8 @@ export default function Game() {
                   <button
                     onClick={() => claimEvent()}
                     disabled={eventMutation.isLoading}
-                    className="w-60 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold">
+                    className="w-60 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold"
+                  >
                     {eventMutation.isLoading ? (
                       <LoadingSpinner />
                     ) : (
@@ -412,14 +426,16 @@ export default function Game() {
                   </div>
                 </div>
               ))}
-            {day >= 5 && day <= 12 &&
+            {day >= 5 &&
+              day <= 12 &&
               month === 4 &&
               (!getProfile.data?.claimedEvent ? (
                 <div className="pt-4">
                   <button
                     onClick={() => claimEvent()}
                     disabled={eventMutation.isLoading}
-                    className="w-60 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold">
+                    className="w-60 rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold"
+                  >
                     {eventMutation.isLoading ? (
                       <LoadingSpinner />
                     ) : (
@@ -429,20 +445,33 @@ export default function Game() {
                 </div>
               ) : (
                 <div className="pt-4">
-                  <div className="pokezoo pb-4 text-center text-7xl" data-text="Happy PokéZoo Day!">
+                  <div
+                    className="pokezoo pb-4 text-center text-7xl"
+                    data-text="Happy PokéZoo Day!"
+                  >
                     <span style={{ "--i": 1 } as React.CSSProperties}>H</span>
                     <span style={{ "--i": 2 } as React.CSSProperties}>a</span>
                     <span style={{ "--i": 3 } as React.CSSProperties}>p</span>
                     <span style={{ "--i": 4 } as React.CSSProperties}>p</span>
                     <span style={{ "--i": 5 } as React.CSSProperties}>y</span>
-                    <span style={{ "--i": 6 } as React.CSSProperties} className="ml-4">P</span>
+                    <span
+                      style={{ "--i": 6 } as React.CSSProperties}
+                      className="ml-4"
+                    >
+                      P
+                    </span>
                     <span style={{ "--i": 7 } as React.CSSProperties}>o</span>
                     <span style={{ "--i": 8 } as React.CSSProperties}>k</span>
                     <span style={{ "--i": 9 } as React.CSSProperties}>é</span>
                     <span style={{ "--i": 10 } as React.CSSProperties}>Z</span>
                     <span style={{ "--i": 11 } as React.CSSProperties}>o</span>
                     <span style={{ "--i": 12 } as React.CSSProperties}>o</span>
-                    <span style={{ "--i": 13 } as React.CSSProperties} className="ml-4">D</span>
+                    <span
+                      style={{ "--i": 13 } as React.CSSProperties}
+                      className="ml-4"
+                    >
+                      D
+                    </span>
                     <span style={{ "--i": 14 } as React.CSSProperties}>a</span>
                     <span style={{ "--i": 15 } as React.CSSProperties}>y</span>
                     <span style={{ "--i": 16 } as React.CSSProperties}>!</span>
@@ -467,56 +496,68 @@ export default function Game() {
             <div className="flex justify-center gap-5 pt-5">
               <button
                 onClick={() => setSort("Oldest")}
-                className={`${sort === "Oldest"
-                  ? `bg-purple-btn-focus`
-                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
-                data-testid="oldest-sort">
+                className={`${
+                  sort === "Oldest"
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="oldest-sort"
+              >
                 Oldest
               </button>
               <button
                 onClick={() => setSort("Newest")}
-                className={`${sort === "Newest"
-                  ? `bg-purple-btn-focus`
-                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
-                data-testid="newest-sort">
+                className={`${
+                  sort === "Newest"
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="newest-sort"
+              >
                 Newest
               </button>
               <button
                 onClick={() => setSort("Pokedex")}
-                className={`${sort === "Pokedex"
-                  ? `bg-purple-btn-focus`
-                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
-                data-testid="pokedex-sort">
+                className={`${
+                  sort === "Pokedex"
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="pokedex-sort"
+              >
                 Pokédex #
               </button>
               <button
                 onClick={() => setSort("PokedexDesc")}
-                className={`${sort === "PokedexDesc"
-                  ? `bg-purple-btn-focus`
-                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
-                data-testid="pokedex-desc-sort">
+                className={`${
+                  sort === "PokedexDesc"
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="pokedex-desc-sort"
+              >
                 Pokédex # Desc.
               </button>
               <button
                 onClick={() => setSort("Rarity")}
-                className={`${sort === "Rarity"
-                  ? `bg-purple-btn-focus`
-                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
-                data-testid="rarity-sort">
+                className={`${
+                  sort === "Rarity"
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="rarity-sort"
+              >
                 Rarity
               </button>
               <button
                 onClick={() => setSort("RarityDesc")}
-                className={`${sort === "RarityDesc"
-                  ? `bg-purple-btn-focus`
-                  : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
-                  } w-40 rounded-lg border-2 border-black p-2 font-bold`}
-                data-testid="rarity-desc-sort">
+                className={`${
+                  sort === "RarityDesc"
+                    ? `bg-purple-btn-focus`
+                    : `bg-purple-btn-unfocus hover:bg-purple-btn-focus`
+                } w-40 rounded-lg border-2 border-black p-2 font-bold`}
+                data-testid="rarity-desc-sort"
+              >
                 Rarity Desc.
               </button>
             </div>
@@ -540,7 +581,10 @@ export default function Game() {
               ))}
             </div>
             {getGame.hasNextPage && (
-              <div ref={ref} className="flex h-16 justify-center pt-4">
+              <div
+                ref={ref}
+                className="flex h-16 justify-center pt-4"
+              >
                 {getGame.isFetchingNextPage && <LoadingSpinner />}
               </div>
             )}
@@ -550,7 +594,10 @@ export default function Game() {
 
       {/* Modal for New Players */}
       {getProfile.data?.instanceCount === 0 && (
-        <Start region="Kanto" addStarter={addStarter} />
+        <Start
+          region="Kanto"
+          addStarter={addStarter}
+        />
       )}
 
       {/* Modal for Rewards */}
@@ -567,189 +614,223 @@ export default function Game() {
             {""}
             {nightlyReward.modal && nightlyReward.reward.toLocaleString()}!
           </div>
-          {dailyReward.modal && Object.keys(dailyReward.cards).map((key) => {
-            return (
-              <div key={key} className="flex">
-                {dailyReward.cards[key as keyof typeof dailyReward.cards] > 0 && (
-                  <>
-                    <div className="text-xl font-medium">
-                      You received {dailyReward.cards[key as keyof typeof dailyReward.cards]} {key} {" "}
-                      wildcard{dailyReward.cards[key as keyof typeof dailyReward.cards] > 1 && "s"}!
-                    </div>
-                    <img
-                      src={
-                        (key === "Common")
-                          ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png`
-                          : (key === "Rare")
-                            ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
-                            : (key === "Epic")
-                              ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
-                              : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
-                      }
-                      alt={
-                        (key === "Common")
-                          ? `common-wildcard`
-                          : (key === "Rare")
-                            ? `rare-wildcard`
-                            : (key === "Epic")
-                              ? `epic-wildcard`
-                              : `legendary-wildcard`
-                      }
-                    />
-                  </>
-                )}
-              </div>
-            )
-          })}
-          {nightlyReward.modal && Object.keys(nightlyReward.cards).map((key) => {
-            return (
-              <div key={key} className="flex">
-                {nightlyReward.cards[key as keyof typeof nightlyReward.cards] > 0 && (
-                  <>
-                    <div className="text-xl font-medium">
-                      You received {nightlyReward.cards[key as keyof typeof nightlyReward.cards]} {key} {" "}
-                      wildcard{nightlyReward.cards[key as keyof typeof nightlyReward.cards] > 1 && "s"}!
-                    </div>
-                    <img
-                      src={
-                        (key === "Common")
-                          ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png`
-                          : (key === "Rare")
-                            ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
-                            : (key === "Epic")
-                              ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
-                              : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
-                      }
-                      alt={
-                        (key === "Common")
-                          ? `common-wildcard`
-                          : (key === "Rare")
-                            ? `rare-wildcard`
-                            : (key === "Epic")
-                              ? `epic-wildcard`
-                              : `legendary-wildcard`
-                      }
-                    />
-                  </>
-                )}
-              </div>
-            )
-          })}
+          {dailyReward.modal &&
+            Object.keys(dailyReward.cards).map((key) => {
+              return (
+                <div
+                  key={key}
+                  className="flex"
+                >
+                  {dailyReward.cards[key as keyof typeof dailyReward.cards] >
+                    0 && (
+                    <>
+                      <div className="text-xl font-medium">
+                        You received{" "}
+                        {
+                          dailyReward.cards[
+                            key as keyof typeof dailyReward.cards
+                          ]
+                        }{" "}
+                        {key} wildcard
+                        {dailyReward.cards[
+                          key as keyof typeof dailyReward.cards
+                        ] > 1 && "s"}
+                        !
+                      </div>
+                      <img
+                        src={
+                          key === "Common"
+                            ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png`
+                            : key === "Rare"
+                              ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
+                              : key === "Epic"
+                                ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
+                                : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
+                        }
+                        alt={
+                          key === "Common"
+                            ? `common-wildcard`
+                            : key === "Rare"
+                              ? `rare-wildcard`
+                              : key === "Epic"
+                                ? `epic-wildcard`
+                                : `legendary-wildcard`
+                        }
+                      />
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          {nightlyReward.modal &&
+            Object.keys(nightlyReward.cards).map((key) => {
+              return (
+                <div
+                  key={key}
+                  className="flex"
+                >
+                  {nightlyReward.cards[
+                    key as keyof typeof nightlyReward.cards
+                  ] > 0 && (
+                    <>
+                      <div className="text-xl font-medium">
+                        You received{" "}
+                        {
+                          nightlyReward.cards[
+                            key as keyof typeof nightlyReward.cards
+                          ]
+                        }{" "}
+                        {key} wildcard
+                        {nightlyReward.cards[
+                          key as keyof typeof nightlyReward.cards
+                        ] > 1 && "s"}
+                        !
+                      </div>
+                      <img
+                        src={
+                          key === "Common"
+                            ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png`
+                            : key === "Rare"
+                              ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png`
+                              : key === "Epic"
+                                ? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png`
+                                : `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png`
+                        }
+                        alt={
+                          key === "Common"
+                            ? `common-wildcard`
+                            : key === "Rare"
+                              ? `rare-wildcard`
+                              : key === "Epic"
+                                ? `epic-wildcard`
+                                : `legendary-wildcard`
+                        }
+                      />
+                    </>
+                  )}
+                </div>
+              );
+            })}
           <div className="pt-4">
             <button
               onClick={() => {
                 setDailyReward({ ...dailyReward, modal: false });
                 setNightlyReward({ ...nightlyReward, modal: false });
               }}
-              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
+              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
+            >
               Got it!
             </button>
           </div>
-        </Modal >
-      )
-      }
+        </Modal>
+      )}
 
       {/* Modal for Event Reward */}
-      {
-        eventModal.modal && eventModal.reward && (
-          <Modal size="Small">
-            {day >= 25 && month === 12 && (
-              <div className="candy-cane p-2 text-3xl font-bold">
-                Merry Christmas!
-              </div>
-            )}
-            {day <= 7 && month === 1 && (
-              <div className="new-year p-2 text-3xl font-bold">
-                Happy New Year!
-              </div>
-            )}
-            {"aeiou".includes(eventModal.reward.name[0]) ? (
-              <div className="text-center text-xl font-bold">
-                You got an{" "}
-                {eventModal.reward.name[0].toUpperCase() +
-                  eventModal.reward.name.slice(1).toLowerCase()}
-                !{" "}
-              </div>
-            ) : (
-              <div className="text-center text-xl font-bold">
-                You got a{" "}
-                {eventModal.reward.name[0].toUpperCase() +
-                  eventModal.reward.name.slice(1).toLowerCase()}
-                !
-              </div>
-            )}
-            <Card species={eventModal.reward} />
-            <div className="flex justify-center pt-4">
-              <button
-                onClick={() => setEventModal({ modal: false, reward: null })}
-                className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-                Got it!
-              </button>
+      {eventModal.modal && eventModal.reward && (
+        <Modal size="Small">
+          {day >= 25 && month === 12 && (
+            <div className="candy-cane p-2 text-3xl font-bold">
+              Merry Christmas!
             </div>
-          </Modal>
-        )
-      }
+          )}
+          {day <= 7 && month === 1 && (
+            <div className="new-year p-2 text-3xl font-bold">
+              Happy New Year!
+            </div>
+          )}
+          {"aeiou".includes(eventModal.reward.name[0]) ? (
+            <div className="text-center text-xl font-bold">
+              You got an{" "}
+              {eventModal.reward.name[0].toUpperCase() +
+                eventModal.reward.name.slice(1).toLowerCase()}
+              !{" "}
+            </div>
+          ) : (
+            <div className="text-center text-xl font-bold">
+              You got a{" "}
+              {eventModal.reward.name[0].toUpperCase() +
+                eventModal.reward.name.slice(1).toLowerCase()}
+              !
+            </div>
+          )}
+          <Card species={eventModal.reward} />
+          <div className="flex justify-center pt-4">
+            <button
+              onClick={() => setEventModal({ modal: false, reward: null })}
+              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
+            >
+              Got it!
+            </button>
+          </div>
+        </Modal>
+      )}
 
       {/* Modal for Username */}
-      {
-        !getProfile.data?.username && (
-          <Modal size="Small">
-            <form
-              onSubmit={(e) => handleUsername(e)}
-              className="flex w-full flex-col items-center gap-5">
-              <p className="text-xl font-bold">Enter a Username</p>
-              <input
-                onChange={(e) => setUsername(e.target.value)}
-                className="p-2 text-black"></input>
-              <button
-                disabled={usernameMutation.isLoading}
-                className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 text-xl font-bold hover:bg-red-btn-focus">
-                {usernameMutation.isLoading ? <LoadingSpinner /> : "Confirm"}
-              </button>
-            </form>
-            {usernameError && (
-              <div className="flex justify-center font-bold text-red-500">
-                {usernameError}
-              </div>
-            )}
-          </Modal>
-        )
-      }
+      {!getProfile.data?.username && (
+        <Modal size="Small">
+          <form
+            onSubmit={(e) => handleUsername(e)}
+            className="flex w-full flex-col items-center gap-5"
+          >
+            <p className="text-xl font-bold">Enter a Username</p>
+            <input
+              onChange={(e) => setUsername(e.target.value)}
+              className="p-2 text-black"
+            ></input>
+            <button
+              disabled={usernameMutation.isLoading}
+              className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 text-xl font-bold hover:bg-red-btn-focus"
+            >
+              {usernameMutation.isLoading ? <LoadingSpinner /> : "Confirm"}
+            </button>
+          </form>
+          {usernameError && (
+            <div className="flex justify-center font-bold text-red-500">
+              {usernameError}
+            </div>
+          )}
+        </Modal>
+      )}
 
       {/* Modal for Johto Starter */}
-      {
-        !getProfile.data?.johtoStarter && (
-          <Start region="Johto" addStarter={addStarter} />
-        )
-      }
+      {!getProfile.data?.johtoStarter && (
+        <Start
+          region="Johto"
+          addStarter={addStarter}
+        />
+      )}
 
       {/* Modal for Hoenn Starter */}
-      {
-        !getProfile.data?.hoennStarter && (
-          <Start region="Hoenn" addStarter={addStarter} />
-        )
-      }
+      {!getProfile.data?.hoennStarter && (
+        <Start
+          region="Hoenn"
+          addStarter={addStarter}
+        />
+      )}
 
       {/* Modal for Sinnoh Starter */}
-      {
-        !getProfile.data?.sinnohStarter && (
-          <Start region="Sinnoh" addStarter={addStarter} />
-        )
-      }
+      {!getProfile.data?.sinnohStarter && (
+        <Start
+          region="Sinnoh"
+          addStarter={addStarter}
+        />
+      )}
 
       {/* Modal for Unova Starter */}
-      {
-        !getProfile.data?.unovaStarter && (
-          <Start region="Unova" addStarter={addStarter} />
-        )
-      }
+      {!getProfile.data?.unovaStarter && (
+        <Start
+          region="Unova"
+          addStarter={addStarter}
+        />
+      )}
 
       {/* Modal for Kalos Starter */}
-      {
-        !getProfile.data?.kalosStarter && (
-          <Start region="Kalos" addStarter={addStarter} />
-        )
-      }
+      {!getProfile.data?.kalosStarter && (
+        <Start
+          region="Kalos"
+          addStarter={addStarter}
+        />
+      )}
     </>
   );
 }

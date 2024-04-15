@@ -7,7 +7,7 @@ import { env } from "@/src/env";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   const { authorization } = req.headers;
   if (!authorization || authorization.split(" ")[1] !== env.CRON_TOKEN) {
@@ -42,16 +42,16 @@ export default async function handler(
               balance: newBalance,
               claimedDaily: false,
               claimedNightly: false,
-              claimedEvent: completedEvent ?? profile.claimedEvent
+              claimedEvent: completedEvent ?? profile.claimedEvent,
             })
             .where(eq(profiles.id, profile.id));
         }
         return res.status(200).json({
-          msg: "Successfully updated all user's dollars and reset daily and nightly claims"
+          msg: "Successfully updated all user's dollars and reset daily and nightly claims",
         });
       } catch (error) {
         throw new Error(
-          "User's dollars and daily and nightly claims not updated successfully"
+          "User's dollars and daily and nightly claims not updated successfully",
         );
       }
   }

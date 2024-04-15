@@ -4,13 +4,13 @@ import {
   type ZodHabitat,
   type ZodRarity,
   type ZodRegion,
-  type ZodSpeciesType
+  type ZodSpeciesType,
 } from "../zod";
 import {
   HabitatList,
   RaritiesList,
   RegionsList,
-  TypesList
+  TypesList,
 } from "../constants";
 
 export interface IDropdowns {
@@ -57,7 +57,7 @@ export default function Dropdown({
   handleRegion,
   handleRarity,
   handleType,
-  handleHabitat
+  handleHabitat,
 }: IDropdownProps) {
   return (
     <div className="flex justify-center gap-5 pt-5">
@@ -65,7 +65,8 @@ export default function Dropdown({
         <div className="w-48">
           <button
             onClick={() => handleDropdowns("Caught")}
-            className="w-full border-2 border-black bg-red-btn-unfocus p-2 font-bold outline-none">
+            className="w-full border-2 border-black bg-red-btn-unfocus p-2 font-bold outline-none"
+          >
             Select Caught
           </button>
           {dropdowns.Caught && (
@@ -93,7 +94,8 @@ export default function Dropdown({
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Shiny")}
-          className="w-full border-2 border-black bg-purple-btn-unfocus p-2 font-bold outline-none">
+          className="w-full border-2 border-black bg-purple-btn-unfocus p-2 font-bold outline-none"
+        >
           Select Shiny
         </button>
         {dropdowns.Shiny && (
@@ -141,8 +143,9 @@ export default function Dropdown({
             {RegionsList.map((r, index) => (
               <li
                 key={r}
-                className={`${index === RegionsList.length - 1 && `border-b-2`
-                  } border-black`}
+                className={`${
+                  index === RegionsList.length - 1 && `border-b-2`
+                } border-black`}
                 data-testid={`region-${r}-filter`}
               >
                 <DrowpdownItem
@@ -159,7 +162,8 @@ export default function Dropdown({
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Rarity")}
-          className="w-full border-2 border-black bg-orange-btn-unfocus p-2 font-bold outline-none">
+          className="w-full border-2 border-black bg-orange-btn-unfocus p-2 font-bold outline-none"
+        >
           Select Rarity
         </button>
         {dropdowns.Rarity && (
@@ -175,8 +179,10 @@ export default function Dropdown({
             {RaritiesList.map((r, index) => (
               <li
                 key={r}
-                className={`${index === RaritiesList.length - 1 && `border-b-2 border-black`
-                  }`}>
+                className={`${
+                  index === RaritiesList.length - 1 && `border-b-2 border-black`
+                }`}
+              >
                 <DrowpdownItem
                   label={r}
                   fn={handleRarity}
@@ -191,7 +197,8 @@ export default function Dropdown({
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Type")}
-          className="w-full border-2 border-black bg-blue-btn-unfocus p-2 font-bold outline-none">
+          className="w-full border-2 border-black bg-blue-btn-unfocus p-2 font-bold outline-none"
+        >
           Select Type
         </button>
         {dropdowns.Type && (
@@ -207,8 +214,10 @@ export default function Dropdown({
             {TypesList.map((t, index) => (
               <li
                 key={t}
-                className={`${index === TypesList.length - 1 && `border-b-2 border-black`
-                  }`}>
+                className={`${
+                  index === TypesList.length - 1 && `border-b-2 border-black`
+                }`}
+              >
                 <DrowpdownItem
                   label={t}
                   fn={handleType}
@@ -223,7 +232,8 @@ export default function Dropdown({
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Habitat")}
-          className="w-full border-2 border-black bg-lime-btn-unfocus p-2 font-bold outline-none">
+          className="w-full border-2 border-black bg-lime-btn-unfocus p-2 font-bold outline-none"
+        >
           Select Habitat
         </button>
         {dropdowns.Habitat && (
@@ -239,8 +249,10 @@ export default function Dropdown({
             {HabitatList.map((h, index) => (
               <li
                 key={h}
-                className={`${index === HabitatList.length - 10 && `border-b-2 border-black`
-                  }`}>
+                className={`${
+                  index === HabitatList.length - 10 && `border-b-2 border-black`
+                }`}
+              >
                 <DrowpdownItem
                   label={h}
                   fn={handleHabitat}

@@ -15,7 +15,7 @@ type CreateContextOptions = {
 const createInnerTRPCContext = (opts: CreateContextOptions) => {
   return {
     session: opts.session,
-    db
+    db,
   };
 };
 
@@ -23,7 +23,7 @@ export const createTRPCContext = async (opts: CreateNextContextOptions) => {
   const { req, res } = opts;
   const session = await getServerAuthSession({ req, res });
   return createInnerTRPCContext({
-    session
+    session,
   });
 };
 
@@ -37,10 +37,10 @@ const t = initTRPC
         data: {
           ...shape.data,
           zodError:
-            error.cause instanceof ZodError ? error.cause.flatten() : null
-        }
+            error.cause instanceof ZodError ? error.cause.flatten() : null,
+        },
       };
-    }
+    },
   });
 
 const isAuthed = t.middleware(({ ctx, next }) => {
@@ -50,30 +50,33 @@ const isAuthed = t.middleware(({ ctx, next }) => {
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user }
-    }
+      session: { ...ctx.session, user: ctx.session.user },
+    },
   });
 });
 
 const isAdmin = t.middleware(async ({ ctx, next }) => {
   if (!ctx.session || !ctx.session.user) {
-    throw new TRPCError({ code: "UNAUTHORIZED" })
+    throw new TRPCError({ code: "UNAUTHORIZED" });
   }
 
-  const currUser = (await ctx.db.select({ admin: profiles.admin })
-    .from(profiles)
-    .where(eq(profiles.userId, ctx.session.user.id)))[0]
+  const currUser = (
+    await ctx.db
+      .select({ admin: profiles.admin })
+      .from(profiles)
+      .where(eq(profiles.userId, ctx.session.user.id))
+  )[0];
 
   if (!currUser.admin) {
-    throw new TRPCError({ code: "UNAUTHORIZED" })
+    throw new TRPCError({ code: "UNAUTHORIZED" });
   }
   return next({
     ctx: {
       // infers the `session` as non-nullable
-      session: { ...ctx.session, user: ctx.session.user }
-    }
+      session: { ...ctx.session, user: ctx.session.user },
+    },
   });
-})
+});
 
 // Base router and procedure helpers
 export const router = t.router;

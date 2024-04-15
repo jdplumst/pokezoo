@@ -23,40 +23,40 @@ export default function Start({ region, addStarter }: IStarter) {
     region === "Kanto"
       ? "bulbasaur"
       : region === "Johto"
-      ? "chikorita"
-      : region === "Hoenn"
-      ? "treecko"
-      : region === "Sinnoh"
-      ? "turtwig"
-      : region === "Unova"
-      ? "snivy"
-      : "chespin";
+        ? "chikorita"
+        : region === "Hoenn"
+          ? "treecko"
+          : region === "Sinnoh"
+            ? "turtwig"
+            : region === "Unova"
+              ? "snivy"
+              : "chespin";
 
   const fireStarter =
     region === "Kanto"
       ? "charmander"
       : region === "Johto"
-      ? "cyndaquil"
-      : region === "Hoenn"
-      ? "torchic"
-      : region === "Sinnoh"
-      ? "chimchar"
-      : region === "Unova"
-      ? "tepig"
-      : "fennekin";
+        ? "cyndaquil"
+        : region === "Hoenn"
+          ? "torchic"
+          : region === "Sinnoh"
+            ? "chimchar"
+            : region === "Unova"
+              ? "tepig"
+              : "fennekin";
 
   const waterStarter =
     region === "Kanto"
       ? "squirtle"
       : region === "Johto"
-      ? "totodile"
-      : region === "Hoenn"
-      ? "mudkip"
-      : region === "Sinnoh"
-      ? "piplup"
-      : region === "Unova"
-      ? "oshawott"
-      : "froakie";
+        ? "totodile"
+        : region === "Hoenn"
+          ? "mudkip"
+          : region === "Sinnoh"
+            ? "piplup"
+            : region === "Unova"
+              ? "oshawott"
+              : "froakie";
 
   const handleClose = () => {
     if (starter) {
@@ -65,12 +65,12 @@ export default function Start({ region, addStarter }: IStarter) {
           ? getStarters.data?.starters.find((s) => s.name === grassStarter)
               ?.id ?? ""
           : starter === "Fire"
-          ? getStarters.data?.starters.find((s) => s.name === fireStarter)
-              ?.id ?? ""
-          : starter === "Water"
-          ? getStarters.data?.starters.find((s) => s.name === waterStarter)
-              ?.id ?? ""
-          : "";
+            ? getStarters.data?.starters.find((s) => s.name === fireStarter)
+                ?.id ?? ""
+            : starter === "Water"
+              ? getStarters.data?.starters.find((s) => s.name === waterStarter)
+                  ?.id ?? ""
+              : "";
 
       if (region === "Kanto") {
         purchaseMutation.mutate(
@@ -81,8 +81,8 @@ export default function Start({ region, addStarter }: IStarter) {
             },
             onError(error) {
               setError(error.message);
-            }
-          }
+            },
+          },
         );
       } else {
         starterMutation.mutate(
@@ -93,8 +93,8 @@ export default function Start({ region, addStarter }: IStarter) {
             },
             onError(error) {
               setError(error.message);
-            }
-          }
+            },
+          },
         );
       }
     } else if (!starter) {
@@ -125,12 +125,13 @@ export default function Start({ region, addStarter }: IStarter) {
         <div
           className={`${
             starter === "Grass" && `border-4 border-green-500`
-          } pointer-events-auto`}>
+          } pointer-events-auto`}
+        >
           <button onClick={() => setStarter("Grass")}>
             <Card
               species={
                 getStarters.data.starters.find(
-                  (s) => s.name === grassStarter
+                  (s) => s.name === grassStarter,
                 ) ?? getStarters.data.starters[0]
               }
             />
@@ -139,7 +140,8 @@ export default function Start({ region, addStarter }: IStarter) {
         <div
           className={`${
             starter === "Fire" && `border-4 border-green-500`
-          } pointer-events-auto`}>
+          } pointer-events-auto`}
+        >
           <button onClick={() => setStarter("Fire")}>
             <Card
               species={
@@ -151,7 +153,8 @@ export default function Start({ region, addStarter }: IStarter) {
         <div
           className={`${
             starter === "Water" && `border-4 border-green-500`
-          } pointer-events-auto`}>
+          } pointer-events-auto`}
+        >
           <button onClick={() => setStarter("Water")}>
             <Card
               species={
@@ -165,7 +168,8 @@ export default function Start({ region, addStarter }: IStarter) {
         <button
           onClick={() => handleClose()}
           disabled={purchaseMutation.isLoading || starterMutation.isLoading}
-          className="pointer-events-auto rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600">
+          className="pointer-events-auto rounded-lg border-2 border-black bg-red-500 p-2 font-bold hover:bg-red-600"
+        >
           Confirm Selection
         </button>
       </div>

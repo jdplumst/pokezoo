@@ -2,7 +2,7 @@ import { type ReactNode, useState } from "react";
 import { type z } from "zod";
 import {
   type selectCharmSchema,
-  type selectBallSchema
+  type selectBallSchema,
 } from "../server/db/schema";
 
 interface ITooltip {
@@ -18,7 +18,8 @@ export default function Tooltip({ ball, charm, children }: ITooltip) {
     <div
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
-      className="tooltip-container">
+      className="tooltip-container"
+    >
       {visible && (
         <div className="tooltip color z-10 min-w-[200px] border-2 border-tooltip-border bg-tooltip p-4">
           {ball && (
