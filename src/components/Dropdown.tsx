@@ -120,12 +120,17 @@ export default function Dropdown({
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Region")}
-          className="w-full border-2 border-black bg-green-btn-unfocus p-2 font-bold outline-none">
+          className="w-full border-2 border-black bg-green-btn-unfocus p-2 font-bold outline-none"
+          data-testid="region-filter"
+        >
           Select Region
         </button>
         {dropdowns.Region && (
           <ul className="absolute z-10 w-48">
-            <li className="border-b-2 border-black">
+            <li
+              className="border-b-2 border-black"
+              data-testid="region-all-filter"
+            >
               <DrowpdownItem
                 label="Select All"
                 fn={handleRegion}
@@ -136,9 +141,10 @@ export default function Dropdown({
             {RegionsList.map((r, index) => (
               <li
                 key={r}
-                className={`${
-                  index === RegionsList.length - 1 && `border-b-2`
-                } border-black`}>
+                className={`${index === RegionsList.length - 1 && `border-b-2`
+                  } border-black`}
+                data-testid={`region-${r}-filter`}
+              >
                 <DrowpdownItem
                   label={r}
                   fn={handleRegion}
@@ -169,9 +175,8 @@ export default function Dropdown({
             {RaritiesList.map((r, index) => (
               <li
                 key={r}
-                className={`${
-                  index === RaritiesList.length - 1 && `border-b-2 border-black`
-                }`}>
+                className={`${index === RaritiesList.length - 1 && `border-b-2 border-black`
+                  }`}>
                 <DrowpdownItem
                   label={r}
                   fn={handleRarity}
@@ -202,9 +207,8 @@ export default function Dropdown({
             {TypesList.map((t, index) => (
               <li
                 key={t}
-                className={`${
-                  index === TypesList.length - 1 && `border-b-2 border-black`
-                }`}>
+                className={`${index === TypesList.length - 1 && `border-b-2 border-black`
+                  }`}>
                 <DrowpdownItem
                   label={t}
                   fn={handleType}
@@ -235,9 +239,8 @@ export default function Dropdown({
             {HabitatList.map((h, index) => (
               <li
                 key={h}
-                className={`${
-                  index === HabitatList.length - 10 && `border-b-2 border-black`
-                }`}>
+                className={`${index === HabitatList.length - 10 && `border-b-2 border-black`
+                  }`}>
                 <DrowpdownItem
                   label={h}
                   fn={handleHabitat}
