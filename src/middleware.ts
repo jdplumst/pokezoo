@@ -3,26 +3,29 @@ import { Redis } from "@upstash/redis";
 import {
   type NextFetchEvent,
   type NextRequest,
-  NextResponse
+  NextResponse,
 } from "next/server";
+import { env } from "./env";
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
   limiter: Ratelimit.cachedFixedWindow(40, "10s"),
   ephemeralCache: new Map(),
-  analytics: true
+  analytics: true,
 });
 
 export default async function middleware(
   request: NextRequest,
-  event: NextFetchEvent
+  event: NextFetchEvent,
 ): Promise<Response | undefined> {
   const ip = request.ip ?? "127.0.0.1";
 
   if (request.nextUrl.pathname === "/api/blocked") return;
 
+  if (env.NODE_ENV !== "production") return;
+
   const { success, pending, limit, reset, remaining } = await ratelimit.limit(
-    `ratelimit_middleware_${ip}`
+    `ratelimit_middleware_${ip}`,
   );
   event.waitUntil(pending);
 
@@ -37,5 +40,5 @@ export default async function middleware(
 }
 
 export const config = {
-  matcher: "/api/:path*"
+  matcher: "/api/:path*",
 };
