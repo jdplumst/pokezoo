@@ -2,11 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url("https://fonts.googleapis.com/css2?family=Dosis:wght@200;300;400;500;600;700;800&display=swap");
-
 @layer base {
   html {
-    font-family: "Dosis", sans-serif;
     scrollbar-color: #d946ef rgba(0, 0, 0, 0);
     scrollbar-width: thin;
 
@@ -374,28 +371,31 @@ button {
 
 @keyframes animate {
   0% {
-    color: #fff; 
+    color: #fff;
     filter: blur(0px) hue-rotate(0deg);
-    text-shadow: 0 0 10px #00b3ff,
-    0 0 20px #00b3ff,
-    0 0 40px #00b3ff,
-    0 0 80px #00b3ff,
-    0 0 120px #00b3ff,
-    0 0 200px #00b3ff,
-    0 0 300px #00b3ff,
-    0 0 400px #00b3ff;
+    text-shadow:
+      0 0 10px #00b3ff,
+      0 0 20px #00b3ff,
+      0 0 40px #00b3ff,
+      0 0 80px #00b3ff,
+      0 0 120px #00b3ff,
+      0 0 200px #00b3ff,
+      0 0 300px #00b3ff,
+      0 0 400px #00b3ff;
   }
-  30%, 70% {
+  30%,
+  70% {
     color: #fff;
     filter: blur(0px) hue-rotate(360deg);
-    text-shadow: 0 0 10px #00b3ff,
-    0 0 20px #00b3ff,
-    0 0 40px #00b3ff,
-    0 0 80px #00b3ff,
-    0 0 120px #00b3ff,
-    0 0 200px #00b3ff,
-    0 0 300px #00b3ff,
-    0 0 400px #00b3ff;
+    text-shadow:
+      0 0 10px #00b3ff,
+      0 0 20px #00b3ff,
+      0 0 40px #00b3ff,
+      0 0 80px #00b3ff,
+      0 0 120px #00b3ff,
+      0 0 200px #00b3ff,
+      0 0 300px #00b3ff,
+      0 0 400px #00b3ff;
   }
   100% {
     color: transparent;
