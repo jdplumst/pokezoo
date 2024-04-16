@@ -12,7 +12,7 @@ const backfillCreateDateInstance = async () => {
     await delay(1000);
     await prisma.instance.update({
       data: { createDate: new Date() },
-      where: { id: i.id }
+      where: { id: i.id },
     });
   }
 };

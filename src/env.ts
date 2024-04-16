@@ -12,7 +12,7 @@ export const env = createEnv({
       // Since NextAuth.js automatically uses the VERCEL_URL if present.
       (str) => process.env.VERCEL_URL ?? str,
       // VERCEL_URL doesn't include `https` so it cant be validated as a URL
-      process.env.VERCEL ? z.string() : z.string().url()
+      process.env.VERCEL ? z.string() : z.string().url(),
     ),
     NEXTAUTH_SECRET: z.string(),
     GITHUB_ID: z.string(),
@@ -29,7 +29,7 @@ export const env = createEnv({
     TEST_UNAME1: z.string(),
     TEST_VALUE2: z.string(),
     TEST_UNAME2: z.string(),
-    TEST_RESET: z.string().url()
+    TEST_RESET: z.string().url(),
   },
   client: {},
   // If you're using Next.js < 13.4.4, you'll need to specify the runtimeEnv manually
@@ -52,10 +52,10 @@ export const env = createEnv({
     TEST_UNAME1: process.env.TEST_UNAME1,
     TEST_VALUE2: process.env.TEST_VALUE2,
     TEST_UNAME2: process.env.TEST_UNAME2,
-    TEST_RESET: process.env.TEST_RESET
+    TEST_RESET: process.env.TEST_RESET,
   },
   emptyStringAsUndefined: true,
-  skipValidation: process.env.SKIP_VALIDATION === "true"
+  skipValidation: process.env.SKIP_VALIDATION === "true",
   // For Next.js >= 13.4.4, you only need to destructure client variables:
   // experimental__runtimeEnv: {
   //   NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,

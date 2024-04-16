@@ -12,8 +12,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Rarity,
       attribute: "Common",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -23,8 +23,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Rarity,
       attribute: "Rare",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -34,8 +34,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Rarity,
       attribute: "Epic",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -45,8 +45,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Rarity,
       attribute: "Legendary",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -56,8 +56,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Habitat,
       attribute: "grassland",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -67,8 +67,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Habitat,
       attribute: "forest",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -78,8 +78,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Habitat,
       attribute: "waters-edge",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -89,8 +89,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Habitat,
       attribute: "sea",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -100,8 +100,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Habitat,
       attribute: "cave",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -111,8 +111,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Habitat,
       attribute: "mountain",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -122,8 +122,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Habitat,
       attribute: "rough-terrain",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -133,8 +133,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Habitat,
       attribute: "urban",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -144,8 +144,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Habitat,
       attribute: "rare",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -155,8 +155,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "normal",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -166,8 +166,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "fire",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -177,8 +177,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "fighting",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -188,8 +188,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "water",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -199,8 +199,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "flying",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -210,8 +210,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "grass",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -221,8 +221,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "poison",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -232,8 +232,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "electric",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -243,8 +243,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "ground",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -254,8 +254,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "psychic",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -265,8 +265,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "rock",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -276,8 +276,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "ice",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -287,8 +287,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "bug",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -298,8 +298,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "dragon",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -309,8 +309,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "ghost",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -320,8 +320,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "dark",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -331,8 +331,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "steel",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -342,8 +342,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.Type,
       attribute: "fairy",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -353,8 +353,8 @@ const populateGenFourAchievements = async () => {
       type: AchievementType.All,
       attribute: "all",
       generation: 4,
-      shiny: false
-    }
+      shiny: false,
+    },
   });
 };
 

@@ -7,11 +7,11 @@ import { Rarity } from "@prisma/client";
 const populateGenOneShinyDB = async () => {
   for (let i = 1; i <= 151; i++) {
     const speciesResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/${i}/`
+      `https://pokeapi.co/api/v2/pokemon-species/${i}/`,
     );
     const speciesData = await speciesResponse.json();
     const pokemonResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${i}`
+      `https://pokeapi.co/api/v2/pokemon/${i}`,
     );
     const pokemonData = await pokemonResponse.json();
     let rarity: Rarity = "Common";
@@ -44,8 +44,8 @@ const populateGenOneShinyDB = async () => {
         yield: income * 2,
         img: pokemonData.sprites.front_shiny,
         sellPrice: income * 10,
-        shiny: true
-      }
+        shiny: true,
+      },
     });
     console.log(species);
   }

@@ -7,11 +7,11 @@ import { Rarity } from "@prisma/client";
 const populateGenThreeDB = async () => {
   for (let i = 10001; i <= 10003; i++) {
     const speciesResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon-species/386/`
+      `https://pokeapi.co/api/v2/pokemon-species/386/`,
     );
     const speciesData = await speciesResponse.json();
     const pokemonResponse = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${i}`
+      `https://pokeapi.co/api/v2/pokemon/${i}`,
     );
     const pokemonData = await pokemonResponse.json();
     let rarity: Rarity = "Common";
@@ -54,8 +54,8 @@ const populateGenThreeDB = async () => {
           typeOne: pokemonData.types[0].type.name,
           typeTwo: pokemonData.types[1].type.name,
           generation: 3,
-          habitat: speciesData.habitat.name
-        }
+          habitat: speciesData.habitat.name,
+        },
       });
       const shinySpecies = await prisma.species.create({
         data: {
@@ -69,8 +69,8 @@ const populateGenThreeDB = async () => {
           typeOne: pokemonData.types[0].type.name,
           typeTwo: pokemonData.types[1].type.name,
           generation: 3,
-          habitat: speciesData.habitat.name
-        }
+          habitat: speciesData.habitat.name,
+        },
       });
       console.log(species);
       console.log(shinySpecies);
@@ -86,8 +86,8 @@ const populateGenThreeDB = async () => {
           shiny: false,
           typeOne: pokemonData.types[0].type.name,
           generation: 3,
-          habitat: speciesData.habitat.name
-        }
+          habitat: speciesData.habitat.name,
+        },
       });
       const shinySpecies = await prisma.species.create({
         data: {
@@ -100,8 +100,8 @@ const populateGenThreeDB = async () => {
           shiny: true,
           typeOne: pokemonData.types[0].type.name,
           generation: 3,
-          habitat: speciesData.habitat.name
-        }
+          habitat: speciesData.habitat.name,
+        },
       });
       console.log(species);
       console.log(shinySpecies);

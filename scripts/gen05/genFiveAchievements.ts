@@ -13,8 +13,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Common,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -25,8 +25,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Rare,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -37,8 +37,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Epic,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -49,8 +49,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Legendary,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -61,8 +61,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Grassland,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -73,8 +73,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Forest,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -85,8 +85,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.WatersEdge,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -97,8 +97,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Sea,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -109,8 +109,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Cave,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -121,8 +121,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Mountain,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -133,8 +133,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.RoughTerrain,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -145,8 +145,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Urban,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -157,8 +157,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Rare,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -169,8 +169,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Normal,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -181,8 +181,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Fire,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -193,8 +193,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Fighting,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -205,8 +205,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Water,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -217,8 +217,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Flying,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -229,8 +229,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Grass,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -241,8 +241,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Poison,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -253,8 +253,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Electric,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -265,8 +265,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Ground,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -277,8 +277,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Psychic,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -289,8 +289,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Rock,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -301,8 +301,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Ice,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -313,8 +313,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Bug,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -325,8 +325,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Dragon,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -337,8 +337,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Ghost,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -349,8 +349,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Dark,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -361,8 +361,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Steel,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -373,8 +373,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.Fairy,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
   await prisma.achievement.create({
     data: {
@@ -385,8 +385,8 @@ const populateGenFiveAchievements = async () => {
       attribute: Attribute.All,
       generation: 4,
       shiny: false,
-      region: Region.Unova
-    }
+      region: Region.Unova,
+    },
   });
 };
 

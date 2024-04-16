@@ -2,13 +2,13 @@
 const config = {
   parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: true
+    project: true,
   },
   plugins: ["@typescript-eslint"],
   extends: [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended-type-checked",
-    "plugin:@typescript-eslint/stylistic-type-checked"
+    "plugin:@typescript-eslint/stylistic-type-checked",
   ],
   rules: {
     // These opinionated rules are enabled in stylistic-type-checked above.
@@ -20,19 +20,19 @@ const config = {
       "warn",
       {
         prefer: "type-imports",
-        fixStyle: "inline-type-imports"
-      }
+        fixStyle: "inline-type-imports",
+      },
     ],
     "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
     "@typescript-eslint/no-misused-promises": [
       2,
       {
-        checksVoidReturn: { attributes: false }
-      }
+        checksVoidReturn: { attributes: false },
+      },
     ],
 
-    "@next/next/no-img-element": "off"
-  }
+    "@next/next/no-img-element": "off",
+  },
 };
 
 module.exports = config;

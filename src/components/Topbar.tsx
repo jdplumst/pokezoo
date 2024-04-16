@@ -18,41 +18,49 @@ export default function Topbar() {
 
   return (
     <nav
-      className={`relative ${getProfile.data?.admin ? `h-56` : `h-32`
-        } w-full py-4 shadow-lg`}>
+      className={`relative ${
+        getProfile.data?.admin ? `h-56` : `h-32`
+      } w-full py-4 shadow-lg`}
+    >
       {getProfile.data?.admin && (
         <div className="flex flex-col items-center gap-5">
           <div className="flex gap-5">
             <button
               onClick={() => handleTheme("day", theme)}
-              className="w-40 rounded-lg border-2 border-black bg-yellow-500 p-2 font-bold">
+              className="w-40 rounded-lg border-2 border-black bg-yellow-500 p-2 font-bold"
+            >
               Day
             </button>
             <button
               onClick={() => handleTheme("night", theme)}
-              className="w-40 rounded-lg border-2 border-black bg-purple-500 p-2 font-bold">
+              className="w-40 rounded-lg border-2 border-black bg-purple-500 p-2 font-bold"
+            >
               Night
             </button>
           </div>
           <div className="flex gap-5">
             <button
               onClick={() => handleTheme(time, "blue")}
-              className="w-40 rounded-lg border-2 border-black bg-blue-500 p-2 font-bold">
+              className="w-40 rounded-lg border-2 border-black bg-blue-500 p-2 font-bold"
+            >
               Blue
             </button>
             <button
               onClick={() => handleTheme(time, "purple")}
-              className="w-40 rounded-lg border-2 border-black bg-purple-500 p-2 font-bold">
+              className="w-40 rounded-lg border-2 border-black bg-purple-500 p-2 font-bold"
+            >
               Purple
             </button>
             <button
               onClick={() => handleTheme(time, "green")}
-              className="w-40 rounded-lg border-2 border-black bg-green-500 p-2 font-bold">
+              className="w-40 rounded-lg border-2 border-black bg-green-500 p-2 font-bold"
+            >
               Green
             </button>
             <button
               onClick={() => handleTheme(time, "orange")}
-              className="w-40 rounded-lg border-2 border-black bg-orange-500 p-2 font-bold">
+              className="w-40 rounded-lg border-2 border-black bg-orange-500 p-2 font-bold"
+            >
               Orange
             </button>
           </div>
@@ -78,21 +86,37 @@ export default function Topbar() {
         <div className="flex flex-col text-right">
           <div className="flex flex-row items-end justify-end">
             <p>You have {getProfile.data?.commonCards} Common wildcards.</p>
-            <Wildcard wildcard="Common" height={25} width={25} />
+            <Wildcard
+              wildcard="Common"
+              height={25}
+              width={25}
+            />
           </div>
           <div className="flex flex-row items-end justify-end">
             <p>You have {getProfile.data?.rareCards} Rare wildcards.</p>
-            <Wildcard wildcard="Rare" height={25} width={25} />
+            <Wildcard
+              wildcard="Rare"
+              height={25}
+              width={25}
+            />
           </div>
           <div className="flex flex-row items-end justify-end">
             <p>You have {getProfile.data?.epicCards} Epic wildcards.</p>
-            <Wildcard wildcard="Epic" height={25} width={25} />
+            <Wildcard
+              wildcard="Epic"
+              height={25}
+              width={25}
+            />
           </div>
           <div className="flex flex-row items-end justify-end">
             <p>
               You have {getProfile.data?.legendaryCards} Legendary wildcards.
             </p>
-            <Wildcard wildcard="Legendary" height={25} width={25} />
+            <Wildcard
+              wildcard="Legendary"
+              height={25}
+              width={25}
+            />
           </div>
         </div>
       </div>

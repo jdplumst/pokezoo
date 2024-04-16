@@ -9,7 +9,7 @@ export default function DrowpdownItem({
   label,
   fn,
   checked,
-  colour
+  colour,
 }: IDropdownItem) {
   return (
     <div
@@ -17,17 +17,18 @@ export default function DrowpdownItem({
         colour === "purple"
           ? `bg-purple-btn-unfocus`
           : colour === `green`
-          ? `bg-green-btn-unfocus`
-          : colour === `orange`
-          ? `bg-orange-btn-unfocus`
-          : colour === `blue`
-          ? `bg-blue-btn-unfocus`
-          : colour === "lime"
-          ? `bg-lime-btn-unfocus`
-          : colour === "red"
-          ? `bg-red-btn-unfocus`
-          : `bg-white`
-      } flex px-2 py-[1px] font-bold`}>
+            ? `bg-green-btn-unfocus`
+            : colour === `orange`
+              ? `bg-orange-btn-unfocus`
+              : colour === `blue`
+                ? `bg-blue-btn-unfocus`
+                : colour === "lime"
+                  ? `bg-lime-btn-unfocus`
+                  : colour === "red"
+                    ? `bg-red-btn-unfocus`
+                    : `bg-white`
+      } flex px-2 py-[1px] font-bold`}
+    >
       <input
         onChange={fn}
         type="checkbox"
@@ -38,7 +39,8 @@ export default function DrowpdownItem({
       />
       <label
         htmlFor={label === "Select All" ? "all" + colour : label}
-        className="inline-block w-32 flex-auto pl-4 capitalize hover:cursor-pointer">
+        className="inline-block w-32 flex-auto pl-4 capitalize hover:cursor-pointer"
+      >
         {label}
       </label>
     </div>

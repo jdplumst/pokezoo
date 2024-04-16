@@ -9,5 +9,5 @@ export const userAchievementRouter = router({
       .from(userAchievements)
       .where(eq(userAchievements.userId, ctx.session.user.id));
     return { userAchievements: userAchievementsData };
-  })
+  }),
 });

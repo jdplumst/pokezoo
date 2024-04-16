@@ -7,10 +7,13 @@ import { Router } from "next/router";
 import Loading from "../components/Loading";
 import { type Session } from "next-auth";
 import ThemeContextProvider from "../components/ThemeContextProvider";
+import { Dosis } from "next/font/google";
+
+const dosis = Dosis({ fallback: ["sans-serif"], subsets: ["latin"] });
 
 const App: AppType<{ session: Session | null }> = ({
   Component,
-  pageProps: { session, ...pageProps }
+  pageProps: { session, ...pageProps },
 }) => {
   const [loading, setLoading] = React.useState(false);
   React.useEffect(() => {
@@ -30,17 +33,20 @@ const App: AppType<{ session: Session | null }> = ({
     };
   }, []);
   return (
-    <>
+    <div className={dosis.className}>
       {loading ? (
         <Loading />
       ) : (
-        <SessionProvider session={session} refetchOnWindowFocus={false}>
+        <SessionProvider
+          session={session}
+          refetchOnWindowFocus={false}
+        >
           <ThemeContextProvider>
             <Component {...pageProps} />
           </ThemeContextProvider>
         </SessionProvider>
       )}
-    </>
+    </div>
   );
 };
 

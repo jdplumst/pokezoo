@@ -6,7 +6,7 @@ import {
   profiles,
   rarities,
   species,
-  trades
+  trades,
 } from "../../db/schema";
 import { and, desc, eq, or } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
@@ -29,23 +29,23 @@ export const tradeRouter = router({
       .leftJoin(offerer, eq(trades.offererId, offerer.userId))
       .innerJoin(
         initiatorInstance,
-        eq(trades.initiatorInstanceId, initiatorInstance.id)
+        eq(trades.initiatorInstanceId, initiatorInstance.id),
       )
       .innerJoin(
         initiatorSpecies,
-        eq(initiatorInstance.speciesId, initiatorSpecies.id)
+        eq(initiatorInstance.speciesId, initiatorSpecies.id),
       )
       .innerJoin(
         initiatorRarity,
-        eq(initiatorSpecies.rarityId, initiatorRarity.id)
+        eq(initiatorSpecies.rarityId, initiatorRarity.id),
       )
       .leftJoin(
         offererInstance,
-        eq(trades.offererInstanceId, offererInstance.id)
+        eq(trades.offererInstanceId, offererInstance.id),
       )
       .leftJoin(
         offererSpecies,
-        eq(offererInstance.speciesId, offererSpecies.id)
+        eq(offererInstance.speciesId, offererSpecies.id),
       )
       .leftJoin(offererRarity, eq(offererSpecies.rarityId, offererRarity.id))
       .orderBy(desc(trades.modifyDate));
@@ -55,7 +55,7 @@ export const tradeRouter = router({
 
   initiateTrade: protectedProcedure
     .input(
-      z.object({ instanceId: z.string(), description: z.string().nullish() })
+      z.object({ instanceId: z.string(), description: z.string().nullish() }),
     )
     .mutation(async ({ ctx, input }) => {
       const initiatorId = ctx.session.user.id;
@@ -70,14 +70,14 @@ export const tradeRouter = router({
       if (!instanceData) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `Instance with id ${input.instanceId} does not exist`
+          message: `Instance with id ${input.instanceId} does not exist`,
         });
       }
 
       if (instanceData.userId !== initiatorId) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: `Instance with id ${input.instanceId} does not belong to you`
+          message: `Instance with id ${input.instanceId} does not belong to you`,
         });
       }
 
@@ -88,22 +88,22 @@ export const tradeRouter = router({
           .where(
             or(
               eq(trades.initiatorInstanceId, input.instanceId),
-              eq(trades.offererInstanceId, input.instanceId)
-            )
+              eq(trades.offererInstanceId, input.instanceId),
+            ),
           )
       )[0];
 
       if (exists) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: `Instance with id ${input.instanceId} is already in a trade`
+          message: `Instance with id ${input.instanceId} is already in a trade`,
         });
       }
 
       await ctx.db.insert(trades).values({
         initiatorId: initiatorId,
         initiatorInstanceId: input.instanceId,
-        description: input.description
+        description: input.description,
       });
 
       return { message: "Trade created successfully" };
@@ -119,14 +119,14 @@ export const tradeRouter = router({
       if (!tradeData) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `Trade with id ${input.tradeId} does not exist`
+          message: `Trade with id ${input.tradeId} does not exist`,
         });
       }
 
       if (tradeData.initiatorId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You are not authorized to cancel this trade"
+          message: "You are not authorized to cancel this trade",
         });
       }
 
@@ -150,14 +150,14 @@ export const tradeRouter = router({
       if (!instanceData) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `Instance with id ${input.instanceId} does not exist`
+          message: `Instance with id ${input.instanceId} does not exist`,
         });
       }
 
       if (instanceData?.userId !== offererId) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: `Instance with id ${input.instanceId} does not belong to you`
+          message: `Instance with id ${input.instanceId} does not belong to you`,
         });
       }
 
@@ -168,21 +168,21 @@ export const tradeRouter = router({
       if (!tradeData) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `Trade with id ${input.tradeId} does not exist`
+          message: `Trade with id ${input.tradeId} does not exist`,
         });
       }
 
       if (tradeData.offererId) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "There is already an offer for this trade"
+          message: "There is already an offer for this trade",
         });
       }
 
       if (tradeData.initiatorId === ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You can't give an offer for your own trade"
+          message: "You can't give an offer for your own trade",
         });
       }
 
@@ -193,15 +193,15 @@ export const tradeRouter = router({
           .where(
             or(
               eq(trades.initiatorInstanceId, input.instanceId),
-              eq(trades.offererInstanceId, input.instanceId)
-            )
+              eq(trades.offererInstanceId, input.instanceId),
+            ),
           )
       )[0];
 
       if (exists) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: `Instance with id ${input.instanceId} is already in a trade`
+          message: `Instance with id ${input.instanceId} is already in a trade`,
         });
       }
 
@@ -210,7 +210,7 @@ export const tradeRouter = router({
         .set({
           offererId: ctx.session.user.id,
           offererInstanceId: input.instanceId,
-          modifyDate: new Date()
+          modifyDate: new Date(),
         })
         .where(eq(trades.id, input.tradeId));
 
@@ -227,14 +227,14 @@ export const tradeRouter = router({
       if (!tradeData) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `Trade with id ${input.tradeId} does not exist`
+          message: `Trade with id ${input.tradeId} does not exist`,
         });
       }
 
       if (tradeData.offererId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You are not the offerer for this trade"
+          message: "You are not the offerer for this trade",
         });
       }
 
@@ -243,7 +243,7 @@ export const tradeRouter = router({
         .set({
           offererId: null,
           offererInstanceId: null,
-          modifyDate: new Date()
+          modifyDate: new Date(),
         })
         .where(eq(trades.id, input.tradeId));
 
@@ -260,21 +260,21 @@ export const tradeRouter = router({
       if (!tradeData) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `Trade with id ${input.tradeId} does not exist`
+          message: `Trade with id ${input.tradeId} does not exist`,
         });
       }
 
       if (tradeData.initiatorId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You are not the initiator for this trade"
+          message: "You are not the initiator for this trade",
         });
       }
 
       if (!tradeData.offererId || !tradeData.offererInstanceId) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "There is no offer for this trade"
+          message: "There is no offer for this trade",
         });
       }
 
@@ -283,15 +283,15 @@ export const tradeRouter = router({
           .select({
             id: instances.id,
             userId: instances.userId,
-            yield: species.yield
+            yield: species.yield,
           })
           .from(instances)
           .innerJoin(species, eq(instances.speciesId, species.id))
           .where(
             and(
               eq(instances.id, tradeData.initiatorInstanceId),
-              eq(instances.userId, tradeData.initiatorId)
-            )
+              eq(instances.userId, tradeData.initiatorId),
+            ),
           )
       )[0];
 
@@ -300,15 +300,15 @@ export const tradeRouter = router({
           .select({
             id: instances.id,
             userId: instances.userId,
-            yield: species.yield
+            yield: species.yield,
           })
           .from(instances)
           .innerJoin(species, eq(instances.speciesId, species.id))
           .where(
             and(
               eq(instances.id, tradeData.offererInstanceId),
-              eq(instances.userId, tradeData.offererId)
-            )
+              eq(instances.userId, tradeData.offererId),
+            ),
           )
       )[0];
 
@@ -317,7 +317,8 @@ export const tradeRouter = router({
 
         throw new TRPCError({
           code: "CONFLICT",
-          message: "This initiator's Pokemon no longer belongs to the initiator"
+          message:
+            "This initiator's Pokemon no longer belongs to the initiator",
         });
       }
 
@@ -327,13 +328,13 @@ export const tradeRouter = router({
           .set({
             offererId: null,
             offererInstanceId: null,
-            modifyDate: new Date()
+            modifyDate: new Date(),
           })
           .where(eq(trades.id, input.tradeId));
 
         throw new TRPCError({
           code: "CONFLICT",
-          message: "The offered Pokemon no longer belongs to the offerer"
+          message: "The offered Pokemon no longer belongs to the offerer",
         });
       }
 
@@ -368,7 +369,7 @@ export const tradeRouter = router({
             totalYield:
               initiator.totalYield -
               initiatorInstance.yield +
-              offererInstance.yield
+              offererInstance.yield,
           })
           .where(eq(profiles.userId, tradeData.initiatorId));
 
@@ -378,7 +379,7 @@ export const tradeRouter = router({
             totalYield:
               offerer.totalYield -
               offererInstance.yield +
-              initiatorInstance.yield
+              initiatorInstance.yield,
           })
           .where(eq(profiles.userId, tradeData.offererId!));
 
@@ -389,8 +390,8 @@ export const tradeRouter = router({
           .where(
             or(
               eq(trades.initiatorInstanceId, initiatorInstance.id),
-              eq(trades.initiatorInstanceId, offererInstance.id)
-            )
+              eq(trades.initiatorInstanceId, offererInstance.id),
+            ),
           );
 
         await tx
@@ -399,8 +400,8 @@ export const tradeRouter = router({
           .where(
             or(
               eq(trades.offererInstanceId, initiatorInstance.id),
-              eq(trades.offererInstanceId, offererInstance.id)
-            )
+              eq(trades.offererInstanceId, offererInstance.id),
+            ),
           );
       });
 
@@ -417,21 +418,21 @@ export const tradeRouter = router({
       if (!tradeData) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: `Trade with id ${input.tradeId} does not exist`
+          message: `Trade with id ${input.tradeId} does not exist`,
         });
       }
 
       if (tradeData.initiatorId !== ctx.session.user.id) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "You are not the initiator for this trade"
+          message: "You are not the initiator for this trade",
         });
       }
 
       if (!tradeData.offererId || !tradeData.offererInstanceId) {
         throw new TRPCError({
           code: "FORBIDDEN",
-          message: "There is no offer for this trade"
+          message: "There is no offer for this trade",
         });
       }
 
@@ -440,10 +441,10 @@ export const tradeRouter = router({
         .set({
           offererId: null,
           offererInstanceId: null,
-          modifyDate: new Date()
+          modifyDate: new Date(),
         })
         .where(eq(trades.id, input.tradeId));
 
       return { message: "Trade rejected successfully" };
-    })
+    }),
 });

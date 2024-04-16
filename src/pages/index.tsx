@@ -8,18 +8,18 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "./api/auth/[...nextauth]";
 
 export const getServerSideProps = async (
-  context: GetServerSidePropsContext
+  context: GetServerSidePropsContext,
 ) => {
   const session = await getServerSession(context.req, context.res, authOptions);
   if (session) {
     return {
       redirect: {
-        destination: "/game"
-      }
+        destination: "/game",
+      },
     };
   }
   return {
-    props: { session }
+    props: { session },
   };
 };
 
@@ -28,9 +28,18 @@ export default function Home() {
     <>
       <Head>
         <title>PokéZoo</title>
-        <meta name="description" content="PokéZoo" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
+        <meta
+          name="description"
+          content="PokéZoo"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+        <link
+          rel="icon"
+          href="/favicon.png"
+        />
       </Head>
       <main className="fade-in absolute flex h-screen w-screen flex-col items-center bg-[url('../img/pokemon-bg.jpg')] bg-cover pt-10 font-bold">
         <h1 className="mb-20 text-7xl">PokéZoo</h1>
@@ -40,7 +49,8 @@ export default function Home() {
           </p>
           <button
             onClick={() => signIn("github")}
-            className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-green-500">
+            className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-green-500"
+          >
             <span className="flex items-center justify-center gap-2">
               Sign in with GitHub
               <AiOutlineGithub />
@@ -48,7 +58,8 @@ export default function Home() {
           </button>
           <button
             onClick={() => signIn("twitch")}
-            className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-purple-500">
+            className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-purple-500"
+          >
             <span className="flex items-center justify-center gap-2">
               Sign in with Twitch
               <FaTwitch />
@@ -56,7 +67,8 @@ export default function Home() {
           </button>
           <button
             onClick={() => signIn("google")}
-            className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-orange-500">
+            className="mt-5 h-10 w-2/3 rounded-lg border-2 border-black bg-orange-500"
+          >
             <span className="flex items-center justify-center gap-2">
               Sign in with Google
               <BsGoogle />

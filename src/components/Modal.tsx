@@ -11,7 +11,8 @@ export default function Modal({ size, children }: IModal) {
       <div
         className={`absolute ${
           size === "Large" && `top-0`
-        } z-10 flex min-w-[25%] flex-col items-center justify-center bg-black p-4 text-white opacity-100`}>
+        } z-10 flex min-w-[25%] flex-col items-center justify-center bg-black p-4 text-white opacity-100`}
+      >
         {children}
       </div>
     </div>

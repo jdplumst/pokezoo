@@ -4,7 +4,7 @@ module.exports = {
     "./app/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
     "./components/**/*.{js,ts,jsx,tsx}",
-    "./src/**/*.{js,ts,jsx,tsx}"
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -62,9 +62,9 @@ module.exports = {
         "dark": "var(--color-dark)",
         "dragon": "var(--color-dragon)",
         "steel": "var(--color-steel)",
-        "flying": "var(--color-flying)"
-      }
-    }
+        "flying": "var(--color-flying)",
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 };

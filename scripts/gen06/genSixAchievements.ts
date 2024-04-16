@@ -13,7 +13,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Common,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Rare Pokémon in Kalos",
@@ -23,7 +23,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Rare,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Epic Pokémon in Kalos",
@@ -33,7 +33,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Epic,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Legendary Pokémon in Kalos",
@@ -43,7 +43,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Legendary,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Grassland Pokémon in Kalos",
@@ -53,7 +53,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Grassland,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Forest Pokémon in Kalos",
@@ -63,7 +63,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Forest,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Waters-Edge Pokémon in Kalos",
@@ -73,7 +73,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.WatersEdge,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Sea Pokémon in Kalos",
@@ -83,7 +83,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Sea,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Cave Pokémon in Kalos",
@@ -93,7 +93,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Cave,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Mountain Pokémon in Kalos",
@@ -103,7 +103,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Mountain,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Rough-Terrain Pokémon in Kalos",
@@ -113,7 +113,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.RoughTerrain,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Urban Pokémon in Kalos",
@@ -123,7 +123,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Urban,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Rare (Habitat) Pokémon in Kalos",
@@ -133,7 +133,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Rare,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Normal Type Pokémon in Kalos",
@@ -143,7 +143,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Normal,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Fire Type Pokémon in Kalos",
@@ -153,7 +153,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Fire,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Fighting Type Pokémon in Kalos",
@@ -163,7 +163,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Fighting,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Water Type Pokémon in Kalos",
@@ -173,7 +173,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Water,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Flying Type Pokémon in Kalos",
@@ -183,7 +183,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Flying,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Grass Type Pokémon in Kalos",
@@ -193,7 +193,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Grass,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Poison Type Pokémon in Kalos",
@@ -203,7 +203,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Poison,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Electric Type Pokémon in Kalos",
@@ -213,7 +213,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Electric,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Ground Type Pokémon in Kalos",
@@ -223,7 +223,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Ground,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Psychic Type Pokémon in Kalos",
@@ -233,7 +233,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Psychic,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Rock Type Pokémon in Kalos",
@@ -243,7 +243,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Rock,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Ice Type Pokémon in Kalos",
@@ -253,7 +253,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Ice,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Bug Type Pokémon in Kalos",
@@ -263,7 +263,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Bug,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Dragon Type Pokémon in Kalos",
@@ -273,7 +273,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Dragon,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Ghost Type Pokémon in Kalos",
@@ -283,7 +283,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Ghost,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Dark Type Pokémon in Kalos",
@@ -293,7 +293,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Dark,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Steel Type Pokémon in Kalos",
@@ -303,7 +303,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Steel,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Fairy Type Pokémon in Kalos",
@@ -313,7 +313,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.Fairy,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
   await db.insert(achievements).values({
     description: "Catch all Pokémon in Kalos",
@@ -323,7 +323,7 @@ const populateGenSixAchievements = async () => {
     attribute: ZodAttribute.Values.All,
     generation: 6,
     shiny: false,
-    region: ZodRegion.Values.Kalos
+    region: ZodRegion.Values.Kalos,
   });
 };
 

@@ -4,13 +4,13 @@ import {
   type ZodHabitat,
   type ZodRarity,
   type ZodRegion,
-  type ZodSpeciesType
+  type ZodSpeciesType,
 } from "../zod";
 import {
   HabitatList,
   RaritiesList,
   RegionsList,
-  TypesList
+  TypesList,
 } from "../constants";
 
 export interface IDropdowns {
@@ -57,7 +57,7 @@ export default function Dropdown({
   handleRegion,
   handleRarity,
   handleType,
-  handleHabitat
+  handleHabitat,
 }: IDropdownProps) {
   return (
     <div className="flex justify-center gap-5 pt-5">
@@ -65,7 +65,8 @@ export default function Dropdown({
         <div className="w-48">
           <button
             onClick={() => handleDropdowns("Caught")}
-            className="w-full border-2 border-black bg-red-btn-unfocus p-2 font-bold outline-none">
+            className="w-full border-2 border-black bg-red-btn-unfocus p-2 font-bold outline-none"
+          >
             Select Caught
           </button>
           {dropdowns.Caught && (
@@ -93,7 +94,8 @@ export default function Dropdown({
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Shiny")}
-          className="w-full border-2 border-black bg-purple-btn-unfocus p-2 font-bold outline-none">
+          className="w-full border-2 border-black bg-purple-btn-unfocus p-2 font-bold outline-none"
+        >
           Select Shiny
         </button>
         {dropdowns.Shiny && (
@@ -120,12 +122,17 @@ export default function Dropdown({
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Region")}
-          className="w-full border-2 border-black bg-green-btn-unfocus p-2 font-bold outline-none">
+          className="w-full border-2 border-black bg-green-btn-unfocus p-2 font-bold outline-none"
+          data-testid="region-filter"
+        >
           Select Region
         </button>
         {dropdowns.Region && (
           <ul className="absolute z-10 w-48">
-            <li className="border-b-2 border-black">
+            <li
+              className="border-b-2 border-black"
+              data-testid="region-all-filter"
+            >
               <DrowpdownItem
                 label="Select All"
                 fn={handleRegion}
@@ -138,7 +145,9 @@ export default function Dropdown({
                 key={r}
                 className={`${
                   index === RegionsList.length - 1 && `border-b-2`
-                } border-black`}>
+                } border-black`}
+                data-testid={`region-${r.toLowerCase()}-filter`}
+              >
                 <DrowpdownItem
                   label={r}
                   fn={handleRegion}
@@ -153,12 +162,17 @@ export default function Dropdown({
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Rarity")}
-          className="w-full border-2 border-black bg-orange-btn-unfocus p-2 font-bold outline-none">
+          className="w-full border-2 border-black bg-orange-btn-unfocus p-2 font-bold outline-none"
+          data-testid="rarity-filter"
+        >
           Select Rarity
         </button>
         {dropdowns.Rarity && (
           <ul className="absolute z-10 w-48">
-            <li className="border-b-2 border-black">
+            <li
+              className="border-b-2 border-black"
+              data-testid="rarity-all-filter"
+            >
               <DrowpdownItem
                 label="Select All"
                 fn={handleRarity}
@@ -171,7 +185,9 @@ export default function Dropdown({
                 key={r}
                 className={`${
                   index === RaritiesList.length - 1 && `border-b-2 border-black`
-                }`}>
+                }`}
+                data-testid={`rarity-${r.toLowerCase()}-filter`}
+              >
                 <DrowpdownItem
                   label={r}
                   fn={handleRarity}
@@ -186,12 +202,17 @@ export default function Dropdown({
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Type")}
-          className="w-full border-2 border-black bg-blue-btn-unfocus p-2 font-bold outline-none">
+          className="w-full border-2 border-black bg-blue-btn-unfocus p-2 font-bold outline-none"
+          data-testid="type-filter"
+        >
           Select Type
         </button>
         {dropdowns.Type && (
           <ul className="absolute z-10 w-48">
-            <li className="border-b-2 border-black">
+            <li
+              className="border-b-2 border-black"
+              data-testid="type-all-filter"
+            >
               <DrowpdownItem
                 label="Select All"
                 fn={handleType}
@@ -204,7 +225,9 @@ export default function Dropdown({
                 key={t}
                 className={`${
                   index === TypesList.length - 1 && `border-b-2 border-black`
-                }`}>
+                }`}
+                data-testid={`type-${t.toLowerCase()}-filter`}
+              >
                 <DrowpdownItem
                   label={t}
                   fn={handleType}
@@ -219,12 +242,17 @@ export default function Dropdown({
       <div className="w-48">
         <button
           onClick={() => handleDropdowns("Habitat")}
-          className="w-full border-2 border-black bg-lime-btn-unfocus p-2 font-bold outline-none">
+          className="w-full border-2 border-black bg-lime-btn-unfocus p-2 font-bold outline-none"
+          data-testid="habitat-filter"
+        >
           Select Habitat
         </button>
         {dropdowns.Habitat && (
           <ul className="absolute z-10 w-48">
-            <li className="border-b-2 border-black">
+            <li
+              className="border-b-2 border-black"
+              data-testid="habitat-all-filter"
+            >
               <DrowpdownItem
                 label="Select All"
                 fn={handleHabitat}
@@ -237,7 +265,9 @@ export default function Dropdown({
                 key={h}
                 className={`${
                   index === HabitatList.length - 10 && `border-b-2 border-black`
-                }`}>
+                }`}
+                data-testid={`habitat-${h.toLowerCase()}-filter`}
+              >
                 <DrowpdownItem
                   label={h}
                   fn={handleHabitat}

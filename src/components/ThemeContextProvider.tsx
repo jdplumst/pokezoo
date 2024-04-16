@@ -7,14 +7,14 @@ export const ThemeContext = createContext<{
   theme: z.infer<typeof ZodTheme>;
   handleTheme: (
     time: z.infer<typeof ZodTime>,
-    theme: z.infer<typeof ZodTheme>
+    theme: z.infer<typeof ZodTheme>,
   ) => void;
 }>({
   time: "day",
   theme: "blue",
   handleTheme: () => {
     return;
-  }
+  },
 });
 
 interface IThemeContextProviderProps {
@@ -22,21 +22,22 @@ interface IThemeContextProviderProps {
 }
 
 export default function ThemeContextProvider({
-  children
+  children,
 }: IThemeContextProviderProps) {
   const [time, setTime] = useState<z.infer<typeof ZodTime>>("day");
   const [theme, setTheme] = useState<z.infer<typeof ZodTheme>>("blue");
 
   const handleTheme = (
     time: z.infer<typeof ZodTime>,
-    theme: z.infer<typeof ZodTheme>
+    theme: z.infer<typeof ZodTheme>,
   ) => {
     setTime(time);
     setTheme(theme);
   };
   return (
     <ThemeContext.Provider
-      value={{ time: time, theme: theme, handleTheme: handleTheme }}>
+      value={{ time: time, theme: theme, handleTheme: handleTheme }}
+    >
       {children}
     </ThemeContext.Provider>
   );

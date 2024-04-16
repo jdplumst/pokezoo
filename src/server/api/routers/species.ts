@@ -7,7 +7,7 @@ import {
   rarities,
   regions,
   species,
-  types
+  types,
 } from "../../db/schema";
 import {
   and,
@@ -19,13 +19,13 @@ import {
   min,
   notInArray,
   or,
-  sql
+  sql,
 } from "drizzle-orm";
 import {
   HabitatList,
   RaritiesList,
   RegionsList,
-  TypesList
+  TypesList,
 } from "@/src/constants";
 import { alias } from "drizzle-orm/pg-core";
 
@@ -33,8 +33,8 @@ export const speciesRouter = router({
   getSpecies: protectedProcedure
     .input(
       z.object({
-        order: z.union([z.string(), z.null()])
-      })
+        order: z.union([z.string(), z.null()]),
+      }),
     )
     .query(async ({ ctx, input }) => {
       let speciesData;
@@ -57,7 +57,7 @@ export const speciesRouter = router({
             typeTwo: typeTwo.name,
             generation: species.generation,
             habitat: habitats.name,
-            region: regions.name
+            region: regions.name,
           })
           .from(species)
           .innerJoin(regions, eq(species.regionId, regions.id))
@@ -81,7 +81,7 @@ export const speciesRouter = router({
             typeTwo: typeTwo.name,
             generation: species.generation,
             habitat: habitats.name,
-            region: regions.name
+            region: regions.name,
           })
           .from(species)
           .innerJoin(regions, eq(species.regionId, regions.id))
@@ -107,8 +107,8 @@ export const speciesRouter = router({
         regions: z.array(ZodRegion),
         rarities: z.array(ZodRarity),
         types: z.array(ZodSpeciesType),
-        habitats: z.array(ZodHabitat)
-      })
+        habitats: z.array(ZodHabitat),
+      }),
     )
     .query(async ({ ctx, input }) => {
       const limit = input.limit ?? 50;
@@ -137,7 +137,7 @@ export const speciesRouter = router({
           generation: species.generation,
           habitat: habitats.name,
           region: regions.name,
-          instance: i.speciesId
+          instance: i.speciesId,
         })
         .from(species)
         .leftJoin(i, eq(species.id, i.speciesId))
@@ -157,9 +157,9 @@ export const speciesRouter = router({
               : notInArray(rarities.name, RaritiesList),
             input.types.length > 0
               ? or(
-                inArray(typeOne.name, input.types),
-                inArray(typeTwo.name, input.types)
-              )
+                  inArray(typeOne.name, input.types),
+                  inArray(typeTwo.name, input.types),
+                )
               : notInArray(typeOne.name, TypesList),
             input.habitats.length > 0
               ? inArray(habitats.name, input.habitats)
@@ -169,15 +169,16 @@ export const speciesRouter = router({
               : !input.caught.Caught && input.caught.Uncaught
                 ? isNull(i.speciesId)
                 : undefined,
-            sql`(${species.pokedexNumber}, ${species.name}) >= (${input.cursor?.pokedexNumber ?? 0
-              }, ${input.cursor?.name ?? ""})`
-          )
+            sql`(${species.pokedexNumber}, ${species.name}) >= (${
+              input.cursor?.pokedexNumber ?? 0
+            }, ${input.cursor?.name ?? ""})`,
+          ),
         )
         .limit(limit + 1)
         .orderBy(
           asc(species.pokedexNumber),
           asc(rarities.id),
-          asc(species.name)
+          asc(species.name),
         );
 
       let nextCursor: typeof input.cursor | undefined = undefined;
@@ -185,7 +186,7 @@ export const speciesRouter = router({
         const nextItem = pokemon.pop()!;
         nextCursor = {
           pokedexNumber: nextItem?.pokedexNumber,
-          name: nextItem?.name
+          name: nextItem?.name,
         };
       }
 
@@ -195,8 +196,8 @@ export const speciesRouter = router({
   getStarters: protectedProcedure
     .input(
       z.object({
-        region: ZodRegion
-      })
+        region: ZodRegion,
+      }),
     )
     .query(async ({ ctx, input }) => {
       const typeOne = alias(types, "typeOne");
@@ -217,7 +218,7 @@ export const speciesRouter = router({
           generation: species.generation,
           habitat: habitats.name,
           region: regions.name,
-          instance: instances
+          instance: instances,
         })
         .from(instances)
         .innerJoin(species, eq(instances.speciesId, species.id))
@@ -259,7 +260,7 @@ export const speciesRouter = router({
         generation: species.generation,
         habitat: habitats.name,
         region: regions.name,
-        instance: i.speciesId
+        instance: i.speciesId,
       })
       .from(species)
       .innerJoin(regions, eq(species.regionId, regions.id))
@@ -270,5 +271,5 @@ export const speciesRouter = router({
       .innerJoin(i, eq(species.id, i.speciesId));
 
     return speciesData;
-  })
+  }),
 });

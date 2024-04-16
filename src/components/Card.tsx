@@ -12,7 +12,7 @@ interface ICard {
   instance?: z.infer<typeof selectInstanceSchema>;
   modifyDeleteList?: (
     instance: z.infer<typeof selectInstanceSchema>,
-    sell: boolean
+    sell: boolean,
   ) => void;
   caught?: boolean;
   handlePurchase?: (species: z.infer<typeof ZodSpecies>) => void;
@@ -23,7 +23,7 @@ export default function Card({
   instance,
   modifyDeleteList,
   caught,
-  handlePurchase
+  handlePurchase,
 }: ICard) {
   const [beingDeleted, setBeingDeleted] = useState(false);
 
@@ -33,19 +33,22 @@ export default function Card({
   if (!species) return <></>;
   return (
     <div
-      className={`${species.rarity === "Common"
-        ? `bg-common-unfocus hover:bg-common-focus`
-        : species.rarity === "Rare"
-          ? `bg-rare-unfocus hover:bg-rare-focus`
-          : species.rarity === "Epic"
-            ? `bg-epic-unfocus hover:bg-epic-focus`
-            : species.rarity === "Legendary"
-              ? `bg-legendary-unfocus hover:bg-legendary-focus`
-              : species.rarity === "Mega"
-                ? `bg-mega-unfocus hover:bg-mega-focus`
-                : ``
-        } card-hover h-fit w-[260px] border-2 ${species.shiny ? `border-yellow-500` : `border-black`
-        } p-2 text-black`}>
+      className={`${
+        species.rarity === "Common"
+          ? `bg-common-unfocus hover:bg-common-focus`
+          : species.rarity === "Rare"
+            ? `bg-rare-unfocus hover:bg-rare-focus`
+            : species.rarity === "Epic"
+              ? `bg-epic-unfocus hover:bg-epic-focus`
+              : species.rarity === "Legendary"
+                ? `bg-legendary-unfocus hover:bg-legendary-focus`
+                : species.rarity === "Mega"
+                  ? `bg-mega-unfocus hover:bg-mega-focus`
+                  : ``
+      } card-hover h-fit w-[260px] border-2 ${
+        species.shiny ? `border-yellow-500` : `border-black`
+      } p-2 text-black`}
+    >
       {caught && (
         <Image
           className="absolute"
@@ -71,86 +74,90 @@ export default function Card({
         </p>
         <div className="py-4 capitalize">
           <span
-            className={`${species.typeOne === `Normal`
-              ? `bg-normal`
-              : species.typeOne === `Grass`
-                ? `bg-grass`
-                : species.typeOne === `Bug`
-                  ? `bg-bug`
-                  : species.typeOne === `Fire`
-                    ? `bg-fire`
-                    : species.typeOne === `Electric`
-                      ? `bg-electric`
-                      : species.typeOne === `Ground`
-                        ? `bg-ground`
-                        : species.typeOne === `Water`
-                          ? `bg-water`
-                          : species.typeOne === `Fighting`
-                            ? `bg-fighting`
-                            : species.typeOne === `Poison`
-                              ? `bg-poison`
-                              : species.typeOne === `Rock`
-                                ? `bg-rock`
-                                : species.typeOne === `Ice`
-                                  ? `bg-ice`
-                                  : species.typeOne === `Ghost`
-                                    ? `bg-ghost`
-                                    : species.typeOne === `Psychic`
-                                      ? `bg-psychic`
-                                      : species.typeOne === `Fairy`
-                                        ? `bg-fairy`
-                                        : species.typeOne === `Dark`
-                                          ? `bg-dark`
-                                          : species.typeOne === `Dragon`
-                                            ? `bg-dragon`
-                                            : species.typeOne === `Steel`
-                                              ? `bg-steel`
-                                              : species.typeOne === `Flying`
-                                                ? `bg-flying`
-                                                : ``
-              } rounded-lg border-2 border-black p-2 font-bold text-white`}>
+            className={`${
+              species.typeOne === `Normal`
+                ? `bg-normal`
+                : species.typeOne === `Grass`
+                  ? `bg-grass`
+                  : species.typeOne === `Bug`
+                    ? `bg-bug`
+                    : species.typeOne === `Fire`
+                      ? `bg-fire`
+                      : species.typeOne === `Electric`
+                        ? `bg-electric`
+                        : species.typeOne === `Ground`
+                          ? `bg-ground`
+                          : species.typeOne === `Water`
+                            ? `bg-water`
+                            : species.typeOne === `Fighting`
+                              ? `bg-fighting`
+                              : species.typeOne === `Poison`
+                                ? `bg-poison`
+                                : species.typeOne === `Rock`
+                                  ? `bg-rock`
+                                  : species.typeOne === `Ice`
+                                    ? `bg-ice`
+                                    : species.typeOne === `Ghost`
+                                      ? `bg-ghost`
+                                      : species.typeOne === `Psychic`
+                                        ? `bg-psychic`
+                                        : species.typeOne === `Fairy`
+                                          ? `bg-fairy`
+                                          : species.typeOne === `Dark`
+                                            ? `bg-dark`
+                                            : species.typeOne === `Dragon`
+                                              ? `bg-dragon`
+                                              : species.typeOne === `Steel`
+                                                ? `bg-steel`
+                                                : species.typeOne === `Flying`
+                                                  ? `bg-flying`
+                                                  : ``
+            } rounded-lg border-2 border-black p-2 font-bold text-white`}
+          >
             {species.typeOne}
           </span>{" "}
           {species.typeTwo && (
             <span
-              className={`${species.typeTwo === `Normal`
-                ? `bg-normal`
-                : species.typeTwo === `Grass`
-                  ? `bg-grass`
-                  : species.typeTwo === `Bug`
-                    ? `bg-bug`
-                    : species.typeTwo === `Fire`
-                      ? `bg-fire`
-                      : species.typeTwo === `Electric`
-                        ? `bg-electric`
-                        : species.typeTwo === `Ground`
-                          ? `bg-ground`
-                          : species.typeTwo === `Water`
-                            ? `bg-water`
-                            : species.typeTwo === `Fighting`
-                              ? `bg-fighting`
-                              : species.typeTwo === `Poison`
-                                ? `bg-poison`
-                                : species.typeTwo === `Rock`
-                                  ? `bg-rock`
-                                  : species.typeTwo === `Ice`
-                                    ? `bg-ice`
-                                    : species.typeTwo === `Ghost`
-                                      ? `bg-ghost`
-                                      : species.typeTwo === `Psychic`
-                                        ? `bg-psychic`
-                                        : species.typeTwo === `Fairy`
-                                          ? `bg-fairy`
-                                          : species.typeTwo === `Dark`
-                                            ? `bg-dark`
-                                            : species.typeTwo === `Dragon`
-                                              ? `bg-dragon`
-                                              : species.typeTwo === `Steel`
-                                                ? `bg-steel`
-                                                : species.typeTwo === `Flying`
-                                                  ? `bg-flying`
-                                                  : ``
-                } rounded-lg border-2 border-black p-2 font-bold text-white`}>
+              className={`${
+                species.typeTwo === `Normal`
+                  ? `bg-normal`
+                  : species.typeTwo === `Grass`
+                    ? `bg-grass`
+                    : species.typeTwo === `Bug`
+                      ? `bg-bug`
+                      : species.typeTwo === `Fire`
+                        ? `bg-fire`
+                        : species.typeTwo === `Electric`
+                          ? `bg-electric`
+                          : species.typeTwo === `Ground`
+                            ? `bg-ground`
+                            : species.typeTwo === `Water`
+                              ? `bg-water`
+                              : species.typeTwo === `Fighting`
+                                ? `bg-fighting`
+                                : species.typeTwo === `Poison`
+                                  ? `bg-poison`
+                                  : species.typeTwo === `Rock`
+                                    ? `bg-rock`
+                                    : species.typeTwo === `Ice`
+                                      ? `bg-ice`
+                                      : species.typeTwo === `Ghost`
+                                        ? `bg-ghost`
+                                        : species.typeTwo === `Psychic`
+                                          ? `bg-psychic`
+                                          : species.typeTwo === `Fairy`
+                                            ? `bg-fairy`
+                                            : species.typeTwo === `Dark`
+                                              ? `bg-dark`
+                                              : species.typeTwo === `Dragon`
+                                                ? `bg-dragon`
+                                                : species.typeTwo === `Steel`
+                                                  ? `bg-steel`
+                                                  : species.typeTwo === `Flying`
+                                                    ? `bg-flying`
+                                                    : ``
+              } rounded-lg border-2 border-black p-2 font-bold text-white`}
+            >
               {species.typeTwo}
             </span>
           )}
@@ -174,7 +181,8 @@ export default function Card({
               modifyDeleteList(instance, true);
               setBeingDeleted(true);
             }}
-            className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold text-white hover:bg-red-btn-focus">
+            className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold text-white hover:bg-red-btn-focus"
+          >
             Sell Pokémon
           </button>
         )}
@@ -184,7 +192,8 @@ export default function Card({
               modifyDeleteList(instance, false);
               setBeingDeleted(false);
             }}
-            className="rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold text-white hover:bg-green-btn-focus">
+            className="rounded-lg border-2 border-black bg-green-btn-unfocus p-2 font-bold text-white hover:bg-green-btn-focus"
+          >
             Unsell Pokémon
           </button>
         )}
@@ -197,30 +206,55 @@ export default function Card({
                   {
                     onSuccess() {
                       handlePurchase(species);
-                    }
-                  }
+                    },
+                  },
                 )
               }
               disabled={purchaseMutation.isLoading}
-              className="rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 h-12 w-[70px] font-bold text-white hover:bg-blue-btn-focus">
+              className="h-12 w-[70px] rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold text-white hover:bg-blue-btn-focus"
+            >
               <div className="flex flex-row">
                 {(() => {
                   switch (species.rarity) {
                     case "Common":
-                      return <Wildcard wildcard="Common" height={25} width={25} />
+                      return (
+                        <Wildcard
+                          wildcard="Common"
+                          height={25}
+                          width={25}
+                        />
+                      );
                     case "Rare":
-                      return <Wildcard wildcard="Rare" height={25} width={25} />
+                      return (
+                        <Wildcard
+                          wildcard="Rare"
+                          height={25}
+                          width={25}
+                        />
+                      );
                     case "Epic":
-                      return <Wildcard wildcard="Epic" height={25} width={25} />
+                      return (
+                        <Wildcard
+                          wildcard="Epic"
+                          height={25}
+                          width={25}
+                        />
+                      );
                     case "Legendary":
-                      return <Wildcard wildcard="Legendary" height={25} width={25} />
+                      return (
+                        <Wildcard
+                          wildcard="Legendary"
+                          height={25}
+                          width={25}
+                        />
+                      );
                   }
                 })()}
                 {species.shiny ? `100` : `10`}
               </div>
             </button>
           ) : (
-            <div className="flex justify-center items-center rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 h-12 w-[70px] font-bold text-white hover:bg-blue-btn-focus">
+            <div className="flex h-12 w-[70px] items-center justify-center rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold text-white hover:bg-blue-btn-focus">
               N/A
             </div>
           ))}

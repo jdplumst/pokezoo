@@ -14,7 +14,7 @@ import { type z } from "zod";
 import { type ZodRegion, type ZodRarity, type ZodSpecies } from "@/src/zod";
 import {
   type selectCharmSchema,
-  type selectBallSchema
+  type selectBallSchema,
 } from "../server/db/schema";
 import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";
@@ -23,7 +23,7 @@ import Wildcard from "../components/Wildcard";
 
 export default function Shop() {
   const { status } = useSession({
-    required: true
+    required: true,
   });
 
   const utils = trpc.useUtils();
@@ -31,7 +31,7 @@ export default function Shop() {
   const { time } = useContext(ThemeContext);
 
   const { data: speciesData } = trpc.species.getSpecies.useQuery({
-    order: null
+    order: null,
   });
 
   const { data: ballData, isLoading: ballLoading } =
@@ -40,7 +40,8 @@ export default function Shop() {
   const { data: charmData, isLoading: charmLoading } =
     trpc.charm.getCharms.useQuery();
 
-  const { data: userCharmData, isLoading: userCharmLoading } = trpc.charm.getUserCharms.useQuery();
+  const { data: userCharmData, isLoading: userCharmLoading } =
+    trpc.charm.getUserCharms.useQuery();
 
   const [error, setError] = useState<string | null>(null);
 
@@ -59,7 +60,9 @@ export default function Shop() {
   const [newSpecies, setNewSpecies] = useState<
     z.infer<typeof ZodSpecies> | null | undefined
   >(null);
-  const [purchasedWildcard, setPurchasedWildcard] = useState<z.infer<typeof ZodRarity> | null>(null)
+  const [purchasedWildcard, setPurchasedWildcard] = useState<z.infer<
+    typeof ZodRarity
+  > | null>(null);
 
   // Premier Ball
   const [regionOpen, setRegionOpen] = useState(false);
@@ -90,11 +93,11 @@ export default function Shop() {
     let timeSpecies = speciesData?.species.slice();
     if (time === "day") {
       timeSpecies = speciesData?.species.filter(
-        (s) => s.habitat !== "Cave" && s.habitat !== "Forest"
+        (s) => s.habitat !== "Cave" && s.habitat !== "Forest",
       );
     } else if (time === "night") {
       timeSpecies = speciesData?.species.filter(
-        (s) => s.habitat !== "Grassland"
+        (s) => s.habitat !== "Grassland",
       );
     }
 
@@ -106,7 +109,7 @@ export default function Shop() {
           s.typeOne === "Water" ||
           s.typeTwo === "Water" ||
           s.typeOne === "Bug" ||
-          s.typeTwo === "Bug"
+          s.typeTwo === "Bug",
       );
     } else if (ball.name === "Dusk") {
       filteredSpecies = timeSpecies?.filter(
@@ -114,15 +117,15 @@ export default function Shop() {
           s.typeOne === "Dark" ||
           s.typeTwo === "Dark" ||
           s.typeOne === "Ghost" ||
-          s.typeTwo === "Ghost"
+          s.typeTwo === "Ghost",
       );
     } else if (ball.name === "Dive") {
       filteredSpecies = timeSpecies?.filter(
-        (s) => s.habitat === "WatersEdge" || s.habitat === "Sea"
+        (s) => s.habitat === "WatersEdge" || s.habitat === "Sea",
       );
     } else if (ball.name === "Safari") {
       filteredSpecies = timeSpecies?.filter(
-        (s) => s.habitat === "Mountain" || s.habitat === "RoughTerrain"
+        (s) => s.habitat === "Mountain" || s.habitat === "RoughTerrain",
       );
     } else if (ball.name === "Premier") {
       filteredSpecies = timeSpecies?.filter((s) => s.region === regionCurr);
@@ -151,65 +154,65 @@ export default function Shop() {
     let newInstance = speciesData?.species[0];
     if (rarity === "Common" && !shiny) {
       const commonSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Common" && !s.shiny
+        (s) => s.rarity === "Common" && !s.shiny,
       );
       newInstance =
         commonSpecies![Math.floor(Math.random() * commonSpecies!.length)];
     } else if (rarity === "Rare" && !shiny) {
       const rareSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Rare" && !s.shiny
+        (s) => s.rarity === "Rare" && !s.shiny,
       );
       newInstance =
         rareSpecies![Math.floor(Math.random() * rareSpecies!.length)];
     } else if (rarity === "Epic" && !shiny) {
       const epicSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Epic" && !s.shiny
+        (s) => s.rarity === "Epic" && !s.shiny,
       );
       newInstance =
         epicSpecies![Math.floor(Math.random() * epicSpecies!.length)];
     } else if (rarity === "Legendary" && !shiny) {
       const legendarySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Legendary" && !s.shiny
+        (s) => s.rarity === "Legendary" && !s.shiny,
       );
       newInstance =
         legendarySpecies![Math.floor(Math.random() * legendarySpecies!.length)];
     } else if (rarity === "Mega" && !shiny) {
       const megaSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Mega" && !s.shiny
+        (s) => s.rarity === "Mega" && !s.shiny,
       );
       newInstance =
         megaSpecies![Math.floor(Math.random() * megaSpecies!.length)];
     } else if (rarity === "Common" && shiny) {
       const commonShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Common" && s.shiny
+        (s) => s.rarity === "Common" && s.shiny,
       );
       newInstance =
         commonShinySpecies![
-        Math.floor(Math.random() * commonShinySpecies!.length)
+          Math.floor(Math.random() * commonShinySpecies!.length)
         ];
     } else if (rarity === "Rare" && shiny) {
       const rareShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Rare" && s.shiny
+        (s) => s.rarity === "Rare" && s.shiny,
       );
       newInstance =
         rareShinySpecies![Math.floor(Math.random() * rareShinySpecies!.length)];
     } else if (rarity === "Epic" && shiny) {
       const epicShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Epic" && s.shiny
+        (s) => s.rarity === "Epic" && s.shiny,
       );
       newInstance =
         epicShinySpecies![Math.floor(Math.random() * epicShinySpecies!.length)];
     } else if (rarity === "Legendary" && shiny) {
       const legendaryShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Legendary" && s.shiny
+        (s) => s.rarity === "Legendary" && s.shiny,
       );
       newInstance =
         legendaryShinySpecies![
-        Math.floor(Math.random() * legendaryShinySpecies!.length)
+          Math.floor(Math.random() * legendaryShinySpecies!.length)
         ];
     } else if (rarity === "Mega" && shiny) {
       const megaShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Mega" && s.shiny
+        (s) => s.rarity === "Mega" && s.shiny,
       );
       newInstance =
         megaShinySpecies![Math.floor(Math.random() * megaShinySpecies!.length)];
@@ -223,16 +226,16 @@ export default function Shop() {
           void utils.profile.getProfile.invalidate();
           setNewSpecies(
             speciesData?.species.filter(
-              (s) => s.id === data.instance.speciesId
-            )[0]
+              (s) => s.id === data.instance.speciesId,
+            )[0],
           );
           setOpenModal(true);
           setError(null);
         },
         onError(error) {
           setError(error.message);
-        }
-      }
+        },
+      },
     );
   };
 
@@ -248,12 +251,15 @@ export default function Shop() {
         },
         onError(error) {
           setError(error.message);
-        }
-      }
+        },
+      },
     );
   };
 
-  const purchaseWildcard = (tradedCard: z.infer<typeof ZodRarity>, purchasedCard: z.infer<typeof ZodRarity>) => {
+  const purchaseWildcard = (
+    tradedCard: z.infer<typeof ZodRarity>,
+    purchasedCard: z.infer<typeof ZodRarity>,
+  ) => {
     wildcardMutation.mutate(
       { tradedCard: tradedCard, purchasedCard: purchasedCard },
       {
@@ -264,11 +270,11 @@ export default function Shop() {
           setError(null);
         },
         onError(error) {
-          setError(error.message)
-        }
-      }
-    )
-  }
+          setError(error.message);
+        },
+      },
+    );
+  };
 
   if (status === "loading") return <Loading />;
 
@@ -276,9 +282,18 @@ export default function Shop() {
     <>
       <Head>
         <title>PokéZoo - Shop</title>
-        <meta name="description" content="PokéZoo" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.png" />
+        <meta
+          name="description"
+          content="PokéZoo"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1"
+        />
+        <link
+          rel="icon"
+          href="/favicon.png"
+        />
       </Head>
       <ThemeWrapper>
         <Sidebar page="Shop">
@@ -293,7 +308,10 @@ export default function Shop() {
               <div className="flex flex-col gap-20">
                 <div className="balls grid justify-center gap-10 pt-5">
                   {ballData?.balls.map((b) => (
-                    <Tooltip ball={b} key={b.id}>
+                    <Tooltip
+                      ball={b}
+                      key={b.id}
+                    >
                       <div className="h-72 w-72 border-2 border-black bg-ball p-2">
                         <div className="flex h-full flex-col items-center justify-around">
                           <Image
@@ -316,15 +334,20 @@ export default function Shop() {
                                 onClick={() => {
                                   setRegionOpen((p) => !p);
                                 }}
-                                className={`w-24 rounded-lg border-2 ${regionError ? "border-red-500" : "border-black"
-                                  } bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus`}>
+                                className={`w-24 rounded-lg border-2 ${
+                                  regionError
+                                    ? "border-red-500"
+                                    : "border-black"
+                                } bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus`}
+                              >
                                 {regionCurr ?? "Region"}
                               </button>
                             )}
                             <button
                               onClick={() => purchaseBall(b)}
                               disabled={ballMutation.isLoading}
-                              className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                              className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                            >
                               {ballMutation.isLoading && boughtBall === b ? (
                                 <LoadingSpinner />
                               ) : (
@@ -339,7 +362,10 @@ export default function Shop() {
                 </div>
                 <div className="balls grid justify-center gap-10 pt-5">
                   {charmData?.charms.map((c) => (
-                    <Tooltip key={c.id} charm={c}>
+                    <Tooltip
+                      key={c.id}
+                      charm={c}
+                    >
                       <div className="h-72 w-72 border-2 border-black bg-ball p-2">
                         <div className="flex h-full flex-col items-center justify-around">
                           <img
@@ -355,22 +381,25 @@ export default function Shop() {
                           <p className="text-center text-2xl font-bold">
                             P{c.cost.toLocaleString()}
                           </p>
-                          {userCharmData?.charmsData.some(u => u.charm?.id === c.id) ?
+                          {userCharmData?.charmsData.some(
+                            (u) => u.charm?.id === c.id,
+                          ) ? (
                             <p className="text-center text-xl">
                               You have already purchased this charm
                             </p>
-                            :
+                          ) : (
                             <button
                               onClick={() => purchaseCharm(c)}
                               disabled={charmMutation.isLoading}
-                              className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                              className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                            >
                               {charmMutation.isLoading && boughtCharm === c ? (
                                 <LoadingSpinner />
                               ) : (
                                 "Buy"
                               )}
                             </button>
-                          }
+                          )}
                         </div>
                       </div>
                     </Tooltip>
@@ -379,33 +408,57 @@ export default function Shop() {
                 <div className="balls grid justify-center gap-10 pt-5">
                   <div className="h-72 w-72 border-2 border-black bg-ball p-2">
                     <div className="flex h-full flex-col items-center justify-around">
-                      <Wildcard wildcard="Common" width={112} height={112} />
-                      <p className="text-center text-3xl font-bold">Common Wildcard</p>
+                      <Wildcard
+                        wildcard="Common"
+                        width={112}
+                        height={112}
+                      />
+                      <p className="text-center text-3xl font-bold">
+                        Common Wildcard
+                      </p>
                       <div className="flex gap-5">
                         <button
                           onClick={() => purchaseWildcard("Rare", "Common")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
                           <div className="flex justify-center">
                             <span>1</span>
-                            <Wildcard wildcard="Rare" height={25} width={25} /></div>
+                            <Wildcard
+                              wildcard="Rare"
+                              height={25}
+                              width={25}
+                            />
+                          </div>
                         </button>
                         <button
                           onClick={() => purchaseWildcard("Epic", "Common")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
                           <div className="flex justify-center">
                             <span>1</span>
-                            <Wildcard wildcard="Epic" height={25} width={25} />
+                            <Wildcard
+                              wildcard="Epic"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                         <button
-                          onClick={() => purchaseWildcard("Legendary", "Common")}
+                          onClick={() =>
+                            purchaseWildcard("Legendary", "Common")
+                          }
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
                           <div className="flex justify-center">
                             <span>1</span>
-                            <Wildcard wildcard="Legendary" height={25} width={25} />
+                            <Wildcard
+                              wildcard="Legendary"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                       </div>
@@ -413,33 +466,55 @@ export default function Shop() {
                   </div>
                   <div className="h-72 w-72 border-2 border-black bg-ball p-2">
                     <div className="flex h-full flex-col items-center justify-around">
-                      <Wildcard wildcard="Rare" width={112} height={112} />
-                      <p className="text-center text-3xl font-bold">Rare Wildcard</p>
+                      <Wildcard
+                        wildcard="Rare"
+                        width={112}
+                        height={112}
+                      />
+                      <p className="text-center text-3xl font-bold">
+                        Rare Wildcard
+                      </p>
                       <div className="flex gap-5">
                         <button
                           onClick={() => purchaseWildcard("Common", "Rare")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
-                          <div className="flex justify-center"><span>2</span>
-                            <Wildcard wildcard="Common" height={25} width={25} />
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
+                          <div className="flex justify-center">
+                            <span>2</span>
+                            <Wildcard
+                              wildcard="Common"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                         <button
                           onClick={() => purchaseWildcard("Epic", "Rare")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
                           <div className="flex justify-center">
                             <span>1</span>
-                            <Wildcard wildcard="Epic" height={25} width={25} />
+                            <Wildcard
+                              wildcard="Epic"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                         <button
                           onClick={() => purchaseWildcard("Legendary", "Rare")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
                           <div className="flex justify-center">
                             <span>1</span>
-                            <Wildcard wildcard="Legendary" height={25} width={25} />
+                            <Wildcard
+                              wildcard="Legendary"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                       </div>
@@ -447,33 +522,55 @@ export default function Shop() {
                   </div>
                   <div className="h-72 w-72 border-2 border-black bg-ball p-2">
                     <div className="flex h-full flex-col items-center justify-around">
-                      <Wildcard wildcard="Epic" width={112} height={112} />
-                      <p className="text-center text-3xl font-bold">Epic Wildcard</p>
+                      <Wildcard
+                        wildcard="Epic"
+                        width={112}
+                        height={112}
+                      />
+                      <p className="text-center text-3xl font-bold">
+                        Epic Wildcard
+                      </p>
                       <div className="flex gap-5">
                         <button
                           onClick={() => purchaseWildcard("Common", "Epic")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
-                          <div className="flex justify-center"><span>4</span>
-                            <Wildcard wildcard="Common" height={25} width={25} />
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
+                          <div className="flex justify-center">
+                            <span>4</span>
+                            <Wildcard
+                              wildcard="Common"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                         <button
                           onClick={() => purchaseWildcard("Rare", "Epic")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
                           <div className="flex justify-center">
                             <span>2</span>
-                            <Wildcard wildcard="Rare" height={25} width={25} />
+                            <Wildcard
+                              wildcard="Rare"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                         <button
                           onClick={() => purchaseWildcard("Legendary", "Epic")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
                           <div className="flex justify-center">
                             <span>1</span>
-                            <Wildcard wildcard="Legendary" height={25} width={25} />
+                            <Wildcard
+                              wildcard="Legendary"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                       </div>
@@ -481,33 +578,57 @@ export default function Shop() {
                   </div>
                   <div className="h-72 w-72 border-2 border-black bg-ball p-2">
                     <div className="flex h-full flex-col items-center justify-around">
-                      <Wildcard wildcard="Legendary" width={112} height={112} />
-                      <p className="text-center text-3xl font-bold">Legendary Wildcard</p>
+                      <Wildcard
+                        wildcard="Legendary"
+                        width={112}
+                        height={112}
+                      />
+                      <p className="text-center text-3xl font-bold">
+                        Legendary Wildcard
+                      </p>
                       <div className="flex gap-5">
                         <button
-                          onClick={() => purchaseWildcard("Common", "Legendary")}
+                          onClick={() =>
+                            purchaseWildcard("Common", "Legendary")
+                          }
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
-                          <div className="flex justify-center"><span>50</span>
-                            <Wildcard wildcard="Common" height={25} width={25} />
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
+                          <div className="flex justify-center">
+                            <span>50</span>
+                            <Wildcard
+                              wildcard="Common"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                         <button
                           onClick={() => purchaseWildcard("Rare", "Legendary")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
                           <div className="flex justify-center">
                             <span>35</span>
-                            <Wildcard wildcard="Rare" height={25} width={25} />
+                            <Wildcard
+                              wildcard="Rare"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                         <button
                           onClick={() => purchaseWildcard("Epic", "Legendary")}
                           disabled={wildcardMutation.isLoading}
-                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus">
+                          className="w-14 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
+                        >
                           <div className="flex justify-center">
                             <span>15</span>
-                            <Wildcard wildcard="Epic" height={25} width={25} />
+                            <Wildcard
+                              wildcard="Epic"
+                              height={25}
+                              width={25}
+                            />
                           </div>
                         </button>
                       </div>
@@ -517,108 +638,109 @@ export default function Shop() {
               </div>
             )}
           </main>
-        </Sidebar >
-      </ThemeWrapper >
+        </Sidebar>
+      </ThemeWrapper>
 
       {/* Modal for Bought Instance */}
-      {
-        openModal && newSpecies && (
-          <Modal size="Small">
-            {"aeiou".includes(newSpecies.name[0]) ? (
-              <div className="text-center text-xl font-bold">
-                You got an <span className="capitalize">{newSpecies.name}!</span>{" "}
-              </div>
-            ) : (
-              <div className="text-center text-xl font-bold">
-                You got a <span className="capitalize">{newSpecies.name}!</span>
-              </div>
-            )}
-            <Card species={newSpecies} />
-            <div className="flex justify-center pt-4">
-              <button
-                onClick={() => {
-                  setOpenModal(false);
-                  setNewSpecies(null);
-                }}
-                className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-                Got it!
-              </button>
+      {openModal && newSpecies && (
+        <Modal size="Small">
+          {"aeiou".includes(newSpecies.name[0]) ? (
+            <div className="text-center text-xl font-bold">
+              You got an <span className="capitalize">{newSpecies.name}!</span>{" "}
             </div>
-          </Modal>
-        )
-      }
+          ) : (
+            <div className="text-center text-xl font-bold">
+              You got a <span className="capitalize">{newSpecies.name}!</span>
+            </div>
+          )}
+          <Card species={newSpecies} />
+          <div className="flex justify-center pt-4">
+            <button
+              onClick={() => {
+                setOpenModal(false);
+                setNewSpecies(null);
+              }}
+              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
+            >
+              Got it!
+            </button>
+          </div>
+        </Modal>
+      )}
 
       {/* Modal for Premier Ball */}
-      {
-        regionOpen && (
-          <Modal size="Small">
-            <p className="text-xl font-bold">Select a Region</p>
-            <div className="flex gap-5 pt-5">
-              {RegionsList.map((r) => (
-                <button
-                  key={r}
-                  onClick={() => {
-                    setRegionCurr(r);
-                    setRegionOpen(false);
-                    premierRef.current!.scrollIntoView();
-                  }}
-                  className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-                  {r}
-                </button>
-              ))}
-            </div>
-          </Modal>
-        )
-      }
+      {regionOpen && (
+        <Modal size="Small">
+          <p className="text-xl font-bold">Select a Region</p>
+          <div className="flex gap-5 pt-5">
+            {RegionsList.map((r) => (
+              <button
+                key={r}
+                onClick={() => {
+                  setRegionCurr(r);
+                  setRegionOpen(false);
+                  premierRef.current!.scrollIntoView();
+                }}
+                className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
+              >
+                {r}
+              </button>
+            ))}
+          </div>
+        </Modal>
+      )}
 
       {/* Modal for Bought Charm */}
-      {
-        openModal && !newSpecies && boughtCharm && (
-          <Modal size="Small">
-            <div className="flex flex-col items-center gap-4">
-              <div className="text-xl font-bold text-center">
-                You Have Obtained the {boughtCharm?.name} Charm!
-              </div>
-              <img
-                src={boughtCharm.img}
-                alt={boughtCharm.name}
-                width={112}
-                height={112}
-                className="pixelated"
-              />
-              <button
-                onClick={() => {
-                  setOpenModal(false);
-                  setNewSpecies(null);
-                }}
-                className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-                Got it!
-              </button>
+      {openModal && !newSpecies && boughtCharm && (
+        <Modal size="Small">
+          <div className="flex flex-col items-center gap-4">
+            <div className="text-center text-xl font-bold">
+              You Have Obtained the {boughtCharm?.name} Charm!
             </div>
-          </Modal>
-        )
-      }
+            <img
+              src={boughtCharm.img}
+              alt={boughtCharm.name}
+              width={112}
+              height={112}
+              className="pixelated"
+            />
+            <button
+              onClick={() => {
+                setOpenModal(false);
+                setNewSpecies(null);
+              }}
+              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
+            >
+              Got it!
+            </button>
+          </div>
+        </Modal>
+      )}
 
       {/* Modal for Purchased Wildcard */}
-      {
-        openModal && purchasedWildcard && (
-          <Modal size="Small">
-            <div className="flex flex-col items-center gap-4">
-              <div className="text-xl font-bold text-center">
-                You Have Purchased a {purchasedWildcard} Wildcard!
-              </div>
-              <Wildcard wildcard={purchasedWildcard} width={112} height={112} />
-              <button onClick={() => {
+      {openModal && purchasedWildcard && (
+        <Modal size="Small">
+          <div className="flex flex-col items-center gap-4">
+            <div className="text-center text-xl font-bold">
+              You Have Purchased a {purchasedWildcard} Wildcard!
+            </div>
+            <Wildcard
+              wildcard={purchasedWildcard}
+              width={112}
+              height={112}
+            />
+            <button
+              onClick={() => {
                 setOpenModal(false);
                 setPurchasedWildcard(null);
               }}
-                className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus">
-                Got it!
-              </button>
-            </div>
-          </Modal>
-        )
-      }
+              className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
+            >
+              Got it!
+            </button>
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

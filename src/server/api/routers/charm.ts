@@ -23,7 +23,7 @@ export const charmRouter = router({
       if (!currUser) {
         throw new TRPCError({
           code: "UNAUTHORIZED",
-          message: "Not authorized to make this request"
+          message: "Not authorized to make this request",
         });
       }
 
@@ -34,7 +34,7 @@ export const charmRouter = router({
       if (!charmData) {
         throw new TRPCError({
           code: "BAD_REQUEST",
-          message: "Charm does not exist"
+          message: "Charm does not exist",
         });
       }
 
@@ -45,22 +45,22 @@ export const charmRouter = router({
           .where(
             and(
               eq(userCharms.charmId, input.charmId),
-              eq(userCharms.userId, ctx.session.user.id)
-            )
+              eq(userCharms.userId, ctx.session.user.id),
+            ),
           )
       )[0];
 
       if (exists) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "You have already claimed this charm"
+          message: "You have already claimed this charm",
         });
       }
 
       if (currUser.balance < charmData.cost) {
         throw new TRPCError({
           code: "CONFLICT",
-          message: "You cannot afford this charm"
+          message: "You cannot afford this charm",
         });
       }
 
@@ -89,21 +89,22 @@ export const charmRouter = router({
     if (!currUser) {
       throw new TRPCError({
         code: "UNAUTHORIZED",
-        message: "Not authorized to make this request"
+        message: "Not authorized to make this request",
       });
     }
 
     try {
-      const charmsData = await ctx.db.select()
+      const charmsData = await ctx.db
+        .select()
         .from(userCharms)
         .leftJoin(charms, eq(userCharms.charmId, charms.id))
-        .where(eq(userCharms.userId, ctx.session.user.id))
-      return { charmsData }
+        .where(eq(userCharms.userId, ctx.session.user.id));
+      return { charmsData };
     } catch (err) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
-        message: "Something went wrong. Try again later."
-      })
+        message: "Something went wrong. Try again later.",
+      });
     }
-  })
+  }),
 });
