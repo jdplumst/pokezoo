@@ -40,7 +40,7 @@ export default function PatchNotes() {
               patch="6.12"
               date="April 16, 2024"
             >
-              <Note note="Set font to Dosis." />
+              <Note note="Set font to Geist." />
             </Patch>
             <Patch
               patch="6.11"
