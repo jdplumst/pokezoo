@@ -146,7 +146,7 @@ export default function Dropdown({
                 className={`${
                   index === RegionsList.length - 1 && `border-b-2`
                 } border-black`}
-                data-testid={`region-${r}-filter`}
+                data-testid={`region-${r.toLowerCase()}-filter`}
               >
                 <DrowpdownItem
                   label={r}
@@ -163,12 +163,16 @@ export default function Dropdown({
         <button
           onClick={() => handleDropdowns("Rarity")}
           className="w-full border-2 border-black bg-orange-btn-unfocus p-2 font-bold outline-none"
+          data-testid="rarity-filter"
         >
           Select Rarity
         </button>
         {dropdowns.Rarity && (
           <ul className="absolute z-10 w-48">
-            <li className="border-b-2 border-black">
+            <li
+              className="border-b-2 border-black"
+              data-testid="rarity-all-filter"
+            >
               <DrowpdownItem
                 label="Select All"
                 fn={handleRarity}
@@ -182,6 +186,7 @@ export default function Dropdown({
                 className={`${
                   index === RaritiesList.length - 1 && `border-b-2 border-black`
                 }`}
+                data-testid={`rarity-${r.toLowerCase()}-filter`}
               >
                 <DrowpdownItem
                   label={r}
