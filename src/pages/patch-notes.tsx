@@ -37,6 +37,12 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="6.12"
+              date="April 16, 2024"
+            >
+              <Note note="Set font to Dosis." />
+            </Patch>
+            <Patch
               patch="6.11"
               date="March 16, 2024"
             >
