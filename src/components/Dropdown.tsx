@@ -243,12 +243,16 @@ export default function Dropdown({
         <button
           onClick={() => handleDropdowns("Habitat")}
           className="w-full border-2 border-black bg-lime-btn-unfocus p-2 font-bold outline-none"
+          data-testid="habitat-filter"
         >
           Select Habitat
         </button>
         {dropdowns.Habitat && (
           <ul className="absolute z-10 w-48">
-            <li className="border-b-2 border-black">
+            <li
+              className="border-b-2 border-black"
+              data-testid="habitat-all-filter"
+            >
               <DrowpdownItem
                 label="Select All"
                 fn={handleHabitat}
@@ -262,6 +266,7 @@ export default function Dropdown({
                 className={`${
                   index === HabitatList.length - 10 && `border-b-2 border-black`
                 }`}
+                data-testid={`habitat-${h.toLowerCase()}-filter`}
               >
                 <DrowpdownItem
                   label={h}

@@ -791,3 +791,151 @@ test("type filters", async ({ browser }) => {
   await context.close();
   await page.close();
 });
+
+test("habitat filters", async ({ browser }) => {
+  const [page, context] = await login(browser, 1);
+
+  // Sort By Pokedex # For Simplicity
+  await page.getByTestId("pokedex-sort").click();
+
+  // Grassland Filter
+  await expect(page.getByTestId("habitat-grassland-filter")).not.toBeVisible();
+  await page.getByTestId("habitat-filter").click();
+  await expect(page.getByTestId("habitat-grassland-filter")).toBeVisible();
+  await page.getByTestId("habitat-all-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).not.toBeVisible();
+  await page.getByTestId("habitat-grassland-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("venusaur");
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "mega-venusaur",
+  );
+  await expect(page.getByText("#").locator("nth=4")).toContainText("growlithe");
+  await expect(page.getByText("#").locator("nth=5")).toContainText("furret");
+  await expect(page.getByText("#").locator("nth=6")).toContainText("raikou");
+  await expect(page.getByText("#").locator("nth=7")).toContainText("castform");
+  await expect(page.getByText("#").locator("nth=8")).toContainText(
+    "castform-rainy",
+  );
+  await expect(page.getByText("#").locator("nth=9")).toContainText(
+    "castform-snowy",
+  );
+  await expect(page.getByText("#").locator("nth=10")).toContainText(
+    "castform-sunny",
+  );
+  await expect(page.getByText("#").locator("nth=11")).not.toBeVisible();
+  await page.getByTestId("habitat-grassland-filter").click();
+
+  // Forest Filter
+  await page.getByTestId("habitat-forest-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("caterpie");
+  await expect(page.getByText("#").locator("nth=3")).toContainText("togepi");
+  await expect(page.getByText("#").locator("nth=4")).toContainText("sudowoodo");
+  await expect(page.getByText("#").locator("nth=5")).toContainText(
+    "mega-heracross",
+  );
+  await expect(page.getByText("#").locator("nth=6")).toContainText("grovyle");
+  await expect(page.getByText("#").locator("nth=7")).not.toBeVisible();
+  await page.getByTestId("habitat-forest-filter").click();
+
+  // Waters-Edge Filter
+  await page.getByTestId("habitat-waters-edge-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("totodile");
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "basculin-blue-striped",
+  );
+  await expect(page.getByText("#").locator("nth=4")).toContainText(
+    "basculin-red-striped",
+  );
+  await expect(page.getByText("#").locator("nth=5")).toContainText("ducklett");
+  await expect(page.getByText("#").locator("nth=6")).toContainText("greninja");
+  await expect(page.getByText("#").locator("nth=7")).toContainText(
+    "ash-greninja",
+  );
+  await expect(page.getByText("#").locator("nth=8")).not.toBeVisible();
+  await page.getByTestId("habitat-waters-edge-filter").click();
+
+  // Sea Filter
+  await page.getByTestId("habitat-sea-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("walrein");
+  await expect(page.getByText("#").locator("nth=3")).toContainText("kyogre");
+  await expect(page.getByText("#").locator("nth=4")).toContainText(
+    "primal-kyogre",
+  );
+  await expect(page.getByText("#").locator("nth=5")).toContainText(
+    "shellos-east",
+  );
+  await expect(page.getByText("#").locator("nth=6")).toContainText(
+    "shellos-west",
+  );
+  await expect(page.getByText("#").locator("nth=7")).not.toBeVisible();
+  await page.getByTestId("habitat-sea-filter").click();
+
+  // Cave Filter
+  await page.getByTestId("habitat-cave-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText(
+    "mega-mawile",
+  );
+  await expect(page.getByText("#").locator("nth=3")).not.toBeVisible();
+  await page.getByTestId("habitat-cave-filter").click();
+
+  // Mountain Filter
+  await page.getByTestId("habitat-mountain-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("tyranitar");
+  await expect(page.getByText("#").locator("nth=3")).not.toBeVisible();
+  await page.getByTestId("habitat-mountain-filter").click();
+
+  // Rough-Terrain Filter
+  await page.getByTestId("habitat-rough-terrain-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("metagross");
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "hippowdon-f",
+  );
+  await expect(page.getByText("#").locator("nth=4")).toContainText(
+    "hippowdon-m",
+  );
+  await expect(page.getByText("#").locator("nth=5")).not.toBeVisible();
+  await page.getByTestId("habitat-rough-terrain-filter").click();
+
+  // Urban Filter
+  await page.getByTestId("habitat-urban-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("umbreon");
+  await expect(page.getByText("#").locator("nth=3")).toContainText("gardevoir");
+  await expect(page.getByText("#").locator("nth=4")).toContainText("rotom");
+  await expect(page.getByText("#").locator("nth=5")).toContainText("rotom-fan");
+  await expect(page.getByText("#").locator("nth=6")).toContainText(
+    "rotom-frost",
+  );
+  await expect(page.getByText("#").locator("nth=7")).toContainText(
+    "rotom-heat",
+  );
+  await expect(page.getByText("#").locator("nth=8")).toContainText("rotom-mow");
+  await expect(page.getByText("#").locator("nth=9")).toContainText(
+    "rotom-wash",
+  );
+  await expect(page.getByText("#").locator("nth=10")).toContainText(
+    "meowstic-female",
+  );
+  await expect(page.getByText("#").locator("nth=11")).toContainText(
+    "meowstic-male",
+  );
+  await expect(page.getByText("#").locator("nth=12")).not.toBeVisible();
+  await page.getByTestId("habitat-urban-filter").click();
+
+  // Rare Filter
+  await page.getByTestId("habitat-rare-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("articuno");
+  await expect(page.getByText("#").locator("nth=3")).toContainText("mewtwo");
+  await expect(page.getByText("#").locator("nth=4")).toContainText(
+    "mega-mewtwo-x",
+  );
+  await expect(page.getByText("#").locator("nth=5")).toContainText(
+    "mega-mewtwo-y",
+  );
+  await expect(page.getByText("#").locator("nth=6")).toContainText("lugia");
+  await expect(page.getByText("#").locator("nth=7")).toContainText("victini");
+  await expect(page.getByText("#").locator("nth=12")).not.toBeVisible();
+  await page.getByTestId("habitat-rare-filter").click();
+
+  await context.close();
+  await page.close();
+});
