@@ -7,9 +7,7 @@ import { Router } from "next/router";
 import Loading from "../components/Loading";
 import { type Session } from "next-auth";
 import ThemeContextProvider from "../components/ThemeContextProvider";
-import { Dosis } from "next/font/google";
-
-const dosis = Dosis({ fallback: ["sans-serif"], subsets: ["latin"] });
+import { GeistSans } from "geist/font/sans";
 
 const App: AppType<{ session: Session | null }> = ({
   Component,
@@ -33,7 +31,7 @@ const App: AppType<{ session: Session | null }> = ({
     };
   }, []);
   return (
-    <div className={dosis.className}>
+    <div className={GeistSans.className}>
       {loading ? (
         <Loading />
       ) : (
