@@ -203,12 +203,16 @@ export default function Dropdown({
         <button
           onClick={() => handleDropdowns("Type")}
           className="w-full border-2 border-black bg-blue-btn-unfocus p-2 font-bold outline-none"
+          data-testid="type-filter"
         >
           Select Type
         </button>
         {dropdowns.Type && (
           <ul className="absolute z-10 w-48">
-            <li className="border-b-2 border-black">
+            <li
+              className="border-b-2 border-black"
+              data-testid="type-all-filter"
+            >
               <DrowpdownItem
                 label="Select All"
                 fn={handleType}
@@ -222,6 +226,7 @@ export default function Dropdown({
                 className={`${
                   index === TypesList.length - 1 && `border-b-2 border-black`
                 }`}
+                data-testid={`type-${t.toLowerCase()}-filter`}
               >
                 <DrowpdownItem
                   label={t}

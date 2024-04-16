@@ -561,3 +561,233 @@ test("rarity filters", async ({ browser }) => {
   await context.close();
   await page.close();
 });
+
+test("type filters", async ({ browser }) => {
+  const [page, context] = await login(browser, 1);
+
+  // Sort By Pokedex # For Simplicity
+  await page.getByTestId("pokedex-sort").click();
+
+  // Normal Filter
+  await expect(page.getByTestId("type-normal-filter")).not.toBeVisible();
+  await page.getByTestId("type-filter").click();
+  await expect(page.getByTestId("type-normal-filter")).toBeVisible();
+  await page.getByTestId("type-all-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).not.toBeVisible();
+  await page.getByTestId("type-normal-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("furret");
+  await expect(page.getByText("#").locator("nth=3")).toContainText("castform");
+  await expect(page.getByText("#").locator("nth=4")).not.toBeVisible();
+  await page.getByTestId("type-normal-filter").click();
+
+  // Grass Filter
+  await page.getByTestId("type-grass-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("venusaur");
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "mega-venusaur",
+  );
+  await expect(page.getByText("#").locator("nth=4")).toContainText("grovyle");
+  await expect(page.getByText("#").locator("nth=5")).toContainText("rotom-mow");
+  await expect(page.getByText("#").locator("nth=6")).not.toBeVisible();
+  await page.getByTestId("type-grass-filter").click();
+
+  // Bug Filter
+  await page.getByTestId("type-bug-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("caterpie");
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "mega-heracross",
+  );
+  await expect(page.getByText("#").locator("nth=4")).not.toBeVisible();
+  await page.getByTestId("type-bug-filter").click();
+
+  // Fire Filter
+  await page.getByTestId("type-fire-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("growlithe");
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "castform-sunny",
+  );
+  await expect(page.getByText("#").locator("nth=4")).toContainText(
+    "rotom-heat",
+  );
+  await expect(page.getByText("#").locator("nth=5")).toContainText("victini");
+  await expect(page.getByText("#").locator("nth=6")).not.toBeVisible();
+  await page.getByTestId("type-fire-filter").click();
+
+  // Electric Filter
+  await page.getByTestId("type-electric-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("raikou");
+  await expect(page.getByText("#").locator("nth=3")).toContainText("rotom");
+  await expect(page.getByText("#").locator("nth=4")).toContainText("rotom-fan");
+  await expect(page.getByText("#").locator("nth=5")).toContainText(
+    "rotom-frost",
+  );
+  await expect(page.getByText("#").locator("nth=6")).toContainText(
+    "rotom-heat",
+  );
+  await expect(page.getByText("#").locator("nth=7")).toContainText("rotom-mow");
+  await expect(page.getByText("#").locator("nth=8")).toContainText(
+    "rotom-wash",
+  );
+  await expect(page.getByText("#").locator("nth=9")).not.toBeVisible();
+  await page.getByTestId("type-electric-filter").click();
+
+  // Ground Filter
+  await page.getByTestId("type-ground-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText(
+    "hippowdon-f",
+  );
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "hippowdon-m",
+  );
+  await expect(page.getByText("#").locator("nth=4")).not.toBeVisible();
+  await page.getByTestId("type-ground-filter").click();
+
+  // Water Filter
+  await page.getByTestId("type-water-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("totodile");
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "castform-rainy",
+  );
+  await expect(page.getByText("#").locator("nth=4")).toContainText("walrein");
+  await expect(page.getByText("#").locator("nth=5")).toContainText("kyogre");
+  await expect(page.getByText("#").locator("nth=6")).toContainText(
+    "primal-kyogre",
+  );
+  await expect(page.getByText("#").locator("nth=7")).toContainText(
+    "shellos-east",
+  );
+  await expect(page.getByText("#").locator("nth=8")).toContainText(
+    "shellos-west",
+  );
+  await expect(page.getByText("#").locator("nth=9")).toContainText(
+    "rotom-wash",
+  );
+  await expect(page.getByText("#").locator("nth=10")).toContainText(
+    "basculin-blue-striped",
+  );
+  await expect(page.getByText("#").locator("nth=11")).toContainText(
+    "basculin-red-striped",
+  );
+  await expect(page.getByText("#").locator("nth=12")).toContainText("ducklett");
+  await expect(page.getByText("#").locator("nth=13")).toContainText("greninja");
+  await expect(page.getByText("#").locator("nth=14")).toContainText(
+    "ash-greninja",
+  );
+  await expect(page.getByText("#").locator("nth=15")).not.toBeVisible();
+  await page.getByTestId("type-water-filter").click();
+
+  // Fighting Filter
+  await page.getByTestId("type-fighting-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText(
+    "mega-mewtwo-x",
+  );
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "mega-heracross",
+  );
+  await expect(page.getByText("#").locator("nth=4")).not.toBeVisible();
+  await page.getByTestId("type-fighting-filter").click();
+
+  // Poison Filter
+  await page.getByTestId("type-poison-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("venusaur");
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "mega-venusaur",
+  );
+  await expect(page.getByText("#").locator("nth=4")).not.toBeVisible();
+  await page.getByTestId("type-poison-filter").click();
+
+  // Rock Filter
+  await page.getByTestId("type-rock-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("sudowoodo");
+  await expect(page.getByText("#").locator("nth=3")).toContainText("tyranitar");
+  await expect(page.getByText("#").locator("nth=4")).not.toBeVisible();
+  await page.getByTestId("type-rock-filter").click();
+
+  // Ice Filter
+  await page.getByTestId("type-ice-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("articuno");
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "castform-snowy",
+  );
+  await expect(page.getByText("#").locator("nth=4")).toContainText("walrein");
+  await expect(page.getByText("#").locator("nth=5")).toContainText(
+    "rotom-frost",
+  );
+  await expect(page.getByText("#").locator("nth=6")).not.toBeVisible();
+  await page.getByTestId("type-ice-filter").click();
+
+  // Ghost Filter
+  await page.getByTestId("type-ghost-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("rotom");
+  await expect(page.getByText("#").locator("nth=3")).not.toBeVisible();
+  await page.getByTestId("type-ghost-filter").click();
+
+  // Psychic Filter
+  await page.getByTestId("type-psychic-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("mewtwo");
+  await expect(page.getByText("#").locator("nth=3")).toContainText(
+    "mega-mewtwo-x",
+  );
+  await expect(page.getByText("#").locator("nth=4")).toContainText(
+    "mega-mewtwo-y",
+  );
+  await expect(page.getByText("#").locator("nth=5")).toContainText("lugia");
+  await expect(page.getByText("#").locator("nth=6")).toContainText("gardevoir");
+  await expect(page.getByText("#").locator("nth=7")).toContainText("metagross");
+  await expect(page.getByText("#").locator("nth=8")).toContainText("victini");
+  await expect(page.getByText("#").locator("nth=9")).toContainText(
+    "meowstic-female",
+  );
+  await expect(page.getByText("#").locator("nth=10")).toContainText(
+    "meowstic-male",
+  );
+  await expect(page.getByText("#").locator("nth=11")).not.toBeVisible();
+  await page.getByTestId("type-psychic-filter").click();
+
+  // Fairy Filter
+  await page.getByTestId("type-fairy-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("togepi");
+  await expect(page.getByText("#").locator("nth=3")).toContainText("gardevoir");
+  await expect(page.getByText("#").locator("nth=4")).toContainText(
+    "mega-mawile",
+  );
+  await expect(page.getByText("#").locator("nth=5")).not.toBeVisible();
+  await page.getByTestId("type-fairy-filter").click();
+
+  // Dark Filter
+  await page.getByTestId("type-dark-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("umbreon");
+  await expect(page.getByText("#").locator("nth=3")).toContainText("tyranitar");
+  await expect(page.getByText("#").locator("nth=4")).toContainText("greninja");
+  await expect(page.getByText("#").locator("nth=5")).toContainText(
+    "ash-greninja",
+  );
+  await expect(page.getByText("#").locator("nth=6")).not.toBeVisible();
+  await page.getByTestId("type-dark-filter").click();
+
+  // Dragon Filter
+  await page.getByTestId("type-dragon-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).not.toBeVisible();
+  await page.getByTestId("type-dragon-filter").click();
+
+  // Steel Filter
+  await page.getByTestId("type-steel-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText(
+    "mega-mawile",
+  );
+  await expect(page.getByText("#").locator("nth=3")).toContainText("metagross");
+  await expect(page.getByText("#").locator("nth=4")).not.toBeVisible();
+  await page.getByTestId("type-steel-filter").click();
+
+  // Flying Filter
+  await page.getByTestId("type-flying-filter").click();
+  await expect(page.getByText("#").locator("nth=2")).toContainText("articuno");
+  await expect(page.getByText("#").locator("nth=3")).toContainText("lugia");
+  await expect(page.getByText("#").locator("nth=4")).toContainText("rotom-fan");
+  await expect(page.getByText("#").locator("nth=5")).toContainText("ducklett");
+  await expect(page.getByText("#").locator("nth=6")).not.toBeVisible();
+  await page.getByTestId("type-flying-filter").click();
+
+  await context.close();
+  await page.close();
+});
