@@ -5,6 +5,7 @@ const nextConfig = {
     domains: ["raw.githubusercontent.com"],
     unoptimized: true,
   },
+  transpilePackages: ["geist"],
 };
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
