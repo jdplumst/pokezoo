@@ -22,9 +22,13 @@ export default async function handler(
 
         let completedEvent = null;
 
-        if ((day === 25 && month === 12) || (day === 1 && month === 1)) {
+        if (
+          (day === 25 && month === 12) ||
+          (day === 1 && month === 1) ||
+          (day === 5 && month === 4)
+        ) {
           completedEvent = false;
-        } else if (day === 8 && month === 1) {
+        } else if ((day === 8 && month === 1) || (day === 13 && month === 4)) {
           completedEvent = true;
         }
 
