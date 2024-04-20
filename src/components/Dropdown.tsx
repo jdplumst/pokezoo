@@ -264,7 +264,7 @@ export default function Dropdown({
               <li
                 key={h}
                 className={`${
-                  index === HabitatList.length - 10 && `border-b-2 border-black`
+                  index === HabitatList.length - 1 && `border-b-2 border-black`
                 }`}
                 data-testid={`habitat-${h.toLowerCase()}-filter`}
               >
