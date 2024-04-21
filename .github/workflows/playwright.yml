@@ -14,7 +14,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       - name: Install Playwright Browsers
-        run: pnpm dlx playwright install --with-deps
+        run: pnpm exec playwright install --with-deps
       - name: Run Playwright tests
         env:
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
@@ -28,7 +28,7 @@ jobs:
           UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL}}
           UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN}}
           SKIP_VALIDATION: "true"
-        run: pnpm dlx playwright test
+        run: pnpm exec playwright test
       - uses: actions/upload-artifact@v3
         if: always()
         with:
