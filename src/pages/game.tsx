@@ -831,6 +831,14 @@ export default function Game() {
           addStarter={addStarter}
         />
       )}
+
+      {/* Modal for Alola Starter */}
+      {!getProfile.data?.alolaStarter && (
+        <Start
+          region="Alola"
+          addStarter={addStarter}
+        />
+      )}
     </>
   );
 }

@@ -193,6 +193,7 @@ export const profiles = pgTable(
     sinnohStarter: boolean("sinnohStarter").notNull().default(true),
     unovaStarter: boolean("unovaStarter").notNull().default(true),
     kalosStarter: boolean("kalosStarter").notNull().default(true),
+    alolaStarter: boolean("alolaStarter").notNull().default(true),
   },
   (p) => {
     return {

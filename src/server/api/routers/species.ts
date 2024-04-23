@@ -218,10 +218,8 @@ export const speciesRouter = router({
           generation: species.generation,
           habitat: habitats.name,
           region: regions.name,
-          instance: instances,
         })
-        .from(instances)
-        .innerJoin(species, eq(instances.speciesId, species.id))
+        .from(species)
         .innerJoin(regions, eq(species.regionId, regions.id))
         .innerJoin(rarities, eq(species.rarityId, rarities.id))
         .innerJoin(typeOne, eq(species.typeOneId, typeOne.id))
@@ -229,7 +227,7 @@ export const speciesRouter = router({
         .innerJoin(habitats, eq(species.habitatId, habitats.id))
         .where(and(eq(species.shiny, false), eq(regions.name, input.region)))
         .orderBy(asc(species.pokedexNumber))
-        .limit(75);
+        .limit(15);
 
       return { starters };
     }),
