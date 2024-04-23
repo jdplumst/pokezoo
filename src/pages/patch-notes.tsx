@@ -37,6 +37,19 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="7.00"
+              date="April 23, 2024"
+            >
+              <Note
+                note="Added Alola Pokémon! Start collecting Pokémon from Alola 
+                alongside Pokémon from the previous regions."
+              />
+              <Note
+                note="All exising users will get to choose an Alola starter between
+                Rowlet, Litten, and Popplio for free!"
+              />
+            </Patch>
+            <Patch
               patch="6.12"
               date="April 16, 2024"
             >
