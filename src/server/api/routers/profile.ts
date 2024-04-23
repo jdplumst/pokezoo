@@ -33,6 +33,7 @@ export const profileRouter = router({
           sinnohStarter: profiles.sinnohStarter,
           unovaStarter: profiles.unovaStarter,
           kalosStarter: profiles.kalosStarter,
+          alolaStarter: profiles.alolaStarter,
           catchingCharm: catchingCharm.charmId,
         })
         .from(profiles)

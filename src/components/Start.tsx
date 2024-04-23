@@ -19,44 +19,47 @@ export default function Start({ region, addStarter }: IStarter) {
   const purchaseMutation = trpc.instance.purchaseInstanceWithBall.useMutation(); // Kanto
   const starterMutation = trpc.instance.claimStarter.useMutation(); // All other regions
 
-  const grassStarter =
-    region === "Kanto"
-      ? "bulbasaur"
-      : region === "Johto"
-        ? "chikorita"
-        : region === "Hoenn"
-          ? "treecko"
-          : region === "Sinnoh"
-            ? "turtwig"
-            : region === "Unova"
-              ? "snivy"
-              : "chespin";
+  let grassStarter: string;
+  let fireStarter: string;
+  let waterStarter: string;
 
-  const fireStarter =
-    region === "Kanto"
-      ? "charmander"
-      : region === "Johto"
-        ? "cyndaquil"
-        : region === "Hoenn"
-          ? "torchic"
-          : region === "Sinnoh"
-            ? "chimchar"
-            : region === "Unova"
-              ? "tepig"
-              : "fennekin";
-
-  const waterStarter =
-    region === "Kanto"
-      ? "squirtle"
-      : region === "Johto"
-        ? "totodile"
-        : region === "Hoenn"
-          ? "mudkip"
-          : region === "Sinnoh"
-            ? "piplup"
-            : region === "Unova"
-              ? "oshawott"
-              : "froakie";
+  switch (region) {
+    case "Kanto":
+      grassStarter = "bulbasaur";
+      fireStarter = "charmander";
+      waterStarter = "squirtle";
+      break;
+    case "Johto":
+      grassStarter = "chikorita";
+      fireStarter = "cyndaquil";
+      waterStarter = "totodile";
+      break;
+    case "Hoenn":
+      grassStarter = "treecko";
+      fireStarter = "torchic";
+      waterStarter = "mudkip";
+      break;
+    case "Sinnoh":
+      grassStarter = "turtwig";
+      fireStarter = "chimchar";
+      waterStarter = "piplup";
+      break;
+    case "Unova":
+      grassStarter = "snivy";
+      fireStarter = "tepig";
+      waterStarter = "oshawott";
+      break;
+    case "Kalos":
+      grassStarter = "chespin";
+      fireStarter = "fennekin";
+      waterStarter = "froakie";
+      break;
+    case "Alola":
+      grassStarter = "rowlet";
+      fireStarter = "litten";
+      waterStarter = "popplio";
+      break;
+  }
 
   const handleClose = () => {
     if (starter) {
