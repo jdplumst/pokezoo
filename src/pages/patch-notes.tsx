@@ -37,6 +37,15 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="7.01"
+              date="April 24, 2024"
+            >
+              <Note note="Added a new rarity: Ultra Beast!" />
+              <Note note="Added Ultra Beast Pokémon." />
+              <Note note="Added Beast Ball." />
+              <Note note="Changed daytime tooltip colour to slate." />
+            </Patch>
+            <Patch
               patch="7.00"
               date="April 23, 2024"
             >
