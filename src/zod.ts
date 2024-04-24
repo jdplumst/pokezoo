@@ -31,6 +31,7 @@ export const DBRarity = [
   "Epic",
   "Legendary",
   "Mega",
+  "Ultra Beast",
 ] as const;
 export const ZodRarity = z.enum(DBRarity);
 
