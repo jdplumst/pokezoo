@@ -148,6 +148,9 @@ export default function Shop() {
     for (let i = 0; i < ball.megaChance; i++) {
       randomizer.push("Mega");
     }
+    for (let i = 0; i < ball.ubChance; i++) {
+      randomizer.push("Ultra Beast");
+    }
     const rarity = randomizer[Math.floor(Math.random() * 100)];
 
     // Determine the new species the user gets
@@ -182,6 +185,11 @@ export default function Shop() {
       );
       newInstance =
         megaSpecies![Math.floor(Math.random() * megaSpecies!.length)];
+    } else if (rarity === "Ultra Beast" && !shiny) {
+      const ubSpecies = filteredSpecies?.filter(
+        (s) => s.rarity === "Ultra Beast" && !s.shiny,
+      );
+      newInstance = ubSpecies![Math.floor(Math.random() * ubSpecies!.length)];
     } else if (rarity === "Common" && shiny) {
       const commonShinySpecies = filteredSpecies?.filter(
         (s) => s.rarity === "Common" && s.shiny,
@@ -216,6 +224,12 @@ export default function Shop() {
       );
       newInstance =
         megaShinySpecies![Math.floor(Math.random() * megaShinySpecies!.length)];
+    } else if (rarity === "Ultra Beast" && shiny) {
+      const ubShinySpecies = filteredSpecies?.filter(
+        (s) => s.rarity === "Ultra Beast" && s.shiny,
+      );
+      newInstance =
+        ubShinySpecies![Math.floor(Math.random() * ubShinySpecies!.length)];
     }
 
     // Create new instance
