@@ -18,6 +18,8 @@
     --color-legendary-unfocus: #10b981;
     --color-mega-focus: #dc2626;
     --color-mega-unfocus: #ef4444;
+    --color-ub-focus: #1e40af;
+    --color-ub-unfocus: #1d4ed8;
 
     /* Pokemon Type Colours */
     --color-normal: #a8a77a;
@@ -63,7 +65,7 @@
   --color-text: black;
   --color-sidebar-focus: white;
   --color-sidebar-unfocus: #cbd5e1;
-  --color-tooltip: #1d4ed8;
+  --color-tooltip: #cbd5e1;
   --color-tooltip-border: black;
 }
 

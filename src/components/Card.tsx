@@ -44,7 +44,9 @@ export default function Card({
                 ? `bg-legendary-unfocus hover:bg-legendary-focus`
                 : species.rarity === "Mega"
                   ? `bg-mega-unfocus hover:bg-mega-focus`
-                  : ``
+                  : species.rarity === "Ultra Beast"
+                    ? `bg-ub-unfocus hover:bg-ub-focus`
+                    : ``
       } card-hover h-fit w-[260px] border-2 ${
         species.shiny ? `border-yellow-500` : `border-black`
       } p-2 text-black`}

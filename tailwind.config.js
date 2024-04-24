@@ -43,6 +43,8 @@ module.exports = {
         "legendary-unfocus": "var(--color-legendary-unfocus)",
         "mega-focus": "var(--color-mega-focus)",
         "mega-unfocus": "var(--color-mega-unfocus)",
+        "ub-focus": "var(--color-ub-focus)",
+        "ub-unfocus": "var(--color-ub-unfocus)",
 
         // Pokemon Type Colours
         "normal": "var(--color-normal)",
