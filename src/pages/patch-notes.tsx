@@ -37,6 +37,12 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="7.03"
+              date="April 26, 2024"
+            >
+              <Note note="Added Alola Achievements." />
+            </Patch>
+            <Patch
               patch="7.02"
               date="April 25, 2024"
             >
