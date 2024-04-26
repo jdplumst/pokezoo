@@ -44,13 +44,13 @@ export default function Achievements() {
             (s) =>
               s.region === a.region &&
               s.shiny === a.shiny &&
-              s.rarity !== "Mega",
+              ["Common", "Rare", "Epic", "Legendary"].includes(s.rarity),
           ).length;
           value = instanceData.filter(
             (i) =>
               i.region === a.region &&
               i.shiny === a.shiny &&
-              i.rarity !== "Mega",
+              ["Common", "Rare", "Epic", "Legendary"].includes(i.rarity),
           ).length;
         } else if (a.type === "Rarity") {
           max = speciesData.species.filter(
@@ -71,14 +71,14 @@ export default function Achievements() {
               s.habitat === a.attribute &&
               s.region === a.region &&
               s.shiny === a.shiny &&
-              s.rarity !== "Mega",
+              ["Common", "Rare", "Epic", "Legendary"].includes(s.rarity),
           ).length;
           value = instanceData.filter(
             (i) =>
               i.habitat === a.attribute &&
               i.region === a.region &&
               i.shiny === a.shiny &&
-              i.rarity !== "Mega",
+              ["Common", "Rare", "Epic", "Legendary"].includes(i.rarity),
           ).length;
         } else if (a.type === "Type") {
           max = speciesData.species.filter(
@@ -86,14 +86,14 @@ export default function Achievements() {
               (s.typeOne === a.attribute || s.typeTwo === a.attribute) &&
               s.region === a.region &&
               s.shiny === a.shiny &&
-              s.rarity !== "Mega",
+              ["Common", "Rare", "Epic", "Legendary"].includes(s.rarity),
           ).length;
           value = instanceData.filter(
             (i) =>
               (i.typeOne === a.attribute || i.typeTwo === a.attribute) &&
               i.region === a.region &&
               i.shiny === a.shiny &&
-              i.rarity !== "Mega",
+              ["Common", "Rare", "Epic", "Legendary"].includes(i.rarity),
           ).length;
         }
 
