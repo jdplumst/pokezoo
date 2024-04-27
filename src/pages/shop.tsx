@@ -70,7 +70,6 @@ export default function Shop() {
     typeof ZodRegion
   > | null>(null);
   const [regionError, setRegionError] = useState(false);
-  const premierRef = useRef<HTMLButtonElement>(null);
 
   const purchaseBall = (ball: z.infer<typeof selectBallSchema>) => {
     setBoughtBall(ball);
@@ -344,7 +343,6 @@ export default function Shop() {
                           <div className="flex gap-5">
                             {b.name === "Premier" && (
                               <button
-                                ref={premierRef}
                                 onClick={() => {
                                   setRegionOpen((p) => !p);
                                 }}
@@ -693,7 +691,6 @@ export default function Shop() {
                 onClick={() => {
                   setRegionCurr(r);
                   setRegionOpen(false);
-                  premierRef.current!.scrollIntoView();
                 }}
                 className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
               >
