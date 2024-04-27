@@ -37,6 +37,12 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="7.04"
+              date="April 27, 2024"
+            >
+              <Note note="Removed scroll when choosing a region with Premier Ball." />
+            </Patch>
+            <Patch
               patch="7.03"
               date="April 26, 2024"
             >
