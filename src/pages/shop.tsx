@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useContext, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import Card from "@/src/components/Card";
 import { trpc } from "../utils/trpc";
 import Modal from "@/src/components/Modal";
