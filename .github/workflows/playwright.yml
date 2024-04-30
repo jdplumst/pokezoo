@@ -6,6 +6,9 @@ jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    concurrency:
+      group: test-group
+      cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v3
