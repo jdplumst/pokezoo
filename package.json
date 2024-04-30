@@ -2,6 +2,7 @@
   "name": "pokezoo",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "dev": "next dev --turbo",
@@ -51,6 +52,7 @@
     "@typescript-eslint/parser": "^6.21.0",
     "autoprefixer": "^10.4.19",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.1",
     "drizzle-kit": "^0.20.17",
     "eslint": "8.56.0",
