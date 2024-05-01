@@ -5,4 +5,13 @@ tests:
   - any: ["tests/**/*"]
 
 config:
-  - all: ["*"]
+  - any: ["*"]
+
+devops:
+  - any: [".github/**/*"]
+
+client:
+  - any: ["src/pages/**/*", "src/components/**/*"]
+
+server:
+  - any: ["src/server/**/*", "src/components/**/*"]
