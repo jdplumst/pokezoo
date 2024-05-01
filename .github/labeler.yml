@@ -1,3 +1,8 @@
-feature: src/**/*
-tests: tests/**/*
-config: "*"
+feature:
+  - any: ["src/**/*"]
+
+tests:
+  - any: ["tests/**/*"]
+
+config:
+  - all: ["*"]
