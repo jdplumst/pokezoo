@@ -1,6 +1,7 @@
 import { env } from "@/src/env";
 import test, { expect } from "@playwright/test";
 import { login } from "./helpers/login";
+import { closePage } from "./helpers/closePage";
 
 test.beforeAll("reset accounts", async ({ browser }) => {
   const [page, context] = await login(browser, 1);
@@ -8,8 +9,7 @@ test.beforeAll("reset accounts", async ({ browser }) => {
   await expect(
     page.getByText("Test accounts reset successfully"),
   ).toBeVisible();
-  await context.close();
-  await page.close();
+  await closePage(page, context);
 });
 
 test("select initial starters", async ({ browser }) => {
@@ -50,8 +50,7 @@ test("select initial starters", async ({ browser }) => {
   await page.getByText("Confirm Delete").click();
   await expect(page.getByText("You have 0 / 2,000 Pokémon.")).toBeVisible();
 
-  await context.close();
-  await page.close();
+  await closePage(page, context);
 });
 
 test("sorting buttons", async ({ browser }) => {
@@ -289,8 +288,7 @@ test("sorting buttons", async ({ browser }) => {
   );
   await expect(page.getByText("#").locator("nth=47")).toContainText("caterpie");
 
-  await context.close();
-  await page.close();
+  await closePage(page, context);
 });
 
 test("region filters", async ({ browser }) => {
@@ -426,8 +424,7 @@ test("region filters", async ({ browser }) => {
   await expect(page.getByText("#").locator("nth=6")).not.toBeVisible();
   await page.getByTestId("region-kalos-filter").click();
 
-  await context.close();
-  await page.close();
+  await closePage(page, context);
 });
 
 test("rarity filters", async ({ browser }) => {
@@ -558,8 +555,7 @@ test("rarity filters", async ({ browser }) => {
   await expect(page.getByText("#").locator("nth=8")).not.toBeVisible();
   await page.getByTestId("rarity-mega-filter").click();
 
-  await context.close();
-  await page.close();
+  await closePage(page, context);
 });
 
 test("type filters", async ({ browser }) => {
@@ -788,8 +784,7 @@ test("type filters", async ({ browser }) => {
   await expect(page.getByText("#").locator("nth=6")).not.toBeVisible();
   await page.getByTestId("type-flying-filter").click();
 
-  await context.close();
-  await page.close();
+  await closePage(page, context);
 });
 
 test("habitat filters", async ({ browser }) => {
@@ -936,6 +931,5 @@ test("habitat filters", async ({ browser }) => {
   await expect(page.getByText("#").locator("nth=12")).not.toBeVisible();
   await page.getByTestId("habitat-rare-filter").click();
 
-  await context.close();
-  await page.close();
+  await closePage(page, context);
 });
