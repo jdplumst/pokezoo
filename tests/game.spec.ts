@@ -784,7 +784,7 @@ test("type filters", async ({ browser }) => {
   await expect(page.getByText("#").locator("nth=6")).not.toBeVisible();
   await page.getByTestId("type-flying-filter").click();
 
-  await closePage(page, close);
+  await closePage(page, context);
 });
 
 test("habitat filters", async ({ browser }) => {
