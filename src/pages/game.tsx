@@ -305,7 +305,7 @@ export default function Game() {
     } else if (!checked && habitats.includes(label)) {
       setHabitats(habitats.filter((h) => h !== label));
     } else {
-      setHabitats([...habitats, label as z.infer<typeof ZodHabitat>]);
+      setHabitats([...habitats, label]);
     }
   };
 
