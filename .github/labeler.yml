@@ -27,3 +27,8 @@ server:
   - any:
       - changed-files:
           - any-glob-to-any-file: ["src/server/**/*", "src/utils/**/*"]
+
+scripts:
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ["scripts/**/*"]
