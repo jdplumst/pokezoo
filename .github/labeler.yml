@@ -1,0 +1,11 @@
+feature:
+  - changed files:
+      - any-glob-to-any-file: src/**
+
+tests:
+  - changed files:
+      - any-glob-to-any-file: tests/**
+
+config:
+  - changed files:
+      - any-glob-to-any-file: "*"
