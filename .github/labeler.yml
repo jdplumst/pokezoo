@@ -1,8 +1,29 @@
 feature:
-  - any: ["src/**/*"]
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ["src/**/*"]
 
 tests:
-  - any: ["tests/**/*"]
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ["tests/**/*"]
 
 config:
-  - all: ["*"]
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ["*"]
+
+devops:
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: [".github/**/*"]
+
+client:
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ["src/pages/**/*", "src/components/**/*"]
+
+server:
+  - any:
+      - changed-files:
+          - any-glob-to-any-file: ["src/server/**/*", "src/utils/**/*"]
