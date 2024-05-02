@@ -12,6 +12,7 @@ config:
   - any:
       - changed-files:
           - any-glob-to-any-file: ["*"]
+          - all-globs-to-all-files: ["!package.json"]
 
 devops:
   - any:
