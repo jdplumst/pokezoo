@@ -9,7 +9,7 @@ tests:
           - any-glob-to-any-file: ["tests/**/*"]
 
 config:
-  - any:
+  - all:
       - changed-files:
           - any-glob-to-any-file: ["*"]
           - all-globs-to-all-files: ["!package.json"]
