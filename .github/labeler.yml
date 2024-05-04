@@ -19,12 +19,12 @@ devops:
       - changed-files:
           - any-glob-to-any-file: [".github/**/*"]
 
-client:
+frontend:
   - any:
       - changed-files:
           - any-glob-to-any-file: ["src/pages/**/*", "src/components/**/*"]
 
-server:
+backend:
   - any:
       - changed-files:
           - any-glob-to-any-file: ["src/server/**/*", "src/utils/**/*"]
