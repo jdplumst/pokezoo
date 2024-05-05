@@ -16,15 +16,12 @@ export interface FullAchievement {
 
 interface IProgressBar {
   fullAchievement: FullAchievement;
-  updateYield: () => void;
 }
 
-export default function ProgressBar({
-  fullAchievement,
-  updateYield,
-}: IProgressBar) {
+export default function ProgressBar({ fullAchievement }: IProgressBar) {
+  const utils = trpc.useUtils();
+
   const [disabled, setDisabled] = useState(false);
-  const [isAchieved, setIsAchieved] = useState(fullAchievement.achieved);
   const [error, setError] = useState<null | string>(null);
   const achievementMutation = trpc.achievement.claimAchievement.useMutation();
 
@@ -36,8 +33,8 @@ export default function ProgressBar({
       },
       {
         onSuccess() {
-          updateYield();
-          setIsAchieved(true);
+          void utils.profile.getProfile.invalidate();
+          void utils.userAchievement.getUserAchievements.invalidate();
           setError(null);
         },
         onError(error) {
@@ -50,7 +47,7 @@ export default function ProgressBar({
 
   return (
     <div className="flex items-center">
-      {!isAchieved ? (
+      {!fullAchievement.achieved ? (
         <label
           htmlFor={fullAchievement.achievement.id}
           className="mr-4"
@@ -61,7 +58,8 @@ export default function ProgressBar({
       ) : (
         <span>You have claimed this achievement!</span>
       )}
-      {fullAchievement.value === fullAchievement.max && !isAchieved ? (
+      {fullAchievement.value === fullAchievement.max &&
+      !fullAchievement.achieved ? (
         <div className="inline-block w-40 text-center">
           <button
             onClick={() => handleClaimAchievement()}
@@ -71,7 +69,8 @@ export default function ProgressBar({
             {achievementMutation.isLoading ? <LoadingSpinner /> : "Claim"}
           </button>
         </div>
-      ) : fullAchievement.value !== fullAchievement.max && !isAchieved ? (
+      ) : fullAchievement.value !== fullAchievement.max &&
+        !fullAchievement.achieved ? (
         <meter
           id={fullAchievement.achievement.id}
           className="h-6 w-40"
@@ -83,7 +82,7 @@ export default function ProgressBar({
         >
           {fullAchievement.percent}%
         </meter>
-      ) : isAchieved ? (
+      ) : fullAchievement.achieved ? (
         <span className="text-4xl">✅</span>
       ) : (
         <></>

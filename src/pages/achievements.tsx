@@ -128,10 +128,6 @@ export default function Achievements() {
     }
   }, [instanceData, speciesData, achievementData, userAchievementData]);
 
-  const updateYield = () => {
-    void utils.profile.getProfile.invalidate();
-  };
-
   if (status === "loading") return <Loading />;
 
   return (
@@ -168,10 +164,7 @@ export default function Achievements() {
                         {a.achievement.description}
                       </div>
                       <div>
-                        <ProgressBar
-                          fullAchievement={a}
-                          updateYield={updateYield}
-                        />
+                        <ProgressBar fullAchievement={a} />
                       </div>
                     </li>
                   ))}
