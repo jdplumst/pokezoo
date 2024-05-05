@@ -12,7 +12,8 @@ config:
   - all:
       - changed-files:
           - any-glob-to-any-file: ["*"]
-          - all-globs-to-all-files: ["!pnpm-lock.yaml"]
+          - all-globs-to-all-files:
+              ["!package.json", "!pnpm-lock.yaml", "!README.md"]
 
 devops:
   - any:
