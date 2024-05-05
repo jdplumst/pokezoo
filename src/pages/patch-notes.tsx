@@ -37,6 +37,12 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="7.05"
+              date="May 5, 2024"
+            >
+              <Note note="Fixed claim button sometimes showing for achievements that have already been claimed." />
+            </Patch>
+            <Patch
               patch="7.04"
               date="April 27, 2024"
             >
