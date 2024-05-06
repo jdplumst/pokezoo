@@ -1,7 +1,8 @@
 feature:
-  - any:
+  - all:
       - changed-files:
           - any-glob-to-any-file: ["src/**/*"]
+          - all-globs-to-all-files: ["!tests/**/*"]
 
 tests:
   - any:
