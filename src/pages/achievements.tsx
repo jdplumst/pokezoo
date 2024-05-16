@@ -56,13 +56,13 @@ export default function Achievements() {
           max = speciesData.species.filter(
             (s) =>
               s.rarity === a.attribute &&
-              s.region === a.region &&
+              (a.generation ? s.region === a.region : s.region) &&
               s.shiny === a.shiny,
           ).length;
           value = instanceData.filter(
             (i) =>
               i.rarity === a.attribute &&
-              i.region === a.region &&
+              (a.generation ? i.region === a.region : i.region) &&
               i.shiny === a.shiny,
           ).length;
         } else if (a.type === "Habitat") {
