@@ -37,6 +37,12 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="7.07"
+              date="May 17, 2024"
+            >
+              <Note note="Changed style of Pokémon cards." />
+            </Patch>
+            <Patch
               patch="7.06"
               date="May 16, 2024"
             >
