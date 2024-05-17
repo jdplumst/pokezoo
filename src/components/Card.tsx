@@ -33,7 +33,7 @@ export default function Card({
   if (!species) return <></>;
   return (
     <div
-      className={`${handlePurchase || modifyDeleteList ? `h-[390px]` : `h-[320px]`}`}
+      className={`${!handlePurchase && !modifyDeleteList ? `h-[320px]` : `h-[390px]`}`}
     >
       <div
         className={`card relative h-[320px] w-[260px] ${

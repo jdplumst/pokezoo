@@ -15,8 +15,6 @@ export default function Achievements() {
     required: true,
   });
 
-  const utils = trpc.useUtils();
-
   const { data: speciesData } = trpc.species.getSpecies.useQuery({
     order: null,
   });
