@@ -334,7 +334,7 @@ export default function Game() {
         <Sidebar page="Game">
           <Topbar />
           {deleteList.length > 0 && (
-            <div className="sticky top-0 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">
+            <div className="sticky top-0 z-10 flex items-center justify-between border-2 border-solid border-black bg-fuchsia-500 p-4">
               <span className="font-bold">
                 You have selected {deleteList.length} Pokémon to delete.
               </span>

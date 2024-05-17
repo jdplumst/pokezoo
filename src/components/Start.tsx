@@ -127,7 +127,7 @@ export default function Start({ region, addStarter }: IStarter) {
       <div className="flex gap-5 pt-4">
         <div
           className={`${
-            starter === "Grass" && `border-4 border-green-500`
+            starter === "Grass" && `h-[341px] border-4 border-green-500`
           } pointer-events-auto`}
         >
           <button onClick={() => setStarter("Grass")}>
@@ -142,7 +142,7 @@ export default function Start({ region, addStarter }: IStarter) {
         </div>
         <div
           className={`${
-            starter === "Fire" && `border-4 border-green-500`
+            starter === "Fire" && `h-[341px] border-4 border-green-500`
           } pointer-events-auto`}
         >
           <button onClick={() => setStarter("Fire")}>
@@ -155,7 +155,7 @@ export default function Start({ region, addStarter }: IStarter) {
         </div>
         <div
           className={`${
-            starter === "Water" && `border-4 border-green-500`
+            starter === "Water" && `h-[341px] border-4 border-green-500`
           } pointer-events-auto`}
         >
           <button onClick={() => setStarter("Water")}>
