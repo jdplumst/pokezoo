@@ -48,7 +48,9 @@ export default function Card({
         <div className="card-hover"></div>
         <div className="card-hover"></div>
         <div className="card-hover"></div>
-        <div className="card-contents absolute bottom-0 left-0 right-0 top-0 rounded-lg rounded-bl-none rounded-br-none border-x-2 border-t-2 border-black bg-rare-focus">
+        <div
+          className={`card-contents absolute bottom-0 left-0 right-0 top-0 rounded-lg rounded-bl-none rounded-br-none border-x-2 border-t-2 border-black ${species.rarity === "Common" ? `bg-common-unfocus` : species.rarity === "Rare" ? `bg-rare-unfocus` : species.rarity === "Epic" ? `bg-epic-unfocus` : species.rarity === "Legendary" ? `bg-legendary-unfocus` : species.rarity === "Mega" ? `bg-mega-unfocus` : species.rarity === "Ultra Beast" ? `bg-ub-unfocus` : ``}`}
+        >
           {caught && (
             <Image
               className="absolute"
@@ -178,7 +180,9 @@ export default function Card({
             <p>Generation: {species.generation}</p>
             <p>Yield: P{species.yield.toLocaleString()}</p>
             <p>Sell Price: P{species.sellPrice.toLocaleString()}</p>
-            <div className="flex w-[260px] flex-col items-center rounded-lg rounded-tl-none rounded-tr-none border-x-2 border-b-2 border-black bg-rare-focus py-2">
+            <div
+              className={`flex w-[260px] flex-col items-center rounded-lg rounded-tl-none rounded-tr-none border-x-2 border-b-2 border-black ${species.rarity === "Common" ? `bg-common-unfocus` : species.rarity === "Rare" ? `bg-rare-unfocus` : species.rarity === "Epic" ? `bg-epic-unfocus` : species.rarity === "Legendary" ? `bg-legendary-unfocus` : species.rarity === "Mega" ? `bg-mega-unfocus` : species.rarity === "Ultra Beast" ? `bg-ub-unfocus` : ``} py-2`}
+            >
               {instance && modifyDeleteList && !beingDeleted && (
                 <button
                   onClick={() => {
