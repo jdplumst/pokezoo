@@ -211,20 +211,104 @@ button {
 }
 
 /* Card Hover Animation */
-.card-hover:hover {
-  animation: pulse 1s infinite;
+/* https://codepen.io/nxworld/pen/vrpJZN */
+.card-contents {
+  transition: 0.5s ease;
 }
 
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(0.9);
-  }
-  100% {
-    transform: scale(1);
-  }
+.card-hover {
+  position: absolute;
+  z-index: 2;
+  width: calc(100% / 3);
+  height: calc(100% / 3);
+}
+
+.card-hover:nth-child(1) {
+  top: 0;
+  left: 0;
+}
+
+.card-hover:nth-child(2) {
+  top: 0;
+  left: calc(100% / 3);
+}
+
+.card-hover:nth-child(3) {
+  top: 0;
+  right: 0;
+}
+
+.card-hover:nth-child(4) {
+  top: calc(100% / 3);
+  left: 0;
+}
+
+.card-hover:nth-child(5) {
+  top: calc(100% / 3);
+  right: 0;
+}
+
+.card-hover:nth-child(6) {
+  bottom: 0;
+  left: 0;
+}
+
+.card-hover:nth-child(7) {
+  bottom: 0;
+  left: calc(100% / 3);
+}
+
+.card-hover:nth-child(8) {
+  bottom: 0;
+  right: 0;
+}
+
+.card-hover:nth-child(1):hover ~ .card-contents {
+  box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.3);
+  transform-origin: right top;
+  transform: perspective(1000px) rotateX(10deg) rotateY(-10deg) rotateZ(2deg);
+}
+
+.card-hover:nth-child(2):hover ~ .card-contents {
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+  transform-origin: center top;
+  transform: perspective(1000px) rotateX(10deg);
+}
+
+.card-hover:nth-child(3):hover ~ .card-contents {
+  box-shadow: -15px 15px 50px rgba(0, 0, 0, 0.3);
+  transform-origin: left top;
+  transform: perspective(1000px) rotateX(10deg) rotateY(10deg) rotateZ(-2deg);
+}
+
+.card-hover:nth-child(4):hover ~ .card-contents {
+  box-shadow: 15px 5px 50px rgba(0, 0, 0, 0.3);
+  transform-origin: left center;
+  transform: perspective(1000px) rotateY(-10deg);
+}
+
+.card-hover:nth-child(5):hover ~ .card-contents {
+  box-shadow: -15px 5px 50px rgba(0, 0, 0, 0.3);
+  transform-origin: right center;
+  transform: perspective(1000px) rotateY(10deg);
+}
+
+.card-hover:nth-child(6):hover ~ .card-contents {
+  box-shadow: 15px -15px 50px rgba(0, 0, 0, 0.3);
+  transform-origin: right bottom;
+  transform: perspective(1000px) rotateX(-10deg) rotateY(-10deg) rotateZ(-2deg);
+}
+
+.card-hover:nth-child(7):hover ~ .card-contents {
+  box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.3);
+  transform-origin: center bottom;
+  transform: perspective(1000px) rotateX(-10deg);
+}
+
+.card-hover:nth-child(8):hover ~ .card-contents {
+  box-shadow: -15px -15px 50px rgba(0, 0, 0, 0.3);
+  transform-origin: left bottom;
+  transform: perspective(1000px) rotateX(-10deg) rotateY(10deg) rotateZ(2deg);
 }
 
 /* Loading Animation */
