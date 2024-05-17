@@ -211,6 +211,7 @@ button {
 }
 
 /* Card Hover Animation */
+/* https://codepen.io/nxworld/pen/vrpJZN */
 .card-contents {
   transition: 0.5s ease;
 }
