@@ -883,12 +883,12 @@ export default function PatchNotes() {
               <Note note="Added balance changes:" />
               <ul className="list-disc px-4">
                 <li className="ml-4">
-                  Epic yield changed from P150 to P300 (Shiny Rare yield changed
-                  from 300 to P600)
+                  Epic yield changed from P150 to P300 (Shiny Epic yield changed
+                  from P300 to P600)
                 </li>
                 <li className="ml-4">
-                  Legendary yield changed from P500 to P1000 (Shiny Epic yield
-                  changed from P1000 to P200)
+                  Legendary yield changed from P500 to P1000 (Shiny Legendary
+                  yield changed from P1000 to P2000)
                 </li>
               </ul>
             </Patch>
