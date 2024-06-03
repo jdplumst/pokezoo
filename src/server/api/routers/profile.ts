@@ -692,7 +692,7 @@ export const profileRouter = router({
 
       await tx
         .update(profiles)
-        .set({ instanceCount: 46, balance: 0, totalYield: 39310 })
+        .set({ instanceCount: 46, balance: 500000000, totalYield: 39310 })
         .where(eq(profiles.username, env.TEST_UNAME1));
     });
 

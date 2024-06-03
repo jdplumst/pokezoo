@@ -7,7 +7,7 @@ export async function login(
 ): Promise<[Page, BrowserContext]> {
   const context = await browser.newContext();
   const page = await context.newPage();
-  await page.goto(env.NEXTAUTH_URL);
+  await page.goto("/");
 
   switch (account) {
     case 1:
