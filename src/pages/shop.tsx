@@ -358,6 +358,7 @@ export default function Shop() {
                             <button
                               onClick={() => purchaseBall(b)}
                               disabled={ballMutation.isLoading}
+                              data-testid={`${b.name}-button`}
                               className="w-24 rounded-lg border-2 border-black bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus"
                             >
                               {ballMutation.isLoading && boughtBall === b ? (
@@ -672,6 +673,7 @@ export default function Shop() {
                 setOpenModal(false);
                 setNewSpecies(null);
               }}
+              data-testid="confirm-ball-button"
               className="pointer-events-auto rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"
             >
               Got it!

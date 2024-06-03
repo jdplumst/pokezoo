@@ -14,7 +14,7 @@ test.beforeAll("reset accounts", async ({ browser }) => {
 
 test("select initial starters", async ({ browser }) => {
   const [page, context] = await login(browser, 2);
-  await page.goto(env.NEXTAUTH_URL);
+  await page.goto("/");
   await expect(page.getByText(env.TEST_UNAME2)).toBeVisible();
 
   // Select Bulbasaur
@@ -55,7 +55,7 @@ test("select initial starters", async ({ browser }) => {
 
 test("sorting buttons", async ({ browser }) => {
   const [page, context] = await login(browser, 1);
-  await page.goto(env.NEXTAUTH_URL);
+  await page.goto("/");
   await expect(page.getByText(env.TEST_UNAME1)).toBeVisible();
 
   await expect(page.getByText("You have 46 / 2,000 Pokémon.")).toBeVisible();
