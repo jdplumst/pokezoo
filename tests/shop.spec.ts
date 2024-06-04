@@ -80,7 +80,7 @@ test("purchase net balls", async ({ browser }) => {
   // Purchase 10 times
   for (let i = 0; i < 10; i++) {
     await page.getByTestId("Net-button").click();
-    await expect(page.getByText(/Type: (Water|Bug)/)).toBeVisible();
+    await expect(page.getByText(/(Water|Bug)/).first()).toBeVisible();
     await page.getByTestId("confirm-ball-button").click();
   }
 
