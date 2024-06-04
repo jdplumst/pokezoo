@@ -109,7 +109,7 @@ test("purchase dive balls", async ({ browser }) => {
 
   // Purchase 10 times
   for (let i = 0; i < 10; i++) {
-    await page.getByTestId("Dusk-button").click();
+    await page.getByTestId("Dive-button").click();
     await expect(page.getByText(/Habitat: (Waters-Edge|Sea)/)).toBeVisible();
     await page.getByTestId("confirm-ball-button").click();
   }
