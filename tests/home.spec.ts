@@ -4,7 +4,7 @@ let page: Page;
 
 test.beforeAll("go to home page", async ({ browser }) => {
   page = await browser.newPage();
-  await page.goto(process.env.NEXTAUTH_URL!);
+  await page.goto("");
 });
 
 test("has title", async () => {
