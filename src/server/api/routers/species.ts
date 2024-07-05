@@ -227,7 +227,7 @@ export const speciesRouter = router({
         .innerJoin(habitats, eq(species.habitatId, habitats.id))
         .where(and(eq(species.shiny, false), eq(regions.name, input.region)))
         .orderBy(asc(species.pokedexNumber))
-        .limit(15);
+        .limit(50);
 
       return { starters };
     }),
