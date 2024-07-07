@@ -37,6 +37,18 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="7.09"
+              date="July 7, 2024"
+            >
+              <Note note="Fixed achievement sorting on Firefox." />
+            </Patch>
+            <Patch
+              patch="7.08"
+              date="July 5, 2024"
+            >
+              <Note note="Fixed Alolan starter selection not showing correct Pokémon." />
+            </Patch>
+            <Patch
               patch="7.07"
               date="May 17, 2024"
             >
