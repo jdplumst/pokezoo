@@ -114,12 +114,10 @@ export default function Achievements() {
       }
 
       full.sort(function (a, b) {
-        if (a.achieved > b.achieved) return 1;
-        if (b.achieved > a.achieved) return -1;
-
-        if (a.percent >= b.percent) return -1;
-        if (b.percent < a.percent) return 1;
-        return 0;
+        if (a.achieved == b.achieved) {
+          return b.percent - a.percent;
+        }
+        return a.achieved ? 1 : -1;
       });
 
       setFullAchievements(full);
