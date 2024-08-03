@@ -43,7 +43,7 @@ importers:
         version: 1.2.0
       '@upstash/redis':
         specifier: ^1.30.0
-        version: 1.31.3
+        version: 1.32.0
       drizzle-orm:
         specifier: ^0.29.5
         version: 0.29.5(@planetscale/database@1.16.0)(@types/react@18.3.3)(pg@8.12.0)(postgres@3.4.4)(react@18.3.1)
@@ -968,8 +968,8 @@ packages:
   '@upstash/ratelimit@1.2.0':
     resolution: {integrity: sha512-03mNBUNz9EvIJCxhU0OtFWO3OSQE4gShFBlGph+hDPm9k7O75We1NYS/tCXSdmLVXtOvUGSmi5fyKQLBTEGWxw==}
 
-  '@upstash/redis@1.31.3':
-    resolution: {integrity: sha512-KtVgWBUEx/LGbR8oRwYexwzHh3s5DNqYW0bjkD+gjFZVOnREJITvK+hC4PjSSD+8D4qJ+Xbkfmy8ANADZ9EUFg==}
+  '@upstash/redis@1.32.0':
+    resolution: {integrity: sha512-KBzCjOgF9mhNcV4HTz7U8g7QTdLVEKi1sSe/97u0E+HkzdPmDt3j9lIPIHEUJz6RrdVH6s4HW4JcPvMLC7w3ew==}
 
   acorn-jsx@5.3.2:
     resolution: {integrity: sha512-rq9s+JNhf0IChjtDXxllJ7g41oZk5SlXtp0LHwyA5cejwn7vKmKp4pPri6YEePv2PU65sAsegbXtIinmDFDXgQ==}
@@ -3510,13 +3510,13 @@ snapshots:
 
   '@upstash/core-analytics@0.0.9':
     dependencies:
-      '@upstash/redis': 1.31.3
+      '@upstash/redis': 1.32.0
 
   '@upstash/ratelimit@1.2.0':
     dependencies:
       '@upstash/core-analytics': 0.0.9
 
-  '@upstash/redis@1.31.3':
+  '@upstash/redis@1.32.0':
     dependencies:
       crypto-js: 4.2.0
 
