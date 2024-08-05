@@ -203,6 +203,28 @@ export const profiles = pgTable(
   },
 );
 
+export const quests = pgTable(
+  "quest",
+  {
+    id: serial("id").notNull().primaryKey(),
+    description: text("description").notNull(),
+    typeId: integer("type")
+      .notNull()
+      .references(() => questTypes.id, { onDelete: "cascade" }),
+    reward: integer("reward").notNull(),
+  },
+  (q) => {
+    return {
+      typeIdIdx: index("Quest_typeId_idx").on(q.typeId),
+    };
+  },
+);
+
+export const questTypes = pgTable("questType", {
+  id: serial("id").notNull().primaryKey(),
+  name: text("name").notNull().unique(),
+});
+
 export const rarities = pgTable("rarity", {
   id: serial("id").notNull().primaryKey(),
   name: text("name").notNull().unique(),
@@ -351,6 +373,29 @@ export const userCharms = pgTable(
     return {
       userIdIdx: index("UserCharm_userId_idx").on(uc.userId),
       charmIdIdx: index("UserCharm_charmId_idx").on(uc.charmId),
+    };
+  },
+);
+
+export const userQuests = pgTable(
+  "userQuest",
+  {
+    id: text("id")
+      .notNull()
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    questId: integer("questId")
+      .notNull()
+      .references(() => quests.id, { onDelete: "cascade" }),
+    completed: boolean("completed").notNull(),
+  },
+  (uq) => {
+    return {
+      userIdIdx: index("UserQuest_userId_idx").on(uq.userId),
+      questIdIdx: index("UserQuest_questId_idx").on(uq.questId),
     };
   },
 );
