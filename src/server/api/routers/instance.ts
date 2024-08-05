@@ -165,12 +165,12 @@ export const instanceRouter = router({
             input.order === "Oldest"
               ? sql`${instances.modifyDate} >= ${
                   input.cursor?.modifyDate ??
-                  new Date("2020-12-03 17:20:11.049")
+                  new Date("2020-12-03 17:20:11.049").toISOString()
                 }`
               : input.order === "Newest"
                 ? sql`${instances.modifyDate} <= ${
                     input.cursor?.modifyDate ??
-                    new Date("2050-12-03 17:20:11.049")
+                    new Date("2050-12-03 17:20:11.049").toISOString()
                   }`
                 : input.order === "Pokedex"
                   ? sql`(${species.pokedexNumber}, ${rarities.id} ,${species.name}, ${
@@ -179,7 +179,7 @@ export const instanceRouter = router({
                       input.cursor?.name ?? ""
                     }, ${
                       input.cursor?.modifyDate ??
-                      new Date("2020-12-03 17:20:11.049")
+                      new Date("2020-12-03 17:20:11.049").toISOString()
                     })`
                   : input.order === "PokedexDesc"
                     ? sql`(${species.pokedexNumber}, ${rarities.id}, ${species.name}, ${
@@ -188,7 +188,7 @@ export const instanceRouter = router({
                         input.cursor?.name ?? "{"
                       }, ${
                         input.cursor?.modifyDate ??
-                        new Date("2050-12-03 17:20:11.049")
+                        new Date("2050-12-03 17:20:11.049").toISOString()
                       })`
                     : input.order === "Rarity"
                       ? sql`(${rarities.id}, ${species.pokedexNumber}, ${
@@ -197,7 +197,7 @@ export const instanceRouter = router({
                           input.cursor?.pokedexNumber ?? 0
                         }, ${input.cursor?.name ?? ""}, ${
                           input.cursor?.modifyDate ??
-                          new Date("2020-12-03 17:20:11.049")
+                          new Date("2020-12-03 17:20:11.049").toISOString()
                         })`
                       : input.order === "RarityDesc"
                         ? sql`(${rarities.id}, ${species.pokedexNumber}, ${
@@ -206,7 +206,7 @@ export const instanceRouter = router({
                             input.cursor?.pokedexNumber ?? 10000
                           }, ${input.cursor?.name ?? "{"}, ${
                             input.cursor?.modifyDate ??
-                            new Date("2050-12-03 17:20:11.049")
+                            new Date("2050-12-03 17:20:11.049").toISOString()
                           })`
                         : undefined,
           ),
