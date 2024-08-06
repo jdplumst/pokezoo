@@ -76,7 +76,7 @@ export const instanceRouter = router({
         limit: z.number().min(1).max(100).nullish(),
         cursor: z
           .object({
-            modifyDate: z.date(),
+            modifyDate: z.string(),
             name: z.string().nullish(),
             pokedexNumber: z.number().nullish(),
             rarity: z.string().nullish(),
@@ -234,13 +234,13 @@ export const instanceRouter = router({
         nextCursor =
           input.order === "Oldest" || input.order === "Newest"
             ? {
-                modifyDate: nextItem.instance.modifyDate,
+                modifyDate: nextItem.instance.modifyDate.toISOString(),
                 name: null,
                 pokedexNumber: null,
                 rarity: null,
               }
             : {
-                modifyDate: nextItem.instance.modifyDate,
+                modifyDate: nextItem.instance.modifyDate.toISOString(),
                 name: nextItem.name,
                 pokedexNumber: nextItem.pokedexNumber,
                 rarity: nextItem.rarity,
