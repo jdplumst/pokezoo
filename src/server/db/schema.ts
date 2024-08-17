@@ -212,6 +212,7 @@ export const quests = pgTable(
       .notNull()
       .references(() => questTypes.id, { onDelete: "cascade" }),
     reward: integer("reward").notNull(),
+    goal: integer("goal").notNull(),
   },
   (q) => {
     return {
@@ -390,7 +391,8 @@ export const userQuests = pgTable(
     questId: integer("questId")
       .notNull()
       .references(() => quests.id, { onDelete: "cascade" }),
-    completed: boolean("completed").notNull(),
+    count: integer("count").notNull(),
+    claimed: boolean("claimed").notNull(),
   },
   (uq) => {
     return {
