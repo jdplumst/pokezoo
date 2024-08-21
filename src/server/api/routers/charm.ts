@@ -100,7 +100,7 @@ export const charmRouter = router({
         .leftJoin(charms, eq(userCharms.charmId, charms.id))
         .where(eq(userCharms.userId, ctx.session.user.id));
       return { charmsData };
-    } catch (err) {
+    } catch (_) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
         message: "Something went wrong. Try again later.",

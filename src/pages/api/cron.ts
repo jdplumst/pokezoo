@@ -53,7 +53,7 @@ export default async function handler(
         return res.status(200).json({
           msg: "Successfully updated all user's dollars and reset daily and nightly claims",
         });
-      } catch (error) {
+      } catch (_) {
         throw new Error(
           "User's dollars and daily and nightly claims not updated successfully",
         );
