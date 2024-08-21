@@ -238,9 +238,7 @@ export default function Shop() {
         onSuccess(data) {
           void utils.profile.getProfile.invalidate();
           setNewSpecies(
-            speciesData?.species.filter(
-              (s) => s.id === data.instance.speciesId,
-            )[0],
+            speciesData?.species.find((s) => s.id === data.instance.speciesId),
           );
           setOpenModal(true);
           setError(null);
