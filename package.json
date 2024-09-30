@@ -26,7 +26,7 @@
     "@trpc/next": "^10.45.2",
     "@trpc/react-query": "^10.45.1",
     "@trpc/server": "^10.45.2",
-    "@types/react": "18.3.8",
+    "@types/react": "18.3.10",
     "@types/react-dom": "18.3.0",
     "@upstash/ratelimit": "^2.0.0",
     "@upstash/redis": "^1.30.0",
