@@ -35,6 +35,7 @@ import { calcNewYield } from "@/src/utils/calcNewYield";
 import { withinInstanceLimit } from "@/src/utils/withinInstanceLimit";
 import { alias } from "drizzle-orm/pg-core";
 import { env } from "@/src/env";
+import { updateUserQuest } from "@/src/utils/updateUserQuest";
 
 export const instanceRouter = router({
   getInstanceSpecies: protectedProcedure.query(async ({ ctx }) => {
@@ -324,7 +325,7 @@ export const instanceRouter = router({
       }
 
       if (currBall.name === "Premier" && input.regionId) {
-        var currRegion = (
+        const currRegion = (
           await ctx.db
             .select()
             .from(regions)
@@ -347,8 +348,8 @@ export const instanceRouter = router({
       }
 
       // Variables to keep track of which species to filter
-      var habitats = [3, 4, 6, 7, 8, 8]; // Habitats found both day and night
-      var types = [
+      let habitats = [3, 4, 6, 7, 8, 8]; // Habitats found both day and night
+      let types = [
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
       ];
 
@@ -418,6 +419,21 @@ export const instanceRouter = router({
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Something went wrong trying to select species",
+        });
+      }
+
+      // Update userQuest count field
+      try {
+        await updateUserQuest(
+          currSpecies,
+          ctx.db,
+          ctx.session.user.id,
+          currBall,
+        );
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Error trying to update userQuests",
         });
       }
 
@@ -491,7 +507,7 @@ export const instanceRouter = router({
         });
       }
 
-      const speciesData = (
+      const currSpecies = (
         await ctx.db
           .select()
           .from(species)
@@ -499,7 +515,7 @@ export const instanceRouter = router({
           .where(eq(species.id, input.speciesId))
       )[0];
 
-      if (!speciesData) {
+      if (!currSpecies) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Species does not exist.",
@@ -507,29 +523,29 @@ export const instanceRouter = router({
       }
 
       if (
-        (speciesData.rarity?.name === "Common" &&
-          !speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Common" &&
+          !currSpecies.species.shiny &&
           currUser.commonCards < WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Common" &&
-          speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Common" &&
+          currSpecies.species.shiny &&
           currUser.commonCards < SHINY_WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Rare" &&
-          !speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Rare" &&
+          !currSpecies.species.shiny &&
           currUser.rareCards < WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Rare" &&
-          speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Rare" &&
+          currSpecies.species.shiny &&
           currUser.rareCards < SHINY_WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Epic" &&
-          !speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Epic" &&
+          !currSpecies.species.shiny &&
           currUser.epicCards < WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Epic" &&
-          speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Epic" &&
+          currSpecies.species.shiny &&
           currUser.epicCards < SHINY_WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Legendary" &&
-          !speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Legendary" &&
+          !currSpecies.species.shiny &&
           currUser.legendaryCards < WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Legendary" &&
-          speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Legendary" &&
+          currSpecies.species.shiny &&
           currUser.legendaryCards < SHINY_WILDCARD_COST)
       ) {
         throw new TRPCError({
@@ -548,9 +564,19 @@ export const instanceRouter = router({
         });
       }
 
+      // Update userQuest count field
+      try {
+        await updateUserQuest(currSpecies.species, ctx.db, ctx.session.user.id);
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Error trying to update userQuests",
+        });
+      }
+
       const newYield = calcNewYield(
         currUser.totalYield,
-        speciesData.species.yield,
+        currSpecies.species.yield,
       );
 
       await ctx.db.transaction(async (tx) => {
@@ -559,33 +585,33 @@ export const instanceRouter = router({
           .set({
             totalYield: newYield,
             commonCards:
-              speciesData.rarity?.name === "Common" &&
-              !speciesData.species.shiny
+              currSpecies.rarity?.name === "Common" &&
+              !currSpecies.species.shiny
                 ? currUser.commonCards - WILDCARD_COST
-                : speciesData.rarity?.name === "Common" &&
-                    speciesData.species.shiny
+                : currSpecies.rarity?.name === "Common" &&
+                    currSpecies.species.shiny
                   ? currUser.commonCards - SHINY_WILDCARD_COST
                   : currUser.commonCards,
             rareCards:
-              speciesData.rarity?.name === "Rare" && !speciesData.species.shiny
+              currSpecies.rarity?.name === "Rare" && !currSpecies.species.shiny
                 ? currUser.rareCards - WILDCARD_COST
-                : speciesData.rarity?.name === "Rare" &&
-                    speciesData.species.shiny
+                : currSpecies.rarity?.name === "Rare" &&
+                    currSpecies.species.shiny
                   ? currUser.rareCards - SHINY_WILDCARD_COST
                   : currUser.rareCards,
             epicCards:
-              speciesData.rarity?.name === "Epic" && !speciesData.species.shiny
+              currSpecies.rarity?.name === "Epic" && !currSpecies.species.shiny
                 ? currUser.epicCards - WILDCARD_COST
-                : speciesData.rarity?.name === "Epic" &&
-                    speciesData.species.shiny
+                : currSpecies.rarity?.name === "Epic" &&
+                    currSpecies.species.shiny
                   ? currUser.epicCards - SHINY_WILDCARD_COST
                   : currUser.epicCards,
             legendaryCards:
-              speciesData.rarity?.name === "Legendary" &&
-              !speciesData.species.shiny
+              currSpecies.rarity?.name === "Legendary" &&
+              !currSpecies.species.shiny
                 ? currUser.legendaryCards - WILDCARD_COST
-                : speciesData.rarity?.name === "Legendary" &&
-                    speciesData.species.shiny
+                : currSpecies.rarity?.name === "Legendary" &&
+                    currSpecies.species.shiny
                   ? currUser.legendaryCards - SHINY_WILDCARD_COST
                   : currUser.legendaryCards,
             instanceCount: currUser.instanceCount + 1,
