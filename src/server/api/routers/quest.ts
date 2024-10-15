@@ -98,8 +98,10 @@ export const questRouter = router({
 
           await tx
             .update(profiles)
-            .set({ balance: currProfile.balance + currQuest.reward });
+            .set({ balance: currProfile.balance + currQuest.reward })
+            .where(eq(profiles.userId, ctx.session.user.id));
         });
+
         return { message: "Quest reward claimed successfully" };
       } catch (e) {
         throw new TRPCError({
