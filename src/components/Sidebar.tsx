@@ -10,6 +10,7 @@ interface ISidebar {
   page:
     | "Game"
     | "Shop"
+    | "Quests"
     | "Achievements"
     | "Pokedex"
     | "Trades"
