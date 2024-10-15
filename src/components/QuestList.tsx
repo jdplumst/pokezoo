@@ -54,7 +54,10 @@ export default function QuestList(props: IQuestListProps) {
             key={u.userQuest.id}
             className="mb-5 flex h-14 items-center justify-between border-2 border-tooltip-border p-2"
           >
-            <div className="text-xl font-bold">{u.quest?.description}</div>
+            <div className="text-xl">
+              <span className="font-bold">{u.quest?.description} </span>
+              <span>(P{u.quest?.reward.toLocaleString()})</span>
+            </div>
             {error && (
               <span className="ml-4 font-bold text-red-500">{error}</span>
             )}
