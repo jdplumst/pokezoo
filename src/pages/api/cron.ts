@@ -1,9 +1,15 @@
 import { db } from "@/src/server/db/index";
 import { type NextApiRequest, type NextApiResponse } from "next";
-import { profiles } from "@/src/server/db/schema";
-import { eq } from "drizzle-orm";
+import {
+  profiles,
+  quests,
+  selectProfileSchema,
+  userQuests,
+} from "@/src/server/db/schema";
+import { eq, sql } from "drizzle-orm";
 import { MAX_BALANCE } from "@/src/constants";
 import { env } from "@/src/env";
+import { z } from "zod";
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,12 +20,15 @@ export default async function handler(
     throw new Error("Not authorized to make this request.");
   }
   switch (req.method) {
+    default:
     case "POST":
       try {
         const date = new Date();
+        const dayOfWeek = date.getDay();
         const day = date.getDate();
         const month = date.getMonth() + 1;
 
+        // Set claimedEvent field
         let completedEvent = null;
 
         if (
@@ -32,6 +41,36 @@ export default async function handler(
           completedEvent = true;
         }
 
+        // Set user quests
+        await db.execute(
+          sql`DELETE FROM "pokezoo_userQuest"
+              WHERE "pokezoo_userQuest"."questId" IN (
+              SELECT id
+              FROM "pokezoo_quest"
+              WHERE "pokezoo_quest"."type" = 1)`,
+        );
+
+        if (dayOfWeek === 0) {
+          await db.execute(
+            sql`DELETE FROM "pokezoo_userQuest"
+              WHERE "pokezoo_userQuest"."questId" IN (
+              SELECT id
+              FROM "pokezoo_quest"
+              WHERE "pokezoo_quest"."type" = 2)`,
+          );
+        }
+
+        if (day === 1) {
+          await db.execute(
+            sql`DELETE FROM "pokezoo_userQuest"
+              WHERE "pokezoo_userQuest"."questId" IN (
+              SELECT id
+              FROM "pokezoo_quest"
+              WHERE "pokezoo_quest"."type" = 3)`,
+          );
+        }
+
+        // Update balance from yield
         const profilesData = await db.select().from(profiles);
 
         for (const profile of profilesData) {
@@ -39,6 +78,14 @@ export default async function handler(
             profile.balance + profile.totalYield > MAX_BALANCE
               ? MAX_BALANCE
               : profile.balance + profile.totalYield;
+
+          await setQuests(profile, 1);
+          if (dayOfWeek === 0) {
+            await setQuests(profile, 2);
+          }
+          if (day === 1) {
+            await setQuests(profile, 3);
+          }
 
           await db
             .update(profiles)
@@ -58,5 +105,26 @@ export default async function handler(
           "User's dollars and daily and nightly claims not updated successfully",
         );
       }
+  }
+}
+
+async function setQuests(
+  currProfile: z.infer<typeof selectProfileSchema>,
+  questType: number,
+) {
+  const randomQuests = await db
+    .select()
+    .from(quests)
+    .where(eq(quests.typeId, questType))
+    .orderBy(sql`RANDOM()`)
+    .limit(5);
+
+  for (const currQuest of randomQuests) {
+    await db.insert(userQuests).values({
+      userId: currProfile.userId,
+      questId: currQuest.id,
+      count: 0,
+      claimed: false,
+    });
   }
 }
