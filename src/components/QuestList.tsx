@@ -26,6 +26,7 @@ export default function QuestList(props: IQuestListProps) {
           void utils.quest.getUserQuests.invalidate();
           void utils.profile.getProfile.invalidate();
           setError(null);
+          setDisabled(false);
         },
         onError(error) {
           window.scrollTo(0, 0);
