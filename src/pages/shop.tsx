@@ -11,7 +11,7 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import Topbar from "../components/Topbar";
 import { useSession } from "next-auth/react";
 import { type z } from "zod";
-import { type ZodRegion, type ZodRarity, type ZodSpecies } from "@/src/zod";
+import { type ZodRarity, type ZodSpecies } from "@/src/zod";
 import {
   type selectCharmSchema,
   type selectBallSchema,
@@ -66,174 +66,18 @@ export default function Shop() {
 
   // Premier Ball
   const [regionOpen, setRegionOpen] = useState(false);
-  const [regionCurr, setRegionCurr] = useState<z.infer<
-    typeof ZodRegion
-  > | null>(null);
-  const [regionError, setRegionError] = useState(false);
+  const [regionCurr, setRegionCurr] = useState<number | null>(null);
 
   const purchaseBall = (ball: z.infer<typeof selectBallSchema>) => {
     setBoughtBall(ball);
 
-    if (ball.name === "Premier" && !regionCurr) {
-      setRegionError(true);
-      return;
-    }
-
-    setRegionError(false);
-
-    // Determine if shiny
-    const shinyRandomizer = Math.floor(Math.random() * 4096) + 1;
-    let shiny = false;
-    if (shinyRandomizer === 8) {
-      shiny = true;
-    }
-
-    // Filter species based on time
-    let timeSpecies = speciesData?.species.slice();
-    if (time === "day") {
-      timeSpecies = speciesData?.species.filter(
-        (s) => s.habitat !== "Cave" && s.habitat !== "Forest",
-      );
-    } else if (time === "night") {
-      timeSpecies = speciesData?.species.filter(
-        (s) => s.habitat !== "Grassland",
-      );
-    }
-
-    // Filter species based on ball
-    let filteredSpecies = timeSpecies?.slice();
-    if (ball.name === "Net") {
-      filteredSpecies = timeSpecies?.filter(
-        (s) =>
-          s.typeOne === "Water" ||
-          s.typeTwo === "Water" ||
-          s.typeOne === "Bug" ||
-          s.typeTwo === "Bug",
-      );
-    } else if (ball.name === "Dusk") {
-      filteredSpecies = timeSpecies?.filter(
-        (s) =>
-          s.typeOne === "Dark" ||
-          s.typeTwo === "Dark" ||
-          s.typeOne === "Ghost" ||
-          s.typeTwo === "Ghost",
-      );
-    } else if (ball.name === "Dive") {
-      filteredSpecies = timeSpecies?.filter(
-        (s) => s.habitat === "WatersEdge" || s.habitat === "Sea",
-      );
-    } else if (ball.name === "Safari") {
-      filteredSpecies = timeSpecies?.filter(
-        (s) => s.habitat === "Mountain" || s.habitat === "RoughTerrain",
-      );
-    } else if (ball.name === "Premier") {
-      filteredSpecies = timeSpecies?.filter((s) => s.region === regionCurr);
-    }
-
-    // Determine rarity
-    const randomizer: z.infer<typeof ZodRarity>[] = [];
-    for (let i = 0; i < ball.commonChance; i++) {
-      randomizer.push("Common");
-    }
-    for (let i = 0; i < ball.rareChance; i++) {
-      randomizer.push("Rare");
-    }
-    for (let i = 0; i < ball.epicChance; i++) {
-      randomizer.push("Epic");
-    }
-    for (let i = 0; i < ball.legendaryChance; i++) {
-      randomizer.push("Legendary");
-    }
-    for (let i = 0; i < ball.megaChance; i++) {
-      randomizer.push("Mega");
-    }
-    for (let i = 0; i < ball.ubChance; i++) {
-      randomizer.push("Ultra Beast");
-    }
-    const rarity = randomizer[Math.floor(Math.random() * 100)];
-
-    // Determine the new species the user gets
-    let newInstance = speciesData?.species[0];
-    if (rarity === "Common" && !shiny) {
-      const commonSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Common" && !s.shiny,
-      );
-      newInstance =
-        commonSpecies![Math.floor(Math.random() * commonSpecies!.length)];
-    } else if (rarity === "Rare" && !shiny) {
-      const rareSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Rare" && !s.shiny,
-      );
-      newInstance =
-        rareSpecies![Math.floor(Math.random() * rareSpecies!.length)];
-    } else if (rarity === "Epic" && !shiny) {
-      const epicSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Epic" && !s.shiny,
-      );
-      newInstance =
-        epicSpecies![Math.floor(Math.random() * epicSpecies!.length)];
-    } else if (rarity === "Legendary" && !shiny) {
-      const legendarySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Legendary" && !s.shiny,
-      );
-      newInstance =
-        legendarySpecies![Math.floor(Math.random() * legendarySpecies!.length)];
-    } else if (rarity === "Mega" && !shiny) {
-      const megaSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Mega" && !s.shiny,
-      );
-      newInstance =
-        megaSpecies![Math.floor(Math.random() * megaSpecies!.length)];
-    } else if (rarity === "Ultra Beast" && !shiny) {
-      const ubSpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Ultra Beast" && !s.shiny,
-      );
-      newInstance = ubSpecies![Math.floor(Math.random() * ubSpecies!.length)];
-    } else if (rarity === "Common" && shiny) {
-      const commonShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Common" && s.shiny,
-      );
-      newInstance =
-        commonShinySpecies![
-          Math.floor(Math.random() * commonShinySpecies!.length)
-        ];
-    } else if (rarity === "Rare" && shiny) {
-      const rareShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Rare" && s.shiny,
-      );
-      newInstance =
-        rareShinySpecies![Math.floor(Math.random() * rareShinySpecies!.length)];
-    } else if (rarity === "Epic" && shiny) {
-      const epicShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Epic" && s.shiny,
-      );
-      newInstance =
-        epicShinySpecies![Math.floor(Math.random() * epicShinySpecies!.length)];
-    } else if (rarity === "Legendary" && shiny) {
-      const legendaryShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Legendary" && s.shiny,
-      );
-      newInstance =
-        legendaryShinySpecies![
-          Math.floor(Math.random() * legendaryShinySpecies!.length)
-        ];
-    } else if (rarity === "Mega" && shiny) {
-      const megaShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Mega" && s.shiny,
-      );
-      newInstance =
-        megaShinySpecies![Math.floor(Math.random() * megaShinySpecies!.length)];
-    } else if (rarity === "Ultra Beast" && shiny) {
-      const ubShinySpecies = filteredSpecies?.filter(
-        (s) => s.rarity === "Ultra Beast" && s.shiny,
-      );
-      newInstance =
-        ubShinySpecies![Math.floor(Math.random() * ubShinySpecies!.length)];
-    }
-
     // Create new instance
     ballMutation.mutate(
-      { speciesId: newInstance!.id, cost: ball.cost },
+      {
+        ballId: ball.id,
+        regionId: regionCurr !== null ? regionCurr + 1 : regionCurr,
+        time: time,
+      },
       {
         onSuccess(data) {
           void utils.profile.getProfile.invalidate();
@@ -244,7 +88,21 @@ export default function Shop() {
           setError(null);
         },
         onError(error) {
-          setError(error.message);
+          window.scrollTo(0, 0);
+          switch (error.data?.code) {
+            case "NOT_FOUND":
+            case "BAD_REQUEST":
+              setError(
+                "Make sure to to purchase a real ball or select the region if purchasing a Premier Ball",
+              );
+              break;
+            case "CONFLICT":
+              setError(error.message);
+              break;
+            default:
+              setError("Something went wrong. Please try again.");
+              break;
+          }
         },
       },
     );
@@ -344,13 +202,9 @@ export default function Shop() {
                                 onClick={() => {
                                   setRegionOpen((p) => !p);
                                 }}
-                                className={`w-24 rounded-lg border-2 ${
-                                  regionError
-                                    ? "border-red-500"
-                                    : "border-black"
-                                } bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus`}
+                                className={`w-24 rounded-lg border-2 ${"border-black"} bg-blue-btn-unfocus p-2 font-bold hover:bg-blue-btn-focus`}
                               >
-                                {regionCurr ?? "Region"}
+                                {RegionsList[regionCurr ?? -1] ?? "Region"}
                               </button>
                             )}
                             <button
@@ -689,7 +543,7 @@ export default function Shop() {
               <button
                 key={r}
                 onClick={() => {
-                  setRegionCurr(r);
+                  setRegionCurr(RegionsList.indexOf(r));
                   setRegionOpen(false);
                 }}
                 className="rounded-lg border-2 border-black bg-red-btn-unfocus p-2 font-bold hover:bg-red-btn-focus"

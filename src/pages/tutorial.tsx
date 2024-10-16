@@ -37,9 +37,9 @@ export default function Tutorial() {
             <hr className="border-black pb-4"></hr>
             <p>
               PokéZoo is a game where players collect Pokémon. Each Pokémon
-              gives the user a certain amount of money depending on their
-              rarity. Money can then be used to collect even more Pokémon and
-              claim achievements.
+              gives the user a certain amount of in-game currency depending on
+              their rarity. In-game currency can then be used to collect even
+              more Pokémon and claim achievements.
             </p>
             <br></br>
             <p>
@@ -184,6 +184,14 @@ export default function Tutorial() {
               be sold for P1,500, and Legendary Pokémon can be sold for P5,000.
               Shiny Pokémon can be sold for double the amount of their non-shiny
               counterparts.
+            </p>
+            <br></br>
+            <p>
+              Users also have daily, weekly, and monthly quests that give them
+              in-game currency when completed. Daily quests reset everyday
+              around 3am EDT. Weekly quests reset every Sunday around 3am EDT.
+              Monthly quests reset on the first day of each month around 3am
+              EDT.
             </p>
             <br></br>
             <p className="pb-4">

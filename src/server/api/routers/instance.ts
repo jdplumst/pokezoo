@@ -16,8 +16,10 @@ import {
   ZodRegion,
   ZodSort,
   ZodSpeciesType,
+  ZodTime,
 } from "@/src/zod";
 import {
+  balls,
   habitats,
   instances,
   profiles,
@@ -33,6 +35,7 @@ import { calcNewYield } from "@/src/utils/calcNewYield";
 import { withinInstanceLimit } from "@/src/utils/withinInstanceLimit";
 import { alias } from "drizzle-orm/pg-core";
 import { env } from "@/src/env";
+import { updateUserQuest } from "@/src/utils/updateUserQuest";
 
 export const instanceRouter = router({
   getInstanceSpecies: protectedProcedure.query(async ({ ctx }) => {
@@ -253,8 +256,9 @@ export const instanceRouter = router({
   purchaseInstanceWithBall: protectedProcedure
     .input(
       z.object({
-        speciesId: z.string(),
-        cost: z.number(),
+        ballId: z.string(),
+        regionId: z.number().nullish(),
+        time: ZodTime,
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -285,24 +289,21 @@ export const instanceRouter = router({
         });
       }
 
-      if (currUser.balance < input.cost) {
+      const currBall = (
+        await ctx.db.select().from(balls).where(eq(balls.id, input.ballId))
+      )[0];
+
+      if (!currBall) {
         throw new TRPCError({
-          code: "CONFLICT",
-          message: "You cannot afford this ball.",
+          code: "NOT_FOUND",
+          message: `Ball with id ${input.ballId} does not exist`,
         });
       }
 
-      const speciesData = (
-        await ctx.db
-          .select()
-          .from(species)
-          .where(eq(species.id, input.speciesId))
-      )[0];
-
-      if (!speciesData) {
+      if (currUser.balance < currBall.cost) {
         throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "Species does not exist.",
+          code: "CONFLICT",
+          message: "You cannot afford this ball.",
         });
       }
 
@@ -315,21 +316,142 @@ export const instanceRouter = router({
             "You have reached your limit. Sell Pokémon if you want to buy more.",
         });
       }
-      const newYield = calcNewYield(currUser.totalYield, speciesData.yield);
+
+      if (currBall.name === "Premier" && !input.regionId) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Must send a valid region id for Premier Ball",
+        });
+      }
+
+      if (currBall.name === "Premier" && input.regionId) {
+        const currRegion = (
+          await ctx.db
+            .select()
+            .from(regions)
+            .where(eq(regions.id, input.regionId))
+        )[0];
+
+        if (!currRegion) {
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: `Region with id ${input.regionId} does not exist`,
+          });
+        }
+      }
+
+      // Determine if shiny
+      const shinyRandomizer = Math.floor(Math.random() * 4096) + 1;
+      let shiny = false;
+      if (shinyRandomizer === 8) {
+        shiny = true;
+      }
+
+      // Variables to keep track of which species to filter
+      let habitats = [3, 4, 6, 7, 8, 8]; // Habitats found both day and night
+      let types = [
+        1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+      ];
+
+      // Filter species based on time
+      if (input.time === "day") {
+        habitats.push(1);
+      } else if (input.time === "night") {
+        habitats.push(2, 5);
+      }
+
+      // Filter species based on ball
+      if (currBall.name === "Net") {
+        types = types.filter((t) => t === 3 || t === 7);
+      } else if (currBall.name === "Dusk") {
+        types = types.filter((t) => t === 12 || t === 15);
+      } else if (currBall.name === "Dive") {
+        habitats = habitats.filter((h) => h === 3 || h === 4);
+      } else if (currBall.name === "Safari") {
+        habitats = habitats.filter((h) => h === 6 || h === 7);
+      }
+
+      // Determine rarity
+      const randomizer = [];
+      for (let i = 0; i < currBall.commonChance; i++) {
+        randomizer.push(1);
+      }
+      for (let i = 0; i < currBall.rareChance; i++) {
+        randomizer.push(2);
+      }
+      for (let i = 0; i < currBall.epicChance; i++) {
+        randomizer.push(3);
+      }
+      for (let i = 0; i < currBall.legendaryChance; i++) {
+        randomizer.push(4);
+      }
+      for (let i = 0; i < currBall.megaChance; i++) {
+        randomizer.push(5);
+      }
+      for (let i = 0; i < currBall.ubChance; i++) {
+        randomizer.push(6);
+      }
+      const rarity = randomizer[Math.floor(Math.random() * 100)];
+
+      // Determine the new species the user gets
+      const currSpecies = (
+        await ctx.db
+          .select()
+          .from(species)
+          .where(
+            and(
+              eq(species.rarityId, rarity),
+              inArray(species.habitatId, habitats),
+              or(
+                inArray(species.typeOneId, types),
+                inArray(species.typeTwoId, types),
+              ),
+              eq(species.shiny, shiny),
+              currBall.name === "Premier"
+                ? eq(species.regionId, input.regionId!)
+                : undefined,
+            ),
+          )
+          .orderBy(sql`RANDOM()`)
+      )[0];
+
+      if (!currSpecies) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Something went wrong trying to select species",
+        });
+      }
+
+      // Update userQuest count field
+      try {
+        await updateUserQuest(
+          currSpecies,
+          ctx.db,
+          ctx.session.user.id,
+          currBall,
+        );
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Error trying to update userQuests",
+        });
+      }
+
+      const newYield = calcNewYield(currUser.totalYield, currSpecies.yield);
 
       await ctx.db.transaction(async (tx) => {
         await tx
           .update(profiles)
           .set({
             totalYield: newYield,
-            balance: currUser.balance - input.cost,
+            balance: currUser.balance - currBall.cost,
             instanceCount: currUser.instanceCount + 1,
           })
           .where(eq(profiles.userId, ctx.session.user.id));
 
         await tx
           .insert(instances)
-          .values({ userId: ctx.session.user.id, speciesId: input.speciesId });
+          .values({ userId: ctx.session.user.id, speciesId: currSpecies.id });
       });
 
       const instanceData = (
@@ -339,7 +461,7 @@ export const instanceRouter = router({
           .where(
             and(
               eq(instances.userId, ctx.session.user.id),
-              eq(instances.speciesId, input.speciesId),
+              eq(instances.speciesId, currSpecies.id),
             ),
           )
       )[0];
@@ -385,7 +507,7 @@ export const instanceRouter = router({
         });
       }
 
-      const speciesData = (
+      const currSpecies = (
         await ctx.db
           .select()
           .from(species)
@@ -393,7 +515,7 @@ export const instanceRouter = router({
           .where(eq(species.id, input.speciesId))
       )[0];
 
-      if (!speciesData) {
+      if (!currSpecies) {
         throw new TRPCError({
           code: "NOT_FOUND",
           message: "Species does not exist.",
@@ -401,29 +523,29 @@ export const instanceRouter = router({
       }
 
       if (
-        (speciesData.rarity?.name === "Common" &&
-          !speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Common" &&
+          !currSpecies.species.shiny &&
           currUser.commonCards < WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Common" &&
-          speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Common" &&
+          currSpecies.species.shiny &&
           currUser.commonCards < SHINY_WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Rare" &&
-          !speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Rare" &&
+          !currSpecies.species.shiny &&
           currUser.rareCards < WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Rare" &&
-          speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Rare" &&
+          currSpecies.species.shiny &&
           currUser.rareCards < SHINY_WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Epic" &&
-          !speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Epic" &&
+          !currSpecies.species.shiny &&
           currUser.epicCards < WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Epic" &&
-          speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Epic" &&
+          currSpecies.species.shiny &&
           currUser.epicCards < SHINY_WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Legendary" &&
-          !speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Legendary" &&
+          !currSpecies.species.shiny &&
           currUser.legendaryCards < WILDCARD_COST) ||
-        (speciesData.rarity?.name === "Legendary" &&
-          speciesData.species.shiny &&
+        (currSpecies.rarity?.name === "Legendary" &&
+          currSpecies.species.shiny &&
           currUser.legendaryCards < SHINY_WILDCARD_COST)
       ) {
         throw new TRPCError({
@@ -442,9 +564,19 @@ export const instanceRouter = router({
         });
       }
 
+      // Update userQuest count field
+      try {
+        await updateUserQuest(currSpecies.species, ctx.db, ctx.session.user.id);
+      } catch (e) {
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Error trying to update userQuests",
+        });
+      }
+
       const newYield = calcNewYield(
         currUser.totalYield,
-        speciesData.species.yield,
+        currSpecies.species.yield,
       );
 
       await ctx.db.transaction(async (tx) => {
@@ -453,33 +585,33 @@ export const instanceRouter = router({
           .set({
             totalYield: newYield,
             commonCards:
-              speciesData.rarity?.name === "Common" &&
-              !speciesData.species.shiny
+              currSpecies.rarity?.name === "Common" &&
+              !currSpecies.species.shiny
                 ? currUser.commonCards - WILDCARD_COST
-                : speciesData.rarity?.name === "Common" &&
-                    speciesData.species.shiny
+                : currSpecies.rarity?.name === "Common" &&
+                    currSpecies.species.shiny
                   ? currUser.commonCards - SHINY_WILDCARD_COST
                   : currUser.commonCards,
             rareCards:
-              speciesData.rarity?.name === "Rare" && !speciesData.species.shiny
+              currSpecies.rarity?.name === "Rare" && !currSpecies.species.shiny
                 ? currUser.rareCards - WILDCARD_COST
-                : speciesData.rarity?.name === "Rare" &&
-                    speciesData.species.shiny
+                : currSpecies.rarity?.name === "Rare" &&
+                    currSpecies.species.shiny
                   ? currUser.rareCards - SHINY_WILDCARD_COST
                   : currUser.rareCards,
             epicCards:
-              speciesData.rarity?.name === "Epic" && !speciesData.species.shiny
+              currSpecies.rarity?.name === "Epic" && !currSpecies.species.shiny
                 ? currUser.epicCards - WILDCARD_COST
-                : speciesData.rarity?.name === "Epic" &&
-                    speciesData.species.shiny
+                : currSpecies.rarity?.name === "Epic" &&
+                    currSpecies.species.shiny
                   ? currUser.epicCards - SHINY_WILDCARD_COST
                   : currUser.epicCards,
             legendaryCards:
-              speciesData.rarity?.name === "Legendary" &&
-              !speciesData.species.shiny
+              currSpecies.rarity?.name === "Legendary" &&
+              !currSpecies.species.shiny
                 ? currUser.legendaryCards - WILDCARD_COST
-                : speciesData.rarity?.name === "Legendary" &&
-                    speciesData.species.shiny
+                : currSpecies.rarity?.name === "Legendary" &&
+                    currSpecies.species.shiny
                   ? currUser.legendaryCards - SHINY_WILDCARD_COST
                   : currUser.legendaryCards,
             instanceCount: currUser.instanceCount + 1,

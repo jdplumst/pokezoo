@@ -37,6 +37,12 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="7.10"
+              date="October 15, 2024"
+            >
+              <Note note="Added Quests! Go to the Quests page to claim quest rewards to increase your in-game currency." />
+            </Patch>
+            <Patch
               patch="7.09"
               date="July 7, 2024"
             >

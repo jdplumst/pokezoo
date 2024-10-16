@@ -203,6 +203,29 @@ export const profiles = pgTable(
   },
 );
 
+export const quests = pgTable(
+  "quest",
+  {
+    id: serial("id").notNull().primaryKey(),
+    description: text("description").notNull(),
+    typeId: integer("type")
+      .notNull()
+      .references(() => questTypes.id, { onDelete: "cascade" }),
+    reward: integer("reward").notNull(),
+    goal: integer("goal").notNull(),
+  },
+  (q) => {
+    return {
+      typeIdIdx: index("Quest_typeId_idx").on(q.typeId),
+    };
+  },
+);
+
+export const questTypes = pgTable("questType", {
+  id: serial("id").notNull().primaryKey(),
+  name: text("name").notNull().unique(),
+});
+
 export const rarities = pgTable("rarity", {
   id: serial("id").notNull().primaryKey(),
   name: text("name").notNull().unique(),
@@ -355,6 +378,30 @@ export const userCharms = pgTable(
   },
 );
 
+export const userQuests = pgTable(
+  "userQuest",
+  {
+    id: text("id")
+      .notNull()
+      .$defaultFn(() => createId())
+      .primaryKey(),
+    userId: text("userId")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    questId: integer("questId")
+      .notNull()
+      .references(() => quests.id, { onDelete: "cascade" }),
+    count: integer("count").notNull(),
+    claimed: boolean("claimed").notNull(),
+  },
+  (uq) => {
+    return {
+      userIdIdx: index("UserQuest_userId_idx").on(uq.userId),
+      questIdIdx: index("UserQuest_questId_idx").on(uq.questId),
+    };
+  },
+);
+
 // Drizzle Zod Table Types
 export const selectAchievementSchema = createSelectSchema(achievements);
 export const selectBallSchema = createSelectSchema(balls);
@@ -364,3 +411,4 @@ export const selectSpeciesSchema = createSelectSchema(species);
 export const selectTradesSchema = createSelectSchema(trades);
 export const selectUserAchievementSchema = createSelectSchema(userAchievements);
 export const selectCharmSchema = createSelectSchema(charms);
+export const selectUserQuestSchema = createSelectSchema(userQuests);
