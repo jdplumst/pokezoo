@@ -186,6 +186,14 @@ export default function Tutorial() {
               counterparts.
             </p>
             <br></br>
+            <p>
+              Users also have daily, weekly, and monthly quests that give them
+              in-game currency when completed. Daily quests reset everyday
+              around 3am EDT. Weekly quests reset every Sunday around 3am EDT.
+              Monthly quests reset on the first day of each month around 3am
+              EDT.
+            </p>
+            <br></br>
             <p className="pb-4">
               Users can also trade Pokémon with each other from the{" "}
               <a href="https://pokezoo.vercel.app/trades">
