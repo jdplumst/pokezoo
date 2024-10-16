@@ -65,7 +65,7 @@ export default function QuestList(props: IQuestListProps) {
               <div className="text-xl font-bold">
                 You have already claimed this quest!
               </div>
-            ) : u.userQuest.count >= u.quest?.goal! ? (
+            ) : u.userQuest.count >= (u.quest?.goal ?? 10000) ? (
               <button
                 onClick={() => handleClaimQuest(u.userQuest.id)}
                 disabled={disabled}
