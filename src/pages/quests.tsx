@@ -18,7 +18,7 @@ export default function Quests() {
   return (
     <>
       <Head>
-        <title>PokéZoo - Achievements</title>
+        <title>PokéZoo - Quests</title>
         <meta
           name="description"
           content="PokéZoo"
