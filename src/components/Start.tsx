@@ -65,41 +65,27 @@ export default function Start({ region, addStarter }: IStarter) {
     if (starter) {
       const speciesId =
         starter === "Grass"
-          ? getStarters.data?.starters.find((s) => s.name === grassStarter)
-              ?.id ?? ""
+          ? (getStarters.data?.starters.find((s) => s.name === grassStarter)
+              ?.id ?? "")
           : starter === "Fire"
-            ? getStarters.data?.starters.find((s) => s.name === fireStarter)
-                ?.id ?? ""
+            ? (getStarters.data?.starters.find((s) => s.name === fireStarter)
+                ?.id ?? "")
             : starter === "Water"
-              ? getStarters.data?.starters.find((s) => s.name === waterStarter)
-                  ?.id ?? ""
+              ? (getStarters.data?.starters.find((s) => s.name === waterStarter)
+                  ?.id ?? "")
               : "";
 
-      if (region === "Kanto") {
-        purchaseMutation.mutate(
-          { speciesId: speciesId, cost: 0 },
-          {
-            onSuccess() {
-              addStarter();
-            },
-            onError(error) {
-              setError(error.message);
-            },
+      starterMutation.mutate(
+        { speciesId: speciesId, region: region },
+        {
+          onSuccess() {
+            addStarter();
           },
-        );
-      } else {
-        starterMutation.mutate(
-          { speciesId: speciesId, region: region },
-          {
-            onSuccess() {
-              addStarter();
-            },
-            onError(error) {
-              setError(error.message);
-            },
+          onError(error) {
+            setError(error.message);
           },
-        );
-      }
+        },
+      );
     } else if (!starter) {
       setError("Must pick a starter Pokémon");
     }

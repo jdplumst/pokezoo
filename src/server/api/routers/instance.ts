@@ -750,7 +750,12 @@ export const instanceRouter = router({
         });
       }
 
-      if (input.region === "Johto" && currUser.johtoStarter) {
+      if (input.region === "Kanto" && currUser.instanceCount) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You have already received a Kanto starter.",
+        });
+      } else if (input.region === "Johto" && currUser.johtoStarter) {
         throw new TRPCError({
           code: "CONFLICT",
           message: "You have already received a Johto starter.",
