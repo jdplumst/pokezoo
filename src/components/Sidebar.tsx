@@ -81,6 +81,24 @@ export default function Sidebar({ children, page }: ISidebar) {
             </h2>
           </div>
         </Link>
+        <Link href="/quests">
+          <div
+            className={`${
+              page === "Quests" && `bg-sidebar-focus`
+            } flex w-full items-center hover:bg-sidebar-unfocus`}
+          >
+            <Image
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/items/honor-of-kalos.png"
+              alt="shop"
+              width={45}
+              height={45}
+              className={`${open ? `` : `ml-auto mr-auto`} pixelated`}
+            />
+            <h2 className={`${open ? `block` : `hidden`} text-2xl font-bold`}>
+              Quests
+            </h2>
+          </div>
+        </Link>
         <Link href="/achievements">
           <div
             className={`${
