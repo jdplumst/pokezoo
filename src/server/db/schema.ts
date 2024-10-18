@@ -195,6 +195,7 @@ export const profiles = pgTable(
     unovaStarter: boolean("unovaStarter").notNull().default(true),
     kalosStarter: boolean("kalosStarter").notNull().default(true),
     alolaStarter: boolean("alolaStarter").notNull().default(true),
+    galarStarter: boolean("galarStarter").notNull().default(true),
   },
   (p) => {
     return {
