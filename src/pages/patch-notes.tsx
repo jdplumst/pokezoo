@@ -37,6 +37,19 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="8.00"
+              date="October 18, 2024"
+            >
+              <Note
+                note="Added Galar Pokémon! Start collecting Pokémon from Galar
+                alongside Pokémon from the previous regions."
+              />
+              <Note
+                note="All exising users will get to choose a Galar starter between
+                Grookey, Scorbunny, and Sobble for free!"
+              />
+            </Patch>
+            <Patch
               patch="7.10"
               date="October 15, 2024"
             >
