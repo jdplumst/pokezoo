@@ -839,6 +839,14 @@ export default function Game() {
           addStarter={addStarter}
         />
       )}
+
+      {/* Modal for Galar Starter */}
+      {!getProfile.data?.galarStarter && (
+        <Start
+          region="Galar"
+          addStarter={addStarter}
+        />
+      )}
     </>
   );
 }
