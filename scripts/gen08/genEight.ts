@@ -30,7 +30,7 @@ const TypesMap = {
 const populateGenEightDB = async () => {
   const api = new PokemonClient();
 
-  for (let i = 810; i <= 890; i++) {
+  for (let i = 810; i <= 898; i++) {
     const pokemonData = await api.getPokemonById(i);
     const speciesData = await api.getPokemonSpeciesById(i);
 
