@@ -70,6 +70,10 @@ export default function Tooltip({ ball, charm, children }: ITooltip) {
                 {ball.ubChance}% Chance{" "}
                 <span className="text-ub-unfocus">Ultra Beast</span>
               </p>
+              <p>
+                {ball.gmaxChance}% Chance{" "}
+                <span className="text-gmax-unfocus">Gigantamax</span>
+              </p>
             </div>
           )}
           {charm && (
