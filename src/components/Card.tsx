@@ -36,7 +36,7 @@ export default function Card({
       className={`${!handlePurchase && !modifyDeleteList ? `h-[320px]` : `h-[390px]`}`}
     >
       <div
-        className={`card relative h-[320px] w-[260px] ${
+        className={`card relative h-[320px] w-[280px] ${
           species.shiny ? `border-yellow-500` : `border-black`
         } p-2 text-black`}
       >
@@ -49,7 +49,7 @@ export default function Card({
         <div className="card-hover"></div>
         <div className="card-hover"></div>
         <div
-          className={`card-contents absolute bottom-0 left-0 right-0 top-0 rounded-lg rounded-bl-none rounded-br-none border-x-2 border-t-2 border-black ${species.rarity === "Common" ? `bg-common-unfocus` : species.rarity === "Rare" ? `bg-rare-unfocus` : species.rarity === "Epic" ? `bg-epic-unfocus` : species.rarity === "Legendary" ? `bg-legendary-unfocus` : species.rarity === "Mega" ? `bg-mega-unfocus` : species.rarity === "Ultra Beast" ? `bg-ub-unfocus` : ``}`}
+          className={`card-contents absolute bottom-0 left-0 right-0 top-0 rounded-lg rounded-bl-none rounded-br-none border-x-2 border-t-2 border-black ${species.rarity === "Common" ? `bg-common-unfocus` : species.rarity === "Rare" ? `bg-rare-unfocus` : species.rarity === "Epic" ? `bg-epic-unfocus` : species.rarity === "Legendary" ? `bg-legendary-unfocus` : species.rarity === "Mega" ? `bg-mega-unfocus` : species.rarity === "Ultra Beast" ? `bg-ub-unfocus` : species.rarity === "Gigantamax" ? `bg-gmax-unfocus` : ``}`}
         >
           {caught && (
             <Image
@@ -181,7 +181,7 @@ export default function Card({
             <p>Yield: P{species.yield.toLocaleString()}</p>
             <p>Sell Price: P{species.sellPrice.toLocaleString()}</p>
             <div
-              className={`flex w-[260px] flex-col items-center rounded-lg rounded-tl-none rounded-tr-none border-x-2 border-b-2 border-black ${species.rarity === "Common" ? `bg-common-unfocus` : species.rarity === "Rare" ? `bg-rare-unfocus` : species.rarity === "Epic" ? `bg-epic-unfocus` : species.rarity === "Legendary" ? `bg-legendary-unfocus` : species.rarity === "Mega" ? `bg-mega-unfocus` : species.rarity === "Ultra Beast" ? `bg-ub-unfocus` : ``} py-2`}
+              className={`flex w-[280px] flex-col items-center rounded-lg rounded-tl-none rounded-tr-none border-x-2 border-b-2 border-black ${species.rarity === "Common" ? `bg-common-unfocus` : species.rarity === "Rare" ? `bg-rare-unfocus` : species.rarity === "Epic" ? `bg-epic-unfocus` : species.rarity === "Legendary" ? `bg-legendary-unfocus` : species.rarity === "Mega" ? `bg-mega-unfocus` : species.rarity === "Ultra Beast" ? `bg-ub-unfocus` : species.rarity === "Gigantamax" ? `bg-gmax-unfocus` : ``} py-2`}
             >
               {instance && modifyDeleteList && !beingDeleted && (
                 <button

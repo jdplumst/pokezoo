@@ -20,6 +20,8 @@
     --color-mega-unfocus: #ef4444;
     --color-ub-focus: #1e40af;
     --color-ub-unfocus: #1d4ed8;
+    --color-gmax-focus: #db2777;
+    --color-gmax-unfocus: #ec4899;
 
     /* Pokemon Type Colours */
     --color-normal: #a8a77a;
@@ -198,7 +200,7 @@ button {
 
 /* Card Grid */
 .cards {
-  grid-template-columns: repeat(auto-fill, 260px);
+  grid-template-columns: repeat(auto-fill, 280px);
 }
 
 /* Ball Grid */
