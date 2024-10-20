@@ -240,7 +240,7 @@ export default function Pokedex() {
                 <LoadingSpinner />
               </div>
             )}
-            <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
+            <div className="cards grid justify-center gap-x-5 gap-y-5 pt-5">
               {getPokedex.data?.pages.map((p, index) => (
                 <Fragment key={index}>
                   {p.pokemon.map((c) => (

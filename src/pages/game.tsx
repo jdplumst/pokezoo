@@ -566,7 +566,7 @@ export default function Game() {
                 <LoadingSpinner />
               </div>
             )}
-            <div className="cards grid justify-center gap-x-3 gap-y-5 pt-5">
+            <div className="cards grid justify-center gap-x-5 gap-y-5 pt-5">
               {getGame.data?.pages.map((p, index) => (
                 <Fragment key={index}>
                   {p.instancesData.map((c) => (

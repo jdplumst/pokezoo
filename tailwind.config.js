@@ -45,6 +45,8 @@ const config = {
         "mega-unfocus": "var(--color-mega-unfocus)",
         "ub-focus": "var(--color-ub-focus)",
         "ub-unfocus": "var(--color-ub-unfocus)",
+        "gmax-focus": "var(--color-gmax-focus)",
+        "gmax-unfocus": "var(--color-gmax-unfocus)",
 
         // Pokemon Type Colours
         "normal": "var(--color-normal)",
