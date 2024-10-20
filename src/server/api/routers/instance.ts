@@ -391,6 +391,9 @@ export const instanceRouter = router({
       for (let i = 0; i < currBall.ubChance; i++) {
         randomizer.push(6);
       }
+      for (let i = 0; i < currBall.gmaxChance; i++) {
+        randomizer.push(7);
+      }
       const rarity = randomizer[Math.floor(Math.random() * 100)];
 
       // Determine the new species the user gets
