@@ -37,6 +37,12 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="8.03"
+              date="October 21, 2024"
+            >
+              <Note note="Added Galar and Gigantamax Achievements." />
+            </Patch>
+            <Patch
               patch="8.02"
               date="October 20, 2024"
             >
