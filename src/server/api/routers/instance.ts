@@ -348,7 +348,7 @@ export const instanceRouter = router({
       }
 
       // Variables to keep track of which species to filter
-      let habitats = [3, 4, 6, 7, 8, 8]; // Habitats found both day and night
+      let habitats = [3, 4, 6, 7, 8, 9]; // Habitats found both day and night
       let types = [
         1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
       ];
@@ -395,6 +395,7 @@ export const instanceRouter = router({
         randomizer.push(7);
       }
       const rarity = randomizer[Math.floor(Math.random() * 100)];
+      console.log(rarity);
 
       // Determine the new species the user gets
       const currSpecies = (
@@ -417,6 +418,7 @@ export const instanceRouter = router({
           )
           .orderBy(sql`RANDOM()`)
       )[0];
+      console.log(currSpecies.name);
 
       if (!currSpecies) {
         throw new TRPCError({
