@@ -395,7 +395,6 @@ export const instanceRouter = router({
         randomizer.push(7);
       }
       const rarity = randomizer[Math.floor(Math.random() * 100)];
-      console.log(rarity);
 
       // Determine the new species the user gets
       const currSpecies = (
@@ -418,7 +417,6 @@ export const instanceRouter = router({
           )
           .orderBy(sql`RANDOM()`)
       )[0];
-      console.log(currSpecies.name);
 
       if (!currSpecies) {
         throw new TRPCError({
