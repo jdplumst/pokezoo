@@ -24,6 +24,8 @@ export default defineConfig({
   reporter: "html",
   /* Tests that take over a minute to run are considered slow */
   reportSlowTests: { max: 10, threshold: 60 * 1000 },
+  /* Test timeout of 2 minutes */
+  timeout: 120000,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
