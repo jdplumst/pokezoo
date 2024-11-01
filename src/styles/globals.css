@@ -200,7 +200,7 @@ button {
 
 /* Card Grid */
 .cards {
-  grid-template-columns: repeat(auto-fill, 280px);
+  grid-template-columns: repeat(auto-fill, 300px);
 }
 
 /* Ball Grid */
