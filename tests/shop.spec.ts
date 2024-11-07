@@ -180,3 +180,20 @@ test("purchase beast balls", async ({ browser }) => {
 
   await closePage(page, context);
 });
+
+test("purchase dream balls", async ({ browser }) => {
+  const [page, context] = await login(browser, 1);
+  await page.goto("/shop");
+  await expect(page.getByText(env.TEST_UNAME1)).toBeVisible();
+
+  // Purchase 10 times
+  for (let i = 0; i < 10; i++) {
+    await page.getByTestId("Dream-button").click();
+    await expect(
+      page.getByText(/Rarity: (Legendary|Gigantamax)/),
+    ).toBeVisible();
+    await page.getByTestId("confirm-ball-button").click();
+  }
+
+  await closePage(page, context);
+});
