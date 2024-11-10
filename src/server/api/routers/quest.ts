@@ -103,7 +103,7 @@ export const questRouter = router({
         });
 
         return { message: "Quest reward claimed successfully" };
-      } catch (e) {
+      } catch (_) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Something went wrong trying to claim quest reward",

@@ -1,5 +1,5 @@
-import { inferRouterOutputs } from "@trpc/server";
-import { AppRouter } from "../server/api/_app";
+import { type inferRouterOutputs } from "@trpc/server";
+import { type AppRouter } from "../server/api/_app";
 import { trpc } from "../utils/trpc";
 import { useState } from "react";
 import LoadingSpinner from "./LoadingSpinner";

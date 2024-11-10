@@ -433,7 +433,7 @@ export const instanceRouter = router({
           ctx.session.user.id,
           currBall,
         );
-      } catch (e) {
+      } catch (_) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Error trying to update userQuests",
@@ -570,7 +570,7 @@ export const instanceRouter = router({
       // Update userQuest count field
       try {
         await updateUserQuest(currSpecies.species, ctx.db, ctx.session.user.id);
-      } catch (e) {
+      } catch (_) {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Error trying to update userQuests",

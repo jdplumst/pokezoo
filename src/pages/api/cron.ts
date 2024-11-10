@@ -3,13 +3,13 @@ import { type NextApiRequest, type NextApiResponse } from "next";
 import {
   profiles,
   quests,
-  selectProfileSchema,
+  type selectProfileSchema,
   userQuests,
 } from "@/src/server/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { MAX_BALANCE } from "@/src/constants";
 import { env } from "@/src/env";
-import { z } from "zod";
+import { type z } from "zod";
 
 export default async function handler(
   req: NextApiRequest,
