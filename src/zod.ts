@@ -23,6 +23,7 @@ export const DBRegion = [
   "Kalos",
   "Alola",
   "Galar",
+  "Hisui",
 ] as const;
 export const ZodRegion = z.enum(DBRegion);
 
