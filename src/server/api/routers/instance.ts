@@ -742,6 +742,7 @@ export const instanceRouter = router({
             kalosStarter: profiles.kalosStarter,
             alolaStarter: profiles.alolaStarter,
             galarStarter: profiles.galarStarter,
+            hisuiStarter: profiles.hisuiStarter,
           })
           .from(profiles)
           .where(eq(profiles.userId, ctx.session.user.id))
@@ -794,6 +795,11 @@ export const instanceRouter = router({
           code: "CONFLICT",
           message: "You have already received a Galar starter.",
         });
+      } else if (input.region === "Hisui" && currUser.hisuiStarter) {
+        throw new TRPCError({
+          code: "CONFLICT",
+          message: "You have already received a Hisui starter.",
+        });
       }
 
       const speciesData = (
@@ -838,6 +844,8 @@ export const instanceRouter = router({
               input.region === "Alola" ? true : currUser.alolaStarter,
             galarStarter:
               input.region === "Galar" ? true : currUser.galarStarter,
+            hisuiStarter:
+              input.region === "Hisui" ? true : currUser.hisuiStarter,
           })
           .where(eq(profiles.userId, ctx.session.user.id));
 

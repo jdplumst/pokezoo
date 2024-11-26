@@ -64,6 +64,11 @@ export default function Start({ region, addStarter }: IStarter) {
       fireStarter = "scorbunny";
       waterStarter = "sobble";
       break;
+    case "Hisui":
+      grassStarter = "decidueye-hisui";
+      fireStarter = "typhlosion-hisui";
+      waterStarter = "samurott-hisui";
+      break;
   }
 
   const handleClose = () => {

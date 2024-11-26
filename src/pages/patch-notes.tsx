@@ -37,6 +37,19 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="8.04"
+              date="November 26, 2024"
+            >
+              <Note
+                note="Added Hisui Pokémon! Start collecting Pokémon from Hisui 
+                alongside Pokémon from the previous regions."
+              />
+              <Note
+                note="All exising users will get to choose a Galar starter between
+                Hisuian Decidueye, Hisuian Typhlosion, and Hisuian Samurott for free!"
+              />
+            </Patch>
+            <Patch
               patch="8.03"
               date="October 21, 2024"
             >
