@@ -84,7 +84,7 @@ const populateHisuianDB = async () => {
       typeTwoId: typeTwo ? TypesMap[typeTwo] : null,
       generation: 8,
       habitatId: 1,
-      regionId: 8,
+      regionId: 9,
     });
 
     await db.insert(species).values({
@@ -99,7 +99,7 @@ const populateHisuianDB = async () => {
       typeTwoId: typeTwo ? TypesMap[typeTwo] : null,
       generation: 8,
       habitatId: 1,
-      regionId: 8,
+      regionId: 9,
     });
   }
 };
