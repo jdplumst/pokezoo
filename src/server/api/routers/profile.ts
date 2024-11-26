@@ -35,6 +35,7 @@ export const profileRouter = router({
           kalosStarter: profiles.kalosStarter,
           alolaStarter: profiles.alolaStarter,
           galarStarter: profiles.galarStarter,
+          hisuiStarter: profiles.hisuiStarter,
           catchingCharm: catchingCharm.charmId,
         })
         .from(profiles)

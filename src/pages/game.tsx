@@ -847,6 +847,14 @@ export default function Game() {
           addStarter={addStarter}
         />
       )}
+
+      {/* Modal for Hisui Starter */}
+      {!getProfile.data?.hisuiStarter && (
+        <Start
+          region="Hisui"
+          addStarter={addStarter}
+        />
+      )}
     </>
   );
 }
