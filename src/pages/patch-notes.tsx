@@ -37,6 +37,12 @@ export default function PatchNotes() {
           <main className="px-8">
             <h1 className="p-4 text-7xl font-bold">Patch Notes</h1>
             <Patch
+              patch="8.05"
+              date="November 30, 2024"
+            >
+              <Note note="Added Hisui Achievements." />
+            </Patch>
+            <Patch
               patch="8.04"
               date="November 26, 2024"
             >
