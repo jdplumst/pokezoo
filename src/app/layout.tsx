@@ -9,11 +9,12 @@ export default async function RootLayout({
 }) {
   const theme = await getTheme();
   const time = await getTime();
+  const mode = time === "day" ? "light" : "dark";
 
   return (
     <html
       lang="en"
-      className={`${theme} ${time}`}
+      className={`${theme} ${mode}`}
     >
       <body>{children}</body>
     </html>

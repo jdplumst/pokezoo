@@ -25,8 +25,12 @@ import {
 } from "lucide-react";
 import Github from "@/src/app/_components/Github";
 import SignOut from "@/src/app/_components/SignOut";
+import { getTime } from "@/src/server/actions/cookies/getTime";
 
-export function AppSidebar() {
+export async function AppSidebar() {
+  const time = await getTime();
+  console.log(time);
+
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
@@ -138,7 +142,7 @@ export function AppSidebar() {
               <SidebarMenuItem key={"Github"}>
                 <SidebarMenuButton asChild>
                   <a href="https://github.com/jdplumst/pokezoo">
-                    <Github />
+                    <Github fill={`${time === `day` ? `black` : `white`}`} />
                     <SidebarMenuLabel>PokéZoo Github</SidebarMenuLabel>
                   </a>
                 </SidebarMenuButton>

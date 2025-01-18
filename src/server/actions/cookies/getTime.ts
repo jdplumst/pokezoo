@@ -5,9 +5,9 @@ export async function getTime() {
   const timeZone = cookieStore.get("timezone")?.value || "-5";
   const parsedTimeZone = parseInt(timeZone) || 5;
   const hour = new Date().getHours() + parsedTimeZone;
-  let time = "light";
+  let time = "day";
   if (hour < 6 || hour > 17) {
-    time = "dark";
+    time = "night";
   }
   return time;
 }
