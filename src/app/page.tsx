@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { signIn } from "next-auth/react";
 import { getServerSession } from "next-auth";
 import SignIn from "./_components/SignIn";
 import { authOptions } from "../pages/api/auth/[...nextauth]";
