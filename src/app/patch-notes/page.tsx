@@ -19,7 +19,7 @@ export default async function PatchNotes() {
   }
 
   return (
-    <main className="px-8">
+    <div className="px-8">
       <h1 className="p-4 text-5xl font-bold">Patch Notes</h1>
       <Patch
         patch="8.05"
@@ -1155,6 +1155,6 @@ export default async function PatchNotes() {
               and try to collect all 151 Pokémon from the Kanto Pokédex!"
         />
       </Patch>
-    </main>
+    </div>
   );
 }
