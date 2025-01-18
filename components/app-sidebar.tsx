@@ -29,7 +29,6 @@ import { getTime } from "@/src/server/actions/cookies/getTime";
 
 export async function AppSidebar() {
   const time = await getTime();
-  console.log(time);
 
   return (
     <Sidebar collapsible="icon">
