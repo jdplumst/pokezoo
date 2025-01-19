@@ -1,8 +1,5 @@
-import { authOptions } from "@/src/pages/api/auth/[...nextauth]";
 import { isAuthed } from "@/src/server/actions/auth";
 import { Metadata } from "next";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Tutorial",

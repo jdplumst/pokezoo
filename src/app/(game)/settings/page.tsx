@@ -1,5 +1,4 @@
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { isAuthed } from "@/src/server/actions/auth";
 import {
   getTimezone,
@@ -10,7 +9,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@radix-ui/react-dropdown-menu";

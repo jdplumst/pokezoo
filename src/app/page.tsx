@@ -19,11 +19,11 @@ export default async function HomePage() {
   }
 
   return (
-    <main className="fade-in absolute flex h-screen w-screen flex-col items-center bg-[url('../img/pokemon-bg.jpg')] bg-cover pt-10 font-bold">
+    <main className="absolute flex h-screen w-screen flex-col items-center bg-[url('../img/pokemon-bg.jpg')] bg-cover pt-10 font-bold fade-in">
       <h1 className="mb-20 text-7xl">PokéZoo</h1>
       <div className="w-1/3 rounded-lg border-4 border-black bg-white py-5 text-center">
         <p>
-          <strong className="text-2xl">Login</strong>
+          <strong className="text-2xl text-black">Login</strong>
         </p>
         <SignIn provider="github" />
         <SignIn provider="twitch" />

@@ -1,9 +1,7 @@
-import Patch from "../_components/Patch";
-import Note from "../_components/Note";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/src/pages/api/auth/[...nextauth]";
-import { redirect } from "next/navigation";
+import Patch from "../../_components/Patch";
+import Note from "../../_components/Note";
 import { Metadata } from "next";
+import { isAuthed } from "@/src/server/actions/auth";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Patch Notes",
@@ -13,10 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PatchNotes() {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/");
-  }
+  await isAuthed();
 
   return (
     <div className="px-8">

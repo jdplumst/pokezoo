@@ -27,7 +27,6 @@ export async function getTime() {
   const timezone = cookieStore.get("timezone-offset")?.value || "-5";
   const parsedTimezone = Math.floor(Number(timezone)) || -5;
   const hour = new Date().getUTCHours() + parsedTimezone;
-  console.log(hour);
   let time: "day" | "night" = "day";
   if (hour < 6 || hour > 17) {
     time = "night";
