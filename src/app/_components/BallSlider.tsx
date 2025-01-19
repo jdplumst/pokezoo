@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
-import { trpc } from "@/src/utils/trpc";
+import { serverOnly_purchaseBalls } from "@/src/shared/actions/shop";
 import Image from "next/image";
 import { useState } from "react";
 
@@ -25,8 +25,6 @@ export default function BallSlider(props: { ballId: string }) {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const purchaseBalls = trpc.ball.purchaseBalls.useMutation();
-
   return (
     <>
       <div>Quantity: {sliderValue[0]}</div>
@@ -39,22 +37,20 @@ export default function BallSlider(props: { ballId: string }) {
       />
       <form
         action={async () => {
-          purchaseBalls.mutate(
-            { ballId: props.ballId, quantity: sliderValue[0] },
-            {
-              onSuccess(data) {
-                setPurchasedSpecies(data.speciesList);
-                setIsOpen(true);
-              },
-              onError(error) {
-                toast({
-                  title: "Error",
-                  description: error.message,
-                  variant: "destructive",
-                });
-              },
-            },
+          const res = await serverOnly_purchaseBalls(
+            props.ballId,
+            sliderValue[0],
           );
+          if (res.error) {
+            toast({
+              title: "Error",
+              description: res.error,
+              variant: "destructive",
+            });
+          } else {
+            setPurchasedSpecies(res.speciesList!);
+            setIsOpen(true);
+          }
         }}
       >
         <Button>Buy</Button>

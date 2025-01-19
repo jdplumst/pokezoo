@@ -8,7 +8,7 @@ import {
   userCharms,
 } from "../../db/schema";
 import { z } from "zod";
-import { getTime } from "../../actions/cookies";
+import { getTime } from "../../../shared/actions/cookies";
 import { alias } from "drizzle-orm/pg-core";
 import { and, eq, inArray, or, sql } from "drizzle-orm";
 import { withinInstanceLimit } from "@/src/utils/withinInstanceLimit";
