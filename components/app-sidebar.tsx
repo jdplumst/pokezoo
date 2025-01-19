@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import Github from "@/src/app/_components/Github";
 import SignOut from "@/src/app/_components/SignOut";
-import { getTime } from "@/src/server/actions/cookies/getTime";
+import { getTime } from "@/src/server/actions/cookies";
 
 export async function AppSidebar() {
   const time = await getTime();

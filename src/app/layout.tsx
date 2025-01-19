@@ -1,6 +1,5 @@
 import "../styles/globals.css";
-import { getTheme } from "../server/actions/cookies/getTheme";
-import { getTime } from "../server/actions/cookies/getTime";
+import { getTheme, getTime } from "../server/actions/cookies";
 
 export default async function RootLayout({
   children,
