@@ -229,101 +229,6 @@
   }
 }
 
-.day {
-  --color-purple-btn-focus: #7c3aed;
-  --color-purple-btn-unfocus: #8b5cf6;
-  --color-blue-btn-focus: #4f46e5;
-  --color-blue-btn-unfocus: #6366f1;
-  --color-green-btn-focus: #059669;
-  --color-green-btn-unfocus: #22c55e;
-  --color-red-btn-focus: #dc2626;
-  --color-red-btn-unfocus: #ef4444;
-  --color-orange-btn-focus: #ea580c;
-  --color-orange-btn-unfocus: #f97316;
-  --color-lime-btn-focus: #65a30d;
-  --color-lime-btn-unfocus: #84cc16;
-  --color-yellow-btn-focus: #eab308;
-  --color-yellow-btn-unfocus: #facc15;
-  --color-text: black;
-  --color-sidebar-focus: white;
-  --color-sidebar-unfocus: #cbd5e1;
-  --color-tooltip: #cbd5e1;
-  --color-tooltip-border: black;
-}
-
-.night {
-  --color-purple-btn-focus: #5b21b6;
-  --color-purple-btn-unfocus: #6d28d9;
-  --color-blue-btn-focus: #312e81;
-  --color-blue-btn-unfocus: #3730a3;
-  --color-green-btn-focus: #065f46;
-  --color-green-btn-unfocus: #15803d;
-  --color-red-btn-focus: #b91c1c;
-  --color-red-btn-unfocus: #dc2626;
-  --color-orange-btn-focus: #c2410c;
-  --color-orange-btn-unfocus: #ea580c;
-  --color-lime-btn-focus: #4d7c0f;
-  --color-lime-btn-unfocus: #65a30d;
-  --color-text: rgb(240, 220, 252);
-  --color-sidebar-focus: #3b0764;
-  --color-sidebar-unfocus: #7e22ce;
-  --color-tooltip: #28284e;
-  --color-tooltip-border: #6943ff62;
-
-  /* Pokemon Rarity Colours */
-  --color-common-focus: #475569;
-  --color-common-unfocus: #64748b;
-}
-
-.day.blue {
-  background-image: linear-gradient(to right, #06b6d4, #6366f1);
-  --color-bg-left: #06b6d4;
-  --color-bg-right: #6366f1;
-  --color-ball: #10b981;
-}
-
-.night.blue {
-  --color-bg-left: #164e63;
-  --color-bg-right: #1e1b4b;
-  --color-ball: #15803d;
-}
-
-.day.purple {
-  --color-bg-left: #8b5cf6;
-  --color-bg-right: #a855f7;
-  --color-ball: #34d399;
-}
-
-.night.purple {
-  --color-bg-left: #581c87;
-  --color-bg-right: #28284e;
-  --color-ball: #581c87;
-}
-
-.day.green {
-  --color-bg-left: #22c55e;
-  --color-bg-right: #10b981;
-  --color-ball: #14b8a6;
-}
-
-.night.green {
-  --color-bg-left: #3f6212;
-  --color-bg-right: #065f46;
-  --color-ball: #c2410c;
-}
-
-.day.orange {
-  --color-bg-left: #fb923c;
-  --color-bg-right: #f59e0b;
-  --color-ball: #84cc16;
-}
-
-.night.orange {
-  --color-bg-left: #9a3412;
-  --color-bg-right: #854d0e;
-  --color-ball: #991b1b;
-}
-
 /* Scrollbar */
 html::-webkit-scrollbar,
 div::-webkit-scrollbar {
@@ -357,40 +262,9 @@ button {
   outline: none;
 }
 
-/* Sidebar */
-.sidebar {
-  transition: all 0.5s;
-}
-
-/* Tooltip */
-.tooltip-container {
-  position: relative;
-  display: inline-block;
-}
-
-.tooltip {
-  position: absolute;
-  top: calc(0% - 50px);
-  transform: translateX(-40%);
-}
-
 /* Sprite */
 .pixelated {
   image-rendering: pixelated;
-}
-
-/* Card Grid */
-.cards {
-  grid-template-columns: repeat(auto-fill, 300px);
-}
-
-/* Ball Grid */
-.balls {
-  grid-template-columns: repeat(auto-fill, 288px);
-}
-
-.trades {
-  grid-template-columns: repeat(auto-fill, 600px);
 }
 
 /* Card Hover Animation */

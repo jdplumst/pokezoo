@@ -9,4 +9,5 @@ export async function isAuthed() {
   if (!session) {
     redirect("/");
   }
+  return session;
 }
