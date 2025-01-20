@@ -1,5 +1,6 @@
 import "../styles/globals.css";
 import { getTheme, getTime } from "../shared/actions/cookies";
+import Providers from "./providers";
 
 export default async function RootLayout({
   children,
@@ -15,7 +16,9 @@ export default async function RootLayout({
       lang="en"
       className={`${theme} ${mode}`}
     >
-      <body>{children}</body>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
