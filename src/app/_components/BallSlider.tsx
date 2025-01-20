@@ -10,9 +10,11 @@ import {
 } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
-import { serverOnly_purchaseBalls } from "@/src/shared/actions/shop";
+import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
+import { z } from "zod";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function BallSlider(props: { ballId: string }) {
   const { toast } = useToast();
@@ -25,6 +27,62 @@ export default function BallSlider(props: { ballId: string }) {
 
   const [isOpen, setIsOpen] = useState(false);
 
+  const purchase = useMutation({
+    mutationFn: async (input: {
+      ballId: string;
+      quantity: number;
+      regionId?: number;
+    }) => {
+      const res = await fetch("/api/ball", {
+        method: "POST",
+        body: JSON.stringify({
+          ballId: input.ballId,
+          quantity: input.quantity,
+          regionId: input.regionId,
+        }),
+      });
+
+      const data = await res.json();
+
+      const resSchema = z.union([
+        z.object({
+          speciesList: z
+            .object({
+              name: z.string(),
+              img: z.string(),
+              shiny: z.boolean(),
+            })
+            .array(),
+          error: z.undefined(),
+        }),
+        z.object({ speciesList: z.undefined(), error: z.string() }),
+      ]);
+      const check = resSchema.parse(data);
+      return check;
+    },
+
+    onSuccess(data) {
+      if (data.error) {
+        toast({
+          title: "Error",
+          description: data.error,
+          variant: "destructive",
+        });
+      } else if (data.speciesList) {
+        setPurchasedSpecies(data.speciesList);
+        setIsOpen(true);
+      }
+    },
+
+    onError() {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   return (
     <>
       <div>Quantity: {sliderValue[0]}</div>
@@ -35,26 +93,14 @@ export default function BallSlider(props: { ballId: string }) {
         value={sliderValue}
         onValueChange={(e) => setSliderValue(e)}
       />
-      <form
-        action={async () => {
-          const res = await serverOnly_purchaseBalls(
-            props.ballId,
-            sliderValue[0],
-          );
-          if (res.error) {
-            toast({
-              title: "Error",
-              description: res.error,
-              variant: "destructive",
-            });
-          } else {
-            setPurchasedSpecies(res.speciesList!);
-            setIsOpen(true);
-          }
-        }}
+      <Button
+        onClick={() =>
+          purchase.mutate({ ballId: props.ballId, quantity: sliderValue[0] })
+        }
+        disabled={purchase.isLoading}
       >
-        <Button>Buy</Button>
-      </form>
+        {purchase.isLoading ? <LoadingSpinner /> : "Buy"}
+      </Button>
 
       <Dialog
         open={isOpen}

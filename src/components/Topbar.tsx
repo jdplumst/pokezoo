@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { trpc } from "../utils/trpc";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../app/_components/LoadingSpinner";
 import { ThemeContext } from "./ThemeContextProvider";
 import Wildcard from "./Wildcard";
 

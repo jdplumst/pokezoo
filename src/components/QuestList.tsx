@@ -2,7 +2,7 @@ import { type inferRouterOutputs } from "@trpc/server";
 import { type AppRouter } from "../server/api/_app";
 import { trpc } from "../utils/trpc";
 import { useState } from "react";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../app/_components/LoadingSpinner";
 
 interface IQuestListProps {
   quests: inferRouterOutputs<AppRouter>["quest"]["getUserQuests"] | undefined;

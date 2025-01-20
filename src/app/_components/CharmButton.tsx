@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
+import LoadingSpinner from "./LoadingSpinner";
 
 export default function CharmButton(props: { charmId: number }) {
   const { toast } = useToast();
@@ -14,6 +15,7 @@ export default function CharmButton(props: { charmId: number }) {
         method: "POST",
         body: JSON.stringify({ charmId: charmId }),
       });
+
       const data = await res.json();
 
       const resSchema = z.union([
@@ -53,8 +55,9 @@ export default function CharmButton(props: { charmId: number }) {
       onClick={() => {
         purchase.mutate(props.charmId);
       }}
+      disabled={purchase.isLoading}
     >
-      Buy
+      {purchase.isLoading ? <LoadingSpinner /> : "Buy"}
     </Button>
   );
 }

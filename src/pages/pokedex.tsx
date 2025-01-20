@@ -6,7 +6,7 @@ import Loading from "../components/Loading";
 import Topbar from "../components/Topbar";
 import { useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../app/_components/LoadingSpinner";
 import Modal from "../components/Modal";
 import { useInView } from "react-intersection-observer";
 import Dropdown, { type IDropdowns } from "../components/Dropdown";

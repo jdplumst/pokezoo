@@ -7,7 +7,7 @@ import { type FullAchievement } from "../components/ProgressBar";
 import Topbar from "../components/Topbar";
 import { useSession } from "next-auth/react";
 import { trpc } from "../utils/trpc";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../app/_components/LoadingSpinner";
 import ThemeWrapper from "../components/ThemeWrapper";
 
 export default function Achievements() {

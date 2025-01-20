@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { trpc } from "../utils/trpc";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "../app/_components/LoadingSpinner";
 import { type z } from "zod";
 import { type ZodAchievement } from "../zod";
 

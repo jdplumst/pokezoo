@@ -1,7 +1,5 @@
-"use server";
-
-import { authOptions } from "@/src/pages/api/auth/[...nextauth]";
-import { getTime } from "@/src/shared/actions/cookies";
+import { isAuthed } from "@/src/server/actions/auth";
+import { getTime } from "@/src/server/actions/cookies";
 import { db } from "@/src/server/db";
 import {
   balls,
@@ -16,20 +14,25 @@ import { updateUserQuest } from "@/src/utils/updateUserQuest";
 import { withinInstanceLimit } from "@/src/utils/withinInstanceLimit";
 import { and, eq, inArray, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
-import { getServerSession } from "next-auth";
-import { redirect } from "next/navigation";
+import { z } from "zod";
 
-// Functions are prefixed with "serverOnly" so it is known not to call them on the client
+export async function POST(req: Request) {
+  const bodySchema = z.object({
+    ballId: z.string(),
+    quantity: z.number(),
+    regionId: z.number().optional(),
+  });
 
-export async function serverOnly_purchaseBalls(
-  ballId: string,
-  quantity: number,
-  regionId?: number,
-) {
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    redirect("/");
+  const bodyData = await req.json();
+  const body = bodySchema.safeParse(bodyData);
+
+  if (body.error) {
+    return Response.json({
+      error: "Something went wrong. Please try again.",
+    });
   }
+
+  const session = await isAuthed();
 
   const time = await getTime();
 
@@ -54,44 +57,52 @@ export async function serverOnly_purchaseBalls(
   )[0];
 
   if (!currProfile) {
-    redirect("/game");
+    return Response.json({
+      error: "Please go to the game page to create a profile first.",
+    });
   }
 
   const currBall = (
-    await db.select().from(balls).where(eq(balls.id, ballId))
+    await db.select().from(balls).where(eq(balls.id, body.data.ballId))
   )[0];
 
   if (!currBall) {
-    return { error: "The ball you are trying to purchase does not exist." };
+    return Response.json({
+      error: "The ball you are trying to purchase does not exist.",
+    });
   }
 
-  if (currProfile.balance < currBall.cost * quantity) {
-    return { error: "You cannot afford these balls." };
+  if (currProfile.balance < currBall.cost * body.data.quantity) {
+    return Response.json({ error: "You cannot afford these balls." });
   }
 
   if (
     !withinInstanceLimit(
-      currProfile.instanceCount + quantity,
+      currProfile.instanceCount + body.data.quantity,
       !!currProfile.catchingCharm,
     )
   ) {
-    return {
+    return Response.json({
       error:
         "You will go over your Pokémon limit. Reduce the number of balls you are purchasing or sell Pokémon if you want to buy more.",
-    };
+    });
   }
 
-  if (currBall.name === "Premier" && !regionId) {
-    return { error: "Must select a valid region for Premier Balls." };
+  if (currBall.name === "Premier" && !body.data.regionId) {
+    return Response.json({
+      error: "Must select a valid region for Premier Balls.",
+    });
   }
 
-  if (currBall.name === "Premier" && regionId) {
+  if (currBall.name === "Premier" && body.data.regionId) {
     const currRegion = (
-      await db.select().from(regions).where(eq(regions.id, regionId))
+      await db.select().from(regions).where(eq(regions.id, body.data.regionId))
     )[0];
 
     if (!currRegion) {
-      return { error: "Must select a valid region for Premier Balls." };
+      return Response.json({
+        error: "Must select a valid region for Premier Balls.",
+      });
     }
   }
 
@@ -149,7 +160,7 @@ export async function serverOnly_purchaseBalls(
   }
 
   const generatedRarities: number[] = [];
-  for (let i = 0; i < quantity; i++) {
+  for (let i = 0; i < body.data.quantity; i++) {
     generatedRarities.push(randomizer[Math.floor(Math.random() * 100)]);
   }
 
@@ -159,7 +170,7 @@ export async function serverOnly_purchaseBalls(
 
   // Determine the new species the user gets
   await db.transaction(async (tx) => {
-    for (let i = 0; i < quantity; i++) {
+    for (let i = 0; i < body.data.quantity; i++) {
       const currSpecies = (
         await db
           .select()
@@ -174,7 +185,7 @@ export async function serverOnly_purchaseBalls(
               ),
               eq(species.shiny, shiny),
               currBall.name === "Premier"
-                ? eq(species.regionId, regionId!)
+                ? eq(species.regionId, body.data.regionId!)
                 : undefined,
             ),
           )
@@ -182,10 +193,10 @@ export async function serverOnly_purchaseBalls(
       )[0];
 
       if (!currSpecies) {
-        return {
+        return Response.json({
           error:
             "Something went wrong trying to purchase Pokémon. Please try again.",
-        };
+        });
       }
 
       speciesList.push({
@@ -212,11 +223,11 @@ export async function serverOnly_purchaseBalls(
       .update(profiles)
       .set({
         totalYield: totalNewYield,
-        balance: currProfile.balance - currBall.cost * quantity,
-        instanceCount: currProfile.instanceCount + quantity,
+        balance: currProfile.balance - currBall.cost * body.data.quantity,
+        instanceCount: currProfile.instanceCount + body.data.quantity,
       })
       .where(eq(profiles.userId, session.user.id));
   });
 
-  return { speciesList };
+  return Response.json({ speciesList });
 }

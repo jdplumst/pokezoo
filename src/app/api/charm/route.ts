@@ -2,7 +2,6 @@ import { isAuthed } from "@/src/server/actions/auth";
 import { db } from "@/src/server/db";
 import { charms, profiles, userCharms } from "@/src/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
 import { z } from "zod";
 
 export async function POST(req: Request) {
@@ -29,7 +28,9 @@ export async function POST(req: Request) {
   )[0];
 
   if (!currProfile) {
-    redirect("game");
+    return Response.json({
+      error: "Please go to the game page to create a profile first.",
+    });
   }
 
   const charmData = (

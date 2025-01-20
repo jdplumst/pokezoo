@@ -5,7 +5,7 @@ import {
   getTimezone,
   setTheme,
   setTimezone,
-} from "@/src/shared/actions/cookies";
+} from "@/src/server/actions/cookies";
 import { timezones } from "@/src/utils/timezones";
 import {
   DropdownMenu,

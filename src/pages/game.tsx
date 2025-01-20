@@ -6,7 +6,7 @@ import { trpc } from "../utils/trpc";
 import Modal from "../components/Modal";
 import Sidebar from "../components/Sidebar";
 import Loading from "../components/Loading";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../app/_components/LoadingSpinner";
 import Topbar from "../components/Topbar";
 import { useSession } from "next-auth/react";
 import { useInView } from "react-intersection-observer";

@@ -5,7 +5,7 @@ import { useContext, useState } from "react";
 import { useSession } from "next-auth/react";
 import Loading from "../components/Loading";
 import { trpc } from "../utils/trpc";
-import LoadingSpinner from "../components/LoadingSpinner";
+import LoadingSpinner from "../app/_components/LoadingSpinner";
 import Modal from "../components/Modal";
 import { ThemeContext } from "../components/ThemeContextProvider";
 import ThemeWrapper from "../components/ThemeWrapper";

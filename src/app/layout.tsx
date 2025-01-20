@@ -1,5 +1,5 @@
 import "../styles/globals.css";
-import { getTheme, getTime } from "../shared/actions/cookies";
+import { getTheme, getTime } from "../server/actions/cookies";
 import Providers from "./providers";
 
 export default async function RootLayout({
