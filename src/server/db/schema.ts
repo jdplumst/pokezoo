@@ -414,4 +414,5 @@ export const selectSpeciesSchema = createSelectSchema(species);
 export const selectTradesSchema = createSelectSchema(trades);
 export const selectUserAchievementSchema = createSelectSchema(userAchievements);
 export const selectCharmSchema = createSelectSchema(charms);
+export const selectUserCharmsSchema = createSelectSchema(userCharms);
 export const selectUserQuestSchema = createSelectSchema(userQuests);

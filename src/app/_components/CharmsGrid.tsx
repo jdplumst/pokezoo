@@ -4,13 +4,17 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { selectCharmSchema } from "@/src/server/db/schema";
+import {
+  selectCharmSchema,
+  selectUserCharmsSchema,
+} from "@/src/server/db/schema";
 import Image from "next/image";
 import { z } from "zod";
 import CharmButton from "./CharmButton";
 
 export default function CharmsGrid(props: {
   charms: z.infer<typeof selectCharmSchema>[];
+  userCharms: z.infer<typeof selectUserCharmsSchema>[];
 }) {
   return (
     <>
@@ -27,7 +31,11 @@ export default function CharmsGrid(props: {
                   className="pixelated"
                 />
                 <div className="text-lg font-semibold">{c.name} Charm</div>
-                <CharmButton charmId={c.id} />
+                {props.userCharms.some((u) => u.charmId === c.id) ? (
+                  <div>Owned</div>
+                ) : (
+                  <CharmButton charmId={c.id} />
+                )}
               </div>
             </TooltipTrigger>
             <TooltipContent className="text-md bg-gray-400 dark:bg-black">

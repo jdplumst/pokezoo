@@ -25,7 +25,6 @@ export async function getShopData(session: Session) {
   const userCharmsData = await db
     .select()
     .from(userCharms)
-    .leftJoin(charms, eq(userCharms.charmId, charms.id))
     .where(eq(userCharms.userId, session.user.id));
 
   return { ballsData, charmsData, userCharmsData };

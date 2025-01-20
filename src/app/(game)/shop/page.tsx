@@ -4,6 +4,7 @@ import { Metadata } from "next";
 import BallsGrid from "../../_components/BallsGrid";
 import CharmsGrid from "../../_components/CharmsGrid";
 import ShopGrid from "../../_components/ShopGrid";
+import { Separator } from "@/components/ui/separator";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Shop",
@@ -18,13 +19,18 @@ export default async function Shop() {
   const data = await getShopData(session);
 
   return (
-    <div className="p-4">
+    <div className="px-8 pb-8">
+      <h1 className="py-4 text-5xl font-bold">Shop</h1>
+      <Separator className="mb-4" />
       <div className="flex flex-col gap-20">
         <ShopGrid>
           <BallsGrid balls={data.ballsData} />
         </ShopGrid>
         <ShopGrid>
-          <CharmsGrid charms={data.charmsData} />
+          <CharmsGrid
+            charms={data.charmsData}
+            userCharms={data.userCharmsData}
+          />
         </ShopGrid>
       </div>
     </div>
