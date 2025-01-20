@@ -53,3 +53,16 @@ export async function setTimezone(timezone: string, offset: string) {
   cookieStore.set("timezone-offset", offset);
   revalidatePath("/settings");
 }
+
+export async function toggleTime() {
+  const cookieStore = await cookies();
+  const time = await getTime();
+  const timezone = cookieStore.get("timezone")?.value || "Fiji Time [FJT +12]";
+  if (timezone === "Fiji Time [FJT +12]") {
+    cookieStore.set("timezone", "Coordinated Universal Time [UTC 0]");
+    cookieStore.set("timezone-offset", "0");
+  } else {
+    cookieStore.set("timezone", "Fiji Time [FJT +12]");
+    cookieStore.set("timezone-offset", "12");
+  }
+}

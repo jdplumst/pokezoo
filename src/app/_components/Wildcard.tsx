@@ -1,5 +1,5 @@
+import { ZodRarity } from "@/src/zod";
 import { type z } from "zod";
-import { type ZodRarity } from "../zod";
 
 interface IWildcardProps {
   wildcard: z.infer<typeof ZodRarity>;
