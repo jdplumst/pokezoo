@@ -5,8 +5,11 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import LoadingSpinner from "./LoadingSpinner";
+import { useRouter } from "next/navigation";
 
 export default function CharmButton(props: { charmId: number }) {
+  const router = useRouter();
+
   const { toast } = useToast();
 
   const purchase = useMutation({
@@ -38,6 +41,7 @@ export default function CharmButton(props: { charmId: number }) {
           title: "Success! 🎉",
           description: `You have successfully purchased the ${data.name} Charm!`,
         });
+        router.refresh();
       }
     },
 

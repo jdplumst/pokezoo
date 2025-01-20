@@ -30,13 +30,13 @@ export default function BallsGrid(props: {
                 <BallSlider ballId={b.id} />
               </div>
             </TooltipTrigger>
-            <TooltipContent className="text-md bg-gray-300 dark:bg-black">
+            <TooltipContent className="text-md bg-gray-400 dark:bg-black">
               <div className="text-common-unfocus">
                 {b.commonChance}% Common
               </div>
               <div className="text-rare-unfocus">{b.rareChance}% Rare</div>
               <div className="text-epic-unfocus">{b.epicChance}% Epic</div>
-              <div className="text-legendary-unfocus">
+              <div className="text-legendary-focus">
                 {b.legendaryChance}% Legendary
               </div>
               <div className="text-mega-unfocus">{b.megaChance}% Mega</div>

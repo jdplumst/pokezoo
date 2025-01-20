@@ -30,7 +30,7 @@ export default function CharmsGrid(props: {
                 <CharmButton charmId={c.id} />
               </div>
             </TooltipTrigger>
-            <TooltipContent className="text-md bg-gray-300 dark:bg-black">
+            <TooltipContent className="text-md bg-gray-400 dark:bg-black">
               {c.name === "Catching" && (
                 <div>
                   Increases the total number of Pokémon a user can have to

@@ -15,8 +15,11 @@ import Image from "next/image";
 import { useState } from "react";
 import { z } from "zod";
 import LoadingSpinner from "./LoadingSpinner";
+import { useRouter } from "next/navigation";
 
 export default function BallSlider(props: { ballId: string }) {
+  const router = useRouter();
+
   const { toast } = useToast();
 
   const [sliderValue, setSliderValue] = useState([1]);
@@ -71,10 +74,12 @@ export default function BallSlider(props: { ballId: string }) {
       } else if (data.speciesList) {
         setPurchasedSpecies(data.speciesList);
         setIsOpen(true);
+        router.refresh();
       }
     },
 
-    onError() {
+    onError(error) {
+      console.error(error);
       toast({
         title: "Error",
         description: "Something went wrong. Please try again.",
@@ -109,24 +114,30 @@ export default function BallSlider(props: { ballId: string }) {
         <DialogContent className="w-96">
           <DialogHeader>
             <DialogTitle>You have obtained new Pokémon!</DialogTitle>
-            <DialogDescription className="h-80 overflow-y-scroll">
-              {purchasedSpecies.map((s) => (
-                <div className="flex items-center gap-4">
-                  <Image
-                    src={s.img}
-                    alt={s.name}
-                    width={70}
-                    height={70}
-                    className="pixelated"
-                  />{" "}
-                  <span className="text-xl capitalize">
-                    {s.shiny && "🌟 "}
-                    {s.name}
-                  </span>
-                </div>
-              ))}
-            </DialogDescription>
           </DialogHeader>
+          <DialogDescription>
+            Here is all the Pokémon you have obtained.
+          </DialogDescription>
+          <div className="flex h-80 flex-col gap-4 overflow-y-scroll">
+            {purchasedSpecies.map((s, idx) => (
+              <div
+                key={idx}
+                className="flex items-center gap-2"
+              >
+                <Image
+                  src={s.img}
+                  alt={s.name}
+                  width={70}
+                  height={70}
+                  className="pixelated"
+                />{" "}
+                <span className="text-xl capitalize">
+                  {s.shiny && "🌟 "}
+                  {s.name}
+                </span>
+              </div>
+            ))}
+          </div>
         </DialogContent>
       </Dialog>
     </>
