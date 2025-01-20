@@ -4,7 +4,6 @@
 
 @layer base {
   html {
-    scrollbar-color: #d946ef rgba(0, 0, 0, 0);
     scrollbar-width: thin;
 
     /* Pokemon Rarity Colours */
@@ -69,6 +68,7 @@
     --input: 234 30% 33%;
     --ring: 234 78% 47%;
     --radius: 0.3rem;
+    scrollbar-color: blue rgba(0, 0, 0, 0);
   }
   .dark {
     --background: 234 50% 10%;
@@ -114,6 +114,7 @@
     --input: 274 30% 33%;
     --ring: 274 78% 47%;
     --radius: 0.3rem;
+    scrollbar-color: #d946ef rgba(0, 0, 0, 0);
   }
   .dark.purple {
     --background: 274 50% 10%;
@@ -159,6 +160,7 @@
     --input: 31 30% 33%;
     --ring: 31 78% 47%;
     --radius: 0.3rem;
+    scrollbar-color: orange rgba(0, 0, 0, 0);
   }
   .dark.orange {
     --background: 31 50% 10%;
@@ -204,6 +206,7 @@
     --input: 119 30% 33%;
     --ring: 119 78% 47%;
     --radius: 0.3rem;
+    scrollbar-color: green rgba(0, 0, 0, 0);
   }
   .dark.green {
     --background: 119 50% 10%;
@@ -243,6 +246,10 @@ div::-webkit-scrollbar-track {
 html::-webkit-scrollbar-thumb,
 div::-webkit-scrollbar-track {
   background-color: #d946ef;
+}
+html::-webkit-scrollbar-thumb.blue,
+div::-webkit-scrollbar-track.blue {
+  background-color: blue;
 }
 
 /* html::-webkit-scrollbar-thumb,
