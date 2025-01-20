@@ -1,3 +1,4 @@
+import { Separator } from "@/components/ui/separator";
 import { isAuthed } from "@/src/server/actions/auth";
 import { Metadata } from "next";
 
@@ -14,7 +15,7 @@ export default async function Tutorial() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Tutorial</h1>
-      <hr className="border-black pb-4"></hr>
+      <Separator className="mb-4" />
       <p>
         PokéZoo is a game where players collect Pokémon. Each Pokémon gives the
         user a certain amount of in-game currency depending on their rarity.

@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import { isAuthed } from "@/src/server/actions/auth";
 import {
   getTimezone,
@@ -29,7 +30,7 @@ export default async function Settings() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Settings</h1>
-      <hr className="border-black pb-4"></hr>
+      <Separator className="mb-4" />
       <div className="flex flex-col gap-10">
         <div className="flex flex-col gap-4">
           <h3 className="text-2xl font-semibold">Pick a Theme</h3>

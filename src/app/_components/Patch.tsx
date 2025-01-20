@@ -1,3 +1,4 @@
+import { Separator } from "@/components/ui/separator";
 import { type ReactNode } from "react";
 
 export default function Patch(props: {
@@ -7,12 +8,12 @@ export default function Patch(props: {
 }) {
   return (
     <>
-      <hr className="border-black pb-4"></hr>
+      <Separator className="mb-4" />
       <section className="pb-4">
         <h3 className="p-4 text-3xl font-semibold">
           {props.patch} ({props.date})
         </h3>
-        <hr className="border-black pb-4"></hr>
+        <Separator className="mb-4" />
         {props.children}
       </section>
     </>
