@@ -5,7 +5,7 @@ import { profiles, userCharms } from "../db/schema";
 import { and, eq } from "drizzle-orm";
 import { db } from "../db";
 
-export async function getProfile() {
+export async function getTopbar() {
   const session = await isAuthed();
 
   const catchingCharm = alias(userCharms, "catchingCharm");
@@ -19,21 +19,10 @@ export async function getProfile() {
         totalYield: profiles.totalYield,
         balance: profiles.balance,
         instanceCount: profiles.instanceCount,
-        claimedDaily: profiles.claimedDaily,
-        claimedNightly: profiles.claimedNightly,
-        claimedEvent: profiles.claimedEvent,
         commonCards: profiles.commonCards,
         rareCards: profiles.rareCards,
         epicCards: profiles.epicCards,
         legendaryCards: profiles.legendaryCards,
-        johtoStarter: profiles.johtoStarter,
-        hoennStarter: profiles.hoennStarter,
-        sinnohStarter: profiles.sinnohStarter,
-        unovaStarter: profiles.unovaStarter,
-        kalosStarter: profiles.kalosStarter,
-        alolaStarter: profiles.alolaStarter,
-        galarStarter: profiles.galarStarter,
-        hisuiStarter: profiles.hisuiStarter,
         catchingCharm: catchingCharm.charmId,
       })
       .from(profiles)

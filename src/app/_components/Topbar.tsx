@@ -1,10 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { setTheme, toggleTime } from "@/src/server/actions/cookies";
-import { getProfile } from "@/src/server/actions/profile";
+import { getTopbar } from "@/src/server/actions/topbar";
 import Wildcard from "./Wildcard";
+import { useSidebar } from "@/components/ui/sidebar";
+import TopbarContent from "./TopbarContent";
 
 export default async function Topbar() {
-  const profile = await getProfile();
+  const profile = await getTopbar();
 
   return (
     <div
@@ -67,55 +69,7 @@ export default async function Topbar() {
           </div>
         </div>
       )}
-      <div className="flex justify-between px-4">
-        <div className="flex flex-col">
-          <p>Hi {profile.username ?? ""}!</p>
-          <p>
-            You have {profile.instanceCount.toLocaleString()} /{" "}
-            {profile.catchingCharm ? "3,000 " : "2,000 "}
-            Pokémon.
-          </p>
-          <p>Your current balance is P{profile.balance.toLocaleString()}.</p>
-          <p>
-            You will receive P{profile.totalYield.toLocaleString()} on the next
-            payout.
-          </p>
-        </div>
-        <div className="flex flex-col text-right">
-          <div className="flex flex-row items-end justify-end">
-            <p>You have {profile.commonCards} Common wildcards.</p>
-            <Wildcard
-              wildcard="Common"
-              height={25}
-              width={25}
-            />
-          </div>
-          <div className="flex flex-row items-end justify-end">
-            <p>You have {profile.rareCards} Rare wildcards.</p>
-            <Wildcard
-              wildcard="Rare"
-              height={25}
-              width={25}
-            />
-          </div>
-          <div className="flex flex-row items-end justify-end">
-            <p>You have {profile.epicCards} Epic wildcards.</p>
-            <Wildcard
-              wildcard="Epic"
-              height={25}
-              width={25}
-            />
-          </div>
-          <div className="flex flex-row items-end justify-end">
-            <p>You have {profile.legendaryCards} Legendary wildcards.</p>
-            <Wildcard
-              wildcard="Legendary"
-              height={25}
-              width={25}
-            />
-          </div>
-        </div>
-      </div>
+      <TopbarContent profile={profile} />
     </div>
   );
 }
