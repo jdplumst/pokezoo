@@ -1,3 +1,4 @@
+import { authOptions } from "@/src/pages/api/auth/[...nextauth]";
 import { isAuthed } from "@/src/server/actions/auth";
 import { getTime } from "@/src/server/actions/cookies";
 import { db } from "@/src/server/db";
@@ -14,6 +15,7 @@ import { updateUserQuest } from "@/src/utils/updateUserQuest";
 import { withinInstanceLimit } from "@/src/utils/withinInstanceLimit";
 import { and, eq, inArray, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
+import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 export async function POST(req: Request) {
@@ -32,7 +34,12 @@ export async function POST(req: Request) {
     });
   }
 
-  const session = await isAuthed();
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return Response.json({
+      error: "You are not authorized to purchase this wildcard.",
+    });
+  }
 
   const time = await getTime();
 
@@ -58,7 +65,7 @@ export async function POST(req: Request) {
 
   if (!currProfile) {
     return Response.json({
-      error: "Please go to the game page to create a profile first.",
+      error: "You are not authorized to purchase this wildcard.",
     });
   }
 

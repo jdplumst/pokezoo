@@ -5,6 +5,7 @@ import BallsGrid from "../../_components/BallsGrid";
 import CharmsGrid from "../../_components/CharmsGrid";
 import ShopGrid from "../../_components/ShopGrid";
 import { Separator } from "@/components/ui/separator";
+import WildcardsGrid from "../../_components/WildcardsGrid";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Shop",
@@ -31,6 +32,9 @@ export default async function Shop() {
             charms={data.charmsData}
             userCharms={data.userCharmsData}
           />
+        </ShopGrid>
+        <ShopGrid>
+          <WildcardsGrid />
         </ShopGrid>
       </div>
     </div>
