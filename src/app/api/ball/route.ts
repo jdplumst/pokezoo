@@ -22,7 +22,7 @@ export async function POST(req: Request) {
   const bodySchema = z.object({
     ballId: z.string(),
     quantity: z.number(),
-    regionId: z.number().optional(),
+    regionName: z.string().optional(),
   });
 
   const bodyData = await req.json();
@@ -95,15 +95,18 @@ export async function POST(req: Request) {
     });
   }
 
-  if (currBall.name === "Premier" && !body.data.regionId) {
+  if (currBall.name === "Premier" && !body.data.regionName) {
     return Response.json({
       error: "Must select a valid region for Premier Balls.",
     });
   }
 
-  if (currBall.name === "Premier" && body.data.regionId) {
-    const currRegion = (
-      await db.select().from(regions).where(eq(regions.id, body.data.regionId))
+  if (currBall.name === "Premier" && body.data.regionName) {
+    var currRegion = (
+      await db
+        .select()
+        .from(regions)
+        .where(eq(regions.name, body.data.regionName))
     )[0];
 
     if (!currRegion) {
@@ -192,7 +195,7 @@ export async function POST(req: Request) {
               ),
               eq(species.shiny, shiny),
               currBall.name === "Premier"
-                ? eq(species.regionId, body.data.regionId!)
+                ? eq(species.regionId, currRegion.id)
                 : undefined,
             ),
           )

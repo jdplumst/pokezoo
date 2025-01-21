@@ -16,13 +16,39 @@ import { useState } from "react";
 import { z } from "zod";
 import LoadingSpinner from "./LoadingSpinner";
 import { useRouter } from "next/navigation";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
+import { Card, CardContent } from "@/components/ui/card";
+import { RegionsList } from "@/src/constants";
+import { ZodRegion } from "@/src/zod";
 
-export default function BallSlider(props: { ballId: string }) {
+export default function BallSlider(props: {
+  ballId: string;
+  ballName: string;
+}) {
   const router = useRouter();
 
   const { toast } = useToast();
 
   const [sliderValue, setSliderValue] = useState([1]);
+
+  const [premierRegion, setPremierRegion] =
+    useState<z.infer<typeof ZodRegion>>("Kanto");
 
   const [purchasedSpecies, setPurchasedSpecies] = useState<
     { name: string; img: string; shiny: boolean }[]
@@ -34,14 +60,14 @@ export default function BallSlider(props: { ballId: string }) {
     mutationFn: async (input: {
       ballId: string;
       quantity: number;
-      regionId?: number;
+      regionName?: string;
     }) => {
       const res = await fetch("/api/ball", {
         method: "POST",
         body: JSON.stringify({
           ballId: input.ballId,
           quantity: input.quantity,
-          regionId: input.regionId,
+          regionName: input.regionName,
         }),
       });
 
@@ -99,15 +125,79 @@ export default function BallSlider(props: { ballId: string }) {
         value={sliderValue}
         onValueChange={(e) => setSliderValue(e)}
       />
-      <Button
-        onClick={() =>
-          purchase.mutate({ ballId: props.ballId, quantity: sliderValue[0] })
-        }
-        disabled={purchase.isLoading}
-      >
-        {purchase.isLoading ? <LoadingSpinner /> : "Buy"}
-      </Button>
-
+      {props.ballName === "Premier" ? (
+        <Drawer>
+          <DrawerTrigger asChild>
+            <Button>Buy</Button>
+          </DrawerTrigger>
+          <DrawerContent className="flex flex-col items-center">
+            <DrawerHeader className="flex flex-col items-center">
+              <DrawerTitle>Premier Ball</DrawerTitle>
+              <DrawerDescription>Please select a region.</DrawerDescription>
+            </DrawerHeader>
+            <Carousel
+              opts={{
+                align: "start",
+              }}
+              className="w-full max-w-sm"
+            >
+              <CarouselContent>
+                {RegionsList.map((r) => (
+                  <CarouselItem
+                    key={r}
+                    className="md:basis-1/2 lg:basis-1/3"
+                  >
+                    <div className={`p-1`}>
+                      <Card
+                        className={`${premierRegion === r && `bg-secondary`}`}
+                      >
+                        <CardContent className="flex aspect-square items-center justify-center p-6">
+                          <button
+                            onClick={() => {
+                              setPremierRegion(r);
+                            }}
+                            className="text-3xl font-semibold"
+                          >
+                            {r}
+                          </button>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>
+            <DrawerFooter className="flex flex-col items-center">
+              <Button
+                onClick={() => {
+                  purchase.mutate({
+                    ballId: props.ballId,
+                    quantity: sliderValue[0],
+                    regionName: premierRegion,
+                  });
+                }}
+                disabled={purchase.isLoading}
+              >
+                Submit
+              </Button>
+              <DrawerClose>
+                <Button variant="outline">Cancel</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <Button
+          onClick={() =>
+            purchase.mutate({ ballId: props.ballId, quantity: sliderValue[0] })
+          }
+          disabled={purchase.isLoading}
+        >
+          {purchase.isLoading ? <LoadingSpinner /> : "Buy"}
+        </Button>
+      )}
       <Dialog
         open={isOpen}
         onOpenChange={setIsOpen}
