@@ -33,7 +33,28 @@ export default function BallsGrid(props: {
                 />
               </div>
             </TooltipTrigger>
-            <TooltipContent className="text-md bg-gray-400 dark:bg-black">
+            <TooltipContent className="text-md bg-black">
+              {b.name === "Net" && (
+                <p>
+                  A guaranteed <span className="text-water">Water</span> or{" "}
+                  <span className="text-bug">Bug</span> type Pokémon.
+                </p>
+              )}
+              {b.name === "Dusk" && (
+                <p>
+                  A guaranteed <span className="text-dark">Dark</span> or{" "}
+                  <span className="text-ghost">Ghost</span> type Pokémon.
+                </p>
+              )}
+              {b.name === "Dive" && (
+                <p>A guaranteed Waters-Edge or Sea Pokémon.</p>
+              )}
+              {b.name === "Safari" && (
+                <p>A guaranteed Mountain or Rough-Terrain Pokémon.</p>
+              )}
+              {b.name === "Premier" && (
+                <p>A guaranteed Pokémon from your region of choice.</p>
+              )}
               <div className="text-common-unfocus">
                 {b.commonChance}% Common
               </div>
