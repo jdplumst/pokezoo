@@ -93,6 +93,7 @@ export default function BallSlider(props: { ballId: string }) {
       <div>Quantity: {sliderValue[0]}</div>
       <Slider
         defaultValue={[1]}
+        min={1}
         max={30}
         step={1}
         value={sliderValue}
