@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/src/components/ui/button";
+import { Separator } from "@/src/components/ui/separator";
 import { isAuthed } from "@/src/server/actions/auth";
 import {
   getTimezone,

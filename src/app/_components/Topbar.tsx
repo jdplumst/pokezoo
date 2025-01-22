@@ -1,8 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/src/components/ui/button";
 import { setTheme, toggleTime } from "@/src/server/actions/cookies";
 import { getTopbar } from "@/src/server/actions/topbar";
-import Wildcard from "./Wildcard";
-import { useSidebar } from "@/components/ui/sidebar";
 import TopbarContent from "./TopbarContent";
 
 export default async function Topbar() {

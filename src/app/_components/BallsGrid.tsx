@@ -3,7 +3,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/src/components/ui/tooltip";
 import Image from "next/image";
 import BallSlider from "./BallSlider";
 import { z } from "zod";

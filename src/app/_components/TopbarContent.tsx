@@ -1,8 +1,8 @@
 "use client";
 
-import { useSidebar } from "@/components/ui/sidebar";
+import { useSidebar } from "@/src/components/ui/sidebar";
 import Wildcard from "./Wildcard";
-import { useIsLarge } from "../hooks/use-large";
+import { useIsLarge } from "../_hooks/use-large";
 
 export default function TopbarContent(props: {
   profile: {
@@ -34,7 +34,7 @@ export default function TopbarContent(props: {
           </p>
         ) : (
           <p>
-            You have {props.profile.instanceCount.toLocaleString()}{" "}
+            You have {props.profile.instanceCount.toLocaleString()} /{" "}
             {props.profile.catchingCharm ? "3,000 " : "2,000 "} Pokémon
           </p>
         )}

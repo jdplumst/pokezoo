@@ -1,15 +1,15 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/src/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Slider } from "@/components/ui/slider";
-import { useToast } from "@/hooks/use-toast";
+} from "@/src/components/ui/dialog";
+import { Slider } from "@/src/components/ui/slider";
+import { useToast } from "@/src/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
@@ -25,15 +25,15 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+} from "@/src/components/ui/drawer";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
+} from "@/src/components/ui/carousel";
+import { Card, CardContent } from "@/src/components/ui/card";
 import { RegionsList } from "@/src/constants";
 import { ZodRegion } from "@/src/zod";
 

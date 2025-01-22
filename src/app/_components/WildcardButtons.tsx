@@ -5,7 +5,7 @@ import { ZodRarity } from "@/src/zod";
 import { z } from "zod";
 import Wildcard from "./Wildcard";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/src/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 
 export default function WildcardButtons(props: {

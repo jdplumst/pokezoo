@@ -4,7 +4,7 @@ import { Metadata } from "next";
 import BallsGrid from "../../_components/BallsGrid";
 import CharmsGrid from "../../_components/CharmsGrid";
 import ShopGrid from "../../_components/ShopGrid";
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "@/src/components/ui/separator";
 import WildcardsGrid from "../../_components/WildcardsGrid";
 
 export const metadata: Metadata = {
