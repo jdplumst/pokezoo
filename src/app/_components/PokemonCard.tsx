@@ -12,6 +12,7 @@ import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/src/zod";
 import Image from "next/image";
 import { ReactNode, useState } from "react";
 import { z } from "zod";
+import TypeButton from "./TypeButton";
 
 export default function PokemonCard(props: {
   children: ReactNode;
@@ -77,8 +78,11 @@ export default function PokemonCard(props: {
                 height={200}
               />
 
-              <div>
-                <b>Types:</b> {props.pokemon.typeOne} / {props.pokemon.typeTwo}
+              <div className="flex gap-4 pb-5">
+                <TypeButton type={props.pokemon.typeOne} />
+                {props.pokemon.typeTwo && (
+                  <TypeButton type={props.pokemon.typeTwo} />
+                )}
               </div>
               <div>
                 <b>Rarity:</b> {props.pokemon.rarity}
