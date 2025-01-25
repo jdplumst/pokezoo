@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/src/components/ui/button";
 import { ZodRarity } from "@/src/zod";
 import { z } from "zod";
 import Wildcard from "./Wildcard";

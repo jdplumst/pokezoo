@@ -1,4 +1,3 @@
-import { isAuthed } from "@/src/server/actions/auth";
 import { getTime } from "@/src/server/actions/cookies";
 import { Metadata } from "next";
 import GameGrid from "../../_components/GameGrid";
@@ -13,8 +12,6 @@ export const metadata: Metadata = {
 };
 
 export default async function Game() {
-  await isAuthed();
-
   const time = await getTime();
 
   const data = await getGame();

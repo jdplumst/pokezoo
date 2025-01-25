@@ -1,7 +1,7 @@
+import "server-only";
 import { authOptions } from "@/src/pages/api/auth/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { alias } from "drizzle-orm/pg-core";
-import "server-only";
 import { and, eq } from "drizzle-orm";
 import { MAX_BALANCE } from "@/src/constants";
 import { profiles, userCharms } from "@/src/server/db/schema";

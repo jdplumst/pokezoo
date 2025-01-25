@@ -6,6 +6,7 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuLabel,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
@@ -23,7 +24,20 @@ import {
   RegionsList,
   TypesList,
 } from "@/src/constants";
-import React, { useState } from "react";
+import {
+  ZodHabitat,
+  ZodRarity,
+  ZodRegion,
+  ZodSort,
+  ZodSpeciesType,
+} from "@/src/zod";
+import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import Image from "next/image";
+import React, { Fragment, useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { z } from "zod";
+import PokemonCard from "./PokemonCard";
 
 export default function GameGrid() {
   const { open } = useSidebar();
@@ -40,52 +54,130 @@ export default function GameGrid() {
   const [sortedBy, setSortedBy] =
     useState<(typeof sortValues)[number]>("Newest");
 
-  const [shiny, setShiny] = useState(false);
+  const [shiny, setShiny] = useState<"Regular" | "Shiny">("Regular");
   const [regions, setRegions] = useState(RegionsList);
   const [rarities, setRarities] = useState(RaritiesList);
   const [types, setTypes] = useState(TypesList);
   const [habitats, setHabitats] = useState(HabitatList);
 
+  const pokemon = useInfiniteQuery({
+    queryKey: ["pokemon", sortedBy, shiny, regions, rarities, types, habitats],
+    queryFn: async ({ pageParam = {} }) => {
+      const res = await fetch("/api/game", {
+        method: "POST",
+        body: JSON.stringify({
+          limit: 50,
+          order: sortedBy,
+          shiny: shiny === "Shiny" ? true : false,
+          regions: regions,
+          rarities: rarities,
+          types: types,
+          habitats: habitats,
+          cursor: pageParam,
+        }),
+      });
+      const data = await res.json();
+
+      const resSchema = z.object({
+        instancesData: z.array(
+          z.object({
+            id: z.string(),
+            pokedexNumber: z.number(),
+            name: z.string(),
+            rarity: ZodRarity,
+            yield: z.number(),
+            img: z.string(),
+            sellPrice: z.number(),
+            shiny: z.boolean(),
+            typeOne: ZodSpeciesType,
+            typeTwo: ZodSpeciesType.nullable(),
+            generation: z.number(),
+            habitat: ZodHabitat,
+            region: ZodRegion,
+            instance: z.object({
+              id: z.string(),
+              userId: z.string(),
+              speciesId: z.string(),
+              createDate: z.string(),
+              modifyDate: z.string(),
+            }),
+          }),
+        ),
+        nextCursor: z
+          .object({
+            modifyDate: z.string(),
+            pokedexNumber: z.number().nullish(),
+            name: z.string().nullish(),
+            rarity: z.string().nullish(),
+          })
+          .nullish(),
+      });
+
+      const check = resSchema.parse(data);
+      return check;
+    },
+    getNextPageParam: (lastPage) => lastPage.nextCursor,
+  });
+
+  const { ref, inView } = useInView();
+
+  useEffect(() => {
+    if (inView) {
+      pokemon.fetchNextPage();
+    }
+  }, [pokemon.fetchNextPage, inView]);
+
   return (
     <>
       <div className="flex flex-col gap-5">
         <div className="flex justify-center gap-2">
-          <Select>
-            <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Newest" />
-            </SelectTrigger>
-            <SelectContent>
-              {sortValues.map((s) => (
-                <SelectItem
-                  key={s}
-                  value={s}
-                  onClick={() => setSortedBy(s)}
-                >
-                  {s}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">{sortedBy}</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuRadioGroup
+                value={sortedBy}
+                // @ts-ignore
+                onValueChange={setSortedBy}
+              >
+                {sortValues.map((s) => (
+                  <DropdownMenuRadioItem
+                    key={s}
+                    value={s}
+                  >
+                    {s}
+                  </DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
 
-          <Select>
-            <SelectTrigger className="w-[150px]">
-              <SelectValue placeholder="Regular" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem
-                value="Regular"
-                onClick={() => setShiny(false)}
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">{shiny}</Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <DropdownMenuRadioGroup
+                value={shiny}
+                // @ts-ignore
+                onValueChange={setShiny}
               >
-                Regular
-              </SelectItem>
-              <SelectItem
-                value="Shiny"
-                onClick={() => setShiny(true)}
-              >
-                Shiny
-              </SelectItem>
-            </SelectContent>
-          </Select>
+                <DropdownMenuRadioItem
+                  key={"Regular"}
+                  value={"Regular"}
+                >
+                  {"Regular"}
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem
+                  key={"Shiny"}
+                  value={"Shiny"}
+                >
+                  {"Shiny"}
+                </DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div className="flex justify-center gap-2">
@@ -93,7 +185,7 @@ export default function GameGrid() {
             <DropdownMenuTrigger asChild>
               <Button variant="outline">Regions</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
+            <DropdownMenuContent className="h-72 w-56 overflow-y-scroll">
               <DropdownMenuLabel>Select Regions</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {RegionsList.map((r) => (
@@ -119,7 +211,7 @@ export default function GameGrid() {
             <DropdownMenuTrigger asChild>
               <Button variant="outline">Rarities</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="h-72 overflow-y-scroll">
               <DropdownMenuLabel>Select Rarities</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {RaritiesList.map((r) => (
@@ -145,7 +237,7 @@ export default function GameGrid() {
             <DropdownMenuTrigger asChild>
               <Button variant="outline">Types</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="h-72 overflow-y-scroll">
               <DropdownMenuLabel>Select Types</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {TypesList.map((t) => (
@@ -171,7 +263,7 @@ export default function GameGrid() {
             <DropdownMenuTrigger asChild>
               <Button variant="outline">Habitats</Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent className="h-72 overflow-y-scroll">
               <DropdownMenuLabel>Select Habitats</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {HabitatList.map((h) => (
@@ -198,9 +290,27 @@ export default function GameGrid() {
         <div
           className={`grid ${open ? `grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4` : `grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5`} gap-10`}
         >
-          <div>item 1</div>
-          <div>item 2</div>
-          <div>item 3</div>
+          {pokemon.data?.pages.map((p, idx) => (
+            <Fragment key={idx}>
+              {p.instancesData.map((i) => (
+                <PokemonCard
+                  key={i.instance.id}
+                  pokemon={i}
+                >
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      console.log("yo");
+                    }}
+                    variant="destructive"
+                  >
+                    Sell
+                  </Button>
+                </PokemonCard>
+              ))}
+            </Fragment>
+          ))}
+          <div ref={ref}></div>
         </div>
       </div>
     </>
