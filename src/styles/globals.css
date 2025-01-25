@@ -91,6 +91,10 @@
     --input: 234 30% 33%;
     --ring: 234 78% 47%;
     --radius: 0.3rem;
+
+    /* Pokemon Rarity Colours */
+    --color-common-focus: #475569;
+    --color-common-unfocus: #64748b;
   }
 
   :root.purple {
