@@ -10,13 +10,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/src/components/ui/select";
 import { useSidebar } from "@/src/components/ui/sidebar";
 import {
   HabitatList,
@@ -24,23 +17,23 @@ import {
   RegionsList,
   TypesList,
 } from "@/src/constants";
-import {
-  ZodHabitat,
-  ZodRarity,
-  ZodRegion,
-  ZodSort,
-  ZodSpeciesType,
-} from "@/src/zod";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/src/zod";
 import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
-import { useInfiniteQuery } from "@tanstack/react-query";
-import Image from "next/image";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import React, { Fragment, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
 import PokemonCard from "./PokemonCard";
+import { useToast } from "@/src/hooks/use-toast";
+import LoadingSpinner from "./LoadingSpinner";
+import { useRouter } from "next/navigation";
 
 export default function GameGrid() {
   const { open } = useSidebar();
+
+  const { toast } = useToast();
+
+  const router = useRouter();
 
   const sortValues = [
     "Newest",
@@ -59,6 +52,8 @@ export default function GameGrid() {
   const [rarities, setRarities] = useState(RaritiesList);
   const [types, setTypes] = useState(TypesList);
   const [habitats, setHabitats] = useState(HabitatList);
+
+  const [sellIds, setSellIds] = useState<string[]>([]);
 
   const pokemon = useInfiniteQuery({
     queryKey: ["pokemon", sortedBy, shiny, regions, rarities, types, habitats],
@@ -119,6 +114,49 @@ export default function GameGrid() {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
+  const sell = useMutation({
+    mutationFn: async (ids: string[]) => {
+      const res = await fetch("/api/sell", {
+        method: "POST",
+        body: JSON.stringify({
+          ids: ids,
+        }),
+      });
+      const data = await res.json();
+
+      const resSchema = z.union([
+        z.object({ message: z.string(), error: z.undefined() }),
+        z.object({ message: z.undefined(), error: z.string() }),
+      ]);
+
+      const check = resSchema.parse(data);
+      return check;
+    },
+    onSuccess(data) {
+      if (data.error) {
+        toast({
+          title: "Error",
+          description: data.error,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success! 🎉",
+          description: data.message,
+        });
+        router.refresh();
+        pokemon.refetch();
+      }
+    },
+    onError() {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
   const { ref, inView } = useInView();
 
   useEffect(() => {
@@ -129,6 +167,21 @@ export default function GameGrid() {
 
   return (
     <>
+      {sellIds.length > 0 && (
+        <div className="sticky top-0 z-10 flex items-center justify-between border-2 border-solid border-black bg-secondary p-4">
+          <span className="font-bold">
+            You have selected {sellIds.length} Pokémon to sell.
+          </span>
+
+          <Button
+            onClick={() => sell.mutate(sellIds)}
+            disabled={sell.isLoading}
+            className="rounded-lg border-2 border-black p-2 font-bold"
+          >
+            {sell.isLoading ? <LoadingSpinner /> : "Confirm Sell"}
+          </Button>
+        </div>
+      )}
       <div className="flex flex-col gap-5">
         <div className="flex justify-center gap-2">
           <DropdownMenu>
@@ -297,15 +350,26 @@ export default function GameGrid() {
                   key={i.instance.id}
                   pokemon={i}
                 >
-                  <Button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      console.log("yo");
-                    }}
-                    variant="destructive"
-                  >
-                    Sell
-                  </Button>
+                  {sellIds.some((s) => s === i.instance.id) ? (
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSellIds(sellIds.filter((s) => s !== i.instance.id));
+                      }}
+                    >
+                      Unsell
+                    </Button>
+                  ) : (
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSellIds([...sellIds, i.instance.id]);
+                      }}
+                      variant="destructive"
+                    >
+                      Sell
+                    </Button>
+                  )}
                 </PokemonCard>
               ))}
             </Fragment>
