@@ -15,6 +15,7 @@ import TypeButton from "./TypeButton";
 
 export default function PokemonCard(props: {
   children: ReactNode;
+  caught?: boolean;
   pokemon: {
     pokedexNumber: number;
     name: string;
@@ -36,24 +37,37 @@ export default function PokemonCard(props: {
     <>
       <div
         onClick={() => setOpen(true)}
-        className={`flex w-80 flex-col items-center gap-2 rounded-2xl border-2 border-solid border-black p-4 shadow-xl hover:cursor-pointer ${props.pokemon.rarity === `Common` && `bg-common-unfocus shadow-common-unfocus hover:bg-common-focus`} ${props.pokemon.rarity === `Rare` && `bg-rare-unfocus shadow-rare-unfocus hover:bg-rare-focus`} ${props.pokemon.rarity === `Epic` && `bg-epic-unfocus shadow-epic-unfocus hover:bg-epic-focus`} ${props.pokemon.rarity === `Legendary` && `bg-legendary-unfocus shadow-legendary-unfocus hover:bg-legendary-focus`} ${props.pokemon.rarity === `Mega` && `bg-mega-unfocus shadow-mega-unfocus hover:bg-mega-focus`} ${props.pokemon.rarity === `Ultra Beast` && `bg-ub-unfocus shadow-ub-unfocus hover:bg-ub-focus`} ${props.pokemon.rarity === `Gigantamax` && `bg-gmax-unfocus shadow-gmax-unfocus hover:bg-gmax-focus`}`}
+        className={`w-80 rounded-2xl border-2 border-solid border-black p-4 shadow-xl hover:cursor-pointer ${props.pokemon.rarity === `Common` && `bg-common-unfocus shadow-common-unfocus hover:bg-common-focus`} ${props.pokemon.rarity === `Rare` && `bg-rare-unfocus shadow-rare-unfocus hover:bg-rare-focus`} ${props.pokemon.rarity === `Epic` && `bg-epic-unfocus shadow-epic-unfocus hover:bg-epic-focus`} ${props.pokemon.rarity === `Legendary` && `bg-legendary-unfocus shadow-legendary-unfocus hover:bg-legendary-focus`} ${props.pokemon.rarity === `Mega` && `bg-mega-unfocus shadow-mega-unfocus hover:bg-mega-focus`} ${props.pokemon.rarity === `Ultra Beast` && `bg-ub-unfocus shadow-ub-unfocus hover:bg-ub-focus`} ${props.pokemon.rarity === `Gigantamax` && `bg-gmax-unfocus shadow-gmax-unfocus hover:bg-gmax-focus`}`}
       >
-        <Image
-          src={props.pokemon.img}
-          alt={props.pokemon.name}
-          width={100}
-          height={100}
-        />
-        <div className="font-lg font-semibold capitalize">
-          {props.pokemon.shiny && "🌟"}{" "}
-          {"#" + props.pokemon.pokedexNumber + ":"} {props.pokemon.name}
+        {props.caught && (
+          <Image
+            src={
+              "https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/items/poke-ball.png"
+            }
+            alt="Caught"
+            width={40}
+            height={40}
+            className="relative left-0 top-0"
+          />
+        )}
+        <div className="flex flex-col items-center gap-2">
+          <Image
+            src={props.pokemon.img}
+            alt={props.pokemon.name}
+            width={100}
+            height={100}
+          />
+          <div className="font-lg font-semibold capitalize">
+            {props.pokemon.shiny && "🌟"}{" "}
+            {"#" + props.pokemon.pokedexNumber + ":"} {props.pokemon.name}
+          </div>
+          <div className="flex flex-col items-center gap-0">
+            <div>Rarity: {props.pokemon.rarity}</div>
+            <div>Yield: P{props.pokemon.yield}</div>
+            <div>Sell Price: P{props.pokemon.sellPrice}</div>
+          </div>
+          {props.children}
         </div>
-        <div className="flex flex-col items-center gap-0">
-          <div>Rarity: {props.pokemon.rarity}</div>
-          <div>Yield: P{props.pokemon.yield}</div>
-          <div>Sell Price: P{props.pokemon.sellPrice}</div>
-        </div>
-        {props.children}
       </div>
 
       <Sheet
