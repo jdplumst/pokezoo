@@ -26,6 +26,7 @@ import {
 import Github from "@/src/app/_components/Github";
 import SignOut from "@/src/app/_components/SignOut";
 import { getTime } from "@/src/server/actions/cookies";
+import { Separator } from "./ui/separator";
 
 export async function AppSidebar() {
   const time = await getTime();
@@ -122,6 +123,7 @@ export async function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+        <Separator className="my-2" />
 
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg font-bold">
@@ -149,6 +151,8 @@ export async function AppSidebar() {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
+
+        <Separator className="my-1" />
 
         <SidebarGroup>
           <SidebarGroupContent>
