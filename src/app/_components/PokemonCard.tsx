@@ -37,7 +37,7 @@ export default function PokemonCard(props: {
     <>
       <div
         onClick={() => setOpen(true)}
-        className={`w-80 rounded-2xl border-2 border-solid border-black p-4 shadow-xl hover:cursor-pointer ${props.pokemon.rarity === `Common` && `bg-common-unfocus shadow-common-unfocus hover:bg-common-focus`} ${props.pokemon.rarity === `Rare` && `bg-rare-unfocus shadow-rare-unfocus hover:bg-rare-focus`} ${props.pokemon.rarity === `Epic` && `bg-epic-unfocus shadow-epic-unfocus hover:bg-epic-focus`} ${props.pokemon.rarity === `Legendary` && `bg-legendary-unfocus shadow-legendary-unfocus hover:bg-legendary-focus`} ${props.pokemon.rarity === `Mega` && `bg-mega-unfocus shadow-mega-unfocus hover:bg-mega-focus`} ${props.pokemon.rarity === `Ultra Beast` && `bg-ub-unfocus shadow-ub-unfocus hover:bg-ub-focus`} ${props.pokemon.rarity === `Gigantamax` && `bg-gmax-unfocus shadow-gmax-unfocus hover:bg-gmax-focus`}`}
+        className={`relative w-80 rounded-2xl border-2 border-solid border-black p-4 shadow-xl hover:cursor-pointer ${props.pokemon.rarity === `Common` && `bg-common-unfocus shadow-common-unfocus hover:bg-common-focus`} ${props.pokemon.rarity === `Rare` && `bg-rare-unfocus shadow-rare-unfocus hover:bg-rare-focus`} ${props.pokemon.rarity === `Epic` && `bg-epic-unfocus shadow-epic-unfocus hover:bg-epic-focus`} ${props.pokemon.rarity === `Legendary` && `bg-legendary-unfocus shadow-legendary-unfocus hover:bg-legendary-focus`} ${props.pokemon.rarity === `Mega` && `bg-mega-unfocus shadow-mega-unfocus hover:bg-mega-focus`} ${props.pokemon.rarity === `Ultra Beast` && `bg-ub-unfocus shadow-ub-unfocus hover:bg-ub-focus`} ${props.pokemon.rarity === `Gigantamax` && `bg-gmax-unfocus shadow-gmax-unfocus hover:bg-gmax-focus`}`}
       >
         {props.caught && (
           <Image
@@ -47,7 +47,7 @@ export default function PokemonCard(props: {
             alt="Caught"
             width={40}
             height={40}
-            className="relative left-0 top-0"
+            className="absolute left-0 top-0 z-10"
           />
         )}
         <div className="flex flex-col items-center gap-2">

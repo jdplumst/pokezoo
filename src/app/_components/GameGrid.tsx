@@ -116,7 +116,7 @@ export default function GameGrid() {
 
   const sell = useMutation({
     mutationFn: async (ids: string[]) => {
-      const res = await fetch("/api/sell", {
+      const res = await fetch("/api/pokemon/sell", {
         method: "POST",
         body: JSON.stringify({
           ids: ids,
@@ -144,6 +144,7 @@ export default function GameGrid() {
           title: "Success! 🎉",
           description: data.message,
         });
+        setSellIds([]);
         router.refresh();
         pokemon.refetch();
       }

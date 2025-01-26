@@ -20,7 +20,7 @@ import {
 } from "@/src/constants";
 import { useToast } from "@/src/hooks/use-toast";
 import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/src/zod";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -28,6 +28,7 @@ import { z } from "zod";
 import LoadingSpinner from "./LoadingSpinner";
 import PokemonCard from "./PokemonCard";
 import Image from "next/image";
+import Wildcard from "./Wildcard";
 
 export default function PokedexGrid() {
   const { open } = useSidebar();
@@ -97,6 +98,49 @@ export default function PokedexGrid() {
       return check;
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor,
+  });
+
+  const purchase = useMutation({
+    mutationFn: async (speciesId: string) => {
+      const res = await fetch("/api/pokemon/purchase", {
+        method: "POST",
+        body: JSON.stringify({
+          speciesId: speciesId,
+        }),
+      });
+      const data = await res.json();
+
+      const resSchema = z.union([
+        z.object({ message: z.string(), error: z.undefined() }),
+        z.object({ message: z.undefined(), error: z.string() }),
+      ]);
+
+      const check = resSchema.parse(data);
+      return check;
+    },
+    onSuccess(data) {
+      if (data.error) {
+        toast({
+          title: "Error",
+          description: data.error,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success! 🎉",
+          description: data.message,
+        });
+        router.refresh();
+        pokemon.refetch();
+      }
+    },
+    onError() {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+    },
   });
 
   const { ref, inView } = useInView();
@@ -280,7 +324,27 @@ export default function PokedexGrid() {
                   pokemon={p}
                   caught={!!p.instance}
                 >
-                  <div>Wildcard purchase here!</div>
+                  {p.rarity === "Common" ||
+                  p.rarity === "Rare" ||
+                  p.rarity === "Epic" ||
+                  p.rarity === "Legendary" ? (
+                    <Button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        purchase.mutate(p.id);
+                      }}
+                      className="font-lg flex gap-1 font-semibold"
+                    >
+                      <Wildcard
+                        wildcard={p.rarity}
+                        width={25}
+                        height={25}
+                      />
+                      {p.shiny ? `100` : `10`}
+                    </Button>
+                  ) : (
+                    <Button>N/A</Button>
+                  )}
                 </PokemonCard>
               ))}
             </Fragment>
