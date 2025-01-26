@@ -339,7 +339,7 @@ export default function GameGrid() {
           </DropdownMenu>
         </div>
       </div>
-      <div className="flex items-center justify-center">
+      <div className="flex flex-col items-center justify-center gap-10">
         <div
           className={`grid ${open ? `grid-cols-1 lg:grid-cols-2 xl:grid-cols-3` : `grid-cols-1 lg:grid-cols-2 xl:grid-cols-3`} gap-10`}
         >
@@ -374,7 +374,11 @@ export default function GameGrid() {
               ))}
             </Fragment>
           ))}
-          <div ref={ref}></div>
+        </div>
+        <div ref={ref}>
+          {pokemon.hasNextPage && pokemon.isFetchingNextPage && (
+            <LoadingSpinner />
+          )}
         </div>
       </div>
     </>
