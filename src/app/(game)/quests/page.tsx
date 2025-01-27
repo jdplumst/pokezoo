@@ -11,6 +11,7 @@ import {
 } from "@/src/components/ui/table";
 import { claimQuest, getQuests } from "@/src/server/actions/quests";
 import { type Metadata } from "next";
+import SubmitButton from "../../_components/SubmitButton";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Quests",
@@ -53,7 +54,7 @@ export default async function Quests() {
                       await claimQuest(q.userQuest.id);
                     }}
                   >
-                    <Button>Claim</Button>
+                    <SubmitButton text="Claim" />
                   </form>
                 ) : (
                   q.userQuest.count + " / " + q.quest.goal

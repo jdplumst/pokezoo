@@ -8,6 +8,7 @@ import {
   attributes,
   habitats,
   instances,
+  profiles,
   rarities,
   regions,
   species,
@@ -16,6 +17,8 @@ import {
 } from "../db/schema";
 import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
+import { revalidatePath } from "next/cache";
+import { calcNewYield } from "@/src/utils/calcNewYield";
 
 export async function getAchievements() {
   const session = await auth();
@@ -144,16 +147,12 @@ export async function getAchievements() {
       ).length;
     }
 
-    const low = 0.35 * max;
-    const high = 0.7 * max;
     const percent = Math.round((value / max) * 100);
 
     fullAchievements.push({
       achievement: a,
       max: max,
       value: value,
-      low: low,
-      high: high,
       percent: percent,
     });
   }
@@ -165,6 +164,66 @@ export async function getAchievements() {
     return a.achievement.claimed ? 1 : -1;
   });
 
-  console.log(fullAchievements);
   return fullAchievements;
+}
+
+export async function claimAchievement(achievementId: string) {
+  const session = await auth();
+  if (!session) {
+    redirect("/");
+  }
+
+  const currProfile = (
+    await db
+      .select({ totalYield: profiles.totalYield })
+      .from(profiles)
+      .where(eq(profiles.userId, session.user.id))
+  )[0];
+
+  if (!currProfile) {
+    redirect("/onboarding)");
+  }
+
+  const achievementData = (
+    await db
+      .select()
+      .from(achievements)
+      .where(eq(achievements.id, achievementId))
+  )[0];
+
+  if (!achievementData) {
+    throw new Error("The achievement you are trying to claim does not exist.");
+  }
+
+  const exists = (
+    await db
+      .select()
+      .from(userAchievements)
+      .where(
+        and(
+          eq(userAchievements.userId, session.user.id),
+          eq(userAchievements.achievementId, achievementId),
+        ),
+      )
+  )[0];
+
+  if (exists) {
+    revalidatePath("/achievements");
+  }
+
+  const newYield = calcNewYield(currProfile.totalYield, achievementData.yield);
+
+  await db.transaction(async (tx) => {
+    await tx
+      .update(profiles)
+      .set({ totalYield: newYield })
+      .where(eq(profiles.userId, session.user.id));
+
+    await tx.insert(userAchievements).values({
+      userId: session.user.id,
+      achievementId: achievementId,
+    });
+  });
+
+  revalidatePath("/achievements");
 }

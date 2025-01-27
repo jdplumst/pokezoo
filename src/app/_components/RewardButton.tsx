@@ -79,7 +79,6 @@ export default function RewardButton(props: {
           variant: "destructive",
         });
       } else {
-        console.log("success!");
         setRewards({ Reward: data.reward, Cards: data.cards });
         setIsOpen(true);
         router.refresh();

@@ -13,7 +13,6 @@ export const metadata: Metadata = {
 export default async function HomePage() {
   const session = await auth();
   if (session) {
-    console.log("Session!");
     redirect("/game");
   }
 
