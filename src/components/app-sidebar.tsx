@@ -30,7 +30,7 @@ import { Separator } from "./ui/separator";
 export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
-      <SidebarContent className="light bg-sidebar-primary-foreground text-white">
+      <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg font-bold">
             PokéZoo
