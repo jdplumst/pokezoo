@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/src/components/ui/button";
-import { ZodRarity } from "@/src/zod";
+import { type ZodRarity } from "@/src/zod";
 import { z } from "zod";
 import Wildcard from "./Wildcard";
 import { useRouter } from "next/navigation";
@@ -34,13 +34,12 @@ export default function WildcardButtons(props: {
         }),
       });
 
-      const data = await res.json();
-
       const resSchema = z.union([
         z.object({ message: z.string(), error: z.undefined() }),
         z.object({ message: z.undefined(), error: z.string() }),
       ]);
-      const check = resSchema.parse(data);
+
+      const check = resSchema.parse(await res.json());
       return check;
     },
 

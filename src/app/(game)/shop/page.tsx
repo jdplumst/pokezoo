@@ -1,6 +1,5 @@
-import { isAuthed } from "@/src/server/actions/auth";
 import { getShopData } from "@/src/server/actions/shop";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import BallsGrid from "../../_components/BallsGrid";
 import CharmsGrid from "../../_components/CharmsGrid";
 import ShopGrid from "../../_components/ShopGrid";
@@ -15,9 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Shop() {
-  const session = await isAuthed();
-
-  const data = await getShopData(session);
+  const data = await getShopData();
 
   return (
     <div className="px-8 pb-8">

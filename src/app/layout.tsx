@@ -2,13 +2,13 @@ import "../styles/globals.css";
 import { getTheme, getTime } from "../server/actions/cookies";
 import Providers from "./providers";
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const theme = await getTheme();
-  const time = await getTime();
+  const theme = getTheme();
+  const time = getTime();
   const mode = time === "day" ? "light" : "dark";
 
   return (

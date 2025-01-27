@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/src/components/ui/dialog";
 import { useToast } from "@/src/hooks/use-toast";
-import { ZodTime } from "@/src/zod";
+import { type ZodTime } from "@/src/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -48,8 +48,6 @@ export default function RewardButton(props: {
         body: JSON.stringify({ time: time }),
       });
 
-      const data = await res.json();
-
       const resSchema = z.union([
         z.object({
           reward: z.number(),
@@ -67,7 +65,8 @@ export default function RewardButton(props: {
           error: z.string(),
         }),
       ]);
-      const check = resSchema.parse(data);
+
+      const check = resSchema.parse(await res.json());
       return check;
     },
 

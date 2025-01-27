@@ -10,7 +10,7 @@ import {
   TableRow,
 } from "@/src/components/ui/table";
 import { claimQuest, getQuests } from "@/src/server/actions/quests";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Quests",
@@ -40,12 +40,12 @@ export default async function Quests() {
           {quests.map((q) => (
             <TableRow key={q.userQuest.id}>
               <TableCell className="font-medium">{q.questType?.name}</TableCell>
-              <TableCell>{q.quest?.description}</TableCell>
-              <TableCell>P{q.quest?.reward.toLocaleString()}</TableCell>
+              <TableCell>{q.quest.description}</TableCell>
+              <TableCell>P{q.quest.reward.toLocaleString()}</TableCell>
               <TableCell>
                 {q.userQuest.claimed ? (
                   "Claimed"
-                ) : q.userQuest.count >= q.quest?.goal! ? (
+                ) : q.userQuest.count >= q.quest.goal ? (
                   <form
                     action={async () => {
                       "use server";
@@ -56,7 +56,7 @@ export default async function Quests() {
                     <Button>Claim</Button>
                   </form>
                 ) : (
-                  q.userQuest.count + " / " + q.quest?.goal!
+                  q.userQuest.count + " / " + q.quest.goal
                 )}
               </TableCell>
             </TableRow>

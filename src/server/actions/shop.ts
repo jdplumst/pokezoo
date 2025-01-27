@@ -3,10 +3,12 @@ import "server-only";
 import { eq } from "drizzle-orm";
 import { db } from "../db";
 import { balls, charms, profiles, userCharms } from "../db/schema";
-import { Session } from "next-auth";
 import { redirect } from "next/navigation";
+import { isAuthed } from "./auth";
 
-export async function getShopData(session: Session) {
+export async function getShopData() {
+  const session = await isAuthed();
+
   const ballsData = await db.select().from(balls);
 
   const charmsData = await db.select().from(charms);

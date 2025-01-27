@@ -1,5 +1,5 @@
 import { isAuthed } from "@/src/server/actions/auth";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import PokedexGrid from "../../_components/PokedexGrid";
 
 export const metadata: Metadata = {

@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import { redirect } from "next/navigation";
 import SignIn from "./_components/SignIn";
 import { auth } from "../server/auth";

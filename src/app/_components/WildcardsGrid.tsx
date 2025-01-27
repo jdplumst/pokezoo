@@ -1,9 +1,9 @@
 import Wildcard from "./Wildcard";
-import { ZodRarity } from "@/src/zod";
-import { z } from "zod";
+import { type ZodRarity } from "@/src/zod";
+import { type z } from "zod";
 import WildcardButtons from "./WildcardButtons";
 
-export default async function WildcardsGrid() {
+export default function WildcardsGrid() {
   const wildcards: {
     name: z.infer<typeof ZodRarity>;
     commonCost?: number;

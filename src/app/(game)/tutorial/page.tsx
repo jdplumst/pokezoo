@@ -1,6 +1,6 @@
 import { Separator } from "@/src/components/ui/separator";
 import { isAuthed } from "@/src/server/actions/auth";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Tutorial",

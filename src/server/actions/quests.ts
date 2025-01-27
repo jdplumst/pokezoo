@@ -15,8 +15,8 @@ export async function getQuests() {
   const currUserQuests = await db
     .select()
     .from(userQuests)
-    .leftJoin(quests, eq(userQuests.questId, quests.id))
-    .leftJoin(questTypes, eq(quests.typeId, questTypes.id))
+    .innerJoin(quests, eq(userQuests.questId, quests.id))
+    .innerJoin(questTypes, eq(quests.typeId, questTypes.id))
     .where(eq(userQuests.userId, session.user.id))
     .orderBy(questTypes.id);
 

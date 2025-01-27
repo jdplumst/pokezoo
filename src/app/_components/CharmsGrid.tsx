@@ -5,11 +5,11 @@ import {
   TooltipTrigger,
 } from "@/src/components/ui/tooltip";
 import {
-  selectCharmSchema,
-  selectUserCharmsSchema,
+  type selectCharmSchema,
+  type selectUserCharmsSchema,
 } from "@/src/server/db/schema";
 import Image from "next/image";
-import { z } from "zod";
+import { type z } from "zod";
 import CharmButton from "./CharmButton";
 
 export default function CharmsGrid(props: {

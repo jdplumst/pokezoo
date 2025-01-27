@@ -1,6 +1,6 @@
 import { Button } from "@/src/components/ui/button";
-import { ZodSpeciesType } from "@/src/zod";
-import { z } from "zod";
+import { type ZodSpeciesType } from "@/src/zod";
+import { type z } from "zod";
 
 export default function TypeButton(props: {
   type: z.infer<typeof ZodSpeciesType>;

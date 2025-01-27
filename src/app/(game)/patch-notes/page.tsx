@@ -1,6 +1,6 @@
 import Patch from "../../_components/Patch";
 import Note from "../../_components/Note";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import { isAuthed } from "@/src/server/actions/auth";
 
 export const metadata: Metadata = {

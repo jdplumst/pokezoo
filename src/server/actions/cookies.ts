@@ -7,25 +7,25 @@ import { timezones } from "@/src/utils/timezones";
 
 const themeSchema = z.enum(["blue", "purple", "green", "orange"]);
 
-export async function getTheme() {
-  const cookieStore = await cookies();
+export function getTheme() {
+  const cookieStore = cookies();
   const theme = cookieStore.get("theme")?.value ?? "blue";
   const result = themeSchema.safeParse(theme);
   const parsedTheme = result.data ?? "blue";
   return parsedTheme;
 }
 
-export async function setTheme(theme: string) {
+export function setTheme(theme: string) {
   const result = themeSchema.safeParse(theme);
   const parsedTheme = result.data ?? "blue";
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
   cookieStore.set("theme", parsedTheme);
   revalidatePath("/settings");
 }
 
-export async function getTime() {
-  const cookieStore = await cookies();
-  const timezone = cookieStore.get("timezone-offset")?.value || "-5";
+export function getTime() {
+  const cookieStore = cookies();
+  const timezone = cookieStore.get("timezone-offset")?.value ?? "-5";
   const parsedTimezone = Math.floor(Number(timezone)) || -5;
   const hour = new Date().getUTCHours() + parsedTimezone;
   let time: "day" | "night" = "day";
@@ -35,10 +35,10 @@ export async function getTime() {
   return time;
 }
 
-export async function getTimezone() {
-  const cookieStore = await cookies();
+export function getTimezone() {
+  const cookieStore = cookies();
   let timezone =
-    cookieStore.get("timezone")?.value ||
+    cookieStore.get("timezone")?.value ??
     "Eastern Standard Time (North America) [EST -5]";
   const isRealTimezone = timezones.findIndex((t) => t.name === timezone);
   if (isRealTimezone === -1) {
@@ -47,17 +47,16 @@ export async function getTimezone() {
   return timezone;
 }
 
-export async function setTimezone(timezone: string, offset: string) {
-  const cookieStore = await cookies();
+export function setTimezone(timezone: string, offset: string) {
+  const cookieStore = cookies();
   cookieStore.set("timezone", timezone);
   cookieStore.set("timezone-offset", offset);
   revalidatePath("/settings");
 }
 
-export async function toggleTime() {
-  const cookieStore = await cookies();
-  const time = await getTime();
-  const timezone = cookieStore.get("timezone")?.value || "Fiji Time [FJT +12]";
+export function toggleTime() {
+  const cookieStore = cookies();
+  const timezone = cookieStore.get("timezone")?.value ?? "Fiji Time [FJT +12]";
   if (timezone === "Fiji Time [FJT +12]") {
     cookieStore.set("timezone", "Coordinated Universal Time [UTC 0]");
     cookieStore.set("timezone-offset", "0");

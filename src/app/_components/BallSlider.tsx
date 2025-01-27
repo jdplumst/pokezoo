@@ -35,7 +35,7 @@ import {
 } from "@/src/components/ui/carousel";
 import { Card, CardContent } from "@/src/components/ui/card";
 import { RegionsList } from "@/src/constants";
-import { ZodRegion } from "@/src/zod";
+import { type ZodRegion } from "@/src/zod";
 
 export default function BallSlider(props: {
   ballId: string;
@@ -71,8 +71,6 @@ export default function BallSlider(props: {
         }),
       });
 
-      const data = await res.json();
-
       const resSchema = z.union([
         z.object({
           speciesList: z
@@ -86,7 +84,7 @@ export default function BallSlider(props: {
         }),
         z.object({ speciesList: z.undefined(), error: z.string() }),
       ]);
-      const check = resSchema.parse(data);
+      const check = resSchema.parse(await res.json());
       return check;
     },
 

@@ -9,8 +9,7 @@ export async function POST(req: Request) {
     charmId: z.number(),
   });
 
-  const bodyData = await req.json();
-  const body = bodySchema.safeParse(bodyData);
+  const body = bodySchema.safeParse(await req.json());
 
   if (body.error) {
     return Response.json({

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 
-export async function GET(_req: NextApiRequest, res: NextApiResponse) {
+export function GET(_req: NextApiRequest, res: NextApiResponse) {
   res.status(429);
   return res.end();
 }

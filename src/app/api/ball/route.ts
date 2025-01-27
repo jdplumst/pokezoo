@@ -23,8 +23,7 @@ export async function POST(req: Request) {
     regionName: z.string().optional(),
   });
 
-  const bodyData = await req.json();
-  const body = bodySchema.safeParse(bodyData);
+  const body = bodySchema.safeParse(await req.json());
 
   if (body.error) {
     return Response.json({
@@ -100,6 +99,7 @@ export async function POST(req: Request) {
   }
 
   if (currBall.name === "Premier" && body.data.regionName) {
+    // eslint-disable-next-line no-var
     var currRegion = (
       await db
         .select()

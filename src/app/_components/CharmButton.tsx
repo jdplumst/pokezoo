@@ -19,13 +19,11 @@ export default function CharmButton(props: { charmId: number }) {
         body: JSON.stringify({ charmId: charmId }),
       });
 
-      const data = await res.json();
-
       const resSchema = z.union([
         z.object({ name: z.string(), error: z.undefined() }),
         z.object({ name: z.undefined(), error: z.string() }),
       ]);
-      const check = resSchema.parse(data);
+      const check = resSchema.parse(await res.json());
       return check;
     },
 

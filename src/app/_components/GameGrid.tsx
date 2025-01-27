@@ -57,7 +57,7 @@ export default function GameGrid() {
 
   const pokemon = useInfiniteQuery({
     queryKey: ["pokemon", sortedBy, shiny, regions, rarities, types, habitats],
-    queryFn: async ({ pageParam = {} }) => {
+    queryFn: async () => {
       const res = await fetch("/api/game", {
         method: "POST",
         body: JSON.stringify({
@@ -68,10 +68,9 @@ export default function GameGrid() {
           rarities: rarities,
           types: types,
           habitats: habitats,
-          cursor: pageParam,
+          cursor: {},
         }),
       });
-      const data = await res.json();
 
       const resSchema = z.object({
         instancesData: z.array(
@@ -108,7 +107,7 @@ export default function GameGrid() {
           .nullish(),
       });
 
-      const check = resSchema.parse(data);
+      const check = resSchema.parse(await res.json());
       return check;
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -122,14 +121,13 @@ export default function GameGrid() {
           ids: ids,
         }),
       });
-      const data = await res.json();
 
       const resSchema = z.union([
         z.object({ message: z.string(), error: z.undefined() }),
         z.object({ message: z.undefined(), error: z.string() }),
       ]);
 
-      const check = resSchema.parse(data);
+      const check = resSchema.parse(await res.json().catch());
       return check;
     },
     onSuccess(data) {
@@ -146,7 +144,7 @@ export default function GameGrid() {
         });
         setSellIds([]);
         router.refresh();
-        pokemon.refetch();
+        void pokemon.refetch();
       }
     },
     onError() {
@@ -162,8 +160,9 @@ export default function GameGrid() {
 
   useEffect(() => {
     if (inView) {
-      pokemon.fetchNextPage();
+      void pokemon.fetchNextPage();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pokemon.fetchNextPage, inView]);
 
   return (
@@ -192,7 +191,7 @@ export default function GameGrid() {
             <DropdownMenuContent>
               <DropdownMenuRadioGroup
                 value={sortedBy}
-                // @ts-ignore
+                // @ts-expect-error expects string but is specific string
                 onValueChange={setSortedBy}
               >
                 {sortValues.map((s) => (
@@ -214,7 +213,7 @@ export default function GameGrid() {
             <DropdownMenuContent>
               <DropdownMenuRadioGroup
                 value={shiny}
-                // @ts-ignore
+                // @ts-expect-error expects string but is specific string
                 onValueChange={setShiny}
               >
                 <DropdownMenuRadioItem

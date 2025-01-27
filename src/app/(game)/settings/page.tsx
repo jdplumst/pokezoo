@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuGroup,
 } from "@radix-ui/react-dropdown-menu";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Settings",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
 export default async function Settings() {
   await isAuthed();
 
-  const timezone = await getTimezone();
+  const timezone = getTimezone();
 
   return (
     <div className="px-8">
@@ -37,20 +37,20 @@ export default async function Settings() {
           <div className="flex gap-5">
             <form
               className="blue dark"
-              action={async () => {
+              action={() => {
                 "use server";
 
-                await setTheme("blue");
+                setTheme("blue");
               }}
             >
               <Button>Blue</Button>
             </form>
             <form
               className="purple dark"
-              action={async () => {
+              action={() => {
                 "use server";
 
-                await setTheme("purple");
+                setTheme("purple");
               }}
             >
               {" "}
@@ -58,20 +58,20 @@ export default async function Settings() {
             </form>
             <form
               className="green dark"
-              action={async () => {
+              action={() => {
                 "use server";
 
-                await setTheme("green");
+                setTheme("green");
               }}
             >
               <Button>Green</Button>
             </form>
             <form
               className="orange dark"
-              action={async () => {
+              action={() => {
                 "use server";
 
-                await setTheme("orange");
+                setTheme("orange");
               }}
             >
               <Button>Orange</Button>
@@ -95,10 +95,10 @@ export default async function Settings() {
                 {timezones.map((t) => (
                   <form
                     key={t.name}
-                    action={async () => {
+                    action={() => {
                       "use server";
 
-                      await setTimezone(t.name, t.offset);
+                      setTimezone(t.name, t.offset);
                     }}
                   >
                     <Button

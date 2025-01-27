@@ -6,8 +6,8 @@ import {
 } from "@/src/components/ui/tooltip";
 import Image from "next/image";
 import BallSlider from "./BallSlider";
-import { z } from "zod";
-import { selectBallSchema } from "@/src/server/db/schema";
+import { type z } from "zod";
+import { type selectBallSchema } from "@/src/server/db/schema";
 
 export default function BallsGrid(props: {
   balls: z.infer<typeof selectBallSchema>[];

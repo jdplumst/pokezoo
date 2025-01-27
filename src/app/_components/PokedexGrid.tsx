@@ -27,7 +27,6 @@ import { useInView } from "react-intersection-observer";
 import { z } from "zod";
 import LoadingSpinner from "./LoadingSpinner";
 import PokemonCard from "./PokemonCard";
-import Image from "next/image";
 import Wildcard from "./Wildcard";
 
 export default function PokedexGrid() {
@@ -48,7 +47,7 @@ export default function PokedexGrid() {
 
   const pokemon = useInfiniteQuery({
     queryKey: ["pokemon", caught, shiny, regions, rarities, types, habitats],
-    queryFn: async ({ pageParam = {} }) => {
+    queryFn: async () => {
       const res = await fetch("/api/pokedex", {
         method: "POST",
         body: JSON.stringify({
@@ -62,10 +61,9 @@ export default function PokedexGrid() {
           rarities: rarities,
           types: types,
           habitats: habitats,
-          cursor: pageParam,
+          cursor: {},
         }),
       });
-      const data = await res.json();
 
       const resSchema = z.object({
         pokemon: z.array(
@@ -94,7 +92,7 @@ export default function PokedexGrid() {
           .nullish(),
       });
 
-      const check = resSchema.parse(data);
+      const check = resSchema.parse(await res.json());
       return check;
     },
     getNextPageParam: (lastPage) => lastPage.nextCursor,
@@ -108,14 +106,13 @@ export default function PokedexGrid() {
           speciesId: speciesId,
         }),
       });
-      const data = await res.json();
 
       const resSchema = z.union([
         z.object({ message: z.string(), error: z.undefined() }),
         z.object({ message: z.undefined(), error: z.string() }),
       ]);
 
-      const check = resSchema.parse(data);
+      const check = resSchema.parse(await res.json());
       return check;
     },
     onSuccess(data) {
@@ -131,7 +128,7 @@ export default function PokedexGrid() {
           description: data.message,
         });
         router.refresh();
-        pokemon.refetch();
+        void pokemon.refetch();
       }
     },
     onError() {
@@ -147,8 +144,9 @@ export default function PokedexGrid() {
 
   useEffect(() => {
     if (inView) {
-      pokemon.fetchNextPage();
+      void pokemon.fetchNextPage();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pokemon.fetchNextPage, inView]);
 
   return (
@@ -162,17 +160,17 @@ export default function PokedexGrid() {
             <DropdownMenuContent>
               <DropdownMenuRadioGroup
                 value={caught}
-                // @ts-ignore
+                // @ts-expect-error expects string but is specific string
                 onValueChange={setCaught}
               >
                 <DropdownMenuRadioItem value="All Pokémon">
                   All Pokémon
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="Only Caught">
-                  "Only Caught"
+                  Only Caught
                 </DropdownMenuRadioItem>
                 <DropdownMenuRadioItem value="Only Uncaught">
-                  "Only Uncaught"
+                  Only Uncaught
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
@@ -185,7 +183,7 @@ export default function PokedexGrid() {
             <DropdownMenuContent>
               <DropdownMenuRadioGroup
                 value={shiny}
-                // @ts-ignore
+                // @ts-expect-error expects string but is specific string
                 onValueChange={setShiny}
               >
                 <DropdownMenuRadioItem
