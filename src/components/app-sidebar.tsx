@@ -26,8 +26,11 @@ import {
 import Github from "@/src/app/_components/Github";
 import SignOut from "@/src/app/_components/SignOut";
 import { Separator } from "./ui/separator";
+import { getTime } from "../server/actions/cookies";
 
 export function AppSidebar() {
+  const time = getTime();
+
   return (
     <Sidebar collapsible="icon">
       <SidebarContent>
@@ -140,7 +143,7 @@ export function AppSidebar() {
               <SidebarMenuItem key={"Github"}>
                 <SidebarMenuButton asChild>
                   <a href="https://github.com/jdplumst/pokezoo">
-                    <Github />
+                    <Github fill={`${time === "day" ? "black" : "white"}`} />
                     <SidebarMenuLabel>PokéZoo Github</SidebarMenuLabel>
                   </a>
                 </SidebarMenuButton>
