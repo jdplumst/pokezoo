@@ -1,8 +1,7 @@
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { getServerSession } from "next-auth";
 import SignIn from "./_components/SignIn";
-import { authOptions } from "../pages/api/auth/[...nextauth]";
+import { auth } from "../server/auth";
 
 export const metadata: Metadata = {
   title: "PokéZoo",
@@ -12,7 +11,7 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (session) {
     console.log("Session!");
     redirect("/game");

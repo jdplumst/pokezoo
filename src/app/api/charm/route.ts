@@ -1,9 +1,7 @@
-import { authOptions } from "@/src/pages/api/auth/[...nextauth]";
-import { isAuthed } from "@/src/server/actions/auth";
+import { auth } from "@/src/server/auth";
 import { db } from "@/src/server/db";
 import { charms, profiles, userCharms } from "@/src/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { getServerSession } from "next-auth";
 import { z } from "zod";
 
 export async function POST(req: Request) {
@@ -20,7 +18,7 @@ export async function POST(req: Request) {
     });
   }
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session) {
     return Response.json({
       error: "You are not authorized to purchase this wildcard.",

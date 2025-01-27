@@ -38,7 +38,7 @@ export default async function Quests() {
         </TableHeader>
         <TableBody>
           {quests.map((q) => (
-            <TableRow>
+            <TableRow key={q.userQuest.id}>
               <TableCell className="font-medium">{q.questType?.name}</TableCell>
               <TableCell>{q.quest?.description}</TableCell>
               <TableCell>P{q.quest?.reward.toLocaleString()}</TableCell>

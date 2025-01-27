@@ -1,6 +1,4 @@
 import "server-only";
-import { authOptions } from "@/src/pages/api/auth/[...nextauth]";
-import { getServerSession } from "next-auth";
 import { alias } from "drizzle-orm/pg-core";
 import { and, eq } from "drizzle-orm";
 import { MAX_BALANCE } from "@/src/constants";
@@ -8,6 +6,7 @@ import { profiles, userCharms } from "@/src/server/db/schema";
 import { db } from "@/src/server/db";
 import { z } from "zod";
 import { ZodTime } from "@/src/zod";
+import { auth } from "@/src/server/auth";
 
 export async function POST(req: Request) {
   const bodySchema = z.object({
@@ -23,7 +22,7 @@ export async function POST(req: Request) {
     });
   }
 
-  const session = await getServerSession(authOptions);
+  const session = await auth();
   if (!session) {
     return Response.json({
       error: "You are not authorized to claim this reward.",
