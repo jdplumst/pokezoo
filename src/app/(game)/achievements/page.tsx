@@ -1,4 +1,5 @@
 import { Button } from "@/src/components/ui/button";
+import { Progress } from "@/src/components/ui/progress";
 import { Separator } from "@/src/components/ui/separator";
 import {
   Table,
@@ -32,7 +33,7 @@ export default async function Achievements() {
         </TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Tier</TableHead>
+            <TableHead>Tier</TableHead>
             <TableHead>Description</TableHead>
             <TableHead>Reward</TableHead>
             <TableHead>Status</TableHead>
@@ -58,7 +59,10 @@ export default async function Achievements() {
                     <Button>Claim</Button>
                   </form>
                 ) : (
-                  a.value + " / " + a.max + " (" + a.percent + "%)"
+                  <div>
+                    {a.value + " / " + a.max + " (" + a.percent + "%)"}
+                    <Progress value={a.percent} />
+                  </div>
                 )}
               </TableCell>
             </TableRow>
