@@ -29,11 +29,11 @@ import { getTime } from "@/src/server/actions/cookies";
 import { Separator } from "./ui/separator";
 
 export async function AppSidebar() {
-  const time = await getTime();
+  const time = getTime();
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarContent>
+      <SidebarContent className="light bg-sidebar-primary-foreground text-white">
         <SidebarGroup>
           <SidebarGroupLabel className="text-lg font-bold">
             PokéZoo
@@ -143,7 +143,7 @@ export async function AppSidebar() {
               <SidebarMenuItem key={"Github"}>
                 <SidebarMenuButton asChild>
                   <a href="https://github.com/jdplumst/pokezoo">
-                    <Github fill={`${time === `day` ? `black` : `white`}`} />
+                    <Github />
                     <SidebarMenuLabel>PokéZoo Github</SidebarMenuLabel>
                   </a>
                 </SidebarMenuButton>
