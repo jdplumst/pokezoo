@@ -15,7 +15,7 @@ export default async function PatchNotes() {
 
   return (
     <div className="px-8">
-      <h1 className="p-4 text-5xl font-bold">Patch Notes</h1>
+      <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
       <Patch patch="8.05" date="November 30, 2024">
         <Note note="Added Hisui Achievements." />
       </Patch>

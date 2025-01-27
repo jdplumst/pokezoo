@@ -10,7 +10,7 @@ export default function Patch(props: {
     <>
       <Separator className="mb-4" />
       <section className="pb-4">
-        <h3 className="p-4 text-3xl font-semibold">
+        <h3 className="py-4 text-3xl font-semibold">
           {props.patch} ({props.date})
         </h3>
         <Separator className="mb-4" />
