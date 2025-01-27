@@ -25,12 +25,9 @@ import {
 } from "lucide-react";
 import Github from "@/src/app/_components/Github";
 import SignOut from "@/src/app/_components/SignOut";
-import { getTime } from "@/src/server/actions/cookies";
 import { Separator } from "./ui/separator";
 
-export async function AppSidebar() {
-  const time = getTime();
-
+export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarContent className="light bg-sidebar-primary-foreground text-white">

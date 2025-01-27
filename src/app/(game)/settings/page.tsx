@@ -37,7 +37,8 @@ export default async function Settings() {
           <div className="flex gap-5">
             <form
               className="blue dark"
-              action={() => {
+              // eslint-disable-next-line @typescript-eslint/require-await
+              action={async () => {
                 "use server";
 
                 setTheme("blue");
@@ -47,7 +48,8 @@ export default async function Settings() {
             </form>
             <form
               className="purple dark"
-              action={() => {
+              // eslint-disable-next-line @typescript-eslint/require-await
+              action={async () => {
                 "use server";
 
                 setTheme("purple");
@@ -58,7 +60,8 @@ export default async function Settings() {
             </form>
             <form
               className="green dark"
-              action={() => {
+              // eslint-disable-next-line @typescript-eslint/require-await
+              action={async () => {
                 "use server";
 
                 setTheme("green");
@@ -68,7 +71,8 @@ export default async function Settings() {
             </form>
             <form
               className="orange dark"
-              action={() => {
+              // eslint-disable-next-line @typescript-eslint/require-await
+              action={async () => {
                 "use server";
 
                 setTheme("orange");
@@ -92,7 +96,8 @@ export default async function Settings() {
                 {timezones.map((t) => (
                   <form
                     key={t.name}
-                    action={() => {
+                    // eslint-disable-next-line @typescript-eslint/require-await
+                    action={async () => {
                       "use server";
 
                       setTimezone(t.name, t.offset);
