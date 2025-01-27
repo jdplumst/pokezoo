@@ -12,10 +12,7 @@ export default function RootLayout({
   const mode = time === "day" ? "light" : "dark";
 
   return (
-    <html
-      lang="en"
-      className={`${theme} ${mode}`}
-    >
+    <html lang="en" className={`${theme} ${mode}`}>
       <body>
         <Providers>{children}</Providers>
       </body>

@@ -118,10 +118,7 @@ export default function RewardButton(props: {
           Claim Nightly Reward
         </Button>
       )}
-      <Dialog
-        open={isOpen}
-        onOpenChange={setIsOpen}
-      >
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="w-96">
           <DialogHeader>
             <DialogTitle>
@@ -142,11 +139,7 @@ export default function RewardButton(props: {
                   You received {rewards.Cards.Common} Common wildcard
                   {rewards.Cards.Common > 1 && "s"}
                 </div>
-                <Wildcard
-                  wildcard="Common"
-                  width={20}
-                  height={20}
-                />
+                <Wildcard wildcard="Common" width={20} height={20} />
               </div>
             ) : (
               <></>
@@ -157,11 +150,7 @@ export default function RewardButton(props: {
                   You received {rewards.Cards.Rare} Rare wildcard
                   {rewards.Cards.Rare > 1 && "s"}
                 </div>
-                <Wildcard
-                  wildcard="Rare"
-                  width={20}
-                  height={20}
-                />
+                <Wildcard wildcard="Rare" width={20} height={20} />
               </div>
             ) : (
               <></>
@@ -172,11 +161,7 @@ export default function RewardButton(props: {
                   You received {rewards.Cards.Epic} Epic wildcard
                   {rewards.Cards.Epic > 1 && "s"}
                 </div>
-                <Wildcard
-                  wildcard="Epic"
-                  width={20}
-                  height={20}
-                />
+                <Wildcard wildcard="Epic" width={20} height={20} />
               </div>
             ) : (
               <></>
@@ -187,11 +172,7 @@ export default function RewardButton(props: {
                   You received {rewards.Cards.Legendary} Legendary wildcard
                   {rewards.Cards.Legendary > 1 && "s"}
                 </div>
-                <Wildcard
-                  wildcard="Legendary"
-                  width={20}
-                  height={20}
-                />
+                <Wildcard wildcard="Legendary" width={20} height={20} />
               </div>
             ) : (
               <></>

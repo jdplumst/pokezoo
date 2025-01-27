@@ -195,10 +195,7 @@ export default function GameGrid() {
                 onValueChange={setSortedBy}
               >
                 {sortValues.map((s) => (
-                  <DropdownMenuRadioItem
-                    key={s}
-                    value={s}
-                  >
+                  <DropdownMenuRadioItem key={s} value={s}>
                     {s}
                   </DropdownMenuRadioItem>
                 ))}
@@ -216,16 +213,10 @@ export default function GameGrid() {
                 // @ts-expect-error expects string but is specific string
                 onValueChange={setShiny}
               >
-                <DropdownMenuRadioItem
-                  key={"Regular"}
-                  value={"Regular"}
-                >
+                <DropdownMenuRadioItem key={"Regular"} value={"Regular"}>
                   {"Regular"}
                 </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem
-                  key={"Shiny"}
-                  value={"Shiny"}
-                >
+                <DropdownMenuRadioItem key={"Shiny"} value={"Shiny"}>
                   {"Shiny"}
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
@@ -347,10 +338,7 @@ export default function GameGrid() {
           {pokemon.data?.pages.map((p, idx) => (
             <Fragment key={idx}>
               {p.instancesData.map((i) => (
-                <PokemonCard
-                  key={i.instance.id}
-                  pokemon={i}
-                >
+                <PokemonCard key={i.instance.id} pokemon={i}>
                   {sellIds.some((s) => s === i.instance.id) ? (
                     <Button
                       onClick={(e) => {

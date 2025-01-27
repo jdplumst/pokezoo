@@ -75,10 +75,7 @@ export default function PokemonCard(props: {
         </div>
       </div>
 
-      <Sheet
-        open={open}
-        onOpenChange={setOpen}
-      >
+      <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent>
           <SheetHeader className="flex flex-col items-center">
             <SheetTitle className="font-2xl capitalize">

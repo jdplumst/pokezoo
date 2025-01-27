@@ -186,16 +186,10 @@ export default function PokedexGrid() {
                 // @ts-expect-error expects string but is specific string
                 onValueChange={setShiny}
               >
-                <DropdownMenuRadioItem
-                  key={"Regular"}
-                  value={"Regular"}
-                >
+                <DropdownMenuRadioItem key={"Regular"} value={"Regular"}>
                   {"Regular"}
                 </DropdownMenuRadioItem>
-                <DropdownMenuRadioItem
-                  key={"Shiny"}
-                  value={"Shiny"}
-                >
+                <DropdownMenuRadioItem key={"Shiny"} value={"Shiny"}>
                   {"Shiny"}
                 </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
@@ -333,11 +327,7 @@ export default function PokedexGrid() {
                       }}
                       className="font-lg flex gap-1 font-semibold"
                     >
-                      <Wildcard
-                        wildcard={p.rarity}
-                        width={25}
-                        height={25}
-                      />
+                      <Wildcard wildcard={p.rarity} width={25} height={25} />
                       {p.shiny ? `100` : `10`}
                     </Button>
                   ) : (

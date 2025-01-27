@@ -83,10 +83,7 @@ export default async function Settings() {
           <h3 className="text-2xl font-semibold">Select a Timezone</h3>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-[400px]"
-              >
+              <Button variant="outline" className="w-[400px]">
                 {timezone}
               </Button>
             </DropdownMenuTrigger>
@@ -101,10 +98,7 @@ export default async function Settings() {
                       setTimezone(t.name, t.offset);
                     }}
                   >
-                    <Button
-                      variant="secondary"
-                      className="w-full rounded-none"
-                    >
+                    <Button variant="secondary" className="w-full rounded-none">
                       {t.name}
                     </Button>
                   </form>

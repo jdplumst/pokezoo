@@ -141,10 +141,7 @@ export default function BallSlider(props: {
             >
               <CarouselContent>
                 {RegionsList.map((r) => (
-                  <CarouselItem
-                    key={r}
-                    className="md:basis-1/2 lg:basis-1/3"
-                  >
+                  <CarouselItem key={r} className="md:basis-1/2 lg:basis-1/3">
                     <div className={`p-1`}>
                       <Card
                         className={`${premierRegion === r && `bg-secondary`}`}
@@ -196,10 +193,7 @@ export default function BallSlider(props: {
           {purchase.isLoading ? <LoadingSpinner /> : "Buy"}
         </Button>
       )}
-      <Dialog
-        open={isOpen}
-        onOpenChange={setIsOpen}
-      >
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="w-96">
           <DialogHeader>
             <DialogTitle>You have obtained new Pokémon!</DialogTitle>
@@ -209,10 +203,7 @@ export default function BallSlider(props: {
           </DialogDescription>
           <div className="flex h-80 flex-col gap-4 overflow-y-scroll">
             {purchasedSpecies.map((s, idx) => (
-              <div
-                key={idx}
-                className="flex items-center gap-2"
-              >
+              <div key={idx} className="flex items-center gap-2">
                 <Image
                   src={s.img}
                   alt={s.name}

@@ -44,11 +44,7 @@ export default function WildcardsGrid() {
           key={w.name}
           className="flex w-52 flex-col items-center gap-5 border-2 border-solid p-2 shadow-lg"
         >
-          <Wildcard
-            wildcard={w.name}
-            width={50}
-            height={50}
-          />
+          <Wildcard wildcard={w.name} width={50} height={50} />
           <div className="text-lg font-semibold">{w.name} Wildcard</div>
           <div className="text-center">
             Trade in your wildcards for one wildcard.

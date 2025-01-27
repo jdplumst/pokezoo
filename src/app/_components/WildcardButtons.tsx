@@ -81,11 +81,7 @@ export default function WildcardButtons(props: {
           disabled={purchase.isLoading}
           className="flex gap-1"
         >
-          <Wildcard
-            wildcard="Common"
-            width={30}
-            height={30}
-          />
+          <Wildcard wildcard="Common" width={30} height={30} />
           {props.wildcard.commonCost}
         </Button>
       )}
@@ -100,11 +96,7 @@ export default function WildcardButtons(props: {
           disabled={purchase.isLoading}
           className="flex gap-1"
         >
-          <Wildcard
-            wildcard="Rare"
-            width={30}
-            height={30}
-          />
+          <Wildcard wildcard="Rare" width={30} height={30} />
           {props.wildcard.rareCost}
         </Button>
       )}
@@ -119,11 +111,7 @@ export default function WildcardButtons(props: {
           disabled={purchase.isLoading}
           className="flex gap-1"
         >
-          <Wildcard
-            wildcard="Epic"
-            width={30}
-            height={30}
-          />
+          <Wildcard wildcard="Epic" width={30} height={30} />
           {props.wildcard.epicCost}
         </Button>
       )}
@@ -138,11 +126,7 @@ export default function WildcardButtons(props: {
           disabled={purchase.isLoading}
           className="flex gap-1"
         >
-          <Wildcard
-            wildcard="Legendary"
-            width={30}
-            height={30}
-          />
+          <Wildcard wildcard="Legendary" width={30} height={30} />
           {props.wildcard.legendaryCost}
         </Button>
       )}

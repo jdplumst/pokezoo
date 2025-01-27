@@ -16,24 +16,10 @@ export default function SignIn(props: {
       <span className="flex items-center justify-center gap-2">
         Sign in with {props.provider}
         {props.provider === "github" && (
-          <Github
-            width={20}
-            height={20}
-            fill="black"
-          />
+          <Github width={20} height={20} fill="black" />
         )}
-        {props.provider === "twitch" && (
-          <Twitch
-            width={20}
-            height={20}
-          />
-        )}
-        {props.provider === "google" && (
-          <Google
-            width={20}
-            height={20}
-          />
-        )}
+        {props.provider === "twitch" && <Twitch width={20} height={20} />}
+        {props.provider === "google" && <Google width={20} height={20} />}
       </span>
     </button>
   );
