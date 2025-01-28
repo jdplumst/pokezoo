@@ -24,6 +24,7 @@ export async function getTrades() {
   const tradesData = await db
     .select({
       id: trades.id,
+      description: trades.description,
       initiatorId: initiator.userId,
       initatorName: initiator.username,
       initiatorPokemonId: initiatorInstance.id,

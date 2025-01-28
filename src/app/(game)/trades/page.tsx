@@ -30,14 +30,14 @@ export default async function Trades() {
       <Separator className="mb-4" />
       <div className="flex flex-col gap-4">
         <TradeButton />
-        <div className="grid-cols-1">
+        <div className="grid grid-cols-1 gap-y-4">
           {trades.map((t) => (
-            <div className="flex h-80 w-full justify-between border-2 border-solid py-2">
-              <div className="flex w-full flex-col items-center gap-4">
-                <div className="h-1/5 px-2 text-center font-semibold">
+            <div className="flex h-96 w-full justify-between border-2 border-solid py-2">
+              <div className="flex w-1/2 flex-col items-center gap-4">
+                <div className="h-1/6 px-2 text-center font-semibold">
                   {t.initatorName} wants to trade!
                 </div>
-                <div className="h-1/3 w-1/2">
+                <div className="h-3/6 w-5/6">
                   <MiniPokemonCard
                     name={t.initiatorPokemonName}
                     img={t.initiatorPokemonImg}
@@ -47,8 +47,11 @@ export default async function Trades() {
                     }
                   />
                 </div>
+                <div className="w-full overflow-x-scroll text-center">
+                  {t.description}
+                </div>
                 {t.initiatorId === session.user.id && (
-                  <form className="h-1/5">
+                  <form className="h-1/6">
                     <SubmitButton text="Cancel Trade" />
                   </form>
                 )}
@@ -61,11 +64,11 @@ export default async function Trades() {
               t.offererPokemonName &&
               t.offererPokemonShiny &&
               t.offererPokemonRarity ? (
-                <div className="flex w-full flex-col items-center gap-4">
-                  <div className="h-1/5 px-2 text-center font-semibold">
+                <div className="flex w-1/2 flex-col items-center gap-4">
+                  <div className="h-1/6 px-2 text-center font-semibold">
                     {t.offererName} has an offer!
                   </div>
-                  <div className="h-1/3 w-1/2">
+                  <div className="h-3/6 w-1/2">
                     <MiniPokemonCard
                       name={t.offererPokemonName}
                       img={t.offererPokemonImg}
@@ -75,13 +78,14 @@ export default async function Trades() {
                       }
                     />
                   </div>
+                  <div className="h-1/6"></div>
                   {t.offererId === session.user.id && (
-                    <form>
+                    <form className="h-1/6">
                       <SubmitButton text="Withdraw" />
                     </form>
                   )}
                   {t.initiatorId !== session.user.id && (
-                    <div className="flex h-1/5 w-full justify-around">
+                    <div className="flex h-1/6 w-full justify-around">
                       <form>
                         <SubmitButton text="Accept" />
                       </form>
@@ -92,15 +96,18 @@ export default async function Trades() {
                   )}
                 </div>
               ) : (
-                <div className="flex w-full flex-col items-center gap-4">
-                  <div className="h-1/5"></div>
-                  <div className="h-3/5">
+                <div className="flex w-1/2 flex-col items-center gap-4">
+                  <div className="h-1/6"></div>
+                  <div className="h-3/6">
                     <div></div>
                     <div></div>
                   </div>
-                  <form className="h-1/5">
-                    <SubmitButton text="Add Offer" />
-                  </form>
+                  <div className="h-1/6"></div>
+                  {t.initiatorId !== session.user.id && (
+                    <form className="h-1/6">
+                      <SubmitButton text="Add Offer" />
+                    </form>
+                  )}
                 </div>
               )}
             </div>
