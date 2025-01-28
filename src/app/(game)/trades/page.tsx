@@ -1,6 +1,7 @@
 import { Separator } from "@/src/components/ui/separator";
 import {
   cancelTrade,
+  declineTrade,
   getTrades,
   withdrawTrade,
 } from "@/src/server/actions/trades";
@@ -112,7 +113,13 @@ export default async function Trades() {
                       <form>
                         <SubmitButton text="Accept" />
                       </form>
-                      <form>
+                      <form
+                        action={async () => {
+                          "use server";
+
+                          await declineTrade(t.id);
+                        }}
+                      >
                         <SubmitButton text="Decline" variant="destructive" />
                       </form>
                     </div>

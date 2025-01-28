@@ -115,3 +115,37 @@ export async function withdrawTrade(tradeId: string) {
 
   redirect("/trades");
 }
+
+export async function declineTrade(tradeId: string) {
+  const session = await auth();
+  if (!session) {
+    redirect("/");
+  }
+
+  const tradeData = (
+    await db.select().from(trades).where(eq(trades.id, tradeId))
+  )[0];
+
+  if (!tradeData) {
+    redirect("/trades");
+  }
+
+  if (tradeData.initiatorId !== session.user.id) {
+    redirect("/trades");
+  }
+
+  if (!tradeData.offererId || !tradeData.offererInstanceId) {
+    redirect("/trades");
+  }
+
+  await db
+    .update(trades)
+    .set({
+      offererId: null,
+      offererInstanceId: null,
+      modifyDate: new Date(),
+    })
+    .where(eq(trades.id, tradeId));
+
+  redirect("/trades");
+}
