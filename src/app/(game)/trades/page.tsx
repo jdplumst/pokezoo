@@ -1,7 +1,6 @@
 import { Separator } from "@/src/components/ui/separator";
 import { getTrades } from "@/src/server/actions/trades";
 import { Metadata } from "next";
-import Image from "next/image";
 import SubmitButton from "../../_components/SubmitButton";
 import { auth } from "@/src/server/auth";
 import { redirect } from "next/navigation";
@@ -38,11 +37,16 @@ export default async function Trades() {
                 <div className="h-1/5 px-2 text-center font-semibold">
                   {t.initatorName} wants to trade!
                 </div>
-                <MiniPokemonCard
-                  name={t.initiatorPokemonName}
-                  img={t.initiatorPokemonImg}
-                  rarity={t.initiatorPokemonRarity as z.infer<typeof ZodRarity>}
-                />
+                <div className="h-1/3 w-1/2">
+                  <MiniPokemonCard
+                    name={t.initiatorPokemonName}
+                    img={t.initiatorPokemonImg}
+                    shiny={t.initiatorPokemonShiny}
+                    rarity={
+                      t.initiatorPokemonRarity as z.infer<typeof ZodRarity>
+                    }
+                  />
+                </div>
                 {t.initiatorId === session.user.id && (
                   <form className="h-1/5">
                     <SubmitButton text="Cancel Trade" />
@@ -55,16 +59,22 @@ export default async function Trades() {
               t.offererPokemonId &&
               t.offererPokemonImg &&
               t.offererPokemonName &&
+              t.offererPokemonShiny &&
               t.offererPokemonRarity ? (
                 <div className="flex w-full flex-col items-center gap-4">
                   <div className="h-1/5 px-2 text-center font-semibold">
                     {t.offererName} has an offer!
                   </div>
-                  <MiniPokemonCard
-                    name={t.offererPokemonName}
-                    img={t.offererPokemonImg}
-                    rarity={t.offererPokemonRarity as z.infer<typeof ZodRarity>}
-                  />
+                  <div className="h-1/3 w-1/2">
+                    <MiniPokemonCard
+                      name={t.offererPokemonName}
+                      img={t.offererPokemonImg}
+                      shiny={t.offererPokemonShiny}
+                      rarity={
+                        t.offererPokemonRarity as z.infer<typeof ZodRarity>
+                      }
+                    />
+                  </div>
                   {t.offererId === session.user.id && (
                     <form>
                       <SubmitButton text="Withdraw" />

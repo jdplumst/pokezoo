@@ -4,8 +4,7 @@ import { redirect } from "next/navigation";
 import { alias } from "drizzle-orm/pg-core";
 import { instances, profiles, rarities, species, trades } from "../db/schema";
 import { db } from "../db";
-import { asc, desc, eq, or } from "drizzle-orm";
-import { revalidatePath } from "next/cache";
+import { desc, eq } from "drizzle-orm";
 
 export async function getTrades() {
   const session = await auth();
@@ -30,12 +29,14 @@ export async function getTrades() {
       initiatorPokemonId: initiatorInstance.id,
       initiatorPokemonName: initiatorSpecies.name,
       initiatorPokemonImg: initiatorSpecies.img,
+      initiatorPokemonShiny: initiatorSpecies.shiny,
       initiatorPokemonRarity: initiatorRarity.name,
       offererId: offerer.id,
       offererName: offerer.username,
       offererPokemonId: offererInstance.id,
       offererPokemonName: offererSpecies.name,
       offererPokemonImg: offererSpecies.img,
+      offererPokemonShiny: offererSpecies.shiny,
       offererPokemonRarity: offererRarity.name,
     })
     .from(trades)
@@ -59,51 +60,4 @@ export async function getTrades() {
     .orderBy(desc(trades.modifyDate));
 
   return tradesData;
-}
-
-export async function addTrade(instanceId: string, description: string) {
-  const session = await auth();
-  if (!session) {
-    redirect("/");
-  }
-
-  const initiatorId = session.user.id;
-
-  const instanceData = (
-    await db.select().from(instances).where(eq(instances.id, instanceId))
-  )[0];
-
-  if (!instanceData) {
-    throw new Error("The pokémon you tried to trade does not exist.");
-  }
-
-  if (instanceData.userId !== initiatorId) {
-    throw new Error("The pokémon you tried to trade does not belong to you.");
-  }
-
-  const exists = (
-    await db
-      .select()
-      .from(trades)
-      .where(
-        or(
-          eq(trades.initiatorInstanceId, instanceId),
-          eq(trades.offererInstanceId, instanceId),
-        ),
-      )
-  )[0];
-
-  if (exists) {
-    throw new Error(
-      "The pokémon you are trying to trade is already in a trade.",
-    );
-  }
-
-  await db.insert(trades).values({
-    initiatorId: initiatorId,
-    initiatorInstanceId: instanceId,
-    description: description,
-  });
-
-  revalidatePath("/trades");
 }
