@@ -32,7 +32,7 @@ export async function getTrades() {
       initiatorPokemonImg: initiatorSpecies.img,
       initiatorPokemonShiny: initiatorSpecies.shiny,
       initiatorPokemonRarity: initiatorRarity.name,
-      offererId: offerer.id,
+      offererId: offerer.userId,
       offererName: offerer.username,
       offererPokemonId: offererInstance.id,
       offererPokemonName: offererSpecies.name,
@@ -74,14 +74,44 @@ export async function cancelTrade(tradeId: string) {
   )[0];
 
   if (!tradeData) {
-    throw new Error("The trade you are trying to cancel does not exist.");
+    redirect("/trades");
   }
 
   if (tradeData.initiatorId !== session.user.id) {
-    throw new Error("You are not authorized to cancel this trade.");
+    redirect("/trades");
   }
 
   await db.delete(trades).where(eq(trades.id, tradeId));
+
+  redirect("/trades");
+}
+
+export async function withdrawTrade(tradeId: string) {
+  const session = await auth();
+  if (!session) {
+    redirect("/");
+  }
+
+  const tradeData = (
+    await db.select().from(trades).where(eq(trades.id, tradeId))
+  )[0];
+
+  if (!tradeData) {
+    redirect("/trades");
+  }
+
+  if (tradeData.offererId !== session.user.id) {
+    redirect("/trades");
+  }
+
+  await db
+    .update(trades)
+    .set({
+      offererId: null,
+      offererInstanceId: null,
+      modifyDate: new Date(),
+    })
+    .where(eq(trades.id, tradeId));
 
   redirect("/trades");
 }

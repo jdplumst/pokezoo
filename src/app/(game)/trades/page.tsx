@@ -1,5 +1,9 @@
 import { Separator } from "@/src/components/ui/separator";
-import { cancelTrade, getTrades } from "@/src/server/actions/trades";
+import {
+  cancelTrade,
+  getTrades,
+  withdrawTrade,
+} from "@/src/server/actions/trades";
 import { Metadata } from "next";
 import SubmitButton from "../../_components/SubmitButton";
 import { auth } from "@/src/server/auth";
@@ -53,7 +57,7 @@ export default async function Trades() {
                 <div className="flex h-1/6 w-full items-center justify-center overflow-x-scroll overflow-y-scroll text-center">
                   {t.description}
                 </div>
-                {t.initiatorId === session.user.id && (
+                {t.initiatorId === session.user.id ? (
                   <form
                     className="h-1/6"
                     action={async () => {
@@ -64,6 +68,8 @@ export default async function Trades() {
                   >
                     <SubmitButton text="Cancel Trade" variant="destructive" />
                   </form>
+                ) : (
+                  <div className="h-1/6"></div>
                 )}
               </div>
               <Separator orientation="vertical" />
@@ -79,7 +85,7 @@ export default async function Trades() {
                   <div className="h-1/6 px-2 text-center font-semibold">
                     {t.offererName} has an offer!
                   </div>
-                  <div className="h-3/6 w-1/2">
+                  <div className="h-3/6 w-5/6">
                     <MiniPokemonCard
                       name={t.offererPokemonName}
                       img={t.offererPokemonImg}
@@ -90,12 +96,18 @@ export default async function Trades() {
                     />
                   </div>
                   <div className="h-1/6"></div>
-                  {t.offererId === session.user.id && (
-                    <form className="h-1/6">
+                  {t.offererId === session.user.id ? (
+                    <form
+                      className="h-1/6"
+                      action={async () => {
+                        "use server";
+
+                        await withdrawTrade(t.id);
+                      }}
+                    >
                       <SubmitButton text="Withdraw" />
                     </form>
-                  )}
-                  {t.initiatorId === session.user.id && (
+                  ) : t.initiatorId === session.user.id ? (
                     <div className="flex h-1/6 w-full justify-center gap-2">
                       <form>
                         <SubmitButton text="Accept" />
@@ -104,6 +116,8 @@ export default async function Trades() {
                         <SubmitButton text="Decline" variant="destructive" />
                       </form>
                     </div>
+                  ) : (
+                    <div className="h-1/6"></div>
                   )}
                 </div>
               ) : (
