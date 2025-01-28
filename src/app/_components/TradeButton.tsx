@@ -82,6 +82,10 @@ export default function TradeButton() {
           title: "Success! 🎉",
           description: data.message,
         });
+        setDescription("");
+        setSearch("");
+        setInstance(null);
+        setOpen(false);
         router.refresh();
       }
     },
