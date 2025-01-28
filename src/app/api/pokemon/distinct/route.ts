@@ -1,7 +1,7 @@
 import { auth } from "@/src/server/auth";
 import { db } from "@/src/server/db";
-import { instances, rarities, species } from "@/src/server/db/schema";
-import { and, eq, ilike } from "drizzle-orm";
+import { instances, rarities, species, trades } from "@/src/server/db/schema";
+import { and, eq, ilike, notInArray, or } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -11,6 +11,16 @@ export async function GET(req: NextRequest) {
   if (!session) {
     throw new Error("You are not authorized to fetch this data.");
   }
+
+  const instancesInInitiatedTrades = db
+    .select({ id: trades.initiatorInstanceId })
+    .from(trades)
+    .where(eq(trades.initiatorId, session.user.id));
+
+  const instancesInOfferedTrades = db
+    .select({ id: trades.offererInstanceId })
+    .from(trades)
+    .where(eq(trades.offererId, session.user.id));
 
   const instanceData = await db
     .selectDistinctOn([instances.speciesId], {
@@ -28,6 +38,8 @@ export async function GET(req: NextRequest) {
       and(
         eq(instances.userId, session.user.id),
         ilike(species.name, "%" + name + "%"),
+        notInArray(instances.id, instancesInInitiatedTrades),
+        notInArray(instances.id, instancesInInitiatedTrades),
       ),
     )
     .limit(30);
