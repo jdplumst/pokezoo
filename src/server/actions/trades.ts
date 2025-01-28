@@ -62,3 +62,26 @@ export async function getTrades() {
 
   return tradesData;
 }
+
+export async function cancelTrade(tradeId: string) {
+  const session = await auth();
+  if (!session) {
+    redirect("/");
+  }
+
+  const tradeData = (
+    await db.select().from(trades).where(eq(trades.id, tradeId))
+  )[0];
+
+  if (!tradeData) {
+    throw new Error("The trade you are trying to cancel does not exist.");
+  }
+
+  if (tradeData.initiatorId !== session.user.id) {
+    throw new Error("You are not authorized to cancel this trade.");
+  }
+
+  await db.delete(trades).where(eq(trades.id, tradeId));
+
+  redirect("/trades");
+}

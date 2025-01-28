@@ -1,5 +1,5 @@
 import { Separator } from "@/src/components/ui/separator";
-import { getTrades } from "@/src/server/actions/trades";
+import { cancelTrade, getTrades } from "@/src/server/actions/trades";
 import { Metadata } from "next";
 import SubmitButton from "../../_components/SubmitButton";
 import { auth } from "@/src/server/auth";
@@ -47,11 +47,18 @@ export default async function Trades() {
                     }
                   />
                 </div>
-                <div className="w-full overflow-x-scroll text-center">
+                <div className="flex h-1/6 w-full items-center justify-center overflow-x-scroll overflow-y-scroll text-center">
                   {t.description}
                 </div>
                 {t.initiatorId === session.user.id && (
-                  <form className="h-1/6">
+                  <form
+                    className="h-1/6"
+                    action={async () => {
+                      "use server";
+
+                      await cancelTrade(t.id);
+                    }}
+                  >
                     <SubmitButton text="Cancel Trade" />
                   </form>
                 )}
