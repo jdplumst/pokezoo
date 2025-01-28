@@ -32,7 +32,10 @@ export default async function Trades() {
         <TradeButton />
         <div className="grid grid-cols-1 gap-y-4">
           {trades.map((t) => (
-            <div className="flex h-96 w-full justify-between border-2 border-solid py-2">
+            <div
+              key={t.id}
+              className="flex h-96 w-full justify-between border-2 border-solid py-2"
+            >
               <div className="flex w-1/2 flex-col items-center gap-4">
                 <div className="h-1/6 px-2 text-center font-semibold">
                   {t.initatorName} wants to trade!
@@ -59,7 +62,7 @@ export default async function Trades() {
                       await cancelTrade(t.id);
                     }}
                   >
-                    <SubmitButton text="Cancel Trade" />
+                    <SubmitButton text="Cancel Trade" variant="destructive" />
                   </form>
                 )}
               </div>
@@ -69,7 +72,8 @@ export default async function Trades() {
               t.offererPokemonId &&
               t.offererPokemonImg &&
               t.offererPokemonName &&
-              t.offererPokemonShiny &&
+              (t.offererPokemonShiny === true ||
+                t.offererPokemonShiny === false) &&
               t.offererPokemonRarity ? (
                 <div className="flex w-1/2 flex-col items-center gap-4">
                   <div className="h-1/6 px-2 text-center font-semibold">
@@ -91,13 +95,13 @@ export default async function Trades() {
                       <SubmitButton text="Withdraw" />
                     </form>
                   )}
-                  {t.initiatorId !== session.user.id && (
-                    <div className="flex h-1/6 w-full justify-around">
+                  {t.initiatorId === session.user.id && (
+                    <div className="flex h-1/6 w-full justify-center gap-2">
                       <form>
                         <SubmitButton text="Accept" />
                       </form>
                       <form>
-                        <SubmitButton text="Decline" />
+                        <SubmitButton text="Decline" variant="destructive" />
                       </form>
                     </div>
                   )}
