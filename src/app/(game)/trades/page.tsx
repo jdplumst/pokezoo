@@ -1,5 +1,6 @@
 import { Separator } from "@/src/components/ui/separator";
 import {
+  acceptTrade,
   cancelTrade,
   declineTrade,
   getTrades,
@@ -110,7 +111,13 @@ export default async function Trades() {
                     </form>
                   ) : t.initiatorId === session.user.id ? (
                     <div className="flex h-1/6 w-full justify-center gap-2">
-                      <form>
+                      <form
+                        action={async () => {
+                          "use server";
+
+                          await acceptTrade(t.id);
+                        }}
+                      >
                         <SubmitButton text="Accept" />
                       </form>
                       <form
