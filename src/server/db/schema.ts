@@ -268,6 +268,7 @@ export const species = pgTable(
     regionId: integer("regionId")
       .notNull()
       .references(() => regions.id, { onDelete: "cascade" }),
+    starter: boolean("starter").notNull().default(false),
   },
   (s) => {
     return {
