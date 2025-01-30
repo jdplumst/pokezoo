@@ -34,7 +34,7 @@ export default async function Trades() {
       <h1 className="py-4 text-5xl font-bold">Trades</h1>
       <Separator className="mb-4" />
       <div className="flex flex-col gap-4">
-        <TradeButton />
+        <TradeButton type="initiate" />
         <div className="grid grid-cols-1 gap-y-4">
           {trades.map((t) => (
             <div
@@ -136,9 +136,7 @@ export default async function Trades() {
                   </div>
                   <div className="h-1/6"></div>
                   {t.initiatorId !== session.user.id && (
-                    <form className="h-1/6">
-                      <SubmitButton text="Add Offer" />
-                    </form>
+                    <TradeButton type="offer" tradeId={t.id} />
                   )}
                 </div>
               )}

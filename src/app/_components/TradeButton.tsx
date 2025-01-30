@@ -18,7 +18,13 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/src/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
-export default function TradeButton() {
+export default function TradeButton(
+  props:
+    | {
+        type: "initiate";
+      }
+    | { type: "offer"; tradeId: string },
+) {
   const router = useRouter();
 
   const { toast } = useToast();
@@ -54,7 +60,7 @@ export default function TradeButton() {
 
   const add = useMutation({
     mutationFn: async () => {
-      const res = await fetch("/api/trade", {
+      const res = await fetch("/api/trade/initiate", {
         method: "POST",
         body: JSON.stringify({
           instanceId: instance,
@@ -99,10 +105,57 @@ export default function TradeButton() {
     },
   });
 
+  const offer = useMutation({
+    mutationFn: async (input: { tradeId: string }) => {
+      const res = await fetch("/api/trade/offer", {
+        method: "POST",
+        body: JSON.stringify({
+          tradeId: input.tradeId,
+          instanceId: instance,
+        }),
+      });
+
+      const resSchema = z.union([
+        z.object({ message: z.undefined(), error: z.string() }),
+        z.object({ message: z.string(), error: z.undefined() }),
+      ]);
+
+      const data = resSchema.parse(await res.json());
+      return data;
+    },
+    onSuccess(data) {
+      if (data.error) {
+        toast({
+          title: "Error",
+          description: data.error,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success! 🎉",
+          description: data.message,
+        });
+        setDescription("");
+        setSearch("");
+        setInstance(null);
+        setOpen(false);
+        router.refresh();
+      }
+    },
+    onError() {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+      router.refresh();
+    },
+  });
+
   return (
     <>
       <Button onClick={() => setOpen(true)} className="w-fit">
-        Add Trade
+        {props.type === "initiate" ? "Add Trade" : "Add Offer"}
       </Button>
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetContent>
@@ -113,15 +166,17 @@ export default function TradeButton() {
             </SheetDescription>
           </SheetHeader>
           <div className="flex flex-col items-center gap-10 py-4">
-            <div className="flex w-full flex-col">
-              <Textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                maxLength={100}
-                placeholder="Enter a short message here."
-              />
-              <div>{description.length} / 100</div>
-            </div>
+            {props.type === "initiate" && (
+              <div className="flex w-full flex-col">
+                <Textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  maxLength={100}
+                  placeholder="Enter a short message here."
+                />
+                <div>{description.length} / 100</div>
+              </div>
+            )}
             <Input
               placeholder="Search a pokémon to trade."
               value={search}
@@ -144,7 +199,15 @@ export default function TradeButton() {
                 </button>
               ))}
             </div>
-            <Button onClick={() => add.mutate()}>Add Trade</Button>
+            <Button
+              onClick={() =>
+                props.type === "initiate"
+                  ? add.mutate()
+                  : offer.mutate({ tradeId: props.tradeId })
+              }
+            >
+              {props.type === "initiate" ? "Add Trade" : "Add Offer"}
+            </Button>
           </div>
         </SheetContent>
       </Sheet>
