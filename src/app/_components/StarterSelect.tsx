@@ -9,15 +9,21 @@ import {
   DialogTitle,
 } from "@/src/components/ui/dialog";
 import Image from "next/image";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { z } from "zod";
 import { Button } from "@/src/components/ui/button";
 import { useState } from "react";
+import { useToast } from "@/src/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function StarterSelect(props: {
   regionId: number;
   regionName: string;
 }) {
+  const { toast } = useToast();
+
+  const router = useRouter();
+
   const [starterId, setStarterId] = useState<string | null>(null);
 
   const starters = useQuery({
@@ -35,6 +41,49 @@ export default function StarterSelect(props: {
       });
       const data = resSchema.parse(await res.json());
       return data;
+    },
+  });
+
+  const select = useMutation({
+    mutationFn: async () => {
+      const res = await fetch("/api/starter", {
+        method: "POST",
+        body: JSON.stringify({
+          starterId: starterId,
+        }),
+      });
+
+      const resSchema = z.union([
+        z.object({ message: z.undefined(), error: z.string() }),
+        z.object({ message: z.string(), error: z.undefined() }),
+      ]);
+
+      const data = resSchema.parse(await res.json());
+      return data;
+    },
+    onSuccess(data) {
+      if (data.error) {
+        toast({
+          title: "Error",
+          description: data.error,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Success! 🎉",
+          description: data.message,
+        });
+        setStarterId(null);
+        router.refresh();
+      }
+    },
+    onError() {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        variant: "destructive",
+      });
+      router.refresh();
     },
   });
 
@@ -66,7 +115,9 @@ export default function StarterSelect(props: {
           ))}
         </div>
         <DialogFooter className="mx-auto">
-          <Button>Confirm</Button>
+          <Button onClick={() => select.mutate()} disabled={select.isLoading}>
+            Confirm
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
