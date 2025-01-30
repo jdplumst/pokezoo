@@ -10,9 +10,10 @@ import { eq, sql } from "drizzle-orm";
 import { MAX_BALANCE } from "@/src/constants";
 import { env } from "@/src/env";
 import { type z } from "zod";
+import { NextRequest } from "next/server";
 
-export async function POST(req: NextApiRequest, res: NextApiResponse) {
-  const { authorization } = req.headers;
+export async function POST(req: NextRequest) {
+  const authorization = req.headers.get("authorization");
   if (!authorization || authorization.split(" ")[1] !== env.CRON_TOKEN) {
     throw new Error("Not authorized to make this request.");
   }
@@ -91,9 +92,12 @@ export async function POST(req: NextApiRequest, res: NextApiResponse) {
         })
         .where(eq(profiles.id, profile.id));
     }
-    return res.status(200).json({
-      msg: "Successfully updated all user's dollars and reset daily and nightly claims",
-    });
+    return Response.json(
+      {
+        msg: "Successfully updated all user's dollars and reset daily and nightly claims",
+      },
+      { status: 200 },
+    );
   } catch (_) {
     throw new Error(
       "User's dollars and daily and nightly claims not updated successfully",
