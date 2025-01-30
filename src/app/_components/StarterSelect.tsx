@@ -9,7 +9,7 @@ import {
   DialogTitle,
 } from "@/src/components/ui/dialog";
 import Image from "next/image";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { Button } from "@/src/components/ui/button";
 import { useState } from "react";
@@ -23,6 +23,8 @@ export default function StarterSelect(props: {
   const { toast } = useToast();
 
   const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   const [starterId, setStarterId] = useState<string | null>(null);
 
@@ -74,6 +76,7 @@ export default function StarterSelect(props: {
           description: data.message,
         });
         setStarterId(null);
+        queryClient.invalidateQueries({ queryKey: ["pokemon"] });
         router.refresh();
       }
     },
