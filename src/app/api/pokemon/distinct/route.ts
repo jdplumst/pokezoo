@@ -1,7 +1,7 @@
 import { auth } from "@/src/server/auth";
 import { db } from "@/src/server/db";
 import { instances, rarities, species, trades } from "@/src/server/db/schema";
-import { and, eq, ilike, notInArray, or } from "drizzle-orm";
+import { and, eq, ilike, notInArray } from "drizzle-orm";
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
@@ -39,7 +39,7 @@ export async function GET(req: NextRequest) {
         eq(instances.userId, session.user.id),
         ilike(species.name, "%" + name + "%"),
         notInArray(instances.id, instancesInInitiatedTrades),
-        notInArray(instances.id, instancesInInitiatedTrades),
+        notInArray(instances.id, instancesInOfferedTrades),
       ),
     )
     .limit(30);

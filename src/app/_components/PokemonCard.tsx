@@ -7,15 +7,10 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/src/components/ui/sheet";
-import {
-  type ZodHabitat,
-  type ZodRarity,
-  type ZodRegion,
-  type ZodSpeciesType,
-} from "@/src/zod";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/src/zod";
 import Image from "next/image";
 import { type ReactNode, useState } from "react";
-import { type z } from "zod";
+import { z } from "zod";
 import TypeButton from "./TypeButton";
 
 export default function PokemonCard(props: {
@@ -24,25 +19,44 @@ export default function PokemonCard(props: {
   pokemon: {
     pokedexNumber: number;
     name: string;
-    rarity: z.infer<typeof ZodRarity>;
+    rarity: string;
     yield: number;
     img: string;
     sellPrice: number;
     shiny: boolean;
-    typeOne: z.infer<typeof ZodSpeciesType>;
-    typeTwo: z.infer<typeof ZodSpeciesType> | null;
+    typeOne: string;
+    typeTwo: string | null;
     generation: number;
-    habitat: z.infer<typeof ZodHabitat>;
-    region: z.infer<typeof ZodRegion>;
+    habitat: string;
+    region: string;
   };
 }) {
+  const pokemonSchema = z.object({
+    pokedexNumber: z.number(),
+    name: z.string(),
+    rarity: ZodRarity,
+    yield: z.number(),
+    img: z.string(),
+    sellPrice: z.number(),
+    shiny: z.boolean(),
+    typeOne: ZodSpeciesType,
+    typeTwo: ZodSpeciesType.nullable(),
+    generation: z.number(),
+    habitat: ZodHabitat,
+    region: ZodRegion,
+  });
+  const pokemon = pokemonSchema.safeParse(props.pokemon);
+  if (pokemon.error) {
+    return <div>Something went wrong.</div>;
+  }
+
   const [open, setOpen] = useState(false);
 
   return (
     <>
       <div
         onClick={() => setOpen(true)}
-        className={`relative w-80 rounded-2xl border-2 border-solid border-black p-4 shadow-xl hover:cursor-pointer ${props.pokemon.rarity === `Common` && `bg-common-unfocus shadow-common-unfocus hover:bg-common-focus`} ${props.pokemon.rarity === `Rare` && `bg-rare-unfocus shadow-rare-unfocus hover:bg-rare-focus`} ${props.pokemon.rarity === `Epic` && `bg-epic-unfocus shadow-epic-unfocus hover:bg-epic-focus`} ${props.pokemon.rarity === `Legendary` && `bg-legendary-unfocus shadow-legendary-unfocus hover:bg-legendary-focus`} ${props.pokemon.rarity === `Mega` && `bg-mega-unfocus shadow-mega-unfocus hover:bg-mega-focus`} ${props.pokemon.rarity === `Ultra Beast` && `bg-ub-unfocus shadow-ub-unfocus hover:bg-ub-focus`} ${props.pokemon.rarity === `Gigantamax` && `bg-gmax-unfocus shadow-gmax-unfocus hover:bg-gmax-focus`}`}
+        className={`relative w-80 rounded-2xl border-2 border-solid border-black p-4 shadow-xl hover:cursor-pointer ${pokemon.data.rarity === `Common` && `bg-common-unfocus shadow-common-unfocus hover:bg-common-focus`} ${pokemon.data.rarity === `Rare` && `bg-rare-unfocus shadow-rare-unfocus hover:bg-rare-focus`} ${pokemon.data.rarity === `Epic` && `bg-epic-unfocus shadow-epic-unfocus hover:bg-epic-focus`} ${pokemon.data.rarity === `Legendary` && `bg-legendary-unfocus shadow-legendary-unfocus hover:bg-legendary-focus`} ${pokemon.data.rarity === `Mega` && `bg-mega-unfocus shadow-mega-unfocus hover:bg-mega-focus`} ${pokemon.data.rarity === `Ultra Beast` && `bg-ub-unfocus shadow-ub-unfocus hover:bg-ub-focus`} ${pokemon.data.rarity === `Gigantamax` && `bg-gmax-unfocus shadow-gmax-unfocus hover:bg-gmax-focus`}`}
       >
         {props.caught && (
           <Image
@@ -57,19 +71,19 @@ export default function PokemonCard(props: {
         )}
         <div className="flex flex-col items-center gap-2">
           <Image
-            src={props.pokemon.img}
-            alt={props.pokemon.name}
+            src={pokemon.data.img}
+            alt={pokemon.data.name}
             width={100}
             height={100}
           />
           <div className="font-lg font-semibold capitalize">
-            {props.pokemon.shiny && "🌟"}{" "}
-            {"#" + props.pokemon.pokedexNumber + ":"} {props.pokemon.name}
+            {pokemon.data.shiny && "🌟"}{" "}
+            {"#" + pokemon.data.pokedexNumber + ":"} {pokemon.data.name}
           </div>
           <div className="flex flex-col items-center gap-0">
-            <div>Rarity: {props.pokemon.rarity}</div>
-            <div>Yield: P{props.pokemon.yield}</div>
-            <div>Sell Price: P{props.pokemon.sellPrice}</div>
+            <div>Rarity: {pokemon.data.rarity}</div>
+            <div>Yield: P{pokemon.data.yield}</div>
+            <div>Sell Price: P{pokemon.data.sellPrice}</div>
           </div>
           {props.children}
         </div>
@@ -79,53 +93,53 @@ export default function PokemonCard(props: {
         <SheetContent>
           <SheetHeader className="flex flex-col items-center">
             <SheetTitle className="font-2xl capitalize">
-              {props.pokemon.shiny && "🌟"}{" "}
-              {"#" + props.pokemon.pokedexNumber + ":"} {props.pokemon.name}
+              {pokemon.data.shiny && "🌟"}{" "}
+              {"#" + pokemon.data.pokedexNumber + ":"} {pokemon.data.name}
             </SheetTitle>
             <SheetDescription hidden={true}>
-              A description of {props.pokemon.name}
+              A description of {pokemon.data.name}
             </SheetDescription>
             <div className="flex flex-col items-start text-lg">
               <Image
-                src={props.pokemon.img}
-                alt={props.pokemon.name}
+                src={pokemon.data.img}
+                alt={pokemon.data.name}
                 width={200}
                 height={200}
               />
 
               <div className="flex gap-4 pb-5">
-                <TypeButton type={props.pokemon.typeOne} />
-                {props.pokemon.typeTwo && (
-                  <TypeButton type={props.pokemon.typeTwo} />
+                <TypeButton type={pokemon.data.typeOne} />
+                {pokemon.data.typeTwo && (
+                  <TypeButton type={pokemon.data.typeTwo} />
                 )}
               </div>
               <div>
-                <b>Rarity:</b> {props.pokemon.rarity}
+                <b>Rarity:</b> {pokemon.data.rarity}
               </div>
               <div>
-                <b>Yield:</b> P{props.pokemon.yield}
+                <b>Yield:</b> P{pokemon.data.yield}
               </div>
               <div>
-                <b>Sell Price:</b> P{props.pokemon.sellPrice}
+                <b>Sell Price:</b> P{pokemon.data.sellPrice}
               </div>
               <div>
-                <b>Habitat:</b> {props.pokemon.habitat}
+                <b>Habitat:</b> {pokemon.data.habitat}
               </div>
               <div>
-                <b>Region:</b> {props.pokemon.region}
+                <b>Region:</b> {pokemon.data.region}
               </div>
               <div>
-                <b>Generation:</b> {props.pokemon.generation}
+                <b>Generation:</b> {pokemon.data.generation}
               </div>
               <div>
-                <b>Shiny:</b> {props.pokemon.shiny ? "Shiny" : "Regular"}
+                <b>Shiny:</b> {pokemon.data.shiny ? "Shiny" : "Regular"}
               </div>
               <div>
                 <b>Time of Day:</b>{" "}
-                {props.pokemon.habitat === "Grassland"
+                {pokemon.data.habitat === "Grassland"
                   ? "Day"
-                  : props.pokemon.habitat === "Forest" ||
-                      props.pokemon.habitat === "Cave"
+                  : pokemon.data.habitat === "Forest" ||
+                      pokemon.data.habitat === "Cave"
                     ? "Night"
                     : "Anytime"}
               </div>

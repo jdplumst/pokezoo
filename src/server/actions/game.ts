@@ -13,6 +13,14 @@ export async function getGame() {
       .select({
         claimedDaily: profiles.claimedDaily,
         claimedNightly: profiles.claimedNightly,
+        johtoStarter: profiles.johtoStarter,
+        hoennStarter: profiles.hoennStarter,
+        sinnohStarter: profiles.sinnohStarter,
+        unovaStarter: profiles.unovaStarter,
+        kalosStarter: profiles.kalosStarter,
+        alolaStarter: profiles.alolaStarter,
+        galarStarter: profiles.galarStarter,
+        hisuiStarter: profiles.hisuiStarter,
       })
       .from(profiles)
       .where(eq(profiles.userId, session.user.id))
