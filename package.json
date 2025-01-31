@@ -10,6 +10,7 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
+    "check": "next lint && tsc --noEmit",
     "analyze": "cross-env ANALYZE=true next build",
     "db:push": "dotenv drizzle-kit push",
     "db:pull": "dotenv drizzle-kit introspect",
