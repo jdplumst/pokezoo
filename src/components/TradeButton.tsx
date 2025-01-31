@@ -1,21 +1,21 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
-import { Input } from "@/src/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/src/components/ui/sheet";
-import { Textarea } from "@/src/components/ui/textarea";
+} from "@/components/ui/sheet";
+import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
-import MiniPokemonCard from "./MiniPokemonCard";
+import MiniPokemonCard from "@/components/MiniPokemonCard";
 import { z } from "zod";
-import { type ZodRarity } from "@/src/zod";
+import { type ZodRarity } from "@/utils/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useToast } from "@/src/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 
 export default function TradeButton(

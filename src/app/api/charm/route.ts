@@ -1,6 +1,6 @@
-import { auth } from "@/src/server/auth";
-import { db } from "@/src/server/db";
-import { charms, profiles, userCharms } from "@/src/server/db/schema";
+import { auth } from "@/server/auth";
+import { db } from "@/server/db";
+import { charms, profiles, userCharms } from "@/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 

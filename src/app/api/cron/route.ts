@@ -1,13 +1,13 @@
-import { db } from "@/src/server/db/index";
+import { db } from "@/server/db/index";
 import {
   profiles,
   quests,
   type selectProfileSchema,
   userQuests,
-} from "@/src/server/db/schema";
+} from "@/server/db/schema";
 import { eq, sql } from "drizzle-orm";
-import { MAX_BALANCE } from "@/src/constants";
-import { env } from "@/src/env";
+import { MAX_BALANCE } from "@/utils/constants";
+import { env } from "@/utils/env";
 import { type z } from "zod";
 import { type NextRequest } from "next/server";
 

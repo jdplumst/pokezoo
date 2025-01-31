@@ -1,6 +1,6 @@
-import { auth } from "@/src/server/auth";
-import { db } from "@/src/server/db";
-import { instances, rarities, species, trades } from "@/src/server/db/schema";
+import { auth } from "@/server/auth";
+import { db } from "@/server/db";
+import { instances, rarities, species, trades } from "@/server/db/schema";
 import { and, eq, ilike, notInArray } from "drizzle-orm";
 import { type NextRequest } from "next/server";
 

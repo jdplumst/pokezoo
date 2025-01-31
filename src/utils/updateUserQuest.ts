@@ -3,10 +3,10 @@ import {
   type selectBallSchema,
   type selectUserQuestSchema,
   userQuests,
-} from "../server/db/schema";
+} from "@/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { type z } from "zod";
-import { db } from "../server/db";
+import { db } from "@/server/db";
 
 export async function updateUserQuest(
   species: z.infer<typeof selectSpeciesSchema>,

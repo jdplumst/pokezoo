@@ -6,12 +6,12 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/src/components/ui/sheet";
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/src/zod";
+} from "@/components/ui/sheet";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/utils/zod";
 import Image from "next/image";
 import { type ReactNode, useState } from "react";
 import { z } from "zod";
-import TypeButton from "./TypeButton";
+import TypeButton from "@/components/TypeButton";
 
 export default function PokemonCard(props: {
   children: ReactNode;

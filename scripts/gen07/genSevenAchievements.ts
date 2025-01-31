@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { db } from "@/src/server/db";
 import { achievements } from "@/src/server/db/schema";
 

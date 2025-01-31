@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -10,24 +10,24 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu";
-import { useSidebar } from "@/src/components/ui/sidebar";
+} from "@/components/ui/dropdown-menu";
+import { useSidebar } from "@/components/ui/sidebar";
 import {
   HabitatList,
   RaritiesList,
   RegionsList,
   TypesList,
-} from "@/src/constants";
-import { useToast } from "@/src/hooks/use-toast";
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/src/zod";
+} from "@/utils/constants";
+import { useToast } from "@/hooks/use-toast";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/utils/zod";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
-import LoadingSpinner from "./LoadingSpinner";
-import PokemonCard from "./PokemonCard";
-import Wildcard from "./Wildcard";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import PokemonCard from "@/components/PokemonCard";
+import Wildcard from "@/components/Wildcard";
 
 export default function PokedexGrid() {
   const { open } = useSidebar();

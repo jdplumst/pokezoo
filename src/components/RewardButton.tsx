@@ -1,20 +1,20 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/src/components/ui/dialog";
-import { useToast } from "@/src/hooks/use-toast";
-import { type ZodTime } from "@/src/zod";
+} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
+import { type ZodTime } from "@/utils/zod";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { z } from "zod";
-import Wildcard from "./Wildcard";
+import Wildcard from "@/components/Wildcard";
 
 export default function RewardButton(props: {
   time: z.infer<typeof ZodTime>;

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -9,23 +9,23 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu";
-import { useSidebar } from "@/src/components/ui/sidebar";
+} from "@/components/ui/dropdown-menu";
+import { useSidebar } from "@/components/ui/sidebar";
 import {
   HabitatList,
   RaritiesList,
   RegionsList,
   TypesList,
-} from "@/src/constants";
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/src/zod";
+} from "@/utils/constants";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/utils/zod";
 import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
 import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import React, { Fragment, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
 import PokemonCard from "./PokemonCard";
-import { useToast } from "@/src/hooks/use-toast";
-import LoadingSpinner from "./LoadingSpinner";
+import { useToast } from "@/hooks/use-toast";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter } from "next/navigation";
 
 export default function GameGrid() {

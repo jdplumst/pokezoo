@@ -1,9 +1,15 @@
 import "server-only";
-import { auth } from "../auth";
+import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
 import { alias } from "drizzle-orm/pg-core";
-import { instances, profiles, rarities, species, trades } from "../db/schema";
-import { db } from "../db";
+import {
+  instances,
+  profiles,
+  rarities,
+  species,
+  trades,
+} from "@/server/db/schema";
+import { db } from "@/server/db";
 import { and, desc, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 

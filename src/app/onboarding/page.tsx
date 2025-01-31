@@ -1,6 +1,6 @@
-import { getOnboarding } from "@/src/server/actions/onboarding";
+import { getOnboarding } from "@/server/actions/onboarding";
 import { type Metadata } from "next";
-import OnboardingForm from "../_components/OnboardingForm";
+import OnboardingForm from "@/components/OnboardingForm";
 
 export const metadata: Metadata = {
   title: "PokéZoo",

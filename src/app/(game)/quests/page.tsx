@@ -1,4 +1,4 @@
-import { Separator } from "@/src/components/ui/separator";
+import { Separator } from "@/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -7,10 +7,10 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/src/components/ui/table";
-import { claimQuest, getQuests } from "@/src/server/actions/quests";
+} from "@/components/ui/table";
+import { claimQuest, getQuests } from "@/server/actions/quests";
 import { type Metadata } from "next";
-import SubmitButton from "../../_components/SubmitButton";
+import SubmitButton from "@/components/SubmitButton";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Quests",

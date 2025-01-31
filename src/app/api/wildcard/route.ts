@@ -1,7 +1,7 @@
-import { auth } from "@/src/server/auth";
-import { db } from "@/src/server/db";
-import { profiles } from "@/src/server/db/schema";
-import { ZodRarity } from "@/src/zod";
+import { auth } from "@/server/auth";
+import { db } from "@/server/db";
+import { profiles } from "@/server/db/schema";
+import { ZodRarity } from "@/utils/zod";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 

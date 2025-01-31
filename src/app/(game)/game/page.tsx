@@ -1,9 +1,9 @@
-import { getTime } from "@/src/server/actions/cookies";
+import { getTime } from "@/server/actions/cookies";
 import { type Metadata } from "next";
-import GameGrid from "../../_components/GameGrid";
-import RewardButton from "../../_components/RewardButton";
-import { getGame } from "@/src/server/actions/game";
-import StarterSelect from "../../_components/StarterSelect";
+import GameGrid from "@/components/GameGrid";
+import RewardButton from "@/components/RewardButton";
+import { getGame } from "@/server/actions/game";
+import StarterSelect from "@/components/StarterSelect";
 
 export const metadata: Metadata = {
   title: "PokéZoo",

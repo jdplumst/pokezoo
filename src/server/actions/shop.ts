@@ -1,10 +1,10 @@
 import "server-only";
 
 import { eq } from "drizzle-orm";
-import { db } from "../db";
-import { balls, charms, profiles, userCharms } from "../db/schema";
+import { db } from "@/server//db";
+import { balls, charms, profiles, userCharms } from "@/server/db/schema";
 import { redirect } from "next/navigation";
-import { isAuthed } from "./auth";
+import { isAuthed } from "@/server/actions/auth";
 
 export async function getShopData() {
   const session = await isAuthed();

@@ -1,7 +1,7 @@
-import { MAX_BALANCE } from "@/src/constants";
-import { auth } from "@/src/server/auth";
-import { db } from "@/src/server/db";
-import { instances, profiles, species, trades } from "@/src/server/db/schema";
+import { MAX_BALANCE } from "@/utils/constants";
+import { auth } from "@/server/auth";
+import { db } from "@/server/db";
+import { instances, profiles, species, trades } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 

@@ -1,8 +1,8 @@
 import "server-only";
-import { auth } from "../auth";
+import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
-import { db } from "../db";
-import { profiles, species } from "../db/schema";
+import { db } from "@/server/db";
+import { profiles, species } from "@/server/db/schema";
 import { and, eq } from "drizzle-orm";
 
 export async function getOnboarding() {

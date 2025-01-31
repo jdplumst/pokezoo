@@ -3,14 +3,14 @@ import GithubProvider from "next-auth/providers/github";
 import TwitchProvider from "next-auth/providers/twitch";
 import GoogleProvider from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db } from "@/src/server/db/index";
+import { db } from "@/server/db/index";
 import {
   accounts,
   sessions,
   users,
   verificationTokens,
-} from "@/src/server/db/schema";
-import { env } from "@/src/env";
+} from "@/server/db/schema";
+import { env } from "@/utils/env";
 import type { Adapter } from "next-auth/adapters";
 import { pgTable } from "drizzle-orm/pg-core";
 

@@ -5,7 +5,7 @@ import {
   type NextRequest,
   NextResponse,
 } from "next/server";
-import { env } from "./env";
+import { env } from "@/utils/env";
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),

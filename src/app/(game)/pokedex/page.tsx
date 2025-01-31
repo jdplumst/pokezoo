@@ -1,6 +1,6 @@
-import { isAuthed } from "@/src/server/actions/auth";
+import { isAuthed } from "@/server/actions/auth";
 import { type Metadata } from "next";
-import PokedexGrid from "../../_components/PokedexGrid";
+import PokedexGrid from "@/components/PokedexGrid";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Pokédex",
