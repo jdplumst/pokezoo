@@ -19,7 +19,7 @@ export default function SubmitButton(props: {
     <Button
       disabled={pending}
       type="submit"
-      variant={props.variant && "default"}
+      variant={props.variant ?? "default"}
     >
       {props.text}
     </Button>
