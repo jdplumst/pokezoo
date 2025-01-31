@@ -1,14 +1,15 @@
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { isAuthed } from "@/server/actions/auth";
 import { getTimezone, setTheme, setTimezone } from "@/server/actions/cookies";
 import { timezones } from "@/utils/timezones";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuGroup,
-} from "@radix-ui/react-dropdown-menu";
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -88,7 +89,7 @@ export default async function Settings() {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="h-80 overflow-y-scroll">
-              <DropdownMenuGroup>
+              <DropdownMenuGroup className="mx-auto text-center">
                 {timezones.map((t) => (
                   <form
                     key={t.name}
@@ -99,9 +100,9 @@ export default async function Settings() {
                       setTimezone(t.name, t.offset);
                     }}
                   >
-                    <Button variant="secondary" className="w-full rounded-none">
+                    <DropdownMenuItem className="flex justify-center">
                       {t.name}
-                    </Button>
+                    </DropdownMenuItem>
                   </form>
                 ))}
               </DropdownMenuGroup>
