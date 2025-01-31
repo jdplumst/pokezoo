@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import { getTheme, getTime } from "../server/actions/cookies";
 import Providers from "./providers";
+import { Toaster } from "../components/ui/toaster";
 
 export default function RootLayout({
   children,
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${theme} ${mode}`}>
       <body>
+        <Toaster />
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -1,6 +1,5 @@
 import { SidebarProvider, SidebarTrigger } from "@/src/components/ui/sidebar";
 import { AppSidebar } from "@/src/components/app-sidebar";
-import { Toaster } from "@/src/components/ui/toaster";
 import Topbar from "../_components/Topbar";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
@@ -12,7 +11,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Topbar />
         {children}
       </main>
-      <Toaster />
     </SidebarProvider>
   );
 }
