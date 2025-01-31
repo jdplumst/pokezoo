@@ -154,6 +154,7 @@ export default async function Tutorial() {
         and 6pm EDT and nighttime occurs between 6pm and 6am EDT. During
         daytime, Pokémon with a cave or forest habitat cannot be obtained.
         During nighttime, Pokémon with a grassland habitat cannot be obtained.
+        The colour theme of the game changes based on the time of day.
       </p>
       <br></br>
       <p>
