@@ -31,7 +31,7 @@ export default async function Trades() {
   const trades = await getTrades();
 
   return (
-    <div className="px-8 py-8">
+    <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Trades</h1>
       <Separator className="mb-4" />
       <div className="flex flex-col gap-4">
