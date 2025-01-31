@@ -35,20 +35,17 @@ export default function OnboardingForm(props: {
         z.object({ message: z.string(), error: z.undefined() }),
       ]);
 
-      console.log("what?");
       const data = resSchema.parse(await res.json());
       return data;
     },
     onSuccess: (data) => {
       if (data.error) {
-        console.log("yay");
         toast({
           title: "Error",
           description: data.error,
           variant: "destructive",
         });
       } else {
-        console.log("nah");
         router.push("/game");
       }
     },
