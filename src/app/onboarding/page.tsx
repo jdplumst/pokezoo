@@ -1,5 +1,5 @@
 import { getOnboarding } from "@/src/server/actions/onboarding";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import OnboardingForm from "../_components/OnboardingForm";
 
 export const metadata: Metadata = {

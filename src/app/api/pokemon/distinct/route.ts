@@ -2,7 +2,7 @@ import { auth } from "@/src/server/auth";
 import { db } from "@/src/server/db";
 import { instances, rarities, species, trades } from "@/src/server/db/schema";
 import { and, eq, ilike, notInArray } from "drizzle-orm";
-import { NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
   const name = req.nextUrl.searchParams.get("name");

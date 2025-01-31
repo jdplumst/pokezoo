@@ -2,7 +2,7 @@ import { auth } from "@/src/server/auth";
 import { db } from "@/src/server/db";
 import { instances, profiles, regions, species } from "@/src/server/db/schema";
 import { and, asc, eq } from "drizzle-orm";
-import { NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 import { z } from "zod";
 
 export async function GET(req: NextRequest) {

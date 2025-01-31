@@ -1,5 +1,4 @@
 import { db } from "@/src/server/db/index";
-import { type NextApiRequest, type NextApiResponse } from "next";
 import {
   profiles,
   quests,
@@ -10,7 +9,7 @@ import { eq, sql } from "drizzle-orm";
 import { MAX_BALANCE } from "@/src/constants";
 import { env } from "@/src/env";
 import { type z } from "zod";
-import { NextRequest } from "next/server";
+import { type NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
   const authorization = req.headers.get("authorization");

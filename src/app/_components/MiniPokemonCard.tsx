@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { type z } from "zod";
 import { type ZodRarity } from "@/src/zod";
 import Image from "next/image";
 

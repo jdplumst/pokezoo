@@ -1,4 +1,3 @@
-import { Button } from "@/src/components/ui/button";
 import { Progress } from "@/src/components/ui/progress";
 import { Separator } from "@/src/components/ui/separator";
 import {
@@ -14,7 +13,7 @@ import {
   claimAchievement,
   getAchievements,
 } from "@/src/server/actions/achievements";
-import { Metadata } from "next";
+import { type Metadata } from "next";
 import SubmitButton from "../../_components/SubmitButton";
 
 export const metadata: Metadata = {

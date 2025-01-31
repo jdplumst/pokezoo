@@ -31,6 +31,8 @@ export default function PokemonCard(props: {
     region: string;
   };
 }) {
+  const [open, setOpen] = useState(false);
+
   const pokemonSchema = z.object({
     pokedexNumber: z.number(),
     name: z.string(),
@@ -49,8 +51,6 @@ export default function PokemonCard(props: {
   if (pokemon.error) {
     return <div>Something went wrong.</div>;
   }
-
-  const [open, setOpen] = useState(false);
 
   return (
     <>

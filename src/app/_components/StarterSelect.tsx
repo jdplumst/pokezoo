@@ -76,7 +76,7 @@ export default function StarterSelect(props: {
           description: data.message,
         });
         setStarterId(null);
-        queryClient.invalidateQueries({ queryKey: ["pokemon"] });
+        void queryClient.invalidateQueries({ queryKey: ["pokemon"] });
         router.refresh();
       }
     },

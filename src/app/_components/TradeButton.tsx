@@ -13,7 +13,7 @@ import { Textarea } from "@/src/components/ui/textarea";
 import { useState } from "react";
 import MiniPokemonCard from "./MiniPokemonCard";
 import { z } from "zod";
-import { ZodRarity } from "@/src/zod";
+import { type ZodRarity } from "@/src/zod";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useToast } from "@/src/hooks/use-toast";
 import { useRouter } from "next/navigation";
