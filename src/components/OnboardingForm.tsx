@@ -3,8 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Input } from "@/src/components/ui/input";
-import { useToast } from "@/src/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 

@@ -2,7 +2,7 @@
 
 import { db } from "@/src/server/db";
 import { achievements } from "@/src/server/db/schema";
-import { ZodAchievementType, ZodAttribute, ZodRegion } from "@/src/zod";
+import { ZodAchievementType, ZodAttribute, ZodRegion } from "@/src/utils/zod";
 
 const populateGenSixAchievements = async () => {
   await db.insert(achievements).values({

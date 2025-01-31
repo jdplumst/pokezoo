@@ -1,6 +1,6 @@
 import { type Metadata } from "next";
-import BackgroundEffects from "./_components/BackgroundEffect";
-import { auth, signIn } from "../server/auth";
+import BackgroundEffects from "@/components/BackgroundEffect";
+import { auth, signIn } from "@/server/auth";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {

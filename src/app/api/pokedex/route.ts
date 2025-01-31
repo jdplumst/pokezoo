@@ -3,9 +3,9 @@ import {
   RaritiesList,
   RegionsList,
   TypesList,
-} from "@/src/constants";
-import { auth } from "@/src/server/auth";
-import { db } from "@/src/server/db";
+} from "@/utils/constants";
+import { auth } from "@/server/auth";
+import { db } from "@/server/db";
 import {
   habitats,
   instances,
@@ -13,8 +13,8 @@ import {
   regions,
   species,
   types,
-} from "@/src/server/db/schema";
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/src/zod";
+} from "@/server/db/schema";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/utils/zod";
 import {
   and,
   asc,

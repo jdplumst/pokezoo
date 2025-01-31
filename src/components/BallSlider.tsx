@@ -1,20 +1,20 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/src/components/ui/dialog";
-import { Slider } from "@/src/components/ui/slider";
-import { useToast } from "@/src/hooks/use-toast";
+} from "@/components/ui/dialog";
+import { Slider } from "@/components/ui/slider";
+import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { useState } from "react";
 import { z } from "zod";
-import LoadingSpinner from "./LoadingSpinner";
+import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import {
   Drawer,
@@ -25,17 +25,17 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/src/components/ui/drawer";
+} from "@/components/ui/drawer";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/src/components/ui/carousel";
-import { Card, CardContent } from "@/src/components/ui/card";
-import { RegionsList } from "@/src/constants";
-import { type ZodRegion } from "@/src/zod";
+} from "@/components/ui/carousel";
+import { Card, CardContent } from "@/components/ui/card";
+import { RegionsList } from "@/utils/constants";
+import { type ZodRegion } from "@/utils/zod";
 
 export default function BallSlider(props: {
   ballId: string;

@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
-import { type ZodRarity } from "@/src/zod";
+import { Button } from "@/components/ui/button";
+import { type ZodRarity } from "@/utils/zod";
 import { z } from "zod";
-import Wildcard from "./Wildcard";
+import Wildcard from "@/components/Wildcard";
 import { useRouter } from "next/navigation";
-import { useToast } from "@/src/hooks/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 
 export default function WildcardButtons(props: {

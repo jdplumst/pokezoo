@@ -1,12 +1,12 @@
 import "server-only";
 import { alias } from "drizzle-orm/pg-core";
 import { and, eq } from "drizzle-orm";
-import { MAX_BALANCE } from "@/src/constants";
-import { profiles, userCharms } from "@/src/server/db/schema";
-import { db } from "@/src/server/db";
+import { MAX_BALANCE } from "@/utils/constants";
+import { profiles, userCharms } from "@/server/db/schema";
+import { db } from "@/server/db";
 import { z } from "zod";
-import { ZodTime } from "@/src/zod";
-import { auth } from "@/src/server/auth";
+import { ZodTime } from "@/utils/zod";
+import { auth } from "@/server/auth";
 
 export async function POST(req: Request) {
   const bodySchema = z.object({

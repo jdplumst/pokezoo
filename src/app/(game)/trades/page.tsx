@@ -1,19 +1,19 @@
-import { Separator } from "@/src/components/ui/separator";
+import { Separator } from "@/components/ui/separator";
 import {
   acceptTrade,
   cancelTrade,
   declineTrade,
   getTrades,
   withdrawTrade,
-} from "@/src/server/actions/trades";
+} from "@/server/actions/trades";
 import { type Metadata } from "next";
-import SubmitButton from "../../_components/SubmitButton";
-import { auth } from "@/src/server/auth";
+import SubmitButton from "@/components/SubmitButton";
+import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
-import TradeButton from "../../_components/TradeButton";
-import MiniPokemonCard from "../../_components/MiniPokemonCard";
+import TradeButton from "@/components/TradeButton";
+import MiniPokemonCard from "@/components/MiniPokemonCard";
 import { type z } from "zod";
-import { type ZodRarity } from "@/src/zod";
+import { type ZodRarity } from "@/utils/zod";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Trades",

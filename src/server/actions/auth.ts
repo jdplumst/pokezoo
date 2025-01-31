@@ -1,7 +1,7 @@
 import "server-only";
 
 import { redirect } from "next/navigation";
-import { auth } from "../auth";
+import { auth } from "@/server/auth";
 
 export async function isAuthed() {
   const session = await auth();

@@ -1,7 +1,7 @@
 import "server-only";
-import { isAuthed } from "./auth";
-import { db } from "../db";
-import { profiles } from "../db/schema";
+import { isAuthed } from "@/server/actions/auth";
+import { db } from "@/server/db";
+import { profiles } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 

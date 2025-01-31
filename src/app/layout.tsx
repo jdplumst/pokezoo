@@ -1,7 +1,7 @@
-import "../styles/globals.css";
-import { getTheme, getTime } from "../server/actions/cookies";
-import Providers from "./providers";
-import { Toaster } from "../components/ui/toaster";
+import "@/styles/globals.css";
+import { getTheme, getTime } from "@/server/actions/cookies";
+import { Toaster } from "@/components/ui/toaster";
+import Providers from "@/app/providers";
 
 export default function RootLayout({
   children,

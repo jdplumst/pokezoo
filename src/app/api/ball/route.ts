@@ -1,6 +1,6 @@
-import { getTime } from "@/src/server/actions/cookies";
-import { auth } from "@/src/server/auth";
-import { db } from "@/src/server/db";
+import { getTime } from "@/server/actions/cookies";
+import { auth } from "@/server/auth";
+import { db } from "@/server/db";
 import {
   balls,
   instances,
@@ -8,10 +8,10 @@ import {
   regions,
   species,
   userCharms,
-} from "@/src/server/db/schema";
-import { calcNewYield } from "@/src/utils/calcNewYield";
-import { updateUserQuest } from "@/src/utils/updateUserQuest";
-import { withinInstanceLimit } from "@/src/utils/withinInstanceLimit";
+} from "@/server/db/schema";
+import { calcNewYield } from "@/utils/calcNewYield";
+import { updateUserQuest } from "@/utils/updateUserQuest";
+import { withinInstanceLimit } from "@/utils/withinInstanceLimit";
 import { and, eq, inArray, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { z } from "zod";

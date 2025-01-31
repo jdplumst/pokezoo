@@ -3,14 +3,14 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/src/components/ui/tooltip";
+} from "@/components/ui/tooltip";
 import {
   type selectCharmSchema,
   type selectUserCharmsSchema,
-} from "@/src/server/db/schema";
+} from "@/server/db/schema";
 import Image from "next/image";
 import { type z } from "zod";
-import CharmButton from "./CharmButton";
+import CharmButton from "@/components/CharmButton";
 
 export default function CharmsGrid(props: {
   charms: z.infer<typeof selectCharmSchema>[];

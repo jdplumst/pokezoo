@@ -1,7 +1,7 @@
 import "server-only";
-import { auth } from "../auth";
+import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";
-import { db } from "../db";
+import { db } from "@/server/db";
 import {
   achievements,
   achievementTypes,
@@ -14,11 +14,11 @@ import {
   species,
   types,
   userAchievements,
-} from "../db/schema";
+} from "@/server//db/schema";
 import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { revalidatePath } from "next/cache";
-import { calcNewYield } from "@/src/utils/calcNewYield";
+import { calcNewYield } from "@/utils/calcNewYield";
 
 export async function getAchievements() {
   const session = await auth();

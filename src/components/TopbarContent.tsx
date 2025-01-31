@@ -1,8 +1,8 @@
 "use client";
 
-import { useSidebar } from "@/src/components/ui/sidebar";
-import Wildcard from "./Wildcard";
-import { useIsLarge } from "../_hooks/use-large";
+import { useSidebar } from "@/components/ui/sidebar";
+import Wildcard from "@/components/Wildcard";
+import { useIsLarge } from "@/hooks/use-large";
 
 export default function TopbarContent(props: {
   profile: {

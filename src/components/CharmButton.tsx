@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
-import { useToast } from "@/src/hooks/use-toast";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { z } from "zod";
 import LoadingSpinner from "./LoadingSpinner";

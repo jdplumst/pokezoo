@@ -1,5 +1,6 @@
+// @ts-nocheck
 import { PokemonClient } from "pokenode-ts";
-import { type ZodSpeciesType } from "@/src/zod";
+import { type ZodSpeciesType } from "@/src/utils/zod";
 import { z } from "zod";
 import { capitalize } from "../helpers/capitalize";
 import { db } from "@/src/server/db";

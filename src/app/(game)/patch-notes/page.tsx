@@ -1,7 +1,7 @@
-import Patch from "../../_components/Patch";
-import Note from "../../_components/Note";
+import Patch from "@/components/Patch";
+import Note from "@/components/Note";
 import { type Metadata } from "next";
-import { isAuthed } from "@/src/server/actions/auth";
+import { isAuthed } from "@/server/actions/auth";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Patch Notes",
