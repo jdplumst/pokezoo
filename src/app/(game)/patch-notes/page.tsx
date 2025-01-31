@@ -16,6 +16,27 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
+      <Patch patch="8.06" date="January 31, 2024">
+        <Note note="Redesigned PokéZoo. Some changes include:" />
+        <ul className="list-disc px-4">
+          <li className="ml-4">
+            PokéZoo can now be played on mobile browsers.
+          </li>
+          <li className="ml-4">Changed the colour themes.</li>
+          <li className="ml-4">
+            A lot of visual changes including the sidebar and Pokémon cards.
+          </li>
+          <li className="ml-4">
+            Added sliders to balls in the shop. Users can now purchase up to 10
+            balls at a time.
+          </li>
+          <li className="ml-4">Redesigned the landing page.</li>
+          <li className="ml-4">Added an onboarding page for new users.</li>
+          <li className="ml-4">
+            Users can now change their timezone in the settings page.
+          </li>
+        </ul>
+      </Patch>
       <Patch patch="8.05" date="November 30, 2024">
         <Note note="Added Hisui Achievements." />
       </Patch>
