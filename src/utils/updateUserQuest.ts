@@ -1,4 +1,3 @@
-import { type PostgresJsDatabase } from "drizzle-orm/postgres-js";
 import {
   type selectSpeciesSchema,
   type selectBallSchema,
@@ -7,10 +6,10 @@ import {
 } from "../server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { type z } from "zod";
+import { db } from "../server/db";
 
 export async function updateUserQuest(
   species: z.infer<typeof selectSpeciesSchema>,
-  db: PostgresJsDatabase<typeof import("../server/db/schema")>,
   id: string,
   ball?: z.infer<typeof selectBallSchema>,
 ) {
@@ -26,7 +25,7 @@ export async function updateUserQuest(
       // Purchase 10 Poké Balls
       case 7:
         if (ball?.name === "Poké") {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
@@ -35,7 +34,7 @@ export async function updateUserQuest(
       // Purchase 10 Great Balls
       case 8:
         if (ball?.name === "Great") {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
@@ -44,7 +43,7 @@ export async function updateUserQuest(
       // Purchase 10 Net Balls
       case 10:
         if (ball?.name === "Net") {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
@@ -53,7 +52,7 @@ export async function updateUserQuest(
       // Purchase 10 Safari Balls
       case 11:
         if (ball?.name === "Safari") {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
@@ -62,7 +61,7 @@ export async function updateUserQuest(
       // Catch 10 Common Pokémon
       case 12:
         if (species.rarityId === 1) {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
@@ -71,7 +70,7 @@ export async function updateUserQuest(
       // Catch 10 Rare Pokémon
       case 13:
         if (species.rarityId === 2) {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
@@ -80,7 +79,7 @@ export async function updateUserQuest(
       // Purchase 10 Ultra Balls
       case 17:
         if (ball?.name === "Ultra") {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
@@ -89,7 +88,7 @@ export async function updateUserQuest(
       // Catch 10 Epic Pokémon
       case 20:
         if (species.rarityId === 3) {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
@@ -98,7 +97,7 @@ export async function updateUserQuest(
       // Catch 10 Legendary Pokémon
       case 21:
         if (species.rarityId === 4) {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
@@ -107,14 +106,14 @@ export async function updateUserQuest(
       // Purchase 10 Master Balls
       case 18:
         if (ball?.name === "Master") {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
       // Purhcase 1 Luxury Ball
       case 19:
         if (ball?.name === "Luxury") {
-          await updateUserQuestCount(db, currUserQuest);
+          await updateUserQuestCount(currUserQuest);
         }
         break;
 
@@ -125,7 +124,6 @@ export async function updateUserQuest(
 }
 
 async function updateUserQuestCount(
-  db: PostgresJsDatabase<typeof import("../server/db/schema")>,
   currUserQuest: z.infer<typeof selectUserQuestSchema>,
 ) {
   await db

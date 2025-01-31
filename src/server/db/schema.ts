@@ -268,6 +268,7 @@ export const species = pgTable(
     regionId: integer("regionId")
       .notNull()
       .references(() => regions.id, { onDelete: "cascade" }),
+    starter: boolean("starter").notNull().default(false),
   },
   (s) => {
     return {
@@ -414,4 +415,5 @@ export const selectSpeciesSchema = createSelectSchema(species);
 export const selectTradesSchema = createSelectSchema(trades);
 export const selectUserAchievementSchema = createSelectSchema(userAchievements);
 export const selectCharmSchema = createSelectSchema(charms);
+export const selectUserCharmsSchema = createSelectSchema(userCharms);
 export const selectUserQuestSchema = createSelectSchema(userQuests);
