@@ -82,8 +82,8 @@ export default function PokemonCard(props: {
           </div>
           <div className="flex flex-col items-center gap-0">
             <div>Rarity: {pokemon.data.rarity}</div>
-            <div>Yield: P{pokemon.data.yield}</div>
-            <div>Sell Price: P{pokemon.data.sellPrice}</div>
+            <div>Yield: P{pokemon.data.yield.toLocaleString()}</div>
+            <div>Sell Price: P{pokemon.data.sellPrice.toLocaleString()}</div>
           </div>
           {props.children}
         </div>
