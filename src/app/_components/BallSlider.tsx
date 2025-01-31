@@ -118,7 +118,7 @@ export default function BallSlider(props: {
       <Slider
         defaultValue={[1]}
         min={1}
-        max={30}
+        max={10}
         step={1}
         value={sliderValue}
         onValueChange={(e) => setSliderValue(e)}
