@@ -24,7 +24,7 @@ devops:
 frontend:
   - any:
       - changed-files:
-          - any-glob-to-any-file: ["src/pages/**/*", "src/components/**/*"]
+          - any-glob-to-any-file: ["src/app/**/*", "src/components/**/*"]
 
 backend:
   - any:
