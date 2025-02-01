@@ -5,7 +5,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
@@ -24,7 +23,7 @@ import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { set, z } from "zod";
+import { z } from "zod";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import PokemonCard from "@/components/PokemonCard";
 import Wildcard from "@/components/Wildcard";

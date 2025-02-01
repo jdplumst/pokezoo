@@ -7,15 +7,9 @@ import {
 import { and, eq } from "drizzle-orm";
 import { type z } from "zod";
 import { db } from "@/server/db";
-import { ZodRarity } from "@/utils/zod";
 
 export async function updateUserQuest(
-  species: {
-    shiny: boolean;
-    rarity: z.infer<typeof ZodRarity>;
-    name: string;
-    img: string;
-  },
+  species: z.infer<typeof selectSpeciesSchema>,
   id: string,
   ball?: z.infer<typeof selectBallSchema>,
 ) {
@@ -66,7 +60,7 @@ export async function updateUserQuest(
       case 5:
       // Catch 10 Common Pokémon
       case 12:
-        if (species.rarity === "Common") {
+        if (species.rarityId === 1) {
           await updateUserQuestCount(currUserQuest);
         }
         break;
@@ -75,7 +69,7 @@ export async function updateUserQuest(
       case 6:
       // Catch 10 Rare Pokémon
       case 13:
-        if (species.rarity === "Rare") {
+        if (species.rarityId === 2) {
           await updateUserQuestCount(currUserQuest);
         }
         break;
@@ -93,7 +87,7 @@ export async function updateUserQuest(
       case 14:
       // Catch 10 Epic Pokémon
       case 20:
-        if (species.rarity === "Epic") {
+        if (species.rarityId === 3) {
           await updateUserQuestCount(currUserQuest);
         }
         break;
@@ -102,7 +96,7 @@ export async function updateUserQuest(
       case 15:
       // Catch 10 Legendary Pokémon
       case 21:
-        if (species.rarity === "Legendary") {
+        if (species.rarityId === 4) {
           await updateUserQuestCount(currUserQuest);
         }
         break;

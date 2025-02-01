@@ -13,7 +13,7 @@ import {
 import { calcNewYield } from "@/utils/calcNewYield";
 import { updateUserQuest } from "@/utils/updateUserQuest";
 import { withinInstanceLimit } from "@/utils/withinInstanceLimit";
-import { ZodRarity } from "@/utils/zod";
+import { type ZodRarity } from "@/utils/zod";
 import { and, eq, inArray, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { z } from "zod";
@@ -189,11 +189,7 @@ export async function POST(req: Request) {
       const currSpecies = (
         await db
           .select({
-            id: species.id,
-            name: species.name,
-            img: species.img,
-            shiny: species.shiny,
-            yield: species.yield,
+            species: species,
             rarity: rarities.name,
           })
           .from(species)
@@ -223,24 +219,20 @@ export async function POST(req: Request) {
       }
 
       speciesList.push({
-        name: currSpecies.name,
-        img: currSpecies.img,
-        shiny: currSpecies.shiny,
+        name: currSpecies.species.name,
+        img: currSpecies.species.img,
+        shiny: currSpecies.species.shiny,
         rarity: currSpecies.rarity as z.infer<typeof ZodRarity>,
       });
 
       // Update userQuest count field
-      await updateUserQuest(
-        currSpecies as (typeof speciesList)[0],
-        session.user.id,
-        currBall,
-      );
+      await updateUserQuest(currSpecies.species, session.user.id, currBall);
 
-      newYield += currSpecies.yield;
+      newYield += currSpecies.species.yield;
 
       await tx
         .insert(instances)
-        .values({ userId: session.user.id, speciesId: currSpecies.id });
+        .values({ userId: session.user.id, speciesId: currSpecies.species.id });
     }
   });
 
