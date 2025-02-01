@@ -68,6 +68,7 @@ export default function GameGrid() {
           rarities: rarities,
           types: types,
           habitats: habitats,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           cursor: pageParam,
         }),
       });

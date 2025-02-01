@@ -61,6 +61,7 @@ export default function PokedexGrid() {
           rarities: rarities,
           types: types,
           habitats: habitats,
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           cursor: pageParam,
         }),
       });
