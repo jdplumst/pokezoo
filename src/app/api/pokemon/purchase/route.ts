@@ -164,6 +164,6 @@ export async function POST(req: Request) {
   });
 
   return Response.json({
-    message: `You have successfully purhcased a ${currSpecies.species.shiny && `Shiny`} ${currSpecies.species.name[0].toUpperCase() + currSpecies.species.name.slice(1)}!`,
+    message: `You have successfully purhcased a ${currSpecies.species.shiny === true && `Shiny`} ${currSpecies.species.name[0].toUpperCase() + currSpecies.species.name.slice(1)}!`,
   });
 }
