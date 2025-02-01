@@ -57,7 +57,7 @@ export default function GameGrid() {
 
   const pokemon = useInfiniteQuery({
     queryKey: ["pokemon", sortedBy, shiny, regions, rarities, types, habitats],
-    queryFn: async () => {
+    queryFn: async ({ pageParam = {} }) => {
       const res = await fetch("/api/game", {
         method: "POST",
         body: JSON.stringify({
@@ -68,7 +68,7 @@ export default function GameGrid() {
           rarities: rarities,
           types: types,
           habitats: habitats,
-          cursor: {},
+          cursor: pageParam,
         }),
       });
 

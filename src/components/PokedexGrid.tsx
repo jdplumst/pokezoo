@@ -47,7 +47,7 @@ export default function PokedexGrid() {
 
   const pokemon = useInfiniteQuery({
     queryKey: ["pokemon", caught, shiny, regions, rarities, types, habitats],
-    queryFn: async () => {
+    queryFn: async ({ pageParam = {} }) => {
       const res = await fetch("/api/pokedex", {
         method: "POST",
         body: JSON.stringify({
@@ -61,7 +61,7 @@ export default function PokedexGrid() {
           rarities: rarities,
           types: types,
           habitats: habitats,
-          cursor: {},
+          cursor: pageParam,
         }),
       });
 
