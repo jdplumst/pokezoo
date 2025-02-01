@@ -11,7 +11,6 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
-import Image from "next/image";
 import { useState } from "react";
 import { z } from "zod";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -35,7 +34,8 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { RegionsList } from "@/utils/constants";
-import { type ZodRegion } from "@/utils/zod";
+import { ZodRarity, type ZodRegion } from "@/utils/zod";
+import MiniPokemonCard from "@/components/MiniPokemonCard";
 
 export default function BallSlider(props: {
   ballId: string;
@@ -51,7 +51,12 @@ export default function BallSlider(props: {
     useState<z.infer<typeof ZodRegion>>("Kanto");
 
   const [purchasedSpecies, setPurchasedSpecies] = useState<
-    { name: string; img: string; shiny: boolean }[]
+    {
+      name: string;
+      img: string;
+      shiny: boolean;
+      rarity: z.infer<typeof ZodRarity>;
+    }[]
   >([]);
 
   const [isOpen, setIsOpen] = useState(false);
@@ -78,6 +83,7 @@ export default function BallSlider(props: {
               name: z.string(),
               img: z.string(),
               shiny: z.boolean(),
+              rarity: ZodRarity,
             })
             .array(),
           error: z.undefined(),
@@ -203,19 +209,13 @@ export default function BallSlider(props: {
           </DialogDescription>
           <div className="flex h-80 flex-col gap-4 overflow-y-scroll">
             {purchasedSpecies.map((s, idx) => (
-              <div key={idx} className="flex items-center gap-2">
-                <Image
-                  src={s.img}
-                  alt={s.name}
-                  width={70}
-                  height={70}
-                  className="pixelated"
-                />{" "}
-                <span className="text-xl capitalize">
-                  {s.shiny && "🌟 "}
-                  {s.name}
-                </span>
-              </div>
+              <MiniPokemonCard
+                key={idx}
+                name={s.name}
+                img={s.img}
+                shiny={s.shiny}
+                rarity={s.rarity}
+              />
             ))}
           </div>
         </DialogContent>

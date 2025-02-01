@@ -5,6 +5,7 @@ import {
   balls,
   instances,
   profiles,
+  rarities,
   regions,
   species,
   userCharms,
@@ -12,6 +13,7 @@ import {
 import { calcNewYield } from "@/utils/calcNewYield";
 import { updateUserQuest } from "@/utils/updateUserQuest";
 import { withinInstanceLimit } from "@/utils/withinInstanceLimit";
+import { ZodRarity } from "@/utils/zod";
 import { and, eq, inArray, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { z } from "zod";
@@ -174,15 +176,28 @@ export async function POST(req: Request) {
 
   let newYield = 0;
 
-  const speciesList: { name: string; img: string; shiny: boolean }[] = [];
+  const speciesList: {
+    name: string;
+    img: string;
+    shiny: boolean;
+    rarity: z.infer<typeof ZodRarity>;
+  }[] = [];
 
   // Determine the new species the user gets
   await db.transaction(async (tx) => {
     for (let i = 0; i < body.data.quantity; i++) {
       const currSpecies = (
         await db
-          .select()
+          .select({
+            id: species.id,
+            name: species.name,
+            img: species.img,
+            shiny: species.shiny,
+            yield: species.yield,
+            rarity: rarities.name,
+          })
           .from(species)
+          .innerJoin(rarities, eq(species.rarityId, rarities.id))
           .where(
             and(
               eq(species.rarityId, generatedRarities.pop()!),
@@ -211,10 +226,15 @@ export async function POST(req: Request) {
         name: currSpecies.name,
         img: currSpecies.img,
         shiny: currSpecies.shiny,
+        rarity: currSpecies.rarity as z.infer<typeof ZodRarity>,
       });
 
       // Update userQuest count field
-      await updateUserQuest(currSpecies, session.user.id, currBall);
+      await updateUserQuest(
+        currSpecies as (typeof speciesList)[0],
+        session.user.id,
+        currBall,
+      );
 
       newYield += currSpecies.yield;
 
