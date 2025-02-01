@@ -117,10 +117,10 @@ export default function PokemonCard(props: {
                 <b>Rarity:</b> {pokemon.data.rarity}
               </div>
               <div>
-                <b>Yield:</b> P{pokemon.data.yield}
+                <b>Yield:</b> P{pokemon.data.yield.toLocaleString()}
               </div>
               <div>
-                <b>Sell Price:</b> P{pokemon.data.sellPrice}
+                <b>Sell Price:</b> P{pokemon.data.sellPrice.toLocaleString()}
               </div>
               <div>
                 <b>Habitat:</b> {pokemon.data.habitat}
