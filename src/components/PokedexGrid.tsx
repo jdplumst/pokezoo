@@ -24,7 +24,7 @@ import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { z } from "zod";
+import { set, z } from "zod";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import PokemonCard from "@/components/PokemonCard";
 import Wildcard from "@/components/Wildcard";
@@ -204,7 +204,16 @@ export default function PokedexGrid() {
               <Button variant="outline">Regions</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="h-72 w-56 overflow-y-scroll">
-              <DropdownMenuLabel>Select Regions</DropdownMenuLabel>
+              <DropdownMenuCheckboxItem
+                checked={regions === RegionsList}
+                onCheckedChange={() => {
+                  setRegions((prev) =>
+                    prev === RegionsList ? [] : RegionsList,
+                  );
+                }}
+              >
+                Select All
+              </DropdownMenuCheckboxItem>
               <DropdownMenuSeparator />
               {RegionsList.map((r) => (
                 <DropdownMenuCheckboxItem
@@ -230,7 +239,16 @@ export default function PokedexGrid() {
               <Button variant="outline">Rarities</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="h-72 overflow-y-scroll">
-              <DropdownMenuLabel>Select Rarities</DropdownMenuLabel>
+              <DropdownMenuCheckboxItem
+                checked={rarities === RaritiesList}
+                onCheckedChange={() => {
+                  setRarities((prev) =>
+                    prev === RaritiesList ? [] : RaritiesList,
+                  );
+                }}
+              >
+                Select All
+              </DropdownMenuCheckboxItem>
               <DropdownMenuSeparator />
               {RaritiesList.map((r) => (
                 <DropdownMenuCheckboxItem
@@ -256,7 +274,14 @@ export default function PokedexGrid() {
               <Button variant="outline">Types</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="h-72 overflow-y-scroll">
-              <DropdownMenuLabel>Select Types</DropdownMenuLabel>
+              <DropdownMenuCheckboxItem
+                checked={types === TypesList}
+                onCheckedChange={() => {
+                  setTypes((prev) => (prev === TypesList ? [] : TypesList));
+                }}
+              >
+                Select All
+              </DropdownMenuCheckboxItem>
               <DropdownMenuSeparator />
               {TypesList.map((t) => (
                 <DropdownMenuCheckboxItem
@@ -282,7 +307,16 @@ export default function PokedexGrid() {
               <Button variant="outline">Habitats</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="h-72 overflow-y-scroll">
-              <DropdownMenuLabel>Select Habitats</DropdownMenuLabel>
+              <DropdownMenuCheckboxItem
+                checked={habitats === HabitatList}
+                onCheckedChange={() => {
+                  setHabitats((prev) =>
+                    prev === HabitatList ? [] : HabitatList,
+                  );
+                }}
+              >
+                Select All
+              </DropdownMenuCheckboxItem>
               <DropdownMenuSeparator />
               {HabitatList.map((h) => (
                 <DropdownMenuCheckboxItem
