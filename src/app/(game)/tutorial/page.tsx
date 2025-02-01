@@ -26,7 +26,7 @@ export default async function Tutorial() {
       <p>
         Pokémon are one source of yield. Common Pokémon give P10 per day, Rare
         Pokémon give P50 per day, Epic Pokémon give P300 per day, and Legendary
-        Pokémon give P1000 per day. Shiny Pokémon give double the amount of
+        Pokémon give P1,000 per day. Shiny Pokémon give double the amount of
         their non-shiny counterparts.
       </p>
       <br></br>
