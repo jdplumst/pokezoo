@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { z } from "zod";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -42,6 +42,8 @@ export default function BallSlider(props: {
   ballName: string;
 }) {
   const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   const { toast } = useToast();
 
@@ -104,6 +106,7 @@ export default function BallSlider(props: {
       } else if (data.speciesList) {
         setPurchasedSpecies(data.speciesList);
         setIsOpen(true);
+        void queryClient.invalidateQueries({ queryKey: ["pokemon"] });
         router.refresh();
       }
     },
