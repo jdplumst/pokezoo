@@ -15,55 +15,50 @@ export default async function Topbar() {
       {profile.admin && (
         <div className="flex flex-col items-center gap-5">
           <form
-            // eslint-disable-next-line @typescript-eslint/require-await
             action={async () => {
               "use server";
 
-              toggleTime();
+              await toggleTime();
             }}
           >
             <Button>Toggle Time</Button>
           </form>
           <div className="flex gap-5">
             <form
-              // eslint-disable-next-line @typescript-eslint/require-await
               action={async () => {
                 "use server";
 
-                setTheme("blue");
+                await setTheme("blue");
               }}
               className="blue dark"
             >
               <Button>Blue</Button>
             </form>
             <form
-              // eslint-disable-next-line @typescript-eslint/require-await
               action={async () => {
                 "use server";
 
-                setTheme("purple");
+                await setTheme("purple");
               }}
               className="purple dark"
             >
               <Button>Purple</Button>
             </form>
             <form
-              // eslint-disable-next-line @typescript-eslint/require-await
               action={async () => {
                 "use server";
 
-                setTheme("green");
+                await setTheme("green");
               }}
               className="green dark"
             >
               <Button>Green</Button>
             </form>
             <form
-              // eslint-disable-next-line @typescript-eslint/require-await
               action={async () => {
                 "use server";
 
-                setTheme("orange");
+                await setTheme("orange");
               }}
               className="orange dark"
             >
