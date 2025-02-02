@@ -18,7 +18,7 @@ export default async function middleware(
   request: NextRequest,
   event: NextFetchEvent,
 ): Promise<Response | undefined> {
-  const ip = request.ip ?? "127.0.0.1";
+  const ip = request.headers.get("X-Forwarded-For") ?? "127.0.0.1";
 
   if (request.nextUrl.pathname === "/api/blocked") return;
 

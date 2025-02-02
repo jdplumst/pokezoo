@@ -4,18 +4,15 @@ import Image from "next/image";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { createProfile } from "@/server/actions/onboarding";
-import { useFormState, useFormStatus } from "react-dom";
-import { useEffect } from "react";
+import { useActionState, useEffect } from "react";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import SubmitButton from "@/components/SubmitButton";
 
 export default function OnboardingForm(props: {
   starters: { id: string; name: string; img: string }[];
 }) {
   const { toast } = useToast();
 
-  const [data, action] = useFormState(createProfile, undefined);
-  const { pending } = useFormStatus();
+  const [data, action, isPending] = useActionState(createProfile, undefined);
 
   useEffect(() => {
     if (data?.error) {
@@ -84,14 +81,14 @@ export default function OnboardingForm(props: {
               ))}
             </div>
           </div>
-          <SubmitButton text="Begin Journey" />
-          {/* <button
-            disabled={pending}
+          {/* <SubmitButton text="Begin Journey" /> */}
+          <button
+            disabled={isPending}
             type="submit"
             className="w-full rounded-full bg-violet-500 px-4 py-2 font-bold text-white transition-colors hover:bg-violet-600"
           >
-            {pending ? "Loading..." : "Begin Journey"}
-          </button> */}
+            {isPending ? <LoadingSpinner /> : "Begin Journey"}
+          </button>
         </form>
       </div>
     </div>
