@@ -6,6 +6,7 @@ import {
   NextResponse,
 } from "next/server";
 import { env } from "@/utils/env";
+import { ipAddress } from "@vercel/functions";
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -18,7 +19,7 @@ export default async function middleware(
   request: NextRequest,
   event: NextFetchEvent,
 ): Promise<Response | undefined> {
-  const ip = request.headers.get("X-Forwarded-For") ?? "127.0.0.1";
+  const ip = ipAddress(request) ?? "127.0.0.1";
 
   if (request.nextUrl.pathname === "/api/blocked") return;
 
