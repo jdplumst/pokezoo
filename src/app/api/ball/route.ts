@@ -40,7 +40,7 @@ export async function POST(req: Request) {
     });
   }
 
-  const time = getTime();
+  const time = await getTime();
 
   const catchingCharm = alias(userCharms, "catchingCharm");
   const currProfile = (

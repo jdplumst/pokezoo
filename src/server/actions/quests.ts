@@ -1,3 +1,4 @@
+"use server";
 import "server-only";
 import { db } from "@/server/db";
 import { profiles, quests, questTypes, userQuests } from "@/server/db/schema";

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Game() {
-  const time = getTime();
+  const time = await getTime();
 
   const data = await getGame();
 

@@ -1,3 +1,5 @@
+/* eslint @typescript-eslint/require-await: 0 */
+"use server";
 import "server-only";
 
 import { cookies } from "next/headers";
@@ -7,7 +9,7 @@ import { timezones } from "@/utils/timezones";
 
 const themeSchema = z.enum(["blue", "purple", "green", "orange"]);
 
-export function getTheme() {
+export async function getTheme() {
   const cookieStore = cookies();
   const theme = cookieStore.get("theme")?.value ?? "blue";
   const result = themeSchema.safeParse(theme);
@@ -15,15 +17,19 @@ export function getTheme() {
   return parsedTheme;
 }
 
-export function setTheme(theme: string) {
+export async function setTheme(theme: string) {
   const result = themeSchema.safeParse(theme);
   const parsedTheme = result.data ?? "blue";
   const cookieStore = cookies();
-  cookieStore.set("theme", parsedTheme);
+  cookieStore.set({
+    name: "theme",
+    value: parsedTheme,
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+  });
   revalidatePath("/settings");
 }
 
-export function getTime() {
+export async function getTime() {
   const cookieStore = cookies();
   const timezone = cookieStore.get("timezone-offset")?.value ?? "-5";
   const parsedTimezone = Math.floor(Number(timezone)) || -5;
@@ -35,7 +41,7 @@ export function getTime() {
   return time;
 }
 
-export function getTimezone() {
+export async function getTimezone() {
   const cookieStore = cookies();
   let timezone =
     cookieStore.get("timezone")?.value ??
@@ -47,21 +53,45 @@ export function getTimezone() {
   return timezone;
 }
 
-export function setTimezone(timezone: string, offset: string) {
+export async function setTimezone(timezone: string, offset: string) {
   const cookieStore = cookies();
-  cookieStore.set("timezone", timezone);
-  cookieStore.set("timezone-offset", offset);
+  cookieStore.set({
+    name: "timezone",
+    value: timezone,
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+  });
+  cookieStore.set({
+    name: "timezone-offset",
+    value: offset,
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+  });
   revalidatePath("/settings");
 }
 
-export function toggleTime() {
+export async function toggleTime() {
   const cookieStore = cookies();
   const timezone = cookieStore.get("timezone")?.value ?? "Fiji Time [FJT +12]";
   if (timezone === "Fiji Time [FJT +12]") {
-    cookieStore.set("timezone", "Coordinated Universal Time [UTC 0]");
-    cookieStore.set("timezone-offset", "0");
+    cookieStore.set({
+      name: "timezone",
+      value: "Coordinated Universal Time [UTC 0]",
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+    });
+    cookieStore.set({
+      name: "timezone-offset",
+      value: "0",
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+    });
   } else {
-    cookieStore.set("timezone", "Fiji Time [FJT +12]");
-    cookieStore.set("timezone-offset", "12");
+    cookieStore.set({
+      name: "timezone",
+      value: "Fiji Time [FJT +12]",
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+    });
+    cookieStore.set({
+      name: "timezone-offset",
+      value: "12",
+      maxAge: 60 * 60 * 24 * 365, // 1 year
+    });
   }
 }

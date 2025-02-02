@@ -1,3 +1,4 @@
+"use server";
 import "server-only";
 import { auth } from "@/server/auth";
 import { redirect } from "next/navigation";

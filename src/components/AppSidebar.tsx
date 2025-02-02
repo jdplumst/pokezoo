@@ -28,8 +28,8 @@ import SignOut from "@/components/SignOut";
 import { Separator } from "@/components/ui/separator";
 import { getTime } from "@/server/actions/cookies";
 
-export function AppSidebar() {
-  const time = getTime();
+export async function AppSidebar() {
+  const time = await getTime();
 
   return (
     <Sidebar collapsible="icon">

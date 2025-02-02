@@ -1,3 +1,4 @@
+"use server";
 import "server-only";
 import { isAuthed } from "@/server/actions/auth";
 import { alias } from "drizzle-orm/pg-core";

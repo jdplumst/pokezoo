@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default async function Settings() {
   await isAuthed();
 
-  const timezone = getTimezone();
+  const timezone = await getTimezone();
 
   return (
     <div className="px-8">
@@ -34,22 +34,20 @@ export default async function Settings() {
           <div className="flex gap-5">
             <form
               className="blue dark"
-              // eslint-disable-next-line @typescript-eslint/require-await
               action={async () => {
                 "use server";
 
-                setTheme("blue");
+                await setTheme("blue");
               }}
             >
               <Button>Blue</Button>
             </form>
             <form
               className="purple dark"
-              // eslint-disable-next-line @typescript-eslint/require-await
               action={async () => {
                 "use server";
 
-                setTheme("purple");
+                await setTheme("purple");
               }}
             >
               {" "}
@@ -57,22 +55,20 @@ export default async function Settings() {
             </form>
             <form
               className="green dark"
-              // eslint-disable-next-line @typescript-eslint/require-await
               action={async () => {
                 "use server";
 
-                setTheme("green");
+                await setTheme("green");
               }}
             >
               <Button>Green</Button>
             </form>
             <form
               className="orange dark"
-              // eslint-disable-next-line @typescript-eslint/require-await
               action={async () => {
                 "use server";
 
-                setTheme("orange");
+                await setTheme("orange");
               }}
             >
               <Button>Orange</Button>
@@ -93,15 +89,17 @@ export default async function Settings() {
                 {timezones.map((t) => (
                   <form
                     key={t.name}
-                    // eslint-disable-next-line @typescript-eslint/require-await
                     action={async () => {
                       "use server";
 
-                      setTimezone(t.name, t.offset);
+                      await setTimezone(t.name, t.offset);
                     }}
                   >
-                    <DropdownMenuItem className="flex justify-center">
-                      {t.name}
+                    <DropdownMenuItem
+                      key={t.name}
+                      className="flex justify-center"
+                    >
+                      <button type="submit">{t.name}</button>
                     </DropdownMenuItem>
                   </form>
                 ))}
