@@ -355,6 +355,7 @@ export default function PokedexGrid() {
                   p.rarity === "Epic" ||
                   p.rarity === "Legendary" ? (
                     <Button
+                      variant="destructive"
                       onClick={(e) => {
                         e.stopPropagation();
                         purchase.mutate(p.id);
@@ -365,7 +366,7 @@ export default function PokedexGrid() {
                       {p.shiny ? `100` : `10`}
                     </Button>
                   ) : (
-                    <Button>N/A</Button>
+                    <Button variant="destructive">N/A</Button>
                   )}
                 </PokemonCard>
               ))}
