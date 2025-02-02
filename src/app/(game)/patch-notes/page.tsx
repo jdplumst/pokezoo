@@ -16,6 +16,10 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
+      <Patch patch="8.08" date="February 2, 2024">
+        <Note note="Display ball prices in shop page." />
+        <Note note="Set success and error messages to close on their own after 10 seconds." />
+      </Patch>
       <Patch patch="8.07" date="February 2, 2024">
         <Note note="Fixed theme reverting back to blue after a short period of time." />
         <Note note="Fixed timezones not being saved." />
