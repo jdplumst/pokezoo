@@ -27,6 +27,9 @@ export default function BallsGrid(props: {
                   className="pixelated"
                 />
                 <div className="text-lg font-semibold">{b.name} Ball</div>
+                <div className="text-md font-medium">
+                  P{b.cost.toLocaleString()}
+                </div>
                 <BallSlider ballId={b.id} ballName={b.name} />
               </div>
             </TooltipTrigger>
