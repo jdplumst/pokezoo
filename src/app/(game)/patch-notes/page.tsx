@@ -16,6 +16,11 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
+      <Patch patch="8.07" date="February 2, 2024">
+        <Note note="Fixed theme reverting back to blue after a short period of time." />
+        <Note note="Fixed timezones not being saved." />
+        <Note note="Fixed new Pokémon not being shown on Game page after purchasing a ball." />
+      </Patch>
       <Patch patch="8.06" date="January 31, 2024">
         <Note note="Redesigned PokéZoo. Some changes include:" />
         <ul className="list-disc px-4">
