@@ -10,11 +10,9 @@ import {
 } from "@/components/ui/dialog";
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { z } from "zod";
 import LoadingSpinner from "@/components/LoadingSpinner";
-import { useRouter } from "next/navigation";
 import {
   Drawer,
   DrawerClose,
@@ -34,17 +32,14 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
 import { RegionsList } from "@/utils/constants";
-import { ZodRarity, type ZodRegion } from "@/utils/zod";
+import { type ZodRegion } from "@/utils/zod";
 import MiniPokemonCard from "@/components/MiniPokemonCard";
+import { purchaseBalls } from "@/server/actions/shop";
 
 export default function BallSlider(props: {
   ballId: string;
   ballName: string;
 }) {
-  const router = useRouter();
-
-  const queryClient = useQueryClient();
-
   const { toast } = useToast();
 
   const [sliderValue, setSliderValue] = useState([1]);
@@ -52,74 +47,23 @@ export default function BallSlider(props: {
   const [premierRegion, setPremierRegion] =
     useState<z.infer<typeof ZodRegion>>("Kanto");
 
-  const [purchasedSpecies, setPurchasedSpecies] = useState<
-    {
-      name: string;
-      img: string;
-      shiny: boolean;
-      rarity: z.infer<typeof ZodRarity>;
-    }[]
-  >([]);
-
   const [isOpen, setIsOpen] = useState(false);
 
-  const purchase = useMutation({
-    mutationFn: async (input: {
-      ballId: string;
-      quantity: number;
-      regionName?: string;
-    }) => {
-      const res = await fetch("/api/ball", {
-        method: "POST",
-        body: JSON.stringify({
-          ballId: input.ballId,
-          quantity: input.quantity,
-          regionName: input.regionName,
-        }),
-      });
+  const [data, action, isPending] = useActionState(purchaseBalls, undefined);
 
-      const resSchema = z.union([
-        z.object({
-          speciesList: z
-            .object({
-              name: z.string(),
-              img: z.string(),
-              shiny: z.boolean(),
-              rarity: ZodRarity,
-            })
-            .array(),
-          error: z.undefined(),
-        }),
-        z.object({ speciesList: z.undefined(), error: z.string() }),
-      ]);
-      const check = resSchema.parse(await res.json());
-      return check;
-    },
-
-    onSuccess(data) {
+  useEffect(() => {
+    if (data) {
       if (data.error) {
         toast({
           title: "Error",
           description: data.error,
           variant: "destructive",
         });
-      } else if (data.speciesList) {
-        setPurchasedSpecies(data.speciesList);
+      } else {
         setIsOpen(true);
-        void queryClient.invalidateQueries({ queryKey: ["pokemon"] });
-        router.refresh();
       }
-    },
-
-    onError(error) {
-      console.error(error);
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
+    }
+  }, [data]);
 
   return (
     <>
@@ -174,33 +118,38 @@ export default function BallSlider(props: {
               <CarouselNext />
             </Carousel>
             <DrawerFooter className="flex flex-col items-center">
-              <Button
-                onClick={() => {
-                  purchase.mutate({
-                    ballId: props.ballId,
-                    quantity: sliderValue[0],
-                    regionName: premierRegion,
-                  });
-                }}
-                disabled={purchase.isLoading}
-              >
-                Submit
-              </Button>
-              <DrawerClose>
+              <form action={action}>
+                <input type="hidden" name="ballId" value={props.ballId} />
+                <input
+                  type="number"
+                  name="quantity"
+                  defaultValue={sliderValue[0]}
+                  className="hidden"
+                />
+                <input type="hidden" name="regionName" value={premierRegion} />
+                <Button type="submit" disabled={isPending}>
+                  {isPending ? <LoadingSpinner /> : "Submit"}
+                </Button>
+              </form>
+              <DrawerClose asChild>
                 <Button variant="outline">Cancel</Button>
               </DrawerClose>
             </DrawerFooter>
           </DrawerContent>
         </Drawer>
       ) : (
-        <Button
-          onClick={() =>
-            purchase.mutate({ ballId: props.ballId, quantity: sliderValue[0] })
-          }
-          disabled={purchase.isLoading}
-        >
-          {purchase.isLoading ? <LoadingSpinner /> : "Buy"}
-        </Button>
+        <form action={action}>
+          <input type="hidden" name="ballId" value={props.ballId} />
+          <input
+            type="number"
+            name="quantity"
+            defaultValue={sliderValue[0]}
+            className="hidden"
+          />
+          <Button type="submit" disabled={isPending}>
+            {isPending ? <LoadingSpinner /> : "Buy"}
+          </Button>
+        </form>
       )}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="w-96">
@@ -211,7 +160,7 @@ export default function BallSlider(props: {
             Here is all the Pokémon you have obtained.
           </DialogDescription>
           <div className="flex h-80 flex-col gap-4 overflow-y-scroll">
-            {purchasedSpecies.map((s, idx) => (
+            {data?.purchasedSpecies?.map((s, idx) => (
               <MiniPokemonCard
                 key={idx}
                 name={s.name}
