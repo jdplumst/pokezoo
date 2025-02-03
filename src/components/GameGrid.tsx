@@ -18,14 +18,15 @@ import {
 } from "@/utils/constants";
 import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/utils/zod";
 import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
-import React, { Fragment, useEffect, useState } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import React, { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
 import PokemonCard from "./PokemonCard";
 import { useToast } from "@/hooks/use-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter } from "next/navigation";
+import { sellPokemon } from "@/server/actions/game";
 
 export default function GameGrid() {
   const { open } = useSidebar();
@@ -113,49 +114,6 @@ export default function GameGrid() {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const sell = useMutation({
-    mutationFn: async (ids: string[]) => {
-      const res = await fetch("/api/pokemon/sell", {
-        method: "POST",
-        body: JSON.stringify({
-          ids: ids,
-        }),
-      });
-
-      const resSchema = z.union([
-        z.object({ message: z.string(), error: z.undefined() }),
-        z.object({ message: z.undefined(), error: z.string() }),
-      ]);
-
-      const check = resSchema.parse(await res.json().catch());
-      return check;
-    },
-    onSuccess(data) {
-      if (data.error) {
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success! 🎉",
-          description: data.message,
-        });
-        setSellIds([]);
-        router.refresh();
-        void pokemon.refetch();
-      }
-    },
-    onError() {
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
-
   const { ref, inView } = useInView();
 
   useEffect(() => {
@@ -165,6 +123,27 @@ export default function GameGrid() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pokemon.fetchNextPage, inView]);
 
+  const [data, action, isPending] = useActionState(sellPokemon, undefined);
+
+  useEffect(() => {
+    if (data?.error) {
+      toast({
+        title: "Error",
+        description: data.error,
+        variant: "destructive",
+      });
+    } else if (data?.message) {
+      toast({
+        title: "Success! 🎉",
+        description: data.message,
+      });
+      setSellIds([]);
+      void pokemon.refetch();
+      router.refresh();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, toast, router]);
+
   return (
     <>
       {sellIds.length > 0 && (
@@ -173,13 +152,16 @@ export default function GameGrid() {
             You have selected {sellIds.length} Pokémon to sell.
           </span>
 
-          <Button
-            onClick={() => sell.mutate(sellIds)}
-            disabled={sell.isLoading}
-            className="rounded-lg border-2 border-black p-2 font-bold"
-          >
-            {sell.isLoading ? <LoadingSpinner /> : "Confirm Sell"}
-          </Button>
+          <form action={action}>
+            <input type="hidden" name="ids" defaultValue={sellIds} />
+            <Button
+              type="submit"
+              disabled={isPending}
+              className="rounded-lg border-2 border-black p-2 font-bold"
+            >
+              {isPending ? <LoadingSpinner /> : "Confirm Sell"}
+            </Button>
+          </form>
         </div>
       )}
       <div className="flex flex-col gap-5">
