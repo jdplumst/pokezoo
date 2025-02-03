@@ -31,6 +31,9 @@ export default function CharmsGrid(props: {
                   className="pixelated"
                 />
                 <div className="text-lg font-semibold">{c.name} Charm</div>
+                <div className="text-md font-medium">
+                  P{c.cost.toLocaleString()}
+                </div>
                 {props.userCharms.some((u) => u.charmId === c.id) ? (
                   <div>Owned</div>
                 ) : (
