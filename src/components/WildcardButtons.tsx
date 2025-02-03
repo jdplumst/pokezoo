@@ -7,6 +7,8 @@ import Wildcard from "@/components/Wildcard";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
+import { purchaseWildcard } from "@/server/actions/shop";
+import { useActionState, useEffect } from "react";
 
 export default function WildcardButtons(props: {
   wildcard: {
@@ -21,114 +23,81 @@ export default function WildcardButtons(props: {
 
   const { toast } = useToast();
 
-  const purchase = useMutation({
-    mutationFn: async (input: {
-      tradedWildcard: z.infer<typeof ZodRarity>;
-      purchasedWildcard: z.infer<typeof ZodRarity>;
-    }) => {
-      const res = await fetch("/api/wildcard", {
-        method: "POST",
-        body: JSON.stringify({
-          tradedWildcard: input.tradedWildcard,
-          purchasedWildcard: input.purchasedWildcard,
-        }),
-      });
+  const [data, action, isPending] = useActionState(purchaseWildcard, undefined);
 
-      const resSchema = z.union([
-        z.object({ message: z.string(), error: z.undefined() }),
-        z.object({ message: z.undefined(), error: z.string() }),
-      ]);
-
-      const check = resSchema.parse(await res.json());
-      return check;
-    },
-
-    onSuccess(data) {
-      if (data.error) {
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success! 🎉",
-          description: data.message,
-        });
-        router.refresh();
-      }
-    },
-
-    onError() {
+  useEffect(() => {
+    if (data?.error) {
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: data.error,
         variant: "destructive",
       });
-    },
-  });
+    } else if (data?.message) {
+      toast({
+        title: "Success! 🎉",
+        description: data.message,
+      });
+      router.refresh();
+    }
+  }, [data]);
 
   return (
     <div className="flex gap-1">
       {props.wildcard.commonCost && (
-        <Button
-          onClick={() => {
-            purchase.mutate({
-              tradedWildcard: "Common",
-              purchasedWildcard: props.wildcard.name,
-            });
-          }}
-          disabled={purchase.isLoading}
-          className="flex gap-1"
-        >
-          <Wildcard wildcard="Common" width={30} height={30} />
-          {props.wildcard.commonCost}
-        </Button>
+        <form action={action}>
+          <input type="hidden" name="tradedWildcard" value="Common" />
+          <input
+            type="hidden"
+            name="purchasedWildcard"
+            value={props.wildcard.name}
+          />
+          <Button type="submit" disabled={isPending} className="flex gap-1">
+            <Wildcard wildcard="Common" width={30} height={30} />
+            {props.wildcard.commonCost}
+          </Button>
+        </form>
       )}
       {props.wildcard.rareCost && (
-        <Button
-          onClick={() => {
-            purchase.mutate({
-              tradedWildcard: "Rare",
-              purchasedWildcard: props.wildcard.name,
-            });
-          }}
-          disabled={purchase.isLoading}
-          className="flex gap-1"
-        >
-          <Wildcard wildcard="Rare" width={30} height={30} />
-          {props.wildcard.rareCost}
-        </Button>
+        <form action={action}>
+          <input type="hidden" name="tradedWildcard" value="Rare" />
+          <input
+            type="hidden"
+            name="purchasedWildcard"
+            value={props.wildcard.name}
+          />
+          <Button type="submit" disabled={isPending} className="flex gap-1">
+            <Wildcard wildcard="Rare" width={30} height={30} />
+            {props.wildcard.rareCost}
+          </Button>
+        </form>
       )}
       {props.wildcard.epicCost && (
-        <Button
-          onClick={() => {
-            purchase.mutate({
-              tradedWildcard: "Epic",
-              purchasedWildcard: props.wildcard.name,
-            });
-          }}
-          disabled={purchase.isLoading}
-          className="flex gap-1"
-        >
-          <Wildcard wildcard="Epic" width={30} height={30} />
-          {props.wildcard.epicCost}
-        </Button>
+        <form action={action}>
+          <input type="hidden" name="tradedWildcard" value="Epic" />
+          <input
+            type="hidden"
+            name="purchasedWildcard"
+            value={props.wildcard.name}
+          />
+          <Button type="submit" disabled={isPending} className="flex gap-1">
+            <Wildcard wildcard="Epic" width={30} height={30} />
+            {props.wildcard.epicCost}
+          </Button>
+        </form>
       )}
       {props.wildcard.legendaryCost && (
-        <Button
-          onClick={() => {
-            purchase.mutate({
-              tradedWildcard: "Legendary",
-              purchasedWildcard: props.wildcard.name,
-            });
-          }}
-          disabled={purchase.isLoading}
-          className="flex gap-1"
-        >
-          <Wildcard wildcard="Legendary" width={30} height={30} />
-          {props.wildcard.legendaryCost}
-        </Button>
+        <form action={action}>
+          <input type="hidden" name="tradedWildcard" value="Legendary" />
+          <input
+            type="hidden"
+            name="purchasedWildcard"
+            value={props.wildcard.name}
+          />
+          <Button type="submit" disabled={isPending} className="flex gap-1">
+            <Wildcard wildcard="Legendary" width={30} height={30} />
+            {props.wildcard.legendaryCost}
+          </Button>
+        </form>
       )}
     </div>
   );

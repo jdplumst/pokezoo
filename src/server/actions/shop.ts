@@ -13,7 +13,7 @@ import {
   userCharms,
 } from "@/server/db/schema";
 import { redirect } from "next/navigation";
-import { isAuthed } from "@/server/actions/auth";
+import { hasProfile, isAuthed } from "@/server/actions/auth";
 import { z } from "zod";
 import { getTime } from "@/server/actions/cookies";
 import { alias } from "drizzle-orm/pg-core";
@@ -26,20 +26,11 @@ import { revalidatePath } from "next/cache";
 export async function getShopData() {
   const session = await isAuthed();
 
+  await hasProfile();
+
   const ballsData = await db.select().from(balls);
 
   const charmsData = await db.select().from(charms);
-
-  const currProfile = (
-    await db
-      .select({ balance: profiles.balance })
-      .from(profiles)
-      .where(eq(profiles.userId, session.user.id))
-  )[0];
-
-  if (!currProfile) {
-    redirect("/game");
-  }
 
   const userCharmsData = await db
     .select()
@@ -54,6 +45,8 @@ export async function purchaseBalls(
   formData: FormData,
 ) {
   const session = await isAuthed();
+
+  const currProfile = await hasProfile();
 
   const formSchema = z.object({
     ballId: z.string(),
@@ -72,30 +65,6 @@ export async function purchaseBalls(
 
   const time = await getTime();
 
-  const catchingCharm = alias(userCharms, "catchingCharm");
-  const currProfile = (
-    await db
-      .select({
-        totalYield: profiles.totalYield,
-        balance: profiles.balance,
-        instanceCount: profiles.instanceCount,
-        catchingCharm: catchingCharm.charmId,
-      })
-      .from(profiles)
-      .leftJoin(
-        catchingCharm,
-        and(
-          eq(profiles.userId, catchingCharm.userId),
-          eq(catchingCharm.charmId, 1),
-        ),
-      )
-      .where(eq(profiles.userId, session.user.id))
-  )[0];
-
-  if (!currProfile) {
-    redirect("/onboarding");
-  }
-
   const currBall = (
     await db.select().from(balls).where(eq(balls.id, input.data.ballId))
   )[0];
@@ -104,13 +73,13 @@ export async function purchaseBalls(
     return { error: "The ball you are trying to purchase does not exist." };
   }
 
-  if (currProfile.balance < currBall.cost * input.data.quantity) {
+  if (currProfile.profile.balance < currBall.cost * input.data.quantity) {
     return { error: "You cannot afford these balls." };
   }
 
   if (
     !withinInstanceLimit(
-      currProfile.instanceCount + input.data.quantity,
+      currProfile.profile.instanceCount + input.data.quantity,
       !!currProfile.catchingCharm,
     )
   ) {
@@ -261,15 +230,16 @@ export async function purchaseBalls(
     }
   });
 
-  const totalNewYield = calcNewYield(currProfile.totalYield, newYield);
+  const totalNewYield = calcNewYield(currProfile.profile.totalYield, newYield);
 
   await db.transaction(async (tx) => {
     await tx
       .update(profiles)
       .set({
         totalYield: totalNewYield,
-        balance: currProfile.balance - currBall.cost * input.data.quantity,
-        instanceCount: currProfile.instanceCount + input.data.quantity,
+        balance:
+          currProfile.profile.balance - currBall.cost * input.data.quantity,
+        instanceCount: currProfile.profile.instanceCount + input.data.quantity,
       })
       .where(eq(profiles.userId, session.user.id));
   });
@@ -284,9 +254,8 @@ export async function purchaseCharm(
   formData: FormData,
 ) {
   const session = await isAuthed();
-  if (!session) {
-    redirect("/");
-  }
+
+  const currProfile = await hasProfile();
 
   const formSchema = z.object({
     charmId: z.coerce.number(),
@@ -298,17 +267,6 @@ export async function purchaseCharm(
     return {
       error: "The charm you are trying to purchase does not exist.",
     };
-  }
-
-  const currProfile = (
-    await db
-      .select({ balance: profiles.balance })
-      .from(profiles)
-      .where(eq(profiles.userId, session.user.id))
-  )[0];
-
-  if (!currProfile) {
-    redirect("/onboarding");
   }
 
   const charmData = (
@@ -337,7 +295,7 @@ export async function purchaseCharm(
     return { error: "You have already purchased this charm." };
   }
 
-  if (currProfile.balance < charmData.cost) {
+  if (currProfile.profile.balance < charmData.cost) {
     return { error: "You cannot afford this charm." };
   }
 
@@ -348,11 +306,200 @@ export async function purchaseCharm(
 
     await tx
       .update(profiles)
-      .set({ balance: currProfile.balance - charmData.cost })
+      .set({ balance: currProfile.profile.balance - charmData.cost })
       .where(eq(profiles.userId, session.user.id));
   });
 
   return {
     message: `You have successfully purchased the ${charmData.name} Charm!`,
+  };
+}
+
+export async function purchaseWildcard(
+  _previousState: unknown,
+  formData: FormData,
+) {
+  const session = await isAuthed();
+
+  const currProfile = await hasProfile();
+
+  const formSchema = z.object({
+    tradedWildcard: ZodRarity,
+    purchasedWildcard: ZodRarity,
+  });
+
+  const input = formSchema.safeParse(Object.fromEntries(formData));
+
+  if (input.error) {
+    return {
+      error: "Something went wrong. Please try again.",
+    };
+  }
+
+  switch (input.data.tradedWildcard + ", " + input.data.purchasedWildcard) {
+    case "Common, Rare":
+      if (currProfile.profile.commonCards < 2) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          commonCards: currProfile.profile.commonCards - 2,
+          rareCards: currProfile.profile.rareCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Common, Epic":
+      if (currProfile.profile.commonCards < 4) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          commonCards: currProfile.profile.commonCards - 4,
+          epicCards: currProfile.profile.epicCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Common, Legendary":
+      if (currProfile.profile.commonCards < 50) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          commonCards: currProfile.profile.commonCards - 50,
+          legendaryCards: currProfile.profile.legendaryCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Rare, Common":
+      if (currProfile.profile.rareCards < 1) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          rareCards: currProfile.profile.rareCards - 1,
+          commonCards: currProfile.profile.commonCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Rare, Epic":
+      if (currProfile.profile.rareCards < 2) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          rareCards: currProfile.profile.rareCards - 2,
+          epicCards: currProfile.profile.epicCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Rare, Legendary":
+      if (currProfile.profile.rareCards < 35) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          rareCards: currProfile.profile.rareCards - 35,
+          legendaryCards: currProfile.profile.legendaryCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Epic, Common":
+      if (currProfile.profile.epicCards < 1) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          epicCards: currProfile.profile.epicCards - 1,
+          commonCards: currProfile.profile.commonCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Epic, Rare":
+      if (currProfile.profile.epicCards < 1) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          epicCards: currProfile.profile.epicCards - 1,
+          rareCards: currProfile.profile.rareCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Epic, Legendary":
+      if (currProfile.profile.epicCards < 15) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          epicCards: currProfile.profile.epicCards - 15,
+          legendaryCards: currProfile.profile.legendaryCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Legendary, Common":
+      if (currProfile.profile.legendaryCards < 1) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          legendaryCards: currProfile.profile.legendaryCards - 1,
+          commonCards: currProfile.profile.commonCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Legendary, Rare":
+      if (currProfile.profile.legendaryCards < 1) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          legendaryCards: currProfile.profile.legendaryCards - 1,
+          rareCards: currProfile.profile.rareCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    case "Legendary, Epic":
+      if (currProfile.profile.legendaryCards < 1) {
+        return { error: "You cannot afford this wildcard." };
+      }
+      await db
+        .update(profiles)
+        .set({
+          legendaryCards: currProfile.profile.legendaryCards - 1,
+          epicCards: currProfile.profile.epicCards + 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+      break;
+
+    default:
+      return {
+        error: "Something went wrong. Please try again.",
+      };
+  }
+
+  return {
+    message: `You have successfully purchased a ${input.data.purchasedWildcard} Wildcard.`,
   };
 }
