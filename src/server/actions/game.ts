@@ -1,5 +1,5 @@
 "use server";
-import "server-only";
+
 import { hasProfile, isAuthed } from "@/server/actions/auth";
 import { db } from "@/server/db";
 import { profiles } from "@/server/db/schema";

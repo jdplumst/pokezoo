@@ -12,11 +12,9 @@ import {
   species,
   userCharms,
 } from "@/server/db/schema";
-import { redirect } from "next/navigation";
 import { hasProfile, isAuthed } from "@/server/actions/auth";
 import { z } from "zod";
 import { getTime } from "@/server/actions/cookies";
-import { alias } from "drizzle-orm/pg-core";
 import { withinInstanceLimit } from "@/utils/withinInstanceLimit";
 import { ZodRarity } from "@/utils/zod";
 import { updateUserQuest } from "@/utils/updateUserQuest";

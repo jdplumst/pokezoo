@@ -28,7 +28,7 @@ export default function CharmButton(props: { charmId: number }) {
       });
       router.refresh();
     }
-  }, [data]);
+  }, [data, toast, router]);
 
   return (
     <form action={action}>

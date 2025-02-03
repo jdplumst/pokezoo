@@ -2,11 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { type ZodRarity } from "@/utils/zod";
-import { z } from "zod";
+import { type z } from "zod";
 import Wildcard from "@/components/Wildcard";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation } from "@tanstack/react-query";
 import { purchaseWildcard } from "@/server/actions/shop";
 import { useActionState, useEffect } from "react";
 
@@ -39,7 +38,7 @@ export default function WildcardButtons(props: {
       });
       router.refresh();
     }
-  }, [data]);
+  }, [data, toast, router]);
 
   return (
     <div className="flex gap-1">

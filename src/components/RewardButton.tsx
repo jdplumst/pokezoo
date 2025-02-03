@@ -12,7 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { type ZodTime } from "@/utils/zod";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
-import { z } from "zod";
+import { type z } from "zod";
 import Wildcard from "@/components/Wildcard";
 import { claimReward } from "@/server/actions/game";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -40,7 +40,7 @@ export default function RewardButton(props: {
       setIsOpen(true);
       router.refresh();
     }
-  }, [data]);
+  }, [data, toast, router]);
 
   return (
     <>

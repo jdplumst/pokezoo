@@ -11,7 +11,7 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { useToast } from "@/hooks/use-toast";
 import { useActionState, useEffect, useState } from "react";
-import { z } from "zod";
+import { type z } from "zod";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import {
   Drawer,
@@ -63,7 +63,7 @@ export default function BallSlider(props: {
         setIsOpen(true);
       }
     }
-  }, [data]);
+  }, [data, toast]);
 
   return (
     <>

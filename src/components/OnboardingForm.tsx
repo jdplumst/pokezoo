@@ -22,7 +22,7 @@ export default function OnboardingForm(props: {
         variant: "destructive",
       });
     }
-  }, [data]);
+  }, [data, toast]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800 p-8 text-white">
