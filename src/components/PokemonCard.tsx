@@ -75,6 +75,7 @@ export default function PokemonCard(props: {
             alt={pokemon.data.name}
             width={100}
             height={100}
+            className="pixelated"
           />
           <div className="font-lg font-semibold capitalize">
             {pokemon.data.shiny && "🌟"}{" "}
