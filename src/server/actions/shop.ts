@@ -278,3 +278,81 @@ export async function purchaseBalls(
   revalidatePath("/shop");
   return { purchasedSpecies };
 }
+
+export async function purchaseCharm(
+  _previousState: unknown,
+  formData: FormData,
+) {
+  const session = await isAuthed();
+  if (!session) {
+    redirect("/");
+  }
+
+  const formSchema = z.object({
+    charmId: z.coerce.number(),
+  });
+
+  const input = formSchema.safeParse(Object.fromEntries(formData));
+
+  if (input.error) {
+    return {
+      error: "The charm you are trying to purchase does not exist.",
+    };
+  }
+
+  const currProfile = (
+    await db
+      .select({ balance: profiles.balance })
+      .from(profiles)
+      .where(eq(profiles.userId, session.user.id))
+  )[0];
+
+  if (!currProfile) {
+    redirect("/onboarding");
+  }
+
+  const charmData = (
+    await db.select().from(charms).where(eq(charms.id, input.data.charmId))
+  )[0];
+
+  if (!charmData) {
+    return {
+      error: "The charm you are trying to purchase does not exist.",
+    };
+  }
+
+  const exists = (
+    await db
+      .select()
+      .from(userCharms)
+      .where(
+        and(
+          eq(userCharms.charmId, input.data.charmId),
+          eq(userCharms.userId, session.user.id),
+        ),
+      )
+  )[0];
+
+  if (exists) {
+    return { error: "You have already purchased this charm." };
+  }
+
+  if (currProfile.balance < charmData.cost) {
+    return { error: "You cannot afford this charm." };
+  }
+
+  await db.transaction(async (tx) => {
+    await tx
+      .insert(userCharms)
+      .values({ userId: session.user.id, charmId: input.data.charmId });
+
+    await tx
+      .update(profiles)
+      .set({ balance: currProfile.balance - charmData.cost })
+      .where(eq(profiles.userId, session.user.id));
+  });
+
+  return {
+    message: `You have successfully purchased the ${charmData.name} Charm!`,
+  };
+}
