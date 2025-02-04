@@ -19,14 +19,15 @@ import {
 } from "@/utils/constants";
 import { useToast } from "@/hooks/use-toast";
 import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/utils/zod";
-import { useInfiniteQuery, useMutation } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { z } from "zod";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import PokemonCard from "@/components/PokemonCard";
 import Wildcard from "@/components/Wildcard";
+import { purchasePokemon } from "@/server/actions/pokedex";
 
 export default function PokedexGrid() {
   const { open } = useSidebar();
@@ -34,6 +35,8 @@ export default function PokedexGrid() {
   const { toast } = useToast();
 
   const router = useRouter();
+
+  const queryClient = useQueryClient();
 
   const [caught, setCaught] = useState<
     "All Pokémon" | "Only Uncaught" | "Only Caught"
@@ -45,7 +48,7 @@ export default function PokedexGrid() {
   const [habitats, setHabitats] = useState(HabitatList);
 
   const pokemon = useInfiniteQuery({
-    queryKey: ["pokemon", caught, shiny, regions, rarities, types, habitats],
+    queryKey: ["pokedex", caught, shiny, regions, rarities, types, habitats],
     queryFn: async ({ pageParam = {} }) => {
       const res = await fetch("/api/pokedex", {
         method: "POST",
@@ -98,48 +101,6 @@ export default function PokedexGrid() {
     getNextPageParam: (lastPage) => lastPage.nextCursor,
   });
 
-  const purchase = useMutation({
-    mutationFn: async (speciesId: string) => {
-      const res = await fetch("/api/pokemon/purchase", {
-        method: "POST",
-        body: JSON.stringify({
-          speciesId: speciesId,
-        }),
-      });
-
-      const resSchema = z.union([
-        z.object({ message: z.string(), error: z.undefined() }),
-        z.object({ message: z.undefined(), error: z.string() }),
-      ]);
-
-      const check = resSchema.parse(await res.json());
-      return check;
-    },
-    onSuccess(data) {
-      if (data.error) {
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success! 🎉",
-          description: data.message,
-        });
-        router.refresh();
-        void pokemon.refetch();
-      }
-    },
-    onError() {
-      toast({
-        title: "Error",
-        description: "Something went wrong. Please try again.",
-        variant: "destructive",
-      });
-    },
-  });
-
   const { ref, inView } = useInView();
 
   useEffect(() => {
@@ -148,6 +109,27 @@ export default function PokedexGrid() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pokemon.fetchNextPage, inView]);
+
+  const [data, action, isPending] = useActionState(purchasePokemon, undefined);
+  const [purchaseId, setPurhcaseId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (data?.error) {
+      toast({
+        title: "Error",
+        description: data.error,
+        variant: "destructive",
+      });
+    } else if (data?.message) {
+      toast({
+        title: "Success!",
+        description: data.message,
+      });
+      setPurhcaseId(null);
+      router.refresh();
+      void queryClient.invalidateQueries(["pokedex"]);
+    }
+  }, [data, toast, router, queryClient]);
 
   return (
     <>
@@ -354,17 +336,22 @@ export default function PokedexGrid() {
                   p.rarity === "Rare" ||
                   p.rarity === "Epic" ||
                   p.rarity === "Legendary" ? (
-                    <Button
-                      variant="destructive"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        purchase.mutate(p.id);
-                      }}
-                      className="font-lg flex gap-1 font-semibold"
-                    >
-                      <Wildcard wildcard={p.rarity} width={25} height={25} />
-                      {p.shiny ? `100` : `10`}
-                    </Button>
+                    <form action={action}>
+                      <input type="hidden" name="speciesId" value={p.id} />
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setPurhcaseId(p.id);
+                        }}
+                        type="submit"
+                        variant="destructive"
+                        disabled={isPending && purchaseId === p.id}
+                        className="font-lg flex gap-1 font-semibold"
+                      >
+                        <Wildcard wildcard={p.rarity} width={25} height={25} />
+                        {p.shiny ? `100` : `10`}
+                      </Button>
+                    </form>
                   ) : (
                     <Button variant="destructive">N/A</Button>
                   )}

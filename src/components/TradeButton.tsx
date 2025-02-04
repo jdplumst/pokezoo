@@ -10,13 +10,15 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import MiniPokemonCard from "@/components/MiniPokemonCard";
 import { z } from "zod";
 import { type ZodRarity } from "@/utils/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { initiateTrade, offerTrade } from "@/server/actions/trades";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function TradeButton(
   props:
@@ -33,7 +35,7 @@ export default function TradeButton(
 
   const [description, setDescription] = useState("");
   const [search, setSearch] = useState("");
-  const [instance, setInstance] = useState<string | null>(null);
+  const [instance, setInstance] = useState<string>("");
 
   const pokemon = useQuery({
     queryKey: ["distinct", search],
@@ -58,99 +60,55 @@ export default function TradeButton(
     },
   });
 
-  const add = useMutation({
-    mutationFn: async () => {
-      const res = await fetch("/api/trade/initiate", {
-        method: "POST",
-        body: JSON.stringify({
-          instanceId: instance,
-          description: description,
-        }),
-      });
+  const [initiateData, initiateAction, initiateIsPending] = useActionState(
+    initiateTrade,
+    undefined,
+  );
 
-      const resSchema = z.union([
-        z.object({ message: z.undefined(), error: z.string() }),
-        z.object({ message: z.string(), error: z.undefined() }),
-      ]);
-
-      const data = resSchema.parse(await res.json());
-      return data;
-    },
-    onSuccess(data) {
-      if (data.error) {
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success! 🎉",
-          description: data.message,
-        });
-        setDescription("");
-        setSearch("");
-        setInstance(null);
-        setOpen(false);
-        router.refresh();
-      }
-    },
-    onError() {
+  useEffect(() => {
+    if (initiateData?.error) {
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: initiateData.error,
         variant: "destructive",
       });
-      router.refresh();
-    },
-  });
-
-  const offer = useMutation({
-    mutationFn: async (input: { tradeId: string }) => {
-      const res = await fetch("/api/trade/offer", {
-        method: "POST",
-        body: JSON.stringify({
-          tradeId: input.tradeId,
-          instanceId: instance,
-        }),
+    } else if (initiateData?.message) {
+      toast({
+        title: "Success! 🎉",
+        description: initiateData.message,
       });
+      setDescription("");
+      setSearch("");
+      setInstance("");
+      setOpen(false);
+      router.refresh();
+    }
+  }, [initiateData, toast, router]);
 
-      const resSchema = z.union([
-        z.object({ message: z.undefined(), error: z.string() }),
-        z.object({ message: z.string(), error: z.undefined() }),
-      ]);
+  const [offerData, offerAction, offerIsPending] = useActionState(
+    offerTrade,
+    undefined,
+  );
 
-      const data = resSchema.parse(await res.json());
-      return data;
-    },
-    onSuccess(data) {
-      if (data.error) {
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success! 🎉",
-          description: data.message,
-        });
-        setDescription("");
-        setSearch("");
-        setInstance(null);
-        setOpen(false);
-        router.refresh();
-      }
-    },
-    onError() {
+  useEffect(() => {
+    if (offerData?.error) {
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: offerData.error,
         variant: "destructive",
       });
+    } else if (offerData?.message) {
+      toast({
+        title: "Success! 🎉",
+        description: offerData.message,
+      });
+      setDescription("");
+      setSearch("");
+      setInstance("");
+      setOpen(false);
       router.refresh();
-    },
-  });
+    }
+  }, [offerData, toast, router]);
 
   return (
     <>
@@ -199,15 +157,35 @@ export default function TradeButton(
                 </button>
               ))}
             </div>
-            <Button
-              onClick={() =>
-                props.type === "initiate"
-                  ? add.mutate()
-                  : offer.mutate({ tradeId: props.tradeId })
-              }
+            <form
+              action={props.type === "initiate" ? initiateAction : offerAction}
             >
-              {props.type === "initiate" ? "Add Trade" : "Add Offer"}
-            </Button>
+              <input
+                type="hidden"
+                name="description"
+                defaultValue={description}
+              />
+              <input type="hidden" name="instanceId" defaultValue={instance} />
+              {props.type === "offer" && (
+                <input
+                  type="hidden"
+                  name="tradeId"
+                  defaultValue={props.tradeId}
+                />
+              )}
+              <Button
+                type="submit"
+                disabled={initiateIsPending || offerIsPending}
+              >
+                {initiateIsPending || offerIsPending ? (
+                  <LoadingSpinner />
+                ) : props.type === "initiate" ? (
+                  "Add Trade"
+                ) : (
+                  "Add Offer"
+                )}
+              </Button>
+            </form>
           </div>
         </SheetContent>
       </Sheet>

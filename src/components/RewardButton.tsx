@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { type ZodTime } from "@/utils/zod";
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { z } from "zod";
+import { useActionState, useEffect, useState } from "react";
+import { type z } from "zod";
 import Wildcard from "@/components/Wildcard";
+import { claimReward } from "@/server/actions/game";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function RewardButton(props: {
   time: z.infer<typeof ZodTime>;
@@ -26,74 +27,21 @@ export default function RewardButton(props: {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const [rewards, setRewards] = useState<
-    | {
-        Reward: number | undefined;
-        Cards:
-          | {
-              Common: number;
-              Rare: number;
-              Epic: number;
-              Legendary: number;
-            }
-          | undefined;
-      }
-    | undefined
-  >();
+  const [data, action, isPending] = useActionState(claimReward, undefined);
 
-  const claim = useMutation({
-    mutationFn: async (time: z.infer<typeof ZodTime>) => {
-      const res = await fetch("/api/reward", {
-        method: "POST",
-        body: JSON.stringify({ time: time }),
-      });
-
-      const resSchema = z.union([
-        z.object({
-          reward: z.number(),
-          cards: z.object({
-            Common: z.number(),
-            Rare: z.number(),
-            Epic: z.number(),
-            Legendary: z.number(),
-          }),
-          error: z.undefined(),
-        }),
-        z.object({
-          reward: z.undefined(),
-          cards: z.undefined(),
-          error: z.string(),
-        }),
-      ]);
-
-      const check = resSchema.parse(await res.json());
-      return check;
-    },
-
-    onSuccess(data) {
-      if (data.error) {
-        console.error(data.error);
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else {
-        setRewards({ Reward: data.reward, Cards: data.cards });
-        setIsOpen(true);
-        router.refresh();
-      }
-    },
-
-    onError(error) {
-      console.error(error);
+  useEffect(() => {
+    if (data?.error) {
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: data.error,
         variant: "destructive",
       });
-    },
-  });
+    } else if (data?.reward && data.cards) {
+      setIsOpen(true);
+      router.refresh();
+    }
+  }, [data, toast, router]);
+
   return (
     <>
       {" "}
@@ -101,21 +49,25 @@ export default function RewardButton(props: {
       (props.time === "night" && props.profile.claimedNightly) ? (
         <div>You have already claimed your reward.</div>
       ) : props.time === "day" ? (
-        <Button
-          onClick={() => claim.mutate(props.time)}
-          disabled={claim.isLoading}
-          className="w-40 bg-yellow-400 text-black hover:bg-yellow-500"
-        >
-          Claim Daily Reward
-        </Button>
+        <form action={action}>
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="w-40 bg-yellow-400 text-black hover:bg-yellow-500"
+          >
+            {isPending ? <LoadingSpinner /> : "Claim Daily Reward"}
+          </Button>
+        </form>
       ) : (
-        <Button
-          onClick={() => claim.mutate(props.time)}
-          disabled={claim.isLoading}
-          className="w-40 bg-purple-600 hover:bg-purple-700"
-        >
-          Claim Nightly Reward
-        </Button>
+        <form action={action}>
+          <Button
+            type="submit"
+            disabled={isPending}
+            className="w-40 bg-purple-600 hover:bg-purple-700"
+          >
+            {isPending ? <LoadingSpinner /> : "Claim Nightly Reward"}
+          </Button>
+        </form>
       )}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="w-96">
@@ -130,46 +82,46 @@ export default function RewardButton(props: {
           </DialogHeader>
           <div className="flex h-32 flex-col gap-2 overflow-y-scroll">
             <div className="font-semibold">
-              You received P{rewards?.Reward?.toLocaleString()}!
+              You received P{data?.reward?.toLocaleString()}!
             </div>
-            {rewards?.Cards?.Common ? (
+            {data?.cards?.Common ? (
               <div className="flex gap-1">
                 <div>
-                  You received {rewards.Cards.Common} Common wildcard
-                  {rewards.Cards.Common > 1 && "s"}
+                  You received {data.cards.Common} Common wildcard
+                  {data.cards.Common > 1 && "s"}
                 </div>
                 <Wildcard wildcard="Common" width={20} height={20} />
               </div>
             ) : (
               <></>
             )}
-            {rewards?.Cards?.Rare ? (
+            {data?.cards?.Rare ? (
               <div className="flex gap-1">
                 <div>
-                  You received {rewards.Cards.Rare} Rare wildcard
-                  {rewards.Cards.Rare > 1 && "s"}
+                  You received {data.cards.Rare} Rare wildcard
+                  {data.cards.Rare > 1 && "s"}
                 </div>
                 <Wildcard wildcard="Rare" width={20} height={20} />
               </div>
             ) : (
               <></>
             )}
-            {rewards?.Cards?.Epic ? (
+            {data?.cards?.Epic ? (
               <div className="flex gap-1">
                 <div>
-                  You received {rewards.Cards.Epic} Epic wildcard
-                  {rewards.Cards.Epic > 1 && "s"}
+                  You received {data.cards.Epic} Epic wildcard
+                  {data.cards.Epic > 1 && "s"}
                 </div>
                 <Wildcard wildcard="Epic" width={20} height={20} />
               </div>
             ) : (
               <></>
             )}
-            {rewards?.Cards?.Legendary ? (
+            {data?.cards?.Legendary ? (
               <div className="flex gap-1">
                 <div>
-                  You received {rewards.Cards.Legendary} Legendary wildcard
-                  {rewards.Cards.Legendary > 1 && "s"}
+                  You received {data.cards.Legendary} Legendary wildcard
+                  {data.cards.Legendary > 1 && "s"}
                 </div>
                 <Wildcard wildcard="Legendary" width={20} height={20} />
               </div>

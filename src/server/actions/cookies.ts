@@ -10,7 +10,7 @@ import { timezones } from "@/utils/timezones";
 const themeSchema = z.enum(["blue", "purple", "green", "orange"]);
 
 export async function getTheme() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const theme = cookieStore.get("theme")?.value ?? "blue";
   const result = themeSchema.safeParse(theme);
   const parsedTheme = result.data ?? "blue";
@@ -20,7 +20,7 @@ export async function getTheme() {
 export async function setTheme(theme: string) {
   const result = themeSchema.safeParse(theme);
   const parsedTheme = result.data ?? "blue";
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   cookieStore.set({
     name: "theme",
     value: parsedTheme,
@@ -30,7 +30,7 @@ export async function setTheme(theme: string) {
 }
 
 export async function getTime() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const timezone = cookieStore.get("timezone-offset")?.value ?? "-5";
   const parsedTimezone = Math.floor(Number(timezone)) || -5;
   const hour = new Date().getUTCHours() + parsedTimezone;
@@ -42,7 +42,7 @@ export async function getTime() {
 }
 
 export async function getTimezone() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   let timezone =
     cookieStore.get("timezone")?.value ??
     "Eastern Standard Time (North America) [EST -5]";
@@ -54,7 +54,7 @@ export async function getTimezone() {
 }
 
 export async function setTimezone(timezone: string, offset: string) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   cookieStore.set({
     name: "timezone",
     value: timezone,
@@ -69,7 +69,7 @@ export async function setTimezone(timezone: string, offset: string) {
 }
 
 export async function toggleTime() {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const timezone = cookieStore.get("timezone")?.value ?? "Fiji Time [FJT +12]";
   if (timezone === "Fiji Time [FJT +12]") {
     cookieStore.set({

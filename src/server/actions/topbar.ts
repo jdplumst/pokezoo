@@ -5,6 +5,7 @@ import { alias } from "drizzle-orm/pg-core";
 import { profiles, userCharms } from "@/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { db } from "@/server/db";
+import { redirect } from "next/navigation";
 
 export async function getTopbar() {
   const session = await isAuthed();
@@ -36,6 +37,10 @@ export async function getTopbar() {
       )
       .where(eq(profiles.userId, session.user.id))
   )[0];
+
+  if (!profileData) {
+    redirect("/onboarding");
+  }
 
   return profileData;
 }
