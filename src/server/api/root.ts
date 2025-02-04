@@ -1,4 +1,5 @@
 import { gameRouter } from "@/server/api/routers/game";
+import { pokedexRouter } from "@/server/api/routers/pokedex";
 import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
 
 /**
@@ -8,6 +9,7 @@ import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   game: gameRouter,
+  pokedex: pokedexRouter,
 });
 
 // export type definition of API

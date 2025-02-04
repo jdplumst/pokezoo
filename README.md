@@ -15,6 +15,6 @@ The app is currently on version 8.09.
 - PostgreSQL with Supabase
 - Drizzle
 - NextAuth.js
-- React Query
+- tRPC
 - shadcn/ui
 - Upstash

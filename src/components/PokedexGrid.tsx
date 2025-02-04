@@ -18,16 +18,14 @@ import {
   TypesList,
 } from "@/utils/constants";
 import { useToast } from "@/hooks/use-toast";
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/utils/zod";
-import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { z } from "zod";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import PokemonCard from "@/components/PokemonCard";
 import Wildcard from "@/components/Wildcard";
 import { purchasePokemon } from "@/server/actions/pokedex";
+import { api } from "@/trpc/react";
 
 export default function PokedexGrid() {
   const { open } = useSidebar();
@@ -36,7 +34,7 @@ export default function PokedexGrid() {
 
   const router = useRouter();
 
-  const queryClient = useQueryClient();
+  const utils = api.useUtils();
 
   const [caught, setCaught] = useState<
     "All Pokémon" | "Only Uncaught" | "Only Caught"
@@ -47,68 +45,34 @@ export default function PokedexGrid() {
   const [types, setTypes] = useState(TypesList);
   const [habitats, setHabitats] = useState(HabitatList);
 
-  const pokemon = useInfiniteQuery({
-    queryKey: ["pokedex", caught, shiny, regions, rarities, types, habitats],
-    queryFn: async ({ pageParam = {} }) => {
-      const res = await fetch("/api/pokedex", {
-        method: "POST",
-        body: JSON.stringify({
-          limit: 50,
-          caught: {
-            Caught: caught === "All Pokémon" || caught === "Only Caught",
-            Uncaught: caught === "All Pokémon" || caught === "Only Uncaught",
-          },
-          shiny: shiny === "Shiny" ? true : false,
-          regions: regions,
-          rarities: rarities,
-          types: types,
-          habitats: habitats,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          cursor: pageParam,
-        }),
-      });
-
-      const resSchema = z.object({
-        pokemon: z.array(
-          z.object({
-            id: z.string(),
-            pokedexNumber: z.number(),
-            name: z.string(),
-            rarity: ZodRarity,
-            yield: z.number(),
-            img: z.string(),
-            sellPrice: z.number(),
-            shiny: z.boolean(),
-            typeOne: ZodSpeciesType,
-            typeTwo: ZodSpeciesType.nullable(),
-            generation: z.number(),
-            habitat: ZodHabitat,
-            region: ZodRegion,
-            instance: z.string().nullish(),
-          }),
-        ),
-        nextCursor: z
-          .object({
-            pokedexNumber: z.number().nullish(),
-            name: z.string().nullish(),
-          })
-          .nullish(),
-      });
-
-      const check = resSchema.parse(await res.json());
-      return check;
+  const pokemon = api.pokedex.getPokedex.useInfiniteQuery(
+    {
+      limit: 50,
+      caught: {
+        Caught: caught === "All Pokémon" || caught === "Only Caught",
+        Uncaught: caught === "All Pokémon" || caught === "Only Uncaught",
+      },
+      shiny: shiny === "Shiny" ? true : false,
+      regions: regions,
+      rarities: rarities,
+      types: types,
+      habitats: habitats,
     },
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-  });
+    {
+      getNextPageParam: (lastPage) => {
+        return lastPage.nextCursor;
+      },
+    },
+  );
 
   const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (inView) {
+    if (inView && pokemon.hasNextPage) {
       void pokemon.fetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pokemon.fetchNextPage, inView]);
+  }, [pokemon.fetchNextPage, inView, pokemon.hasNextPage]);
 
   const [data, action, isPending] = useActionState(purchasePokemon, undefined);
   const [purchaseId, setPurhcaseId] = useState<string | null>(null);
@@ -127,9 +91,9 @@ export default function PokedexGrid() {
       });
       setPurhcaseId(null);
       router.refresh();
-      void queryClient.invalidateQueries(["pokedex"]);
+      void utils.pokedex.getPokedex.invalidate();
     }
-  }, [data, toast, router, queryClient]);
+  }, [data, toast, router, utils.pokedex.getPokedex]);
 
   return (
     <>
