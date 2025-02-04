@@ -9,12 +9,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Image from "next/image";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { selectStarter } from "@/server/actions/starters";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default function StarterSelect(props: {
   regionId: number;
@@ -26,7 +28,9 @@ export default function StarterSelect(props: {
 
   const queryClient = useQueryClient();
 
-  const [starterId, setStarterId] = useState<string | null>(null);
+  const [starterId, setStarterId] = useState<string>("");
+
+  const [data, action, isPending] = useActionState(selectStarter, undefined);
 
   const starters = useQuery({
     queryKey: ["starters"],
@@ -46,49 +50,22 @@ export default function StarterSelect(props: {
     },
   });
 
-  const select = useMutation({
-    mutationFn: async () => {
-      const res = await fetch("/api/starter", {
-        method: "POST",
-        body: JSON.stringify({
-          starterId: starterId,
-        }),
-      });
-
-      const resSchema = z.union([
-        z.object({ message: z.undefined(), error: z.string() }),
-        z.object({ message: z.string(), error: z.undefined() }),
-      ]);
-
-      const data = resSchema.parse(await res.json());
-      return data;
-    },
-    onSuccess(data) {
-      if (data.error) {
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Success! 🎉",
-          description: data.message,
-        });
-        setStarterId(null);
-        void queryClient.invalidateQueries({ queryKey: ["pokemon"] });
-        router.refresh();
-      }
-    },
-    onError() {
+  useEffect(() => {
+    if (data?.error) {
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: data.error,
         variant: "destructive",
       });
+    } else if (data?.message) {
+      toast({
+        title: "Success! 🎉",
+        description: data.message,
+      });
+      void queryClient.invalidateQueries(["pokemon"]);
       router.refresh();
-    },
-  });
+    }
+  }, [data, toast, router, queryClient]);
 
   return (
     <Dialog open={true}>
@@ -118,9 +95,12 @@ export default function StarterSelect(props: {
           ))}
         </div>
         <DialogFooter className="mx-auto">
-          <Button onClick={() => select.mutate()} disabled={select.isLoading}>
-            Confirm
-          </Button>
+          <form action={action}>
+            <input type="hidden" name="starterId" value={starterId} />
+            <Button type="submit" disabled={isPending}>
+              {isPending ? <LoadingSpinner /> : "Confirm"}
+            </Button>
+          </form>
         </DialogFooter>
       </DialogContent>
     </Dialog>
