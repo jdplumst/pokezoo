@@ -205,4 +205,23 @@ export const gameRouter = createTRPCRouter({
 
       return { instancesData, nextCursor };
     }),
+
+  getStarters: protectedProcedure
+    .input(z.object({ regionId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const starters = await ctx.db
+        .select({
+          id: species.id,
+          name: species.name,
+          img: species.img,
+        })
+        .from(species)
+        .innerJoin(regions, eq(species.regionId, regions.id))
+        .where(
+          and(eq(species.regionId, input.regionId), eq(species.starter, true)),
+        )
+        .orderBy(asc(species.pokedexNumber));
+
+      return { starters };
+    }),
 });
