@@ -6,9 +6,9 @@ export const ZodSort = z.enum([
   "Oldest",
   "Newest",
   "Pokedex",
-  "PokedexDesc",
+  "Pokedex Desc.",
   "Rarity",
-  "RarityDesc",
+  "Rarity Desc.",
 ]);
 
 export const ZodTime = z.enum(["day", "night"]);

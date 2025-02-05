@@ -2,7 +2,7 @@ import "@/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { getTheme, getTime } from "@/server/actions/cookies";
 import { Toaster } from "@/components/ui/toaster";
-import Providers from "@/app/providers";
+import { TRPCReactProvider } from "@/trpc/react";
 
 export default async function RootLayout({
   children,
@@ -17,7 +17,7 @@ export default async function RootLayout({
     <html lang="en" className={`${GeistSans.className} ${theme} ${mode}`}>
       <body>
         <Toaster />
-        <Providers>{children}</Providers>
+        <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
   );

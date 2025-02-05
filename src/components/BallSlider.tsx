@@ -35,15 +35,12 @@ import { RegionsList } from "@/utils/constants";
 import { type ZodRegion } from "@/utils/zod";
 import MiniPokemonCard from "@/components/MiniPokemonCard";
 import { purchaseBalls } from "@/server/actions/shop";
-import { useQueryClient } from "@tanstack/react-query";
 
 export default function BallSlider(props: {
   ballId: string;
   ballName: string;
 }) {
   const { toast } = useToast();
-
-  const queryClient = useQueryClient();
 
   const [sliderValue, setSliderValue] = useState([1]);
 
@@ -63,9 +60,8 @@ export default function BallSlider(props: {
       });
     } else if (data?.purchasedSpecies) {
       setIsOpen(true);
-      void queryClient.invalidateQueries(["distinct"]);
     }
-  }, [data, toast, queryClient]);
+  }, [data, toast]);
 
   return (
     <>

@@ -16,17 +16,15 @@ import {
   RegionsList,
   TypesList,
 } from "@/utils/constants";
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/utils/zod";
 import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
-import { useInfiniteQuery } from "@tanstack/react-query";
 import React, { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import { z } from "zod";
 import PokemonCard from "./PokemonCard";
 import { useToast } from "@/hooks/use-toast";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useRouter } from "next/navigation";
 import { sellPokemon } from "@/server/actions/game";
+import { api } from "@/trpc/react";
 
 export default function GameGrid() {
   const { open } = useSidebar();
@@ -55,69 +53,25 @@ export default function GameGrid() {
 
   const [sellIds, setSellIds] = useState<string[]>([]);
 
-  const pokemon = useInfiniteQuery({
-    queryKey: ["pokemon", sortedBy, shiny, regions, rarities, types, habitats],
-    queryFn: async ({ pageParam = {} }) => {
-      const res = await fetch("/api/game", {
-        method: "POST",
-        body: JSON.stringify({
-          limit: 50,
-          order: sortedBy,
-          shiny: shiny === "Shiny" ? true : false,
-          regions: regions,
-          rarities: rarities,
-          types: types,
-          habitats: habitats,
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-          cursor: pageParam,
-        }),
-      });
-
-      const resSchema = z.object({
-        instancesData: z.array(
-          z.object({
-            id: z.string(),
-            pokedexNumber: z.number(),
-            name: z.string(),
-            rarity: ZodRarity,
-            yield: z.number(),
-            img: z.string(),
-            sellPrice: z.number(),
-            shiny: z.boolean(),
-            typeOne: ZodSpeciesType,
-            typeTwo: ZodSpeciesType.nullable(),
-            generation: z.number(),
-            habitat: ZodHabitat,
-            region: ZodRegion,
-            instance: z.object({
-              id: z.string(),
-              userId: z.string(),
-              speciesId: z.string(),
-              createDate: z.string(),
-              modifyDate: z.string(),
-            }),
-          }),
-        ),
-        nextCursor: z
-          .object({
-            modifyDate: z.string(),
-            pokedexNumber: z.number().nullish(),
-            name: z.string().nullish(),
-            rarity: z.string().nullish(),
-          })
-          .nullish(),
-      });
-
-      const check = resSchema.parse(await res.json());
-      return check;
+  const pokemon = api.game.getPokemon.useInfiniteQuery(
+    {
+      limit: 50,
+      order: sortedBy,
+      shiny: shiny === "Shiny" ? true : false,
+      regions: regions,
+      rarities: rarities,
+      types: types,
+      habitats: habitats,
     },
-    getNextPageParam: (lastPage) => lastPage.nextCursor,
-  });
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    },
+  );
 
   const { ref, inView } = useInView();
 
   useEffect(() => {
-    if (inView) {
+    if (inView && pokemon.hasNextPage) {
       void pokemon.fetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

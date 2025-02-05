@@ -12,13 +12,13 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useActionState, useEffect, useState } from "react";
 import MiniPokemonCard from "@/components/MiniPokemonCard";
-import { z } from "zod";
+import { type z } from "zod";
 import { type ZodRarity } from "@/utils/zod";
-import { useQuery } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { initiateTrade, offerTrade } from "@/server/actions/trades";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { api } from "@/trpc/react";
 
 export default function TradeButton(
   props:
@@ -37,27 +37,8 @@ export default function TradeButton(
   const [search, setSearch] = useState("");
   const [instance, setInstance] = useState<string>("");
 
-  const pokemon = useQuery({
-    queryKey: ["distinct", search],
-    queryFn: async () => {
-      const res = await fetch(`/api/pokemon/distinct?name=${search}`);
-
-      const resSchema = z.object({
-        pokemon: z.array(
-          z.object({
-            id: z.string(),
-            speciesId: z.string(),
-            name: z.string(),
-            img: z.string(),
-            shiny: z.boolean(),
-            rarity: z.string(),
-          }),
-        ),
-      });
-
-      const data = resSchema.parse(await res.json());
-      return data;
-    },
+  const pokemon = api.trades.getPokemonForTrades.useQuery({
+    name: search,
   });
 
   const [initiateData, initiateAction, initiateIsPending] = useActionState(

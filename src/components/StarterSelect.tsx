@@ -9,14 +9,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import Image from "next/image";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { useActionState, useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { selectStarter } from "@/server/actions/starters";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { api } from "@/trpc/react";
 
 export default function StarterSelect(props: {
   regionId: number;
@@ -26,28 +25,14 @@ export default function StarterSelect(props: {
 
   const router = useRouter();
 
-  const queryClient = useQueryClient();
+  const utils = api.useUtils();
 
   const [starterId, setStarterId] = useState<string>("");
 
   const [data, action, isPending] = useActionState(selectStarter, undefined);
 
-  const starters = useQuery({
-    queryKey: ["starters"],
-    queryFn: async () => {
-      const res = await fetch(`/api/starter?regionId=${props.regionId}`);
-      const resSchema = z.object({
-        starters: z.array(
-          z.object({
-            id: z.string(),
-            name: z.string(),
-            img: z.string(),
-          }),
-        ),
-      });
-      const data = resSchema.parse(await res.json());
-      return data;
-    },
+  const starters = api.game.getStarters.useQuery({
+    regionId: props.regionId,
   });
 
   useEffect(() => {
@@ -62,10 +47,10 @@ export default function StarterSelect(props: {
         title: "Success! 🎉",
         description: data.message,
       });
-      void queryClient.invalidateQueries(["pokemon"]);
+      void utils.game.invalidate();
       router.refresh();
     }
-  }, [data, toast, router, queryClient]);
+  }, [data, toast, router, utils.game]);
 
   return (
     <Dialog open={true}>
