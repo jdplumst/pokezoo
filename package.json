@@ -79,7 +79,7 @@
     "dotenv-cli": "^7.4.4",
     "drizzle-kit": "^0.30.4",
     "eslint": "8.57.1",
-    "eslint-config-next": "14.2.22",
+    "eslint-config-next": "14.2.23",
     "pokenode-ts": "^1.20.0",
     "postcss": "^8.4.49",
     "prettier": "^3.3.3",
