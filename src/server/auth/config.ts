@@ -11,8 +11,6 @@ import {
   verificationTokens,
 } from "@/server/db/schema";
 import { env } from "@/utils/env";
-import type { Adapter } from "next-auth/adapters";
-import { pgTable } from "drizzle-orm/pg-core";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -22,26 +20,13 @@ declare module "next-auth" {
   }
 }
 
-// @ts-expect-error for drizzle table prefix
-const mapAdapter = (name, columns, extraConfig) => {
-  switch (name) {
-    case "user":
-      return users;
-    case "account":
-      return accounts;
-    case "session":
-      return sessions;
-    case "verification_token":
-      return verificationTokens;
-    default:
-      // eslint-disable-next-line
-      return pgTable(name, columns, extraConfig);
-  }
-};
-
 export const authOptions = {
-  // @ts-expect-error for drizzle table prefix
-  adapter: DrizzleAdapter(db, mapAdapter) as Adapter,
+  adapter: DrizzleAdapter(db, {
+    usersTable: users,
+    accountsTable: accounts,
+    sessionsTable: sessions,
+    verificationTokensTable: verificationTokens,
+  }),
   providers: [
     GithubProvider({
       clientId: env.GITHUB_ID,
