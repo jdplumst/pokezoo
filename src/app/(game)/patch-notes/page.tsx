@@ -16,6 +16,9 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
+      <Patch patch="8.10" date="February 7, 2024">
+        <Note note="Fixed purchasing balls always purchasing a single ball." />
+      </Patch>
       <Patch patch="8.09" date="February 3, 2024">
         <Note note="Display charm prices in shop page." />
       </Patch>
