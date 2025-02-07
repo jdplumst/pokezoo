@@ -107,7 +107,7 @@ export default function GameGrid() {
           </span>
 
           <form action={action}>
-            <input type="hidden" name="ids" defaultValue={sellIds} />
+            <input type="hidden" name="ids" value={sellIds} />
             <Button
               type="submit"
               disabled={isPending}

@@ -141,7 +141,7 @@ export default function BallSlider(props: {
           <input
             type="number"
             name="quantity"
-            defaultValue={sliderValue[0]}
+            value={sliderValue[0]}
             className="hidden"
           />
           <Button type="submit" disabled={isPending}>

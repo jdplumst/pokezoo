@@ -141,18 +141,10 @@ export default function TradeButton(
             <form
               action={props.type === "initiate" ? initiateAction : offerAction}
             >
-              <input
-                type="hidden"
-                name="description"
-                defaultValue={description}
-              />
-              <input type="hidden" name="instanceId" defaultValue={instance} />
+              <input type="hidden" name="description" value={description} />
+              <input type="hidden" name="instanceId" value={instance} />
               {props.type === "offer" && (
-                <input
-                  type="hidden"
-                  name="tradeId"
-                  defaultValue={props.tradeId}
-                />
+                <input type="hidden" name="tradeId" value={props.tradeId} />
               )}
               <Button
                 type="submit"
