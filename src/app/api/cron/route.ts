@@ -7,7 +7,7 @@ import {
 } from "~/server/db/schema";
 import { eq, sql } from "drizzle-orm";
 import { MAX_BALANCE } from "~/lib/constants";
-import { env } from "~/lib/env";
+import { env } from "~/env";
 import { type z } from "zod";
 import { type NextRequest } from "next/server";
 

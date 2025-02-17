@@ -10,7 +10,7 @@ import {
   users,
   verificationTokens,
 } from "~/server/db/schema";
-import { env } from "~/lib/env";
+import { env } from "~/env";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
