@@ -12,5 +12,5 @@ jobs:
           version: 8
       - name: Install dependencies
         run: pnpm install
-      - name: Lint
+      - name: Check
         run: pnpm run check
