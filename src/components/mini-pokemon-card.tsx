@@ -1,12 +1,11 @@
-import { type z } from "zod";
-import { type ZodRarity } from "~/lib/zod";
+import { type Rarity } from "~/lib/types";
 import Image from "next/image";
 
 export default function MiniPokemonCard(props: {
   name: string;
   img: string;
   shiny: boolean;
-  rarity: z.infer<typeof ZodRarity>;
+  rarity: Rarity;
   selected?: boolean;
 }) {
   return (

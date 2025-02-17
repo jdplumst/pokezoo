@@ -9,16 +9,15 @@ import {
   DialogTitle,
 } from "~/components/ui/dialog";
 import { useToast } from "~/hooks/use-toast";
-import { type ZodTime } from "~/lib/zod";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
-import { type z } from "zod";
 import Wildcard from "~/components/wildcard";
 import { claimReward } from "~/server/actions/game";
 import LoadingSpinner from "~/components/loading-spinner";
+import { type Time } from "~/lib/types";
 
 export default function RewardButton(props: {
-  time: z.infer<typeof ZodTime>;
+  time: Time;
   profile: { claimedDaily: boolean; claimedNightly: boolean };
 }) {
   const router = useRouter();

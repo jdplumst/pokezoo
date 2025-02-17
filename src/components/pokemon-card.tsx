@@ -7,7 +7,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "~/components/ui/sheet";
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "~/lib/zod";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "~/lib/types";
 import Image from "next/image";
 import { type ReactNode, useState } from "react";
 import { z } from "zod";

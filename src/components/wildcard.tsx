@@ -1,8 +1,7 @@
-import { type ZodRarity } from "~/lib/zod";
-import { type z } from "zod";
+import { type Rarity } from "~/lib/types";
 
 interface IWildcardProps {
-  wildcard: z.infer<typeof ZodRarity>;
+  wildcard: Rarity;
   width: number;
   height: number;
 }

@@ -1,4 +1,4 @@
-import "@/styles/globals.css";
+import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { getTheme, getTime } from "~/server/actions/cookies";
 import { Toaster } from "~/components/ui/toaster";

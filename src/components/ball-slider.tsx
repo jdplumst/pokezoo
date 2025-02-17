@@ -11,7 +11,6 @@ import {
 import { Slider } from "~/components/ui/slider";
 import { useToast } from "~/hooks/use-toast";
 import { useActionState, useEffect, useState } from "react";
-import { type z } from "zod";
 import LoadingSpinner from "~/components/loading-spinner";
 import {
   Drawer,
@@ -31,8 +30,7 @@ import {
   CarouselPrevious,
 } from "~/components/ui/carousel";
 import { Card, CardContent } from "~/components/ui/card";
-import { RegionsList } from "~/lib/constants";
-import { type ZodRegion } from "~/lib/zod";
+import { type Region, RegionValues } from "~/lib/types";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { purchaseBalls } from "~/server/actions/shop";
 
@@ -44,8 +42,7 @@ export default function BallSlider(props: {
 
   const [sliderValue, setSliderValue] = useState([1]);
 
-  const [premierRegion, setPremierRegion] =
-    useState<z.infer<typeof ZodRegion>>("Kanto");
+  const [premierRegion, setPremierRegion] = useState<Region>("Kanto");
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -91,7 +88,7 @@ export default function BallSlider(props: {
               className="w-full max-w-sm"
             >
               <CarouselContent>
-                {RegionsList.map((r) => (
+                {RegionValues.map((r) => (
                   <CarouselItem key={r} className="md:basis-1/2 lg:basis-1/3">
                     <div className={`p-1`}>
                       <Card

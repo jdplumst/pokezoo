@@ -12,8 +12,7 @@ import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
 import TradeForm from "~/components/trade-form";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
-import { type z } from "zod";
-import { type ZodRarity } from "~/lib/zod";
+import { type Rarity } from "~/lib/types";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Trades",
@@ -51,9 +50,7 @@ export default async function Trades() {
                     name={t.initiatorPokemonName}
                     img={t.initiatorPokemonImg}
                     shiny={t.initiatorPokemonShiny}
-                    rarity={
-                      t.initiatorPokemonRarity as z.infer<typeof ZodRarity>
-                    }
+                    rarity={t.initiatorPokemonRarity as Rarity}
                   />
                 </div>
                 <div className="flex h-1/6 w-full items-center justify-center overflow-x-scroll overflow-y-scroll text-center">
@@ -92,9 +89,7 @@ export default async function Trades() {
                       name={t.offererPokemonName}
                       img={t.offererPokemonImg}
                       shiny={t.offererPokemonShiny}
-                      rarity={
-                        t.offererPokemonRarity as z.infer<typeof ZodRarity>
-                      }
+                      rarity={t.offererPokemonRarity as Rarity}
                     />
                   </div>
                   <div className="h-1/6"></div>
