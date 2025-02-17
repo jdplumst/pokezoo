@@ -1,17 +1,16 @@
 "use client";
 
 import { Button } from "~/components/ui/button";
-import { type ZodRarity } from "~/lib/zod";
-import { type z } from "zod";
 import Wildcard from "~/components/wildcard";
 import { useRouter } from "next/navigation";
 import { useToast } from "~/hooks/use-toast";
 import { purchaseWildcard } from "~/server/actions/shop";
 import { useActionState, useEffect } from "react";
+import { type Rarity } from "~/lib/types";
 
 export default function WildcardButtons(props: {
   wildcard: {
-    name: z.infer<typeof ZodRarity>;
+    name: Rarity;
     commonCost?: number;
     rareCost?: number;
     epicCost?: number;

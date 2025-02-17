@@ -1,11 +1,10 @@
 import Wildcard from "~/components/wildcard";
-import { type ZodRarity } from "~/lib/zod";
-import { type z } from "zod";
 import WildcardButtons from "~/components/wildcard-buttons";
+import { type Rarity } from "~/lib/types";
 
 export default function WildcardsGrid() {
   const wildcards: {
-    name: z.infer<typeof ZodRarity>;
+    name: Rarity;
     commonCost?: number;
     rareCost?: number;
     epicCost?: number;

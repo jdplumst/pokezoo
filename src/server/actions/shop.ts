@@ -16,10 +16,10 @@ import { hasProfile, isAuthed } from "~/server/actions/auth";
 import { z } from "zod";
 import { getTime } from "~/server/actions/cookies";
 import { withinInstanceLimit } from "~/lib/within-instance-limit";
-import { ZodRarity } from "~/lib/zod";
 import { updateUserQuest } from "~/lib/update-user-quest";
 import { calcNewYield } from "~/lib/calc-new-yield";
 import { revalidatePath } from "next/cache";
+import { type Rarity, ZodRarity } from "~/lib/types";
 
 export async function getShopData() {
   const session = await isAuthed();
@@ -173,7 +173,7 @@ export async function purchaseBalls(
     name: string;
     img: string;
     shiny: boolean;
-    rarity: z.infer<typeof ZodRarity>;
+    rarity: Rarity;
   }[] = [];
 
   // Determine the new species the user gets
@@ -215,7 +215,7 @@ export async function purchaseBalls(
         name: currSpecies.species.name,
         img: currSpecies.species.img,
         shiny: currSpecies.species.shiny,
-        rarity: currSpecies.rarity as z.infer<typeof ZodRarity>,
+        rarity: currSpecies.rarity as Rarity,
       });
 
       await updateUserQuest(currSpecies.species, session.user.id, currBall);

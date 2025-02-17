@@ -8,18 +8,16 @@ import {
   types,
 } from "~/server/db/schema";
 import {
-  HabitatList,
-  RaritiesList,
-  RegionsList,
-  TypesList,
-} from "~/lib/constants";
-import {
+  HabitatValues,
+  RarityValues,
+  RegionValues,
+  SpeciesTypeValues,
   ZodHabitat,
   ZodRarity,
   ZodRegion,
   ZodSort,
   ZodSpeciesType,
-} from "~/lib/zod";
+} from "~/lib/types";
 import { TRPCError } from "@trpc/server";
 import { and, asc, desc, eq, inArray, notInArray, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
@@ -105,19 +103,19 @@ export const gameRouter = createTRPCRouter({
             eq(species.shiny, input.shiny),
             input.regions.length > 0
               ? inArray(regions.name, input.regions)
-              : notInArray(regions.name, RegionsList),
+              : notInArray(regions.name, Object.values(RegionValues)),
             input.rarities.length > 0
               ? inArray(rarities.name, input.rarities)
-              : notInArray(rarities.name, RaritiesList),
+              : notInArray(rarities.name, Object.values(RarityValues)),
             input.types.length > 0
               ? or(
                   inArray(typeOne.name, input.types),
                   inArray(typeTwo.name, input.types),
                 )
-              : notInArray(typeOne.name, TypesList),
+              : notInArray(typeOne.name, Object.values(SpeciesTypeValues)),
             input.habitats.length > 0
               ? inArray(habitats.name, input.habitats)
-              : notInArray(habitats.name, HabitatList),
+              : notInArray(habitats.name, Object.values(HabitatValues)),
             input.order === "Oldest"
               ? sql`${instances.modifyDate} >= ${
                   input.cursor?.modifyDate ??

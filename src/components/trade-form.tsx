@@ -12,13 +12,12 @@ import {
 import { Textarea } from "~/components/ui/textarea";
 import { useActionState, useEffect, useState } from "react";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
-import { type z } from "zod";
-import { type ZodRarity } from "~/lib/zod";
 import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { initiateTrade, offerTrade } from "~/server/actions/trades";
 import LoadingSpinner from "~/components/loading-spinner";
 import { api } from "~/trpc/react";
+import { type Rarity } from "~/lib/types";
 
 export default function TradeForm(
   props:
@@ -132,7 +131,7 @@ export default function TradeForm(
                     name={p.name}
                     img={p.img}
                     shiny={p.shiny}
-                    rarity={p.rarity as z.infer<typeof ZodRarity>}
+                    rarity={p.rarity as Rarity}
                     selected={p.id === instance}
                   />
                 </button>

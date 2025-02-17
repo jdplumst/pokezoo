@@ -8,12 +8,15 @@ import {
   types,
 } from "~/server/db/schema";
 import {
-  HabitatList,
-  RaritiesList,
-  RegionsList,
-  TypesList,
-} from "~/lib/constants";
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "~/lib/zod";
+  HabitatValues,
+  RarityValues,
+  RegionValues,
+  SpeciesTypeValues,
+  ZodHabitat,
+  ZodRarity,
+  ZodRegion,
+  ZodSpeciesType,
+} from "~/lib/types";
 import {
   and,
   asc,
@@ -85,19 +88,19 @@ export const pokedexRouter = createTRPCRouter({
             eq(species.shiny, input.shiny),
             input.regions.length > 0
               ? inArray(regions.name, input.regions)
-              : notInArray(regions.name, RegionsList),
+              : notInArray(regions.name, Object.values(RegionValues)),
             input.rarities.length > 0
               ? inArray(rarities.name, input.rarities)
-              : notInArray(rarities.name, RaritiesList),
+              : notInArray(rarities.name, Object.values(RarityValues)),
             input.types.length > 0
               ? or(
                   inArray(typeOne.name, input.types),
                   inArray(typeTwo.name, input.types),
                 )
-              : notInArray(typeOne.name, TypesList),
+              : notInArray(typeOne.name, Object.values(SpeciesTypeValues)),
             input.habitats.length > 0
               ? inArray(habitats.name, input.habitats)
-              : notInArray(habitats.name, HabitatList),
+              : notInArray(habitats.name, Object.values(HabitatValues)),
             input.caught.Caught && !input.caught.Uncaught
               ? isNotNull(i.speciesId)
               : !input.caught.Caught && input.caught.Uncaught
