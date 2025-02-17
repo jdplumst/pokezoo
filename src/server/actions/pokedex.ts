@@ -1,12 +1,12 @@
 "use server";
 
-import { hasProfile, isAuthed } from "@/server/actions/auth";
-import { db } from "@/server/db";
-import { instances, profiles, rarities, species } from "@/server/db/schema";
-import { calcNewYield } from "@/utils/calcNewYield";
-import { SHINY_WILDCARD_COST, WILDCARD_COST } from "@/utils/constants";
-import { updateUserQuest } from "@/utils/updateUserQuest";
-import { withinInstanceLimit } from "@/utils/withinInstanceLimit";
+import { hasProfile, isAuthed } from "~/server/actions/auth";
+import { db } from "~/server/db";
+import { instances, profiles, rarities, species } from "~/server/db/schema";
+import { calcNewYield } from "~/lib/calc-new-yield";
+import { SHINY_WILDCARD_COST, WILDCARD_COST } from "~/lib/constants";
+import { updateUserQuest } from "~/lib/update-user-quest";
+import { withinInstanceLimit } from "~/lib/within-instance-limit";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 

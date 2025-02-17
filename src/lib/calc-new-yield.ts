@@ -1,4 +1,4 @@
-import { MAX_YIELD } from "@/utils/constants";
+import { MAX_YIELD } from "~/lib/constants";
 
 export function calcNewYield(currYield: number, addedYield: number): number {
   const newYield =

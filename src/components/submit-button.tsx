@@ -1,7 +1,7 @@
 "use client";
 
-import LoadingSpinner from "@/components/LoadingSpinner";
-import { Button } from "@/components/ui/button";
+import LoadingSpinner from "~/components/loading-spinner";
+import { Button } from "~/components/ui/button";
 import { useFormStatus } from "react-dom";
 
 export default function SubmitButton(props: {

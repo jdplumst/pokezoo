@@ -1,15 +1,15 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Separator } from "@/components/ui/separator";
-import { isAuthed } from "@/server/actions/auth";
-import { getTimezone, setTheme, setTimezone } from "@/server/actions/cookies";
-import { timezones } from "@/utils/timezones";
+} from "~/components/ui/dropdown-menu";
+import { Separator } from "~/components/ui/separator";
+import { isAuthed } from "~/server/actions/auth";
+import { getTimezone, setTheme, setTimezone } from "~/server/actions/cookies";
+import { timezones } from "~/lib/timezones";
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {

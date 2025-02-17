@@ -1,9 +1,9 @@
 "use server";
 import "server-only";
-import { db } from "@/server/db";
-import { profiles, quests, questTypes, userQuests } from "@/server/db/schema";
+import { db } from "~/server/db";
+import { profiles, quests, questTypes, userQuests } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { isAuthed } from "@/server/actions/auth";
+import { isAuthed } from "~/server/actions/auth";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 

@@ -3,14 +3,14 @@ import GithubProvider from "next-auth/providers/github";
 import TwitchProvider from "next-auth/providers/twitch";
 import GoogleProvider from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import { db } from "@/server/db/index";
+import { db } from "~/server/db/index";
 import {
   accounts,
   sessions,
   users,
   verificationTokens,
-} from "@/server/db/schema";
-import { env } from "@/utils/env";
+} from "~/server/db/schema";
+import { env } from "~/lib/env";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {

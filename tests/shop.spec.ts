@@ -1,4 +1,4 @@
-import { env } from "@/utils/env";
+import { env } from "~/lib/env";
 import test, { expect } from "@playwright/test";
 import { login } from "./helpers/login";
 import { closePage } from "./helpers/closePage";

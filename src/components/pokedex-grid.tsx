@@ -1,62 +1,57 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useSidebar } from "@/components/ui/sidebar";
+} from "~/components/ui/dropdown-menu";
+import { useSidebar } from "~/components/ui/sidebar";
 import {
   HabitatList,
   RaritiesList,
   RegionsList,
   TypesList,
-} from "@/utils/constants";
-import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
-import React, { Fragment, useActionState, useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import PokemonCard from "./PokemonCard";
-import { useToast } from "@/hooks/use-toast";
-import LoadingSpinner from "@/components/LoadingSpinner";
+} from "~/lib/constants";
+import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { sellPokemon } from "@/server/actions/game";
-import { api } from "@/trpc/react";
+import { Fragment, useActionState, useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import LoadingSpinner from "~/components/loading-spinner";
+import PokemonCard from "~/components/pokemon-card";
+import Wildcard from "~/components/wildcard";
+import { purchasePokemon } from "~/server/actions/pokedex";
+import { api } from "~/trpc/react";
 
-export default function GameGrid() {
+export default function PokedexGrid() {
   const { open } = useSidebar();
 
   const { toast } = useToast();
 
   const router = useRouter();
 
-  const sortValues = [
-    "Newest",
-    "Oldest",
-    "Pokedex",
-    "Pokedex Desc.",
-    "Rarity",
-    "Rarity Desc.",
-  ] as const;
+  const utils = api.useUtils();
 
-  const [sortedBy, setSortedBy] =
-    useState<(typeof sortValues)[number]>("Newest");
-
+  const [caught, setCaught] = useState<
+    "All Pokémon" | "Only Uncaught" | "Only Caught"
+  >("All Pokémon");
   const [shiny, setShiny] = useState<"Regular" | "Shiny">("Regular");
   const [regions, setRegions] = useState(RegionsList);
   const [rarities, setRarities] = useState(RaritiesList);
   const [types, setTypes] = useState(TypesList);
   const [habitats, setHabitats] = useState(HabitatList);
 
-  const [sellIds, setSellIds] = useState<string[]>([]);
-
-  const pokemon = api.game.getPokemon.useInfiniteQuery(
+  const pokemon = api.pokedex.getPokedex.useInfiniteQuery(
     {
       limit: 50,
-      order: sortedBy,
+      caught: {
+        Caught: caught === "All Pokémon" || caught === "Only Caught",
+        Uncaught: caught === "All Pokémon" || caught === "Only Uncaught",
+      },
       shiny: shiny === "Shiny" ? true : false,
       regions: regions,
       rarities: rarities,
@@ -64,7 +59,9 @@ export default function GameGrid() {
       habitats: habitats,
     },
     {
-      getNextPageParam: (lastPage) => lastPage.nextCursor,
+      getNextPageParam: (lastPage) => {
+        return lastPage.nextCursor;
+      },
     },
   );
 
@@ -75,9 +72,10 @@ export default function GameGrid() {
       void pokemon.fetchNextPage();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pokemon.fetchNextPage, inView]);
+  }, [pokemon.fetchNextPage, inView, pokemon.hasNextPage]);
 
-  const [data, action, isPending] = useActionState(sellPokemon, undefined);
+  const [data, action, isPending] = useActionState(purchasePokemon, undefined);
+  const [purchaseId, setPurhcaseId] = useState<string | null>(null);
 
   useEffect(() => {
     if (data?.error) {
@@ -88,53 +86,38 @@ export default function GameGrid() {
       });
     } else if (data?.message) {
       toast({
-        title: "Success! 🎉",
+        title: "Success!",
         description: data.message,
       });
-      setSellIds([]);
-      void pokemon.refetch();
+      setPurhcaseId(null);
       router.refresh();
+      void utils.pokedex.getPokedex.invalidate();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, toast, router]);
+  }, [data, toast, router, utils.pokedex.getPokedex]);
 
   return (
     <>
-      {sellIds.length > 0 && (
-        <div className="sticky top-0 z-10 flex items-center justify-between border-2 border-solid border-black bg-secondary p-4">
-          <span className="font-bold">
-            You have selected {sellIds.length} Pokémon to sell.
-          </span>
-
-          <form action={action}>
-            <input type="hidden" name="ids" value={sellIds} />
-            <Button
-              type="submit"
-              disabled={isPending}
-              className="rounded-lg border-2 border-black p-2 font-bold"
-            >
-              {isPending ? <LoadingSpinner /> : "Confirm Sell"}
-            </Button>
-          </form>
-        </div>
-      )}
       <div className="flex flex-col gap-5">
         <div className="flex justify-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline">{sortedBy}</Button>
+              <Button variant="outline">{caught}</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuRadioGroup
-                value={sortedBy}
+                value={caught}
                 // @ts-expect-error expects string but is specific string
-                onValueChange={setSortedBy}
+                onValueChange={setCaught}
               >
-                {sortValues.map((s) => (
-                  <DropdownMenuRadioItem key={s} value={s}>
-                    {s}
-                  </DropdownMenuRadioItem>
-                ))}
+                <DropdownMenuRadioItem value="All Pokémon">
+                  All Pokémon
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="Only Caught">
+                  Only Caught
+                </DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="Only Uncaught">
+                  Only Uncaught
+                </DropdownMenuRadioItem>
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -307,27 +290,34 @@ export default function GameGrid() {
         >
           {pokemon.data?.pages.map((p, idx) => (
             <Fragment key={idx}>
-              {p.instancesData.map((i) => (
-                <PokemonCard key={i.instance.id} pokemon={i}>
-                  {sellIds.some((s) => s === i.instance.id) ? (
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSellIds(sellIds.filter((s) => s !== i.instance.id));
-                      }}
-                    >
-                      Unsell
-                    </Button>
+              {p.pokemon.map((p) => (
+                <PokemonCard
+                  key={String(p.shiny) + p.pokedexNumber + p.name}
+                  pokemon={p}
+                  caught={!!p.instance}
+                >
+                  {p.rarity === "Common" ||
+                  p.rarity === "Rare" ||
+                  p.rarity === "Epic" ||
+                  p.rarity === "Legendary" ? (
+                    <form action={action}>
+                      <input type="hidden" name="speciesId" value={p.id} />
+                      <Button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setPurhcaseId(p.id);
+                        }}
+                        type="submit"
+                        variant="destructive"
+                        disabled={isPending && purchaseId === p.id}
+                        className="font-lg flex gap-1 font-semibold"
+                      >
+                        <Wildcard wildcard={p.rarity} width={25} height={25} />
+                        {p.shiny ? `100` : `10`}
+                      </Button>
+                    </form>
                   ) : (
-                    <Button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSellIds([...sellIds, i.instance.id]);
-                      }}
-                      variant="destructive"
-                    >
-                      Sell
-                    </Button>
+                    <Button variant="destructive">N/A</Button>
                   )}
                 </PokemonCard>
               ))}

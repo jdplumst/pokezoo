@@ -1,4 +1,4 @@
-import { env } from "@/utils/env";
+import { env } from "~/lib/env";
 import { type Page, type Browser, type BrowserContext } from "@playwright/test";
 
 export async function login(

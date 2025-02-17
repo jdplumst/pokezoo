@@ -1,4 +1,4 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   habitats,
   instances,
@@ -6,20 +6,20 @@ import {
   regions,
   species,
   types,
-} from "@/server/db/schema";
+} from "~/server/db/schema";
 import {
   HabitatList,
   RaritiesList,
   RegionsList,
   TypesList,
-} from "@/utils/constants";
+} from "~/lib/constants";
 import {
   ZodHabitat,
   ZodRarity,
   ZodRegion,
   ZodSort,
   ZodSpeciesType,
-} from "@/utils/zod";
+} from "~/lib/zod";
 import { TRPCError } from "@trpc/server";
 import { and, asc, desc, eq, inArray, notInArray, or, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";

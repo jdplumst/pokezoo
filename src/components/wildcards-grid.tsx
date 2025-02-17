@@ -1,7 +1,7 @@
-import Wildcard from "@/components/Wildcard";
-import { type ZodRarity } from "@/utils/zod";
+import Wildcard from "~/components/wildcard";
+import { type ZodRarity } from "~/lib/zod";
 import { type z } from "zod";
-import WildcardButtons from "@/components/WildcardButtons";
+import WildcardButtons from "~/components/wildcard-buttons";
 
 export default function WildcardsGrid() {
   const wildcards: {

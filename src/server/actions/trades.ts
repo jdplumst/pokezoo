@@ -8,11 +8,11 @@ import {
   rarities,
   species,
   trades,
-} from "@/server/db/schema";
-import { db } from "@/server/db";
+} from "~/server/db/schema";
+import { db } from "~/server/db";
 import { and, desc, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { hasProfile, isAuthed } from "@/server/actions/auth";
+import { hasProfile, isAuthed } from "~/server/actions/auth";
 import { z } from "zod";
 
 export async function getTrades() {

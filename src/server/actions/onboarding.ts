@@ -1,11 +1,11 @@
 "use server";
 
-import { auth } from "@/server/auth";
+import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import { db } from "@/server/db";
-import { instances, profiles, regions, species } from "@/server/db/schema";
+import { db } from "~/server/db";
+import { instances, profiles, regions, species } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { isAuthed } from "@/server/actions/auth";
+import { isAuthed } from "~/server/actions/auth";
 import { z } from "zod";
 
 export async function getOnboarding() {

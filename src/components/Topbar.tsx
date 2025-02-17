@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
-import { setTheme, toggleTime } from "@/server/actions/cookies";
-import { getTopbar } from "@/server/actions/topbar";
-import TopbarContent from "@/components/TopbarContent";
+import { Button } from "~/components/ui/button";
+import { setTheme, toggleTime } from "~/server/actions/cookies";
+import { getTopbar } from "~/server/actions/topbar";
+import TopbarContent from "~/components/topbar-content";
 
 export default async function Topbar() {
   const profile = await getTopbar();

@@ -2,9 +2,9 @@
 import "server-only";
 
 import { redirect } from "next/navigation";
-import { auth } from "@/server/auth";
-import { db } from "@/server/db";
-import { profiles, userCharms } from "@/server/db/schema";
+import { auth } from "~/server/auth";
+import { db } from "~/server/db";
+import { profiles, userCharms } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 

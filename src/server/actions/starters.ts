@@ -1,8 +1,8 @@
 "use server";
 
-import { hasProfile, isAuthed } from "@/server/actions/auth";
-import { db } from "@/server/db";
-import { instances, profiles, regions, species } from "@/server/db/schema";
+import { hasProfile, isAuthed } from "~/server/actions/auth";
+import { db } from "~/server/db";
+import { instances, profiles, regions, species } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
 

@@ -1,5 +1,5 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
-import { instances, rarities, species, trades } from "@/server/db/schema";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { instances, rarities, species, trades } from "~/server/db/schema";
 import { and, eq, ilike, notInArray } from "drizzle-orm";
 import { z } from "zod";
 

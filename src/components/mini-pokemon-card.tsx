@@ -1,5 +1,5 @@
 import { type z } from "zod";
-import { type ZodRarity } from "@/utils/zod";
+import { type ZodRarity } from "~/lib/zod";
 import Image from "next/image";
 
 export default function MiniPokemonCard(props: {
