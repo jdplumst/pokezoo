@@ -1,10 +1,10 @@
-import { getShopData } from "@/server/actions/shop";
+import { getShopData } from "~/server/actions/shop";
 import { type Metadata } from "next";
-import BallsGrid from "@/components/BallsGrid";
-import CharmsGrid from "@/components/CharmsGrid";
-import ShopGrid from "@/components/ShopGrid";
-import { Separator } from "@/components/ui/separator";
-import WildcardsGrid from "@/components/WildcardsGrid";
+import BallsGrid from "~/components/balls-grid";
+import CharmsGrid from "~/components/charms-grid";
+import ShopGrid from "~/components/shop-grid";
+import { Separator } from "~/components/ui/separator";
+import WildcardsGrid from "~/components/wildcards-grid";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Shop",

@@ -7,15 +7,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "~/components/ui/dialog";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+import { Button } from "~/components/ui/button";
 import { useActionState, useEffect, useState } from "react";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { selectStarter } from "@/server/actions/starters";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import { api } from "@/trpc/react";
+import { selectStarter } from "~/server/actions/starters";
+import LoadingSpinner from "~/components/loading-spinner";
+import { api } from "~/trpc/react";
 
 export default function StarterSelect(props: {
   regionId: number;

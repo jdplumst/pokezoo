@@ -7,8 +7,8 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar";
-import SidebarMenuLabel from "@/components/SidebarMenuLabel";
+} from "~/components/ui/sidebar";
+import SidebarMenuLabel from "~/components/sidebar-menu-label";
 import Link from "next/link";
 import {
   Gamepad2,
@@ -23,10 +23,10 @@ import {
   Rat,
   LogOut,
 } from "lucide-react";
-import Github from "@/components/Github";
-import SignOut from "@/components/SignOut";
-import { Separator } from "@/components/ui/separator";
-import { getTime } from "@/server/actions/cookies";
+import Github from "~/components/github";
+import SignOut from "~/components/sign-out";
+import { Separator } from "~/components/ui/separator";
+import { getTime } from "~/server/actions/cookies";
 
 export async function AppSidebar() {
   const time = await getTime();

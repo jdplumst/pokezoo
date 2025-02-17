@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -9,23 +9,23 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useSidebar } from "@/components/ui/sidebar";
+} from "~/components/ui/dropdown-menu";
+import { useSidebar } from "~/components/ui/sidebar";
 import {
   HabitatList,
   RaritiesList,
   RegionsList,
   TypesList,
-} from "@/utils/constants";
-import { useToast } from "@/hooks/use-toast";
+} from "~/lib/constants";
+import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import PokemonCard from "@/components/PokemonCard";
-import Wildcard from "@/components/Wildcard";
-import { purchasePokemon } from "@/server/actions/pokedex";
-import { api } from "@/trpc/react";
+import LoadingSpinner from "~/components/loading-spinner";
+import PokemonCard from "~/components/pokemon-card";
+import Wildcard from "~/components/wildcard";
+import { purchasePokemon } from "~/server/actions/pokedex";
+import { api } from "~/trpc/react";
 
 export default function PokedexGrid() {
   const { open } = useSidebar();

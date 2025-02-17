@@ -1,19 +1,19 @@
-import { Separator } from "@/components/ui/separator";
+import { Separator } from "~/components/ui/separator";
 import {
   acceptTrade,
   cancelTrade,
   declineTrade,
   getTrades,
   withdrawTrade,
-} from "@/server/actions/trades";
+} from "~/server/actions/trades";
 import { type Metadata } from "next";
-import SubmitButton from "@/components/SubmitButton";
-import { auth } from "@/server/auth";
+import SubmitButton from "~/components/submit-button";
+import { auth } from "~/server/auth";
 import { redirect } from "next/navigation";
-import TradeButton from "@/components/TradeButton";
-import MiniPokemonCard from "@/components/MiniPokemonCard";
+import TradeForm from "~/components/trade-form";
+import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { type z } from "zod";
-import { type ZodRarity } from "@/utils/zod";
+import { type ZodRarity } from "~/lib/zod";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Trades",
@@ -35,7 +35,7 @@ export default async function Trades() {
       <h1 className="py-4 text-5xl font-bold">Trades</h1>
       <Separator className="mb-4" />
       <div className="flex flex-col gap-4">
-        <TradeButton type="initiate" />
+        <TradeForm type="initiate" />
         <div className="grid grid-cols-1 gap-y-4">
           {trades.map((t) => (
             <div
@@ -143,7 +143,7 @@ export default async function Trades() {
                   </div>
                   <div className="h-1/6"></div>
                   {t.initiatorId !== session.user.id && (
-                    <TradeButton type="offer" tradeId={t.id} />
+                    <TradeForm type="offer" tradeId={t.id} />
                   )}
                 </div>
               )}

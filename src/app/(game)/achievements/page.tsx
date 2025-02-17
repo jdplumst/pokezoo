@@ -1,5 +1,5 @@
-import { Progress } from "@/components/ui/progress";
-import { Separator } from "@/components/ui/separator";
+import { Progress } from "~/components/ui/progress";
+import { Separator } from "~/components/ui/separator";
 import {
   Table,
   TableBody,
@@ -8,13 +8,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "~/components/ui/table";
 import {
   claimAchievement,
   getAchievements,
-} from "@/server/actions/achievements";
+} from "~/server/actions/achievements";
 import { type Metadata } from "next";
-import SubmitButton from "@/components/SubmitButton";
+import SubmitButton from "~/components/submit-button";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Achievements",

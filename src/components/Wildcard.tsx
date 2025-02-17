@@ -1,4 +1,4 @@
-import { type ZodRarity } from "@/utils/zod";
+import { type ZodRarity } from "~/lib/zod";
 import { type z } from "zod";
 
 interface IWildcardProps {

@@ -1,21 +1,21 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { useToast } from "@/hooks/use-toast";
-import { type ZodTime } from "@/utils/zod";
+} from "~/components/ui/dialog";
+import { useToast } from "~/hooks/use-toast";
+import { type ZodTime } from "~/lib/zod";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { type z } from "zod";
-import Wildcard from "@/components/Wildcard";
-import { claimReward } from "@/server/actions/game";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import Wildcard from "~/components/wildcard";
+import { claimReward } from "~/server/actions/game";
+import LoadingSpinner from "~/components/loading-spinner";
 
 export default function RewardButton(props: {
   time: z.infer<typeof ZodTime>;

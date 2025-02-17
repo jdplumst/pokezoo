@@ -5,7 +5,7 @@ import {
   type NextRequest,
   NextResponse,
 } from "next/server";
-import { env } from "@/utils/env";
+import { env } from "~/lib/env";
 import { ipAddress } from "@vercel/functions";
 
 const ratelimit = new Ratelimit({

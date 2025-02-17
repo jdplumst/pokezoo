@@ -1,6 +1,6 @@
 "use client";
 
-import { env } from "@/utils/env";
+import { env } from "~/lib/env";
 
 export default function GlobalError({
   error,

@@ -1,10 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/hooks/use-toast";
-import LoadingSpinner from "./LoadingSpinner";
+import { Button } from "~/components/ui/button";
+import { useToast } from "~/hooks/use-toast";
+import LoadingSpinner from "./loading-spinner";
 import { useActionState, useEffect } from "react";
-import { purchaseCharm } from "@/server/actions/shop";
+import { purchaseCharm } from "~/server/actions/shop";
 import { useRouter } from "next/navigation";
 
 export default function CharmButton(props: { charmId: number }) {

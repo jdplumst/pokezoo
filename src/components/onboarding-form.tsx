@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/hooks/use-toast";
-import { createProfile } from "@/server/actions/onboarding";
+import { Input } from "~/components/ui/input";
+import { useToast } from "~/hooks/use-toast";
+import { createProfile } from "~/server/actions/onboarding";
 import { useActionState, useEffect } from "react";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import LoadingSpinner from "~/components/loading-spinner";
 
 export default function OnboardingForm(props: {
   starters: { id: string; name: string; img: string }[];

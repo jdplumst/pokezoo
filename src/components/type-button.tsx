@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { type ZodSpeciesType } from "@/utils/zod";
+import { Button } from "~/components/ui/button";
+import { type ZodSpeciesType } from "~/lib/zod";
 import { type z } from "zod";
 
 export default function TypeButton(props: {

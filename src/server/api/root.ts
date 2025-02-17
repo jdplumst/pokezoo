@@ -1,7 +1,7 @@
-import { gameRouter } from "@/server/api/routers/game";
-import { pokedexRouter } from "@/server/api/routers/pokedex";
-import { tradesRouter } from "@/server/api/routers/trades";
-import { createCallerFactory, createTRPCRouter } from "@/server/api/trpc";
+import { gameRouter } from "~/server/api/routers/game";
+import { pokedexRouter } from "~/server/api/routers/pokedex";
+import { tradesRouter } from "~/server/api/routers/trades";
+import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 
 /**
  * This is the primary router for your server.

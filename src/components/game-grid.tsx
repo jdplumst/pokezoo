@@ -15,13 +15,13 @@ import {
   RaritiesList,
   RegionsList,
   TypesList,
-} from "@/utils/constants";
+} from "@/lib/constants";
 import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
 import React, { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import PokemonCard from "./PokemonCard";
+import PokemonCard from "./pokemon-card";
 import { useToast } from "@/hooks/use-toast";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import LoadingSpinner from "@/components/loading-spinner";
 import { useRouter } from "next/navigation";
 import { sellPokemon } from "@/server/actions/game";
 import { api } from "@/trpc/react";

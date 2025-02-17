@@ -5,7 +5,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
-import { timezones } from "@/utils/timezones";
+import { timezones } from "~/lib/timezones";
 
 const themeSchema = z.enum(["blue", "purple", "green", "orange"]);
 

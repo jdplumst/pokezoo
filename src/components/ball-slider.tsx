@@ -1,18 +1,18 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "~/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Slider } from "@/components/ui/slider";
-import { useToast } from "@/hooks/use-toast";
+} from "~/components/ui/dialog";
+import { Slider } from "~/components/ui/slider";
+import { useToast } from "~/hooks/use-toast";
 import { useActionState, useEffect, useState } from "react";
 import { type z } from "zod";
-import LoadingSpinner from "@/components/LoadingSpinner";
+import LoadingSpinner from "~/components/loading-spinner";
 import {
   Drawer,
   DrawerClose,
@@ -22,19 +22,19 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer";
+} from "~/components/ui/drawer";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
   CarouselPrevious,
-} from "@/components/ui/carousel";
-import { Card, CardContent } from "@/components/ui/card";
-import { RegionsList } from "@/utils/constants";
-import { type ZodRegion } from "@/utils/zod";
-import MiniPokemonCard from "@/components/MiniPokemonCard";
-import { purchaseBalls } from "@/server/actions/shop";
+} from "~/components/ui/carousel";
+import { Card, CardContent } from "~/components/ui/card";
+import { RegionsList } from "~/lib/constants";
+import { type ZodRegion } from "~/lib/zod";
+import MiniPokemonCard from "~/components/mini-pokemon-card";
+import { purchaseBalls } from "~/server/actions/shop";
 
 export default function BallSlider(props: {
   ballId: string;

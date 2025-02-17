@@ -1,4 +1,4 @@
-import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import {
   habitats,
   instances,
@@ -6,14 +6,14 @@ import {
   regions,
   species,
   types,
-} from "@/server/db/schema";
+} from "~/server/db/schema";
 import {
   HabitatList,
   RaritiesList,
   RegionsList,
   TypesList,
-} from "@/utils/constants";
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "@/utils/zod";
+} from "~/lib/constants";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "~/lib/zod";
 import {
   and,
   asc,

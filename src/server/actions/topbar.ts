@@ -1,10 +1,10 @@
 "use server";
 import "server-only";
-import { isAuthed } from "@/server/actions/auth";
+import { isAuthed } from "~/server/actions/auth";
 import { alias } from "drizzle-orm/pg-core";
-import { profiles, userCharms } from "@/server/db/schema";
+import { profiles, userCharms } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { db } from "@/server/db";
+import { db } from "~/server/db";
 import { redirect } from "next/navigation";
 
 export async function getTopbar() {

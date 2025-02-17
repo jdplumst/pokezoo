@@ -1,26 +1,26 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
 import {
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
   SheetTitle,
-} from "@/components/ui/sheet";
-import { Textarea } from "@/components/ui/textarea";
+} from "~/components/ui/sheet";
+import { Textarea } from "~/components/ui/textarea";
 import { useActionState, useEffect, useState } from "react";
-import MiniPokemonCard from "@/components/MiniPokemonCard";
+import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { type z } from "zod";
-import { type ZodRarity } from "@/utils/zod";
-import { useToast } from "@/hooks/use-toast";
+import { type ZodRarity } from "~/lib/zod";
+import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { initiateTrade, offerTrade } from "@/server/actions/trades";
-import LoadingSpinner from "@/components/LoadingSpinner";
-import { api } from "@/trpc/react";
+import { initiateTrade, offerTrade } from "~/server/actions/trades";
+import LoadingSpinner from "~/components/loading-spinner";
+import { api } from "~/trpc/react";
 
-export default function TradeButton(
+export default function TradeForm(
   props:
     | {
         type: "initiate";

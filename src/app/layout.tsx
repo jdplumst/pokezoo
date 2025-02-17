@@ -1,8 +1,8 @@
 import "@/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
-import { getTheme, getTime } from "@/server/actions/cookies";
-import { Toaster } from "@/components/ui/toaster";
-import { TRPCReactProvider } from "@/trpc/react";
+import { getTheme, getTime } from "~/server/actions/cookies";
+import { Toaster } from "~/components/ui/toaster";
+import { TRPCReactProvider } from "~/trpc/react";
 
 export default async function RootLayout({
   children,
