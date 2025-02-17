@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "~/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -8,23 +8,23 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { useSidebar } from "@/components/ui/sidebar";
+} from "~/components/ui/dropdown-menu";
+import { useSidebar } from "~/components/ui/sidebar";
 import {
   HabitatList,
   RaritiesList,
   RegionsList,
   TypesList,
-} from "@/lib/constants";
+} from "~/lib/constants";
 import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
 import React, { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import PokemonCard from "./pokemon-card";
-import { useToast } from "@/hooks/use-toast";
-import LoadingSpinner from "@/components/loading-spinner";
+import { useToast } from "~/hooks/use-toast";
+import LoadingSpinner from "~/components/loading-spinner";
 import { useRouter } from "next/navigation";
-import { sellPokemon } from "@/server/actions/game";
-import { api } from "@/trpc/react";
+import { sellPokemon } from "~/server/actions/game";
+import { api } from "~/trpc/react";
 
 export default function GameGrid() {
   const { open } = useSidebar();
