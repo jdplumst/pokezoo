@@ -1,4 +1,4 @@
-import { Rarity } from "~/lib/types";
+import { type Rarity } from "~/lib/types";
 
 export function getRarityColor(rarity: Rarity) {
   switch (rarity) {
