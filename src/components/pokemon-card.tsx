@@ -12,6 +12,7 @@ import Image from "next/image";
 import { type ReactNode, useState } from "react";
 import { z } from "zod";
 import TypeButton from "~/components/type-button";
+import { getRarityColor } from "~/lib/get-rarity-color";
 
 export default function PokemonCard(props: {
   children: ReactNode;
@@ -56,7 +57,7 @@ export default function PokemonCard(props: {
     <>
       <div
         onClick={() => setOpen(true)}
-        className={`relative w-80 rounded-2xl border-2 border-solid border-black p-4 shadow-xl hover:cursor-pointer ${pokemon.data.rarity === `Common` && `bg-common-unfocus shadow-common-unfocus hover:bg-common-focus`} ${pokemon.data.rarity === `Rare` && `bg-rare-unfocus shadow-rare-unfocus hover:bg-rare-focus`} ${pokemon.data.rarity === `Epic` && `bg-epic-unfocus shadow-epic-unfocus hover:bg-epic-focus`} ${pokemon.data.rarity === `Legendary` && `bg-legendary-unfocus shadow-legendary-unfocus hover:bg-legendary-focus`} ${pokemon.data.rarity === `Mega` && `bg-mega-unfocus shadow-mega-unfocus hover:bg-mega-focus`} ${pokemon.data.rarity === `Ultra Beast` && `bg-ub-unfocus shadow-ub-unfocus hover:bg-ub-focus`} ${pokemon.data.rarity === `Gigantamax` && `bg-gmax-unfocus shadow-gmax-unfocus hover:bg-gmax-focus`}`}
+        className={`relative w-80 rounded-2xl border-2 border-solid border-black p-4 shadow-xl hover:cursor-pointer ${getRarityColor(pokemon.data.rarity)}`}
       >
         {props.caught && (
           <Image
