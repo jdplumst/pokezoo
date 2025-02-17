@@ -36,13 +36,13 @@ const config = {
     "drizzle/enforce-delete-with-where": [
       "error",
       {
-        drizzleObjectName: ["db", "ctx.db"],
+        drizzleObjectName: ["db", "ctx.db", "tx"],
       },
     ],
     "drizzle/enforce-update-with-where": [
       "error",
       {
-        drizzleObjectName: ["db", "ctx.db"],
+        drizzleObjectName: ["db", "ctx.db", "tx"],
       },
     ],
 
@@ -50,4 +50,5 @@ const config = {
   },
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 module.exports = config;
