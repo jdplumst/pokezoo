@@ -10,3 +10,15 @@ export async function getTheme() {
   const parsedTheme = result.data ?? "blue";
   return parsedTheme;
 }
+
+export async function getTime() {
+  const cookieStore = await cookies();
+  const timezone = cookieStore.get("timezone-offset")?.value ?? "-5";
+  const parsedTimezone = Math.floor(Number(timezone)) || -5;
+  const hour = new Date().getUTCHours() + parsedTimezone;
+  let time: "day" | "night" = "day";
+  if (hour < 6 || hour > 17) {
+    time = "night";
+  }
+  return time;
+}

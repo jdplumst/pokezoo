@@ -26,7 +26,7 @@ import {
 import Github from "~/components/github";
 import SignOut from "~/components/sign-out";
 import { Separator } from "~/components/ui/separator";
-import { getTime } from "~/server/actions/cookies";
+import { getTime } from "~/server/db/queries/cookies";
 
 export async function AppSidebar() {
   const time = await getTime();

@@ -5,8 +5,8 @@ import { db } from "~/server/db";
 import { instances, profiles, species, trades } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { MAX_BALANCE } from "~/lib/constants";
-import { getTime } from "~/server/actions/cookies";
 import { z } from "zod";
+import { getTime } from "~/server/db/queries/cookies";
 
 export async function claimReward(
   _previousState: unknown,

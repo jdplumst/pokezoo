@@ -14,12 +14,12 @@ import {
 } from "~/server/db/schema";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { z } from "zod";
-import { getTime } from "~/server/actions/cookies";
 import { withinInstanceLimit } from "~/lib/within-instance-limit";
 import { updateUserQuest } from "~/lib/update-user-quest";
 import { calcNewYield } from "~/lib/calc-new-yield";
 import { revalidatePath } from "next/cache";
 import { type Rarity, ZodRarity } from "~/lib/types";
+import { getTime } from "~/server/db/queries/cookies";
 
 export async function purchaseBalls(
   _previousState: unknown,

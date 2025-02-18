@@ -1,8 +1,8 @@
-import { getTime } from "~/server/actions/cookies";
 import { type Metadata } from "next";
 import GameGrid from "~/components/game-grid";
 import RewardButton from "~/components/reward-button";
 import StarterSelect from "~/components/starter-select";
+import { getTime } from "~/server/db/queries/cookies";
 import { getGame } from "~/server/db/queries/game";
 
 export const metadata: Metadata = {

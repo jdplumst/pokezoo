@@ -17,18 +17,6 @@ export async function setTheme(theme: Theme) {
   revalidatePath("/settings");
 }
 
-export async function getTime() {
-  const cookieStore = await cookies();
-  const timezone = cookieStore.get("timezone-offset")?.value ?? "-5";
-  const parsedTimezone = Math.floor(Number(timezone)) || -5;
-  const hour = new Date().getUTCHours() + parsedTimezone;
-  let time: "day" | "night" = "day";
-  if (hour < 6 || hour > 17) {
-    time = "night";
-  }
-  return time;
-}
-
 export async function getTimezone() {
   const cookieStore = await cookies();
   let timezone =
