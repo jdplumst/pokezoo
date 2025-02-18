@@ -15,3 +15,18 @@ export async function setTheme(theme: Theme) {
   });
   revalidatePath("/settings");
 }
+
+export async function setTimezone(timezone: string, offset: string) {
+  const cookieStore = await cookies();
+  cookieStore.set({
+    name: "timezone",
+    value: timezone,
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+  });
+  cookieStore.set({
+    name: "timezone-offset",
+    value: offset,
+    maxAge: 60 * 60 * 24 * 365, // 1 year
+  });
+  revalidatePath("/settings");
+}

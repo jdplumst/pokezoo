@@ -1,27 +1,15 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { revalidatePath } from "next/cache";
 import { type Theme } from "~/lib/types";
-import { setTheme } from "~/server/db/mutations/cookies";
+import { setTheme, setTimezone } from "~/server/db/mutations/cookies";
 
 export async function setThemeAction(theme: Theme) {
   await setTheme(theme);
 }
 
-export async function setTimezone(timezone: string, offset: string) {
-  const cookieStore = await cookies();
-  cookieStore.set({
-    name: "timezone",
-    value: timezone,
-    maxAge: 60 * 60 * 24 * 365, // 1 year
-  });
-  cookieStore.set({
-    name: "timezone-offset",
-    value: offset,
-    maxAge: 60 * 60 * 24 * 365, // 1 year
-  });
-  revalidatePath("/settings");
+export async function setTimezoneAction(timezone: string, offset: string) {
+  await setTimezone(timezone, offset);
 }
 
 export async function toggleTime() {
