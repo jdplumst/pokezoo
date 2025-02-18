@@ -1,5 +1,5 @@
 import { Button } from "~/components/ui/button";
-import { setThemeAction, toggleTime } from "~/server/actions/cookies";
+import { setThemeAction, toggleTimeAction } from "~/server/actions/cookies";
 import { getTopbar } from "~/server/db/queries/topbar";
 import TopbarContent from "~/components/topbar-content";
 
@@ -18,7 +18,7 @@ export default async function Topbar() {
             action={async () => {
               "use server";
 
-              await toggleTime();
+              await toggleTimeAction();
             }}
           >
             <Button>Toggle Time</Button>
