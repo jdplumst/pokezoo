@@ -12,7 +12,7 @@ import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import Wildcard from "~/components/wildcard";
-import { claimReward } from "~/server/actions/game";
+import { claimRewardAction } from "~/server/actions/game";
 import LoadingSpinner from "~/components/loading-spinner";
 import { type Time } from "~/lib/types";
 
@@ -26,7 +26,10 @@ export default function RewardButton(props: {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const [data, action, isPending] = useActionState(claimReward, undefined);
+  const [data, action, isPending] = useActionState(
+    claimRewardAction,
+    undefined,
+  );
 
   useEffect(() => {
     if (data?.error) {
