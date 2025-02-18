@@ -1,6 +1,7 @@
+import "server-only";
+
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import "server-only";
 import { db } from "~/server/db";
 import { profiles } from "~/server/db/schema";
 import { isAuthed } from "~/server/queries/auth";

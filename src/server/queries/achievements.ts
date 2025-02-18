@@ -1,6 +1,7 @@
+import "server-only";
+
 import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
-import "server-only";
 import { db } from "~/server/db";
 import {
   achievements,
