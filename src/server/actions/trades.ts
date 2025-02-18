@@ -5,7 +5,7 @@ import { instances, profiles, species, trades } from "~/server/db/schema";
 import { db } from "~/server/db";
 import { and, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { hasProfile, isAuthed } from "~/server/queries/auth";
+import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { z } from "zod";
 
 export async function initiateTrade(

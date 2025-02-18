@@ -6,7 +6,7 @@ import { achievements, profiles, userAchievements } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { calcNewYield } from "~/lib/calc-new-yield";
-import { isAuthed } from "~/server/queries/auth";
+import { isAuthed } from "~/server/db/queries/auth";
 
 export async function claimAchievement(achievementId: string) {
   const session = await isAuthed();

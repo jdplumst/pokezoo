@@ -12,7 +12,7 @@ import {
 import { claimAchievement } from "~/server/actions/achievements";
 import { type Metadata } from "next";
 import SubmitButton from "~/components/submit-button";
-import { getAchievements } from "~/server/queries/achievements";
+import { getAchievements } from "~/server/db/queries/achievements";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Achievements",

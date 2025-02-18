@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { db } from "~/server/db";
 import { profiles } from "~/server/db/schema";
-import { isAuthed } from "~/server/queries/auth";
+import { isAuthed } from "~/server/db/queries/auth";
 
 export async function getGame() {
   const session = await isAuthed();

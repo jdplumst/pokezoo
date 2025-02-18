@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { db } from "~/server/db";
 import { instances, profiles, regions, species } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
-import { isAuthed } from "~/server/queries/auth";
+import { isAuthed } from "~/server/db/queries/auth";
 import { z } from "zod";
 
 export async function createProfile(

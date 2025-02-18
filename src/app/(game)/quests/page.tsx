@@ -11,7 +11,7 @@ import {
 import { claimQuest } from "~/server/actions/quests";
 import { type Metadata } from "next";
 import SubmitButton from "~/components/submit-button";
-import { getQuests } from "~/server/queries/quests";
+import { getQuests } from "~/server/db/queries/quests";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Quests",

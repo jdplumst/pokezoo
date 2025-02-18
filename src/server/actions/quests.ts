@@ -3,7 +3,7 @@
 import { db } from "~/server/db";
 import { profiles, quests, userQuests } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { isAuthed } from "~/server/queries/auth";
+import { isAuthed } from "~/server/db/queries/auth";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 

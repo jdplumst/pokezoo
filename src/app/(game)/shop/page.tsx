@@ -4,7 +4,7 @@ import CharmsGrid from "~/components/charms-grid";
 import ShopGrid from "~/components/shop-grid";
 import { Separator } from "~/components/ui/separator";
 import WildcardsGrid from "~/components/wildcards-grid";
-import { getShopData } from "~/server/queries/shop";
+import { getShopData } from "~/server/db/queries/shop";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Shop",

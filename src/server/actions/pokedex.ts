@@ -1,6 +1,6 @@
 "use server";
 
-import { hasProfile, isAuthed } from "~/server/queries/auth";
+import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { db } from "~/server/db";
 import { instances, profiles, rarities, species } from "~/server/db/schema";
 import { calcNewYield } from "~/lib/calc-new-yield";

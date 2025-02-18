@@ -12,7 +12,7 @@ import {
   species,
   userCharms,
 } from "~/server/db/schema";
-import { hasProfile, isAuthed } from "~/server/queries/auth";
+import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { z } from "zod";
 import { getTime } from "~/server/actions/cookies";
 import { withinInstanceLimit } from "~/lib/within-instance-limit";

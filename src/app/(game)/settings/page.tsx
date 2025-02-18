@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Separator } from "~/components/ui/separator";
-import { isAuthed } from "~/server/queries/auth";
+import { isAuthed } from "~/server/db/queries/auth";
 import { getTimezone, setTheme, setTimezone } from "~/server/actions/cookies";
 import { timezones } from "~/lib/timezones";
 import { type Metadata } from "next";

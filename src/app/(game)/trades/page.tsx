@@ -10,7 +10,7 @@ import SubmitButton from "~/components/submit-button";
 import TradeForm from "~/components/trade-form";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { type Rarity } from "~/lib/types";
-import { getTrades } from "~/server/queries/trades";
+import { getTrades } from "~/server/db/queries/trades";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Trades",
