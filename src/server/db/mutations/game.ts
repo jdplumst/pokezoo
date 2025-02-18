@@ -5,7 +5,7 @@ import { MAX_BALANCE } from "~/lib/constants";
 import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { getTime } from "~/server/db/queries/cookies";
-import { profiles } from "~/server/db/schema";
+import { instances, profiles, species, trades } from "~/server/db/schema";
 
 export async function claimReward() {
   const session = await isAuthed();
@@ -77,5 +77,62 @@ export async function claimReward() {
   return {
     reward: reward,
     cards: cards,
+  };
+}
+
+export async function sellPokemon(input: { ids: string[] }) {
+  const session = await isAuthed();
+
+  for (const i of input.ids) {
+    await db.transaction(async (tx) => {
+      const exists = (
+        await tx
+          .select({ id: instances.id, speciesId: instances.speciesId })
+          .from(instances)
+          .where(eq(instances.id, i))
+      )[0];
+
+      if (!exists) {
+        return {
+          error: "You are trying to sell a Pokémon that you do not own.",
+        };
+      }
+
+      const speciesData = (
+        await tx.select().from(species).where(eq(species.id, exists.speciesId))
+      )[0];
+
+      if (!speciesData) {
+        return {
+          error: "You are trying to sell a Pokémon that does not exist.",
+        };
+      }
+
+      const currProfile = await hasProfile();
+
+      await tx.delete(instances).where(eq(instances.id, i));
+
+      await tx
+        .update(trades)
+        .set({ offererId: null, offererInstanceId: null })
+        .where(eq(trades.offererInstanceId, exists.id));
+
+      await tx.delete(trades).where(eq(trades.initiatorInstanceId, exists.id));
+
+      await tx
+        .update(profiles)
+        .set({
+          totalYield: currProfile.profile.totalYield - speciesData.yield,
+          balance:
+            currProfile.profile.balance + speciesData.sellPrice > MAX_BALANCE
+              ? MAX_BALANCE
+              : currProfile.profile.balance + speciesData.sellPrice,
+          instanceCount: currProfile.profile.instanceCount - 1,
+        })
+        .where(eq(profiles.userId, session.user.id));
+    });
+  }
+  return {
+    message: "You have successfully sold your Pokémon!",
   };
 }
