@@ -2,6 +2,7 @@ import "server-only";
 
 import { cookies } from "next/headers";
 import { ZodTheme } from "~/lib/types";
+import { timezones } from "~/lib/timezones";
 
 export async function getTheme() {
   const cookieStore = await cookies();
@@ -21,4 +22,16 @@ export async function getTime() {
     time = "night";
   }
   return time;
+}
+
+export async function getTimezone() {
+  const cookieStore = await cookies();
+  let timezone =
+    cookieStore.get("timezone")?.value ??
+    "Eastern Standard Time (North America) [EST -5]";
+  const isRealTimezone = timezones.findIndex((t) => t.name === timezone);
+  if (isRealTimezone === -1) {
+    timezone = "Eastern Standard Time (North America) [EST -5]";
+  }
+  return timezone;
 }

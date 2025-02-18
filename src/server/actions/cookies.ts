@@ -2,7 +2,6 @@
 
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { timezones } from "~/lib/timezones";
 import { type Theme, ZodTheme } from "~/lib/types";
 
 export async function setTheme(theme: Theme) {
@@ -15,18 +14,6 @@ export async function setTheme(theme: Theme) {
     maxAge: 60 * 60 * 24 * 365, // 1 year
   });
   revalidatePath("/settings");
-}
-
-export async function getTimezone() {
-  const cookieStore = await cookies();
-  let timezone =
-    cookieStore.get("timezone")?.value ??
-    "Eastern Standard Time (North America) [EST -5]";
-  const isRealTimezone = timezones.findIndex((t) => t.name === timezone);
-  if (isRealTimezone === -1) {
-    timezone = "Eastern Standard Time (North America) [EST -5]";
-  }
-  return timezone;
 }
 
 export async function setTimezone(timezone: string, offset: string) {

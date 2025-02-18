@@ -8,9 +8,10 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Separator } from "~/components/ui/separator";
 import { isAuthed } from "~/server/db/queries/auth";
-import { getTimezone, setTheme, setTimezone } from "~/server/actions/cookies";
+import { setTheme, setTimezone } from "~/server/actions/cookies";
 import { timezones } from "~/lib/timezones";
 import { type Metadata } from "next";
+import { getTimezone } from "~/server/db/queries/cookies";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Settings",
