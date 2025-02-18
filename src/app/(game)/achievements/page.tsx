@@ -9,12 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import {
-  claimAchievement,
-  getAchievements,
-} from "~/server/actions/achievements";
+import { claimAchievement } from "~/server/actions/achievements";
 import { type Metadata } from "next";
 import SubmitButton from "~/components/submit-button";
+import { getAchievements } from "~/server/queries/achievements";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Achievements",

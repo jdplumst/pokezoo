@@ -1,34 +1,14 @@
 "use server";
-import "server-only";
+
 import { db } from "~/server/db";
-import { profiles, quests, questTypes, userQuests } from "~/server/db/schema";
+import { profiles, quests, userQuests } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { isAuthed } from "~/server/actions/auth";
+import { isAuthed } from "~/server/queries/auth";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
-export async function getQuests() {
-  const session = await isAuthed();
-  if (!session) {
-    redirect("/");
-  }
-
-  const currUserQuests = await db
-    .select()
-    .from(userQuests)
-    .innerJoin(quests, eq(userQuests.questId, quests.id))
-    .innerJoin(questTypes, eq(quests.typeId, questTypes.id))
-    .where(eq(userQuests.userId, session.user.id))
-    .orderBy(questTypes.id);
-
-  return currUserQuests;
-}
-
 export async function claimQuest(userQuestId: string) {
   const session = await isAuthed();
-  if (!session) {
-    redirect("/");
-  }
 
   const currUserQuest = (
     await db

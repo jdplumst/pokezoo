@@ -8,9 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { claimQuest, getQuests } from "~/server/actions/quests";
+import { claimQuest } from "~/server/actions/quests";
 import { type Metadata } from "next";
 import SubmitButton from "~/components/submit-button";
+import { getQuests } from "~/server/queries/quests";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Quests",

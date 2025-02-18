@@ -1,5 +1,5 @@
 import { Separator } from "~/components/ui/separator";
-import { isAuthed } from "~/server/actions/auth";
+import { isAuthed } from "~/server/queries/auth";
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {
