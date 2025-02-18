@@ -5,14 +5,6 @@ import { revalidatePath } from "next/cache";
 import { timezones } from "~/lib/timezones";
 import { type Theme, ZodTheme } from "~/lib/types";
 
-export async function getTheme() {
-  const cookieStore = await cookies();
-  const theme = cookieStore.get("theme")?.value ?? "blue";
-  const result = ZodTheme.safeParse(theme);
-  const parsedTheme = result.data ?? "blue";
-  return parsedTheme;
-}
-
 export async function setTheme(theme: Theme) {
   const result = ZodTheme.safeParse(theme);
   const parsedTheme = result.data ?? "blue";
