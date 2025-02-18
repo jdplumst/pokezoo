@@ -12,7 +12,7 @@ import {
   species,
   userCharms,
 } from "~/server/db/schema";
-import { hasProfile, isAuthed } from "~/server/actions/auth";
+import { hasProfile, isAuthed } from "~/server/queries/auth";
 import { z } from "zod";
 import { getTime } from "~/server/actions/cookies";
 import { withinInstanceLimit } from "~/lib/within-instance-limit";
@@ -20,23 +20,6 @@ import { updateUserQuest } from "~/lib/update-user-quest";
 import { calcNewYield } from "~/lib/calc-new-yield";
 import { revalidatePath } from "next/cache";
 import { type Rarity, ZodRarity } from "~/lib/types";
-
-export async function getShopData() {
-  const session = await isAuthed();
-
-  await hasProfile();
-
-  const ballsData = await db.select().from(balls);
-
-  const charmsData = await db.select().from(charms);
-
-  const userCharmsData = await db
-    .select()
-    .from(userCharms)
-    .where(eq(userCharms.userId, session.user.id));
-
-  return { ballsData, charmsData, userCharmsData };
-}
 
 export async function purchaseBalls(
   _previousState: unknown,

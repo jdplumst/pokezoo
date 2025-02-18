@@ -3,16 +3,14 @@ import {
   acceptTrade,
   cancelTrade,
   declineTrade,
-  getTrades,
   withdrawTrade,
 } from "~/server/actions/trades";
 import { type Metadata } from "next";
 import SubmitButton from "~/components/submit-button";
-import { auth } from "~/server/auth";
-import { redirect } from "next/navigation";
 import TradeForm from "~/components/trade-form";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { type Rarity } from "~/lib/types";
+import { getTrades } from "~/server/queries/trades";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Trades",
@@ -22,12 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Trades() {
-  const session = await auth();
-  if (!session) {
-    redirect("/");
-  }
-
-  const trades = await getTrades();
+  const data = await getTrades();
 
   return (
     <div className="px-8">
@@ -36,7 +29,7 @@ export default async function Trades() {
       <div className="flex flex-col gap-4">
         <TradeForm type="initiate" />
         <div className="grid grid-cols-1 gap-y-4">
-          {trades.map((t) => (
+          {data.trades.map((t) => (
             <div
               key={t.id}
               className="flex h-96 w-full justify-between border-2 border-solid py-2"
@@ -56,7 +49,7 @@ export default async function Trades() {
                 <div className="flex h-1/6 w-full items-center justify-center overflow-x-scroll overflow-y-scroll text-center">
                   {t.description}
                 </div>
-                {t.initiatorId === session.user.id ? (
+                {t.initiatorId === data.session.user.id ? (
                   <form
                     className="h-1/6"
                     action={async () => {
@@ -93,7 +86,7 @@ export default async function Trades() {
                     />
                   </div>
                   <div className="h-1/6"></div>
-                  {t.offererId === session.user.id ? (
+                  {t.offererId === data.session.user.id ? (
                     <form
                       className="h-1/6"
                       action={async () => {
@@ -104,7 +97,7 @@ export default async function Trades() {
                     >
                       <SubmitButton text="Withdraw" />
                     </form>
-                  ) : t.initiatorId === session.user.id ? (
+                  ) : t.initiatorId === data.session.user.id ? (
                     <div className="flex h-1/6 w-full justify-center gap-2">
                       <form
                         action={async () => {
@@ -137,7 +130,7 @@ export default async function Trades() {
                     <div></div>
                   </div>
                   <div className="h-1/6"></div>
-                  {t.initiatorId !== session.user.id && (
+                  {t.initiatorId !== data.session.user.id && (
                     <TradeForm type="offer" tradeId={t.id} />
                   )}
                 </div>

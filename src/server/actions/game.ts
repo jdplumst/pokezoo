@@ -1,41 +1,12 @@
 "use server";
 
-import { hasProfile, isAuthed } from "~/server/actions/auth";
+import { hasProfile, isAuthed } from "~/server/queries/auth";
 import { db } from "~/server/db";
 import { instances, profiles, species, trades } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
-import { redirect } from "next/navigation";
 import { MAX_BALANCE } from "~/lib/constants";
 import { getTime } from "~/server/actions/cookies";
 import { z } from "zod";
-
-export async function getGame() {
-  const session = await isAuthed();
-
-  const currProfile = (
-    await db
-      .select({
-        claimedDaily: profiles.claimedDaily,
-        claimedNightly: profiles.claimedNightly,
-        johtoStarter: profiles.johtoStarter,
-        hoennStarter: profiles.hoennStarter,
-        sinnohStarter: profiles.sinnohStarter,
-        unovaStarter: profiles.unovaStarter,
-        kalosStarter: profiles.kalosStarter,
-        alolaStarter: profiles.alolaStarter,
-        galarStarter: profiles.galarStarter,
-        hisuiStarter: profiles.hisuiStarter,
-      })
-      .from(profiles)
-      .where(eq(profiles.userId, session.user.id))
-  )[0];
-
-  if (!currProfile) {
-    redirect("/onboarding");
-  }
-
-  return { currProfile };
-}
 
 export async function claimReward(
   _previousState: unknown,

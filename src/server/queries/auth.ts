@@ -1,12 +1,11 @@
-"use server";
 import "server-only";
 
+import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
-import { auth } from "~/server/auth";
 import { db } from "~/server/db";
 import { profiles, userCharms } from "~/server/db/schema";
-import { eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
+import { auth } from "~/server/auth";
 
 export async function isAuthed() {
   const session = await auth();
