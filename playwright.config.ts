@@ -46,14 +46,18 @@ export default defineConfig({
       testMatch: /global\.setup\.ts/,
     },
     {
+      name: "setup auth",
+      testMatch: /auth\.setup\.ts/,
+    },
+    {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
-      dependencies: ["setup db"],
+      dependencies: ["setup db", "setup auth"],
     },
     {
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
-      dependencies: ["setup db"],
+      dependencies: ["setup db", "setup auth"],
     },
 
     // {
@@ -65,7 +69,7 @@ export default defineConfig({
     {
       name: "Mobile Chrome",
       use: { ...devices["Pixel 5"] },
-      dependencies: ["setup db"],
+      dependencies: ["setup db", "setup auth"],
     },
     // {
     //   name: 'Mobile Safari',
