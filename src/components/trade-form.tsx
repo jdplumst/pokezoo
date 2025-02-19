@@ -46,24 +46,22 @@ export default function TradeForm(
   );
 
   useEffect(() => {
-    if (initiateData) {
-      if ("error" in initiateData) {
-        toast({
-          title: "Error",
-          description: initiateData.error,
-          variant: "destructive",
-        });
-      } else if (initiateData.message) {
-        toast({
-          title: "Success! 🎉",
-          description: initiateData.message,
-        });
-        setDescription("");
-        setSearch("");
-        setInstance("");
-        setOpen(false);
-        router.refresh();
-      }
+    if (initiateData?.success === false) {
+      toast({
+        title: "Error",
+        description: initiateData.error,
+        variant: "destructive",
+      });
+    } else if (initiateData?.success === true) {
+      toast({
+        title: "Success! 🎉",
+        description: initiateData.message,
+      });
+      setDescription("");
+      setSearch("");
+      setInstance("");
+      setOpen(false);
+      router.refresh();
     }
   }, [initiateData, toast, router]);
 

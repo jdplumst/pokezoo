@@ -6,8 +6,12 @@ import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { instances, profiles, species, trades } from "~/server/db/schema";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { type ErrorResponse, type MessageResponse } from "~/lib/types";
 
-export async function initiateTrade(instanceId: string, description: string) {
+export async function initiateTrade(
+  instanceId: string,
+  description: string,
+): Promise<MessageResponse | ErrorResponse> {
   const session = await isAuthed();
 
   await hasProfile();
@@ -20,12 +24,14 @@ export async function initiateTrade(instanceId: string, description: string) {
 
   if (!instanceData) {
     return {
+      success: false,
       error: "The pokémon you tried to trade does not exist.",
     };
   }
 
   if (instanceData.userId !== initiatorId) {
     return {
+      success: false,
       error: "The pokémon you tried to trade does not belong to you.",
     };
   }
@@ -44,6 +50,7 @@ export async function initiateTrade(instanceId: string, description: string) {
 
   if (exists) {
     return {
+      success: false,
       error: "The pokémon you are trying to trade is already in a trade.",
     };
   }
@@ -55,6 +62,7 @@ export async function initiateTrade(instanceId: string, description: string) {
   });
 
   return {
+    success: true,
     message: "You have successfully added a trade!",
   };
 }
