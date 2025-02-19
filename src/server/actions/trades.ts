@@ -34,13 +34,14 @@ export async function initiateTradeAction(
 export async function offerTradeAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<MessageResponse | ErrorResponse> {
   const formSchema = z.object({ tradeId: z.string(), instanceId: z.string() });
 
   const input = formSchema.safeParse(Object.fromEntries(formData));
 
   if (input.error) {
     return {
+      success: false,
       error: "You must select a Pokémon to trade.",
     };
   }
