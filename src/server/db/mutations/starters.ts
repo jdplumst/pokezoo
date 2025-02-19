@@ -4,8 +4,11 @@ import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { instances, profiles, regions, species } from "~/server/db/schema";
+import { type ErrorResponse, type MessageResponse } from "~/lib/types";
 
-export async function selectStarter(starterId: string) {
+export async function selectStarter(
+  starterId: string,
+): Promise<MessageResponse | ErrorResponse> {
   const session = await isAuthed();
 
   const currProfile = await hasProfile();
@@ -20,12 +23,14 @@ export async function selectStarter(starterId: string) {
 
   if (!speciesData) {
     return {
+      success: false,
       error: "You must select a starter pokémon.",
     };
   }
 
   if (speciesData.region === "Johto" && currProfile.profile.johtoStarter) {
     return {
+      success: false,
       error: "You have already received a Johto starter.",
     };
   } else if (
@@ -33,6 +38,7 @@ export async function selectStarter(starterId: string) {
     currProfile.profile.hoennStarter
   ) {
     return {
+      success: false,
       error: "You have already received a Hoenn starter.",
     };
   } else if (
@@ -40,6 +46,7 @@ export async function selectStarter(starterId: string) {
     currProfile.profile.sinnohStarter
   ) {
     return {
+      success: false,
       error: "You have already received a Sinnoh starter.",
     };
   } else if (
@@ -47,6 +54,7 @@ export async function selectStarter(starterId: string) {
     currProfile.profile.unovaStarter
   ) {
     return {
+      success: false,
       error: "You have already received a Unova starter.",
     };
   } else if (
@@ -54,6 +62,7 @@ export async function selectStarter(starterId: string) {
     currProfile.profile.kalosStarter
   ) {
     return {
+      success: false,
       error: "You have already received a Kalos starter.",
     };
   } else if (
@@ -61,6 +70,7 @@ export async function selectStarter(starterId: string) {
     currProfile.profile.alolaStarter
   ) {
     return {
+      success: false,
       error: "You have already received an Alola starter.",
     };
   } else if (
@@ -68,6 +78,7 @@ export async function selectStarter(starterId: string) {
     currProfile.profile.galarStarter
   ) {
     return {
+      success: false,
       error: "You have already received a Galar starter.",
     };
   } else if (
@@ -75,6 +86,7 @@ export async function selectStarter(starterId: string) {
     currProfile.profile.hisuiStarter
   ) {
     return {
+      success: false,
       error: "You have already received a Hisui starter.",
     };
   }
@@ -126,6 +138,7 @@ export async function selectStarter(starterId: string) {
   });
 
   return {
+    success: true,
     message: `You have received a ${speciesData.region} starter!`,
   };
 }

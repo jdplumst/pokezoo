@@ -39,21 +39,19 @@ export default function StarterSelect(props: {
   });
 
   useEffect(() => {
-    if (data) {
-      if ("error" in data) {
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else if (data.message) {
-        toast({
-          title: "Success! 🎉",
-          description: data.message,
-        });
-        void utils.game.invalidate();
-        router.refresh();
-      }
+    if (data?.success === false) {
+      toast({
+        title: "Error",
+        description: data.error,
+        variant: "destructive",
+      });
+    } else if (data?.success === true) {
+      toast({
+        title: "Success! 🎉",
+        description: data.message,
+      });
+      void utils.game.invalidate();
+      router.refresh();
     }
   }, [data, toast, router, utils.game]);
 
