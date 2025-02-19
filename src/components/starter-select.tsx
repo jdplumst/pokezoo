@@ -13,7 +13,7 @@ import { Button } from "~/components/ui/button";
 import { useActionState, useEffect, useState } from "react";
 import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { selectStarter } from "~/server/actions/starters";
+import { selectStarterAction } from "~/server/actions/starters";
 import LoadingSpinner from "~/components/loading-spinner";
 import { api } from "~/trpc/react";
 
@@ -29,26 +29,31 @@ export default function StarterSelect(props: {
 
   const [starterId, setStarterId] = useState<string>("");
 
-  const [data, action, isPending] = useActionState(selectStarter, undefined);
+  const [data, action, isPending] = useActionState(
+    selectStarterAction,
+    undefined,
+  );
 
   const starters = api.game.getStarters.useQuery({
     regionId: props.regionId,
   });
 
   useEffect(() => {
-    if (data?.error) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
-    } else if (data?.message) {
-      toast({
-        title: "Success! 🎉",
-        description: data.message,
-      });
-      void utils.game.invalidate();
-      router.refresh();
+    if (data) {
+      if ("error" in data) {
+        toast({
+          title: "Error",
+          description: data.error,
+          variant: "destructive",
+        });
+      } else if (data.message) {
+        toast({
+          title: "Success! 🎉",
+          description: data.message,
+        });
+        void utils.game.invalidate();
+        router.refresh();
+      }
     }
   }, [data, toast, router, utils.game]);
 
