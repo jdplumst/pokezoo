@@ -4,6 +4,7 @@ import { eq, or } from "drizzle-orm";
 import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { instances, trades } from "~/server/db/schema";
+import { redirect } from "next/navigation";
 
 export async function initiateTrade(instanceId: string, description: string) {
   const session = await isAuthed();
@@ -132,4 +133,26 @@ export async function offerTrade(tradeId: string, instanceId: string) {
   return {
     message: "You have successfully added an offer to the trade.",
   };
+}
+
+export async function cancelTrade(tradeId: string) {
+  const session = await isAuthed();
+
+  await hasProfile();
+
+  const tradeData = (
+    await db.select().from(trades).where(eq(trades.id, tradeId))
+  )[0];
+
+  if (!tradeData) {
+    redirect("/trades");
+  }
+
+  if (tradeData.initiatorId !== session.user.id) {
+    redirect("/trades");
+  }
+
+  await db.delete(trades).where(eq(trades.id, tradeId));
+
+  redirect("/trades");
 }

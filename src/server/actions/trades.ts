@@ -7,7 +7,11 @@ import { and, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { z } from "zod";
-import { initiateTrade, offerTrade } from "~/server/db/mutations/trades";
+import {
+  cancelTrade,
+  initiateTrade,
+  offerTrade,
+} from "~/server/db/mutations/trades";
 
 export async function initiateTradeAction(
   _previousState: unknown,
@@ -46,26 +50,8 @@ export async function offerTradeAction(
   return await offerTrade(input.data.tradeId, input.data.instanceId);
 }
 
-export async function cancelTrade(tradeId: string) {
-  const session = await isAuthed();
-
-  await hasProfile();
-
-  const tradeData = (
-    await db.select().from(trades).where(eq(trades.id, tradeId))
-  )[0];
-
-  if (!tradeData) {
-    redirect("/trades");
-  }
-
-  if (tradeData.initiatorId !== session.user.id) {
-    redirect("/trades");
-  }
-
-  await db.delete(trades).where(eq(trades.id, tradeId));
-
-  redirect("/trades");
+export async function cancelTradeAction(tradeId: string) {
+  return await cancelTrade(tradeId);
 }
 
 export async function withdrawTrade(tradeId: string) {
