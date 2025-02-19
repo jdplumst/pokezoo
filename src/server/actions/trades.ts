@@ -7,7 +7,7 @@ import { and, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { z } from "zod";
-import { initiateTrade } from "~/server/db/mutations/trades";
+import { initiateTrade, offerTrade } from "~/server/db/mutations/trades";
 
 export async function initiateTradeAction(
   _previousState: unknown,
@@ -29,11 +29,10 @@ export async function initiateTradeAction(
   return await initiateTrade(input.data.instanceId, input.data.description);
 }
 
-export async function offerTrade(_previousState: unknown, formData: FormData) {
-  const session = await isAuthed();
-
-  await hasProfile();
-
+export async function offerTradeAction(
+  _previousState: unknown,
+  formData: FormData,
+) {
   const formSchema = z.object({ tradeId: z.string(), instanceId: z.string() });
 
   const input = formSchema.safeParse(Object.fromEntries(formData));
@@ -44,79 +43,7 @@ export async function offerTrade(_previousState: unknown, formData: FormData) {
     };
   }
 
-  const offererId = session.user.id;
-
-  const instanceData = (
-    await db
-      .select()
-      .from(instances)
-      .where(eq(instances.id, input.data.instanceId))
-  )[0];
-
-  if (!instanceData) {
-    return {
-      error: "The pokémon you are trying to trade does not exist.",
-    };
-  }
-
-  if (instanceData?.userId !== offererId) {
-    return {
-      error: "The pokémon you are trying to trade does not belong to you.",
-    };
-  }
-
-  const tradeData = (
-    await db.select().from(trades).where(eq(trades.id, input.data.tradeId))
-  )[0];
-
-  if (!tradeData) {
-    return {
-      error: "The trade you are trying to make an offer for does not exist.",
-    };
-  }
-
-  if (tradeData.offererId) {
-    return {
-      error: "There is already an offer for this trade.",
-    };
-  }
-
-  if (tradeData.initiatorId === session.user.id) {
-    return {
-      error: "You can't give an offer for your own trade.",
-    };
-  }
-
-  const exists = (
-    await db
-      .select()
-      .from(trades)
-      .where(
-        or(
-          eq(trades.initiatorInstanceId, input.data.instanceId),
-          eq(trades.offererInstanceId, input.data.instanceId),
-        ),
-      )
-  )[0];
-
-  if (exists) {
-    return {
-      error: "The pokémon you are trying to offer is already in a trade.",
-    };
-  }
-
-  await db
-    .update(trades)
-    .set({
-      offererId: session.user.id,
-      offererInstanceId: input.data.instanceId,
-      modifyDate: new Date(),
-    })
-    .where(eq(trades.id, input.data.tradeId));
-
-  return {
-    message: "You have successfully added an offer to the trade.",
-  };
+  return await offerTrade(input.data.tradeId, input.data.instanceId);
 }
 
 export async function cancelTrade(tradeId: string) {
