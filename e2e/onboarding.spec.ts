@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { expect, test as base } from "@playwright/test";
 import { OnboardingPage } from "./models/onboarding";
+import { Topbar } from "./models/topbar";
 
 type Fixtures = {
   onboardingPage: OnboardingPage;
@@ -65,15 +66,12 @@ test("complete onboarding", async ({ page, onboardingPage }) => {
   await onboardingPage.usernameInput.fill("Green");
   await onboardingPage.bulbasaur.click();
   await onboardingPage.beginJourneyButton.click();
-  await expect(page.getByRole("main")).toContainText("Hi Green!");
-  await expect(page.getByRole("main")).toContainText(
-    "You have 1 / 2,000 Pokémon",
-  );
-  await expect(page.getByRole("main")).toContainText(
-    "Your current balance is P500.",
-  );
-  await expect(page.getByRole("main")).toContainText(
+  const topbar = new Topbar(page);
+  await expect(topbar.content).toContainText("Hi Green!");
+  await expect(topbar.content).toContainText("You have 1 / 2,000 Pokémon");
+  await expect(topbar.content).toContainText("Your current balance is P500.");
+  await expect(topbar.content).toContainText(
     "You will receive P50 on the next payout.",
   );
-  await expect(page.getByText("#1: bulbasaur")).toBeVisible();
+  await page.getByText("#1: bulbasaur").isVisible();
 });
