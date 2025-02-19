@@ -1,7 +1,11 @@
 "use server";
 
 import { z } from "zod";
-import { type ErrorResponse, ZodRarity } from "~/lib/types";
+import {
+  type ErrorResponse,
+  type MessageResponse,
+  ZodRarity,
+} from "~/lib/types";
 import {
   purchaseBalls,
   purchaseCharm,
@@ -40,7 +44,7 @@ export async function purchaseBallsAction(
 export async function purchaseCharmAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<MessageResponse | ErrorResponse> {
   const formSchema = z.object({
     charmId: z.coerce.number(),
   });
@@ -49,6 +53,7 @@ export async function purchaseCharmAction(
 
   if (input.error) {
     return {
+      success: false,
       error: "The charm you are trying to purchase does not exist.",
     };
   }

@@ -3,7 +3,11 @@ import "server-only";
 import { and, eq, inArray, or, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { calcNewYield } from "~/lib/calc-new-yield";
-import { type ErrorResponse, type Rarity } from "~/lib/types";
+import {
+  type MessageResponse,
+  type ErrorResponse,
+  type Rarity,
+} from "~/lib/types";
 import { updateUserQuest } from "~/lib/update-user-quest";
 import { withinInstanceLimit } from "~/lib/within-instance-limit";
 import { db } from "~/server/db";
@@ -222,7 +226,9 @@ export async function purchaseBalls(
   return { success: true, purchasedSpecies };
 }
 
-export async function purchaseCharm(charmId: number) {
+export async function purchaseCharm(
+  charmId: number,
+): Promise<MessageResponse | ErrorResponse> {
   const session = await isAuthed();
 
   const currProfile = await hasProfile();
@@ -233,6 +239,7 @@ export async function purchaseCharm(charmId: number) {
 
   if (!charmData) {
     return {
+      success: false,
       error: "The charm you are trying to purchase does not exist.",
     };
   }
@@ -250,11 +257,11 @@ export async function purchaseCharm(charmId: number) {
   )[0];
 
   if (exists) {
-    return { error: "You have already purchased this charm." };
+    return { success: false, error: "You have already purchased this charm." };
   }
 
   if (currProfile.profile.balance < charmData.cost) {
-    return { error: "You cannot afford this charm." };
+    return { success: false, error: "You cannot afford this charm." };
   }
 
   await db.transaction(async (tx) => {
@@ -269,6 +276,7 @@ export async function purchaseCharm(charmId: number) {
   });
 
   return {
+    success: true,
     message: `You have successfully purchased the ${charmData.name} Charm!`,
   };
 }
