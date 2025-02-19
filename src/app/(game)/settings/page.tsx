@@ -7,10 +7,11 @@ import {
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Separator } from "~/components/ui/separator";
-import { isAuthed } from "~/server/queries/auth";
-import { getTimezone, setTheme, setTimezone } from "~/server/actions/cookies";
+import { isAuthed } from "~/server/db/queries/auth";
+import { setThemeAction, setTimezoneAction } from "~/server/actions/cookies";
 import { timezones } from "~/lib/timezones";
 import { type Metadata } from "next";
+import { getTimezone } from "~/server/db/queries/cookies";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Settings",
@@ -37,7 +38,7 @@ export default async function Settings() {
               action={async () => {
                 "use server";
 
-                await setTheme("blue");
+                await setThemeAction("blue");
               }}
             >
               <Button>Blue</Button>
@@ -47,7 +48,7 @@ export default async function Settings() {
               action={async () => {
                 "use server";
 
-                await setTheme("purple");
+                await setThemeAction("purple");
               }}
             >
               {" "}
@@ -58,7 +59,7 @@ export default async function Settings() {
               action={async () => {
                 "use server";
 
-                await setTheme("green");
+                await setThemeAction("green");
               }}
             >
               <Button>Green</Button>
@@ -68,7 +69,7 @@ export default async function Settings() {
               action={async () => {
                 "use server";
 
-                await setTheme("orange");
+                await setThemeAction("orange");
               }}
             >
               <Button>Orange</Button>
@@ -92,7 +93,7 @@ export default async function Settings() {
                     action={async () => {
                       "use server";
 
-                      await setTimezone(t.name, t.offset);
+                      await setTimezoneAction(t.name, t.offset);
                     }}
                   >
                     <DropdownMenuItem

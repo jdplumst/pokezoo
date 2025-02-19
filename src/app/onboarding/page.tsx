@@ -1,4 +1,4 @@
-import { getOnboarding } from "~/server/queries/onboarding";
+import { getOnboarding } from "~/server/db/queries/onboarding";
 import { type Metadata } from "next";
 import OnboardingForm from "~/components/onboarding-form";
 

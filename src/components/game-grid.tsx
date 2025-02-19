@@ -23,7 +23,7 @@ import PokemonCard from "./pokemon-card";
 import { useToast } from "~/hooks/use-toast";
 import LoadingSpinner from "~/components/loading-spinner";
 import { useRouter } from "next/navigation";
-import { sellPokemon } from "~/server/actions/game";
+import { sellPokemonAction } from "~/server/actions/game";
 import { api } from "~/trpc/react";
 
 export default function GameGrid() {
@@ -77,23 +77,28 @@ export default function GameGrid() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pokemon.fetchNextPage, inView]);
 
-  const [data, action, isPending] = useActionState(sellPokemon, undefined);
+  const [data, action, isPending] = useActionState(
+    sellPokemonAction,
+    undefined,
+  );
 
   useEffect(() => {
-    if (data?.error) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
-    } else if (data?.message) {
-      toast({
-        title: "Success! 🎉",
-        description: data.message,
-      });
-      setSellIds([]);
-      void pokemon.refetch();
-      router.refresh();
+    if (data) {
+      if ("error" in data) {
+        toast({
+          title: "Error",
+          description: data.error,
+          variant: "destructive",
+        });
+      } else if (data.message) {
+        toast({
+          title: "Success! 🎉",
+          description: data.message,
+        });
+        setSellIds([]);
+        void pokemon.refetch();
+        router.refresh();
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, toast, router]);

@@ -1,6 +1,6 @@
 import { Button } from "~/components/ui/button";
-import { setTheme, toggleTime } from "~/server/actions/cookies";
-import { getTopbar } from "~/server/queries/topbar";
+import { setThemeAction, toggleTimeAction } from "~/server/actions/cookies";
+import { getTopbar } from "~/server/db/queries/topbar";
 import TopbarContent from "~/components/topbar-content";
 
 export default async function Topbar() {
@@ -18,7 +18,7 @@ export default async function Topbar() {
             action={async () => {
               "use server";
 
-              await toggleTime();
+              await toggleTimeAction();
             }}
           >
             <Button>Toggle Time</Button>
@@ -28,7 +28,7 @@ export default async function Topbar() {
               action={async () => {
                 "use server";
 
-                await setTheme("blue");
+                await setThemeAction("blue");
               }}
               className="blue dark"
             >
@@ -38,7 +38,7 @@ export default async function Topbar() {
               action={async () => {
                 "use server";
 
-                await setTheme("purple");
+                await setThemeAction("purple");
               }}
               className="purple dark"
             >
@@ -48,7 +48,7 @@ export default async function Topbar() {
               action={async () => {
                 "use server";
 
-                await setTheme("green");
+                await setThemeAction("green");
               }}
               className="green dark"
             >
@@ -58,7 +58,7 @@ export default async function Topbar() {
               action={async () => {
                 "use server";
 
-                await setTheme("orange");
+                await setThemeAction("orange");
               }}
               className="orange dark"
             >

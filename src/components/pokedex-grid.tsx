@@ -24,7 +24,7 @@ import { useInView } from "react-intersection-observer";
 import LoadingSpinner from "~/components/loading-spinner";
 import PokemonCard from "~/components/pokemon-card";
 import Wildcard from "~/components/wildcard";
-import { purchasePokemon } from "~/server/actions/pokedex";
+import { purchasePokemonAction } from "~/server/actions/pokedex";
 import { api } from "~/trpc/react";
 
 export default function PokedexGrid() {
@@ -74,26 +74,32 @@ export default function PokedexGrid() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pokemon.fetchNextPage, inView, pokemon.hasNextPage]);
 
-  const [data, action, isPending] = useActionState(purchasePokemon, undefined);
+  const [data, action, isPending] = useActionState(
+    purchasePokemonAction,
+    undefined,
+  );
   const [purchaseId, setPurhcaseId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (data?.error) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
-    } else if (data?.message) {
-      toast({
-        title: "Success!",
-        description: data.message,
-      });
-      setPurhcaseId(null);
-      router.refresh();
-      void utils.pokedex.getPokedex.invalidate();
+    if (data) {
+      if ("error" in data) {
+        toast({
+          title: "Error",
+          description: data.error,
+          variant: "destructive",
+        });
+      } else if (data.message) {
+        toast({
+          title: "Success!",
+          description: data.message,
+        });
+        setPurhcaseId(null);
+        router.refresh();
+        void utils.pokedex.getPokedex.invalidate();
+        void utils.game.getPokemon.invalidate();
+      }
     }
-  }, [data, toast, router, utils.pokedex.getPokedex]);
+  }, [data, toast, router, utils.pokedex.getPokedex, utils.game.getPokemon]);
 
   return (
     <>

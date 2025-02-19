@@ -10,7 +10,7 @@ import {
   species,
   trades,
 } from "~/server/db/schema";
-import { isAuthed } from "~/server/queries/auth";
+import { isAuthed } from "~/server/db/queries/auth";
 
 export async function getTrades() {
   const session = await isAuthed();

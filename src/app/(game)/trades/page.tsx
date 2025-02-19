@@ -1,16 +1,16 @@
 import { Separator } from "~/components/ui/separator";
 import {
-  acceptTrade,
-  cancelTrade,
-  declineTrade,
-  withdrawTrade,
+  acceptTradeAction,
+  cancelTradeAction,
+  declineTradeAction,
+  withdrawTradeAction,
 } from "~/server/actions/trades";
 import { type Metadata } from "next";
 import SubmitButton from "~/components/submit-button";
 import TradeForm from "~/components/trade-form";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { type Rarity } from "~/lib/types";
-import { getTrades } from "~/server/queries/trades";
+import { getTrades } from "~/server/db/queries/trades";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Trades",
@@ -55,7 +55,7 @@ export default async function Trades() {
                     action={async () => {
                       "use server";
 
-                      await cancelTrade(t.id);
+                      await cancelTradeAction(t.id);
                     }}
                   >
                     <SubmitButton text="Cancel Trade" variant="destructive" />
@@ -92,7 +92,7 @@ export default async function Trades() {
                       action={async () => {
                         "use server";
 
-                        await withdrawTrade(t.id);
+                        await withdrawTradeAction(t.id);
                       }}
                     >
                       <SubmitButton text="Withdraw" />
@@ -103,7 +103,7 @@ export default async function Trades() {
                         action={async () => {
                           "use server";
 
-                          await acceptTrade(t.id);
+                          await acceptTradeAction(t.id);
                         }}
                       >
                         <SubmitButton text="Accept" />
@@ -112,7 +112,7 @@ export default async function Trades() {
                         action={async () => {
                           "use server";
 
-                          await declineTrade(t.id);
+                          await declineTradeAction(t.id);
                         }}
                       >
                         <SubmitButton text="Decline" variant="destructive" />

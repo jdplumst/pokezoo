@@ -1,6 +1,6 @@
 import "server-only";
 
-import { isAuthed } from "~/server/queries/auth";
+import { isAuthed } from "~/server/db/queries/auth";
 import { alias } from "drizzle-orm/pg-core";
 import { profiles, userCharms } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";

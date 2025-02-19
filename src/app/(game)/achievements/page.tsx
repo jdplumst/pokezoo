@@ -9,10 +9,10 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { claimAchievement } from "~/server/actions/achievements";
+import { claimAchievementAction } from "~/server/actions/achievements";
 import { type Metadata } from "next";
 import SubmitButton from "~/components/submit-button";
-import { getAchievements } from "~/server/queries/achievements";
+import { getAchievements } from "~/server/db/queries/achievements";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Achievements",
@@ -56,7 +56,7 @@ export default async function Achievements() {
                     action={async () => {
                       "use server";
 
-                      await claimAchievement(a.achievement.id);
+                      await claimAchievementAction(a.achievement.id);
                     }}
                   >
                     <SubmitButton text="Claim" />
