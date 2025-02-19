@@ -22,7 +22,6 @@ export async function claimReward(): Promise<
       reward: number;
       cards: Cards;
     }
-  | undefined
 > {
   const session = await isAuthed();
 
@@ -106,7 +105,7 @@ export async function claimReward(): Promise<
 
 export async function sellPokemon(
   ids: string[],
-): Promise<MessageResponse | ErrorResponse | undefined> {
+): Promise<MessageResponse | ErrorResponse> {
   const session = await isAuthed();
 
   for (const i of ids) {
