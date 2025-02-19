@@ -33,12 +33,15 @@ import { Card, CardContent } from "~/components/ui/card";
 import { type Region, RegionValues } from "~/lib/types";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { purchaseBalls } from "~/server/actions/shop";
+import { api } from "~/trpc/react";
 
 export default function BallSlider(props: {
   ballId: string;
   ballName: string;
 }) {
   const { toast } = useToast();
+
+  const utils = api.useUtils();
 
   const [sliderValue, setSliderValue] = useState([1]);
 
@@ -57,8 +60,9 @@ export default function BallSlider(props: {
       });
     } else if (data?.purchasedSpecies) {
       setIsOpen(true);
+      void utils.game.getPokemon.invalidate();
     }
-  }, [data, toast]);
+  }, [data, toast, utils.game.getPokemon]);
 
   return (
     <>
