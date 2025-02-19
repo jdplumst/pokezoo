@@ -1,26 +1,16 @@
 import "server-only";
 
-import { redirect } from "next/navigation";
 import { db } from "~/server/db";
 import { achievements, profiles, userAchievements } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { calcNewYield } from "~/lib/calc-new-yield";
-import { isAuthed } from "~/server/db/queries/auth";
+import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 
 export async function claimAchievement(achievementId: string) {
   const session = await isAuthed();
 
-  const currProfile = (
-    await db
-      .select({ totalYield: profiles.totalYield })
-      .from(profiles)
-      .where(eq(profiles.userId, session.user.id))
-  )[0];
-
-  if (!currProfile) {
-    redirect("/onboarding)");
-  }
+  const currProfile = await hasProfile();
 
   const achievementData = (
     await db
@@ -49,7 +39,10 @@ export async function claimAchievement(achievementId: string) {
     revalidatePath("/achievements");
   }
 
-  const newYield = calcNewYield(currProfile.totalYield, achievementData.yield);
+  const newYield = calcNewYield(
+    currProfile.profile.totalYield,
+    achievementData.yield,
+  );
 
   await db.transaction(async (tx) => {
     await tx
