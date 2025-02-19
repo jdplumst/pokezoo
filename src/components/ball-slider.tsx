@@ -154,29 +154,29 @@ export default function BallSlider(props: {
           </Button>
         </form>
       )}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="w-96">
-          <DialogHeader>
-            <DialogTitle>You have obtained new Pokémon!</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>
-            Here is all the Pokémon you have obtained.
-          </DialogDescription>
-          <div className="flex h-80 flex-col gap-4 overflow-y-scroll">
-            {data && "error" in data
-              ? null
-              : data?.purchasedSpecies?.map((s, idx) => (
-                  <MiniPokemonCard
-                    key={idx}
-                    name={s.name}
-                    img={s.img}
-                    shiny={s.shiny}
-                    rarity={s.rarity}
-                  />
-                ))}
-          </div>
-        </DialogContent>
-      </Dialog>
+      {data?.success === true && (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogContent className="w-96">
+            <DialogHeader>
+              <DialogTitle>You have obtained new Pokémon!</DialogTitle>
+            </DialogHeader>
+            <DialogDescription>
+              Here is all the Pokémon you have obtained.
+            </DialogDescription>
+            <div className="flex h-80 flex-col gap-4 overflow-y-scroll">
+              {data.purchasedSpecies.map((s, idx) => (
+                <MiniPokemonCard
+                  key={idx}
+                  name={s.name}
+                  img={s.img}
+                  shiny={s.shiny}
+                  rarity={s.rarity}
+                />
+              ))}
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }
