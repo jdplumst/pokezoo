@@ -5,8 +5,12 @@ import { redirect } from "next/navigation";
 import { db } from "~/server/db";
 import { isAuthed } from "~/server/db/queries/auth";
 import { instances, profiles, regions, species } from "~/server/db/schema";
+import { type ErrorResponse } from "~/lib/types";
 
-export async function createProfile(username: string, starterId: string) {
+export async function createProfile(
+  username: string,
+  starterId: string,
+): Promise<ErrorResponse> {
   const session = await isAuthed();
 
   const currProfile = (
@@ -22,6 +26,7 @@ export async function createProfile(username: string, starterId: string) {
 
   if (currProfile) {
     return {
+      success: false,
       error: "You have already completed the onboarding process.",
     };
   }
@@ -33,6 +38,7 @@ export async function createProfile(username: string, starterId: string) {
 
   if (usernameExists.length > 0) {
     return {
+      success: false,
       error: "The username you have selected is already taken.",
     };
   }
@@ -51,18 +57,21 @@ export async function createProfile(username: string, starterId: string) {
 
   if (!speciesData) {
     return {
+      success: false,
       error: "The starter you are trying to select does not exist.",
     };
   }
 
   if (!speciesData.starter) {
     return {
+      success: false,
       error: "The starter you are trying to select is not a starter.",
     };
   }
 
   if (speciesData.region !== "Kanto") {
     return {
+      success: false,
       error: "The starter you are trying to select is not from Kanto.",
     };
   }

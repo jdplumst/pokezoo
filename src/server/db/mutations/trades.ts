@@ -6,8 +6,12 @@ import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { instances, profiles, species, trades } from "~/server/db/schema";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { type ErrorResponse, type MessageResponse } from "~/lib/types";
 
-export async function initiateTrade(instanceId: string, description: string) {
+export async function initiateTrade(
+  instanceId: string,
+  description: string,
+): Promise<MessageResponse | ErrorResponse> {
   const session = await isAuthed();
 
   await hasProfile();
@@ -20,12 +24,14 @@ export async function initiateTrade(instanceId: string, description: string) {
 
   if (!instanceData) {
     return {
+      success: false,
       error: "The pokémon you tried to trade does not exist.",
     };
   }
 
   if (instanceData.userId !== initiatorId) {
     return {
+      success: false,
       error: "The pokémon you tried to trade does not belong to you.",
     };
   }
@@ -44,6 +50,7 @@ export async function initiateTrade(instanceId: string, description: string) {
 
   if (exists) {
     return {
+      success: false,
       error: "The pokémon you are trying to trade is already in a trade.",
     };
   }
@@ -55,11 +62,15 @@ export async function initiateTrade(instanceId: string, description: string) {
   });
 
   return {
+    success: true,
     message: "You have successfully added a trade!",
   };
 }
 
-export async function offerTrade(tradeId: string, instanceId: string) {
+export async function offerTrade(
+  tradeId: string,
+  instanceId: string,
+): Promise<MessageResponse | ErrorResponse> {
   const session = await isAuthed();
 
   await hasProfile();
@@ -72,12 +83,14 @@ export async function offerTrade(tradeId: string, instanceId: string) {
 
   if (!instanceData) {
     return {
+      success: false,
       error: "The pokémon you are trying to trade does not exist.",
     };
   }
 
   if (instanceData?.userId !== offererId) {
     return {
+      success: false,
       error: "The pokémon you are trying to trade does not belong to you.",
     };
   }
@@ -88,18 +101,21 @@ export async function offerTrade(tradeId: string, instanceId: string) {
 
   if (!tradeData) {
     return {
+      success: false,
       error: "The trade you are trying to make an offer for does not exist.",
     };
   }
 
   if (tradeData.offererId) {
     return {
+      success: false,
       error: "There is already an offer for this trade.",
     };
   }
 
   if (tradeData.initiatorId === session.user.id) {
     return {
+      success: false,
       error: "You can't give an offer for your own trade.",
     };
   }
@@ -118,6 +134,7 @@ export async function offerTrade(tradeId: string, instanceId: string) {
 
   if (exists) {
     return {
+      success: false,
       error: "The pokémon you are trying to offer is already in a trade.",
     };
   }
@@ -132,6 +149,7 @@ export async function offerTrade(tradeId: string, instanceId: string) {
     .where(eq(trades.id, tradeId));
 
   return {
+    success: true,
     message: "You have successfully added an offer to the trade.",
   };
 }

@@ -1,17 +1,24 @@
 "use server";
 
 import { z } from "zod";
-import { ZodRarity } from "~/lib/types";
+import {
+  type ErrorResponse,
+  type MessageResponse,
+  ZodRarity,
+} from "~/lib/types";
 import {
   purchaseBalls,
   purchaseCharm,
   purchaseWildcard,
+  type PurchasedSpecies,
 } from "~/server/db/mutations/shop";
 
 export async function purchaseBallsAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<
+  ErrorResponse | { success: true; purchasedSpecies: PurchasedSpecies }
+> {
   const formSchema = z.object({
     ballId: z.string(),
     quantity: z.coerce.number().min(1).max(10),
@@ -22,6 +29,7 @@ export async function purchaseBallsAction(
 
   if (input.error) {
     return {
+      success: false,
       error: "Something went wrong. Please try again.",
     };
   }
@@ -36,7 +44,7 @@ export async function purchaseBallsAction(
 export async function purchaseCharmAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<MessageResponse | ErrorResponse> {
   const formSchema = z.object({
     charmId: z.coerce.number(),
   });
@@ -45,6 +53,7 @@ export async function purchaseCharmAction(
 
   if (input.error) {
     return {
+      success: false,
       error: "The charm you are trying to purchase does not exist.",
     };
   }
@@ -55,7 +64,7 @@ export async function purchaseCharmAction(
 export async function purchaseWildcardAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<MessageResponse | ErrorResponse> {
   const formSchema = z.object({
     tradedWildcard: ZodRarity,
     purchasedWildcard: ZodRarity,
@@ -65,6 +74,7 @@ export async function purchaseWildcardAction(
 
   if (input.error) {
     return {
+      success: false,
       error: "Something went wrong. Please try again.",
     };
   }

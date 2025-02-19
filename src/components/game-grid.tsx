@@ -83,22 +83,20 @@ export default function GameGrid() {
   );
 
   useEffect(() => {
-    if (data) {
-      if ("error" in data) {
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else if (data.message) {
-        toast({
-          title: "Success! 🎉",
-          description: data.message,
-        });
-        setSellIds([]);
-        void pokemon.refetch();
-        router.refresh();
-      }
+    if (data?.success === false) {
+      toast({
+        title: "Error",
+        description: data.error,
+        variant: "destructive",
+      });
+    } else if (data?.success === true) {
+      toast({
+        title: "Success! 🎉",
+        description: data.message,
+      });
+      setSellIds([]);
+      void pokemon.refetch();
+      router.refresh();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, toast, router]);

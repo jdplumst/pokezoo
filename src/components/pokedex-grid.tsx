@@ -81,23 +81,21 @@ export default function PokedexGrid() {
   const [purchaseId, setPurhcaseId] = useState<string | null>(null);
 
   useEffect(() => {
-    if (data) {
-      if ("error" in data) {
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else if (data.message) {
-        toast({
-          title: "Success!",
-          description: data.message,
-        });
-        setPurhcaseId(null);
-        router.refresh();
-        void utils.pokedex.getPokedex.invalidate();
-        void utils.game.getPokemon.invalidate();
-      }
+    if (data?.success === false) {
+      toast({
+        title: "Error",
+        description: data.error,
+        variant: "destructive",
+      });
+    } else if (data?.success === true) {
+      toast({
+        title: "Success!",
+        description: data.message,
+      });
+      setPurhcaseId(null);
+      router.refresh();
+      void utils.pokedex.getPokedex.invalidate();
+      void utils.game.getPokemon.invalidate();
     }
   }, [data, toast, router, utils.pokedex.getPokedex, utils.game.getPokemon]);
 

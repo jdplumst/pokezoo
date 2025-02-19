@@ -8,8 +8,11 @@ import { withinInstanceLimit } from "~/lib/within-instance-limit";
 import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { instances, profiles, rarities, species } from "~/server/db/schema";
+import { type ErrorResponse, type MessageResponse } from "~/lib/types";
 
-export async function purchasePokemon(speciesId: string) {
+export async function purchasePokemon(
+  speciesId: string,
+): Promise<MessageResponse | ErrorResponse> {
   const session = await isAuthed();
 
   const currProfile = await hasProfile();
@@ -24,6 +27,7 @@ export async function purchasePokemon(speciesId: string) {
 
   if (!currSpecies) {
     return {
+      success: false,
       error: "The Pokémon you are trying to purchase does not exist.",
     };
   }
@@ -54,7 +58,7 @@ export async function purchasePokemon(speciesId: string) {
       currSpecies.species.shiny &&
       currProfile.profile.legendaryCards < SHINY_WILDCARD_COST)
   ) {
-    return { error: "You cannot afford this Pokémon." };
+    return { success: false, error: "You cannot afford this Pokémon." };
   }
 
   if (
@@ -64,6 +68,7 @@ export async function purchasePokemon(speciesId: string) {
     )
   ) {
     return {
+      success: false,
       error:
         "You have reached your Pokémon limit. Sell Pokémon if you want to buy more.",
     };
@@ -116,6 +121,7 @@ export async function purchasePokemon(speciesId: string) {
   });
 
   return {
+    success: true,
     message: `You have successfully purhcased a ${currSpecies.species.shiny === true ? `Shiny` : ``} ${currSpecies.species.name[0].toUpperCase() + currSpecies.species.name.slice(1)}!`,
   };
 }

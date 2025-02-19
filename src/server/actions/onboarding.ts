@@ -1,12 +1,13 @@
 "use server";
 
 import { z } from "zod";
+import { type ErrorResponse } from "~/lib/types";
 import { createProfile } from "~/server/db/mutations/onboarding";
 
 export async function createProfileAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<ErrorResponse> {
   const formSchema = z.object({
     username: z.string().min(3).max(30),
     starterId: z.string(),
@@ -16,6 +17,7 @@ export async function createProfileAction(
 
   if (input.error) {
     return {
+      success: false,
       error:
         "You must select a starter pokémon, and your username must be between 3 and 30 characters.",
     };

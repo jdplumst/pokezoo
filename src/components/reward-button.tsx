@@ -32,13 +32,13 @@ export default function RewardButton(props: {
   );
 
   useEffect(() => {
-    if (data?.error) {
+    if (data?.success === false) {
       toast({
         title: "Error",
         description: data.error,
         variant: "destructive",
       });
-    } else if (data?.reward && data.cards) {
+    } else if (data?.success === true) {
       setIsOpen(true);
       router.refresh();
     }
@@ -71,68 +71,70 @@ export default function RewardButton(props: {
           </Button>
         </form>
       )}
-      <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="w-96">
-          <DialogHeader>
-            <DialogTitle>
-              You have claimed your {props.time === "day" ? "daily" : "nightly"}{" "}
-              reward!
-            </DialogTitle>
-            <DialogDescription hidden={true}>
-              Here are the rewards you have claimed.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex h-32 flex-col gap-2 overflow-y-scroll">
-            <div className="font-semibold">
-              You received P{data?.reward?.toLocaleString()}!
+      {data?.success === true && (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogContent className="w-96">
+            <DialogHeader>
+              <DialogTitle>
+                You have claimed your{" "}
+                {props.time === "day" ? "daily" : "nightly"} reward!
+              </DialogTitle>
+              <DialogDescription hidden={true}>
+                Here are the rewards you have claimed.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="flex h-32 flex-col gap-2 overflow-y-scroll">
+              <div className="font-semibold">
+                You received P{data.reward.toLocaleString()}!
+              </div>
+              {data.cards.Common ? (
+                <div className="flex gap-1">
+                  <div>
+                    You received {data.cards.Common} Common wildcard
+                    {data.cards.Common > 1 && "s"}
+                  </div>
+                  <Wildcard wildcard="Common" width={20} height={20} />
+                </div>
+              ) : (
+                <></>
+              )}
+              {data.cards.Rare ? (
+                <div className="flex gap-1">
+                  <div>
+                    You received {data.cards.Rare} Rare wildcard
+                    {data.cards.Rare > 1 && "s"}
+                  </div>
+                  <Wildcard wildcard="Rare" width={20} height={20} />
+                </div>
+              ) : (
+                <></>
+              )}
+              {data.cards.Epic ? (
+                <div className="flex gap-1">
+                  <div>
+                    You received {data.cards.Epic} Epic wildcard
+                    {data.cards.Epic > 1 && "s"}
+                  </div>
+                  <Wildcard wildcard="Epic" width={20} height={20} />
+                </div>
+              ) : (
+                <></>
+              )}
+              {data.cards.Legendary ? (
+                <div className="flex gap-1">
+                  <div>
+                    You received {data.cards.Legendary} Legendary wildcard
+                    {data.cards.Legendary > 1 && "s"}
+                  </div>
+                  <Wildcard wildcard="Legendary" width={20} height={20} />
+                </div>
+              ) : (
+                <></>
+              )}
             </div>
-            {data?.cards?.Common ? (
-              <div className="flex gap-1">
-                <div>
-                  You received {data.cards.Common} Common wildcard
-                  {data.cards.Common > 1 && "s"}
-                </div>
-                <Wildcard wildcard="Common" width={20} height={20} />
-              </div>
-            ) : (
-              <></>
-            )}
-            {data?.cards?.Rare ? (
-              <div className="flex gap-1">
-                <div>
-                  You received {data.cards.Rare} Rare wildcard
-                  {data.cards.Rare > 1 && "s"}
-                </div>
-                <Wildcard wildcard="Rare" width={20} height={20} />
-              </div>
-            ) : (
-              <></>
-            )}
-            {data?.cards?.Epic ? (
-              <div className="flex gap-1">
-                <div>
-                  You received {data.cards.Epic} Epic wildcard
-                  {data.cards.Epic > 1 && "s"}
-                </div>
-                <Wildcard wildcard="Epic" width={20} height={20} />
-              </div>
-            ) : (
-              <></>
-            )}
-            {data?.cards?.Legendary ? (
-              <div className="flex gap-1">
-                <div>
-                  You received {data.cards.Legendary} Legendary wildcard
-                  {data.cards.Legendary > 1 && "s"}
-                </div>
-                <Wildcard wildcard="Legendary" width={20} height={20} />
-              </div>
-            ) : (
-              <></>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
+          </DialogContent>
+        </Dialog>
+      )}
     </>
   );
 }

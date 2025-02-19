@@ -1,6 +1,7 @@
 "use server";
 
 import { z } from "zod";
+import { type ErrorResponse, type MessageResponse } from "~/lib/types";
 import {
   acceptTrade,
   cancelTrade,
@@ -12,7 +13,7 @@ import {
 export async function initiateTradeAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<MessageResponse | ErrorResponse> {
   const formSchema = z.object({
     instanceId: z.string().min(1),
     description: z.string().max(100),
@@ -22,6 +23,7 @@ export async function initiateTradeAction(
 
   if (input.error) {
     return {
+      success: false,
       error: "You must select a Pokémon to trade.",
     };
   }
@@ -32,13 +34,14 @@ export async function initiateTradeAction(
 export async function offerTradeAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<MessageResponse | ErrorResponse> {
   const formSchema = z.object({ tradeId: z.string(), instanceId: z.string() });
 
   const input = formSchema.safeParse(Object.fromEntries(formData));
 
   if (input.error) {
     return {
+      success: false,
       error: "You must select a Pokémon to trade.",
     };
   }

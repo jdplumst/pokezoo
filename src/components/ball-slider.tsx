@@ -55,17 +55,15 @@ export default function BallSlider(props: {
   );
 
   useEffect(() => {
-    if (data) {
-      if ("error" in data) {
-        toast({
-          title: "Error",
-          description: data.error,
-          variant: "destructive",
-        });
-      } else if (data.purchasedSpecies) {
-        setIsOpen(true);
-        void utils.game.getPokemon.invalidate();
-      }
+    if (data?.success === false) {
+      toast({
+        title: "Error",
+        description: data.error,
+        variant: "destructive",
+      });
+    } else if (data?.success === true) {
+      setIsOpen(true);
+      void utils.game.getPokemon.invalidate();
     }
   }, [data, toast, utils.game.getPokemon]);
 
