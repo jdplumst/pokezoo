@@ -24,8 +24,8 @@ export default defineConfig({
   reporter: "html",
   /* Tests that take over a minute to run are considered slow */
   reportSlowTests: { max: 10, threshold: 60 * 1000 },
-  /* Test timeout of 2 minutes */
-  timeout: 120000,
+  /* Test timeout of 1 minute */
+  timeout: 60000,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
@@ -35,8 +35,8 @@ export default defineConfig({
     trace: "on-first-retry",
   },
   expect: {
-    /* Set default timeout on assertions to be 30s */
-    timeout: 30000,
+    /* Set default timeout on assertions to be 10s */
+    timeout: 10000,
   },
 
   /* Configure projects for major browsers */
@@ -48,16 +48,17 @@ export default defineConfig({
     {
       name: "setup auth",
       testMatch: /auth\.setup\.ts/,
+      dependencies: ["setup db"],
     },
     {
       name: "chromium",
       use: { ...devices["Desktop Chrome"] },
-      dependencies: ["setup db", "setup auth"],
+      dependencies: ["setup auth"],
     },
     {
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
-      dependencies: ["setup db", "setup auth"],
+      dependencies: ["setup auth"],
     },
 
     // {
@@ -69,7 +70,7 @@ export default defineConfig({
     {
       name: "Mobile Chrome",
       use: { ...devices["Pixel 5"] },
-      dependencies: ["setup db", "setup auth"],
+      dependencies: ["setup auth"],
     },
     // {
     //   name: 'Mobile Safari',
