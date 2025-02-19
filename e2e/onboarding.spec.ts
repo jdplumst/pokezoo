@@ -47,6 +47,20 @@ test("no username", async ({ onboardingPage }) => {
   await expect(onboardingPage.squirtle).toHaveClass(/border-red-500/);
 });
 
+test("no starter", async ({ onboardingPage }) => {
+  await onboardingPage.usernameInput.fill("Green");
+  await onboardingPage.beginJourneyButton.click();
+  await expect(onboardingPage.errorToast).toBeVisible();
+  await expect(onboardingPage.errorToast).toContainText("Error");
+  await expect(onboardingPage.errorToast).toContainText(
+    "You must select a starter pokémon, and your username must be between 3 and 30 characters.",
+  );
+  await expect(onboardingPage.usernameInput).toHaveClass(/border-red-500/);
+  await expect(onboardingPage.bulbasaur).toHaveClass(/border-red-500/);
+  await expect(onboardingPage.charmander).toHaveClass(/border-red-500/);
+  await expect(onboardingPage.squirtle).toHaveClass(/border-red-500/);
+});
+
 test("complete onboarding", async ({ page, onboardingPage }) => {
   await onboardingPage.usernameInput.fill("Green");
   await onboardingPage.bulbasaur.click();
