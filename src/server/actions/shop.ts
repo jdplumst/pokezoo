@@ -64,7 +64,7 @@ export async function purchaseCharmAction(
 export async function purchaseWildcardAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<MessageResponse | ErrorResponse> {
   const formSchema = z.object({
     tradedWildcard: ZodRarity,
     purchasedWildcard: ZodRarity,
@@ -74,6 +74,7 @@ export async function purchaseWildcardAction(
 
   if (input.error) {
     return {
+      success: false,
       error: "Something went wrong. Please try again.",
     };
   }

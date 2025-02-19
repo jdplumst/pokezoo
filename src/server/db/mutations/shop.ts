@@ -284,7 +284,7 @@ export async function purchaseCharm(
 export async function purchaseWildcard(
   tradedWildcard: Rarity,
   purchasedWildcard: Rarity,
-) {
+): Promise<MessageResponse | ErrorResponse> {
   const session = await isAuthed();
 
   const currProfile = await hasProfile();
@@ -292,7 +292,7 @@ export async function purchaseWildcard(
   switch (tradedWildcard + ", " + purchasedWildcard) {
     case "Common, Rare":
       if (currProfile.profile.commonCards < 2) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -305,7 +305,7 @@ export async function purchaseWildcard(
 
     case "Common, Epic":
       if (currProfile.profile.commonCards < 4) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -318,7 +318,7 @@ export async function purchaseWildcard(
 
     case "Common, Legendary":
       if (currProfile.profile.commonCards < 50) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -331,7 +331,7 @@ export async function purchaseWildcard(
 
     case "Rare, Common":
       if (currProfile.profile.rareCards < 1) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -344,7 +344,7 @@ export async function purchaseWildcard(
 
     case "Rare, Epic":
       if (currProfile.profile.rareCards < 2) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -357,7 +357,7 @@ export async function purchaseWildcard(
 
     case "Rare, Legendary":
       if (currProfile.profile.rareCards < 35) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -370,7 +370,7 @@ export async function purchaseWildcard(
 
     case "Epic, Common":
       if (currProfile.profile.epicCards < 1) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -383,7 +383,7 @@ export async function purchaseWildcard(
 
     case "Epic, Rare":
       if (currProfile.profile.epicCards < 1) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -396,7 +396,7 @@ export async function purchaseWildcard(
 
     case "Epic, Legendary":
       if (currProfile.profile.epicCards < 15) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -409,7 +409,7 @@ export async function purchaseWildcard(
 
     case "Legendary, Common":
       if (currProfile.profile.legendaryCards < 1) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -422,7 +422,7 @@ export async function purchaseWildcard(
 
     case "Legendary, Rare":
       if (currProfile.profile.legendaryCards < 1) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -435,7 +435,7 @@ export async function purchaseWildcard(
 
     case "Legendary, Epic":
       if (currProfile.profile.legendaryCards < 1) {
-        return { error: "You cannot afford this wildcard." };
+        return { success: false, error: "You cannot afford this wildcard." };
       }
       await db
         .update(profiles)
@@ -448,11 +448,13 @@ export async function purchaseWildcard(
 
     default:
       return {
+        success: false,
         error: "Something went wrong. Please try again.",
       };
   }
 
   return {
+    success: true,
     message: `You have successfully purchased a ${purchasedWildcard} Wildcard.`,
   };
 }
