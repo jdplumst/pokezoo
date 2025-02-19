@@ -6,8 +6,24 @@ import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { getTime } from "~/server/db/queries/cookies";
 import { instances, profiles, species, trades } from "~/server/db/schema";
+import { type ErrorResponse } from "~/lib/types";
 
-export async function claimReward() {
+type Cards = {
+  Common: number;
+  Rare: number;
+  Epic: number;
+  Legendary: number;
+};
+
+export async function claimReward(): Promise<
+  | ErrorResponse
+  | {
+      success: true;
+      reward: number;
+      cards: Cards;
+    }
+  | undefined
+> {
   const session = await isAuthed();
 
   const currProfile = await hasProfile();
@@ -21,7 +37,12 @@ export async function claimReward() {
   const newBalance = reward > MAX_BALANCE ? MAX_BALANCE : reward;
 
   const loopNum = currProfile.markCharm ? 3 : 1;
-  const cards = { Common: 0, Rare: 0, Epic: 0, Legendary: 0 };
+  const cards: Cards = {
+    Common: 0,
+    Rare: 0,
+    Epic: 0,
+    Legendary: 0,
+  };
   for (let i = 0; i < loopNum; i++) {
     const random = Math.random();
     if (random < 0.5) {
@@ -40,6 +61,7 @@ export async function claimReward() {
   if (time === "day") {
     if (currProfile.profile.claimedDaily) {
       return {
+        success: false,
         error: "You have already claimed this reward. Claim it again tomorrow.",
       };
     }
@@ -58,6 +80,7 @@ export async function claimReward() {
   } else {
     if (currProfile.profile.claimedNightly) {
       return {
+        success: false,
         error: "You have already claimed this reward. Claim it again tomorrow.",
       };
     }
@@ -75,6 +98,7 @@ export async function claimReward() {
   }
 
   return {
+    success: true,
     reward: reward,
     cards: cards,
   };

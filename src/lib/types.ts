@@ -126,3 +126,6 @@ export const AchievementTypeValues = [
 ] as const;
 export type AchievementType = (typeof AchievementTypeValues)[number];
 export const ZodAchievementType = z.enum(AchievementTypeValues);
+
+export type MessageResponse = { success: true; message: string };
+export type ErrorResponse = { success: false; error: string };
