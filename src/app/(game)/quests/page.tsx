@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/table";
-import { claimQuest } from "~/server/actions/quests";
+import { claimQuestAction } from "~/server/actions/quests";
 import { type Metadata } from "next";
 import SubmitButton from "~/components/submit-button";
 import { getQuests } from "~/server/db/queries/quests";
@@ -51,7 +51,7 @@ export default async function Quests() {
                     action={async () => {
                       "use server";
 
-                      await claimQuest(q.userQuest.id);
+                      await claimQuestAction(q.userQuest.id);
                     }}
                   >
                     <SubmitButton text="Claim" />
