@@ -3,7 +3,7 @@ import "server-only";
 import { and, eq, inArray, or, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { calcNewYield } from "~/lib/calc-new-yield";
-import { type Rarity } from "~/lib/types";
+import { type ErrorResponse, type Rarity } from "~/lib/types";
 import { updateUserQuest } from "~/lib/update-user-quest";
 import { withinInstanceLimit } from "~/lib/within-instance-limit";
 import { db } from "~/server/db";
@@ -20,11 +20,20 @@ import {
   userCharms,
 } from "~/server/db/schema";
 
+export type PurchasedSpecies = {
+  name: string;
+  img: string;
+  shiny: boolean;
+  rarity: Rarity;
+}[];
+
 export async function purchaseBalls(
   ballId: string,
   quantity: number,
   regionName?: string,
-) {
+): Promise<
+  ErrorResponse | { success: true; purchasedSpecies: PurchasedSpecies }
+> {
   const session = await isAuthed();
 
   const currProfile = await hasProfile();
@@ -36,11 +45,14 @@ export async function purchaseBalls(
   )[0];
 
   if (!currBall) {
-    return { error: "The ball you are trying to purchase does not exist." };
+    return {
+      success: false,
+      error: "The ball you are trying to purchase does not exist.",
+    };
   }
 
   if (currProfile.profile.balance < currBall.cost * quantity) {
-    return { error: "You cannot afford these balls." };
+    return { success: false, error: "You cannot afford these balls." };
   }
 
   if (
@@ -50,6 +62,7 @@ export async function purchaseBalls(
     )
   ) {
     return {
+      success: false,
       error:
         "You will go over your Pokémon limit. Reduce the number of balls you are purchasing or sell Pokémon if you want to buy more.",
     };
@@ -57,6 +70,7 @@ export async function purchaseBalls(
 
   if (currBall.name === "Premier" && !regionName) {
     return {
+      success: false,
       error: "Must select a valid region for Premier Balls.",
     };
   }
@@ -69,6 +83,7 @@ export async function purchaseBalls(
 
     if (!currRegion) {
       return {
+        success: false,
         error: "Must select a valid region for Premier Balls.",
       };
     }
@@ -134,12 +149,7 @@ export async function purchaseBalls(
 
   let newYield = 0;
 
-  const purchasedSpecies: {
-    name: string;
-    img: string;
-    shiny: boolean;
-    rarity: Rarity;
-  }[] = [];
+  const purchasedSpecies: PurchasedSpecies = [];
 
   // Determine the new species the user gets
   await db.transaction(async (tx) => {
@@ -171,6 +181,7 @@ export async function purchaseBalls(
 
       if (!currSpecies) {
         return {
+          success: false,
           error:
             "Something went wrong trying to purchase Pokémon. Please try again.",
         };
@@ -208,7 +219,7 @@ export async function purchaseBalls(
 
   revalidatePath("/game");
   revalidatePath("/shop");
-  return { purchasedSpecies };
+  return { success: true, purchasedSpecies };
 }
 
 export async function purchaseCharm(charmId: number) {

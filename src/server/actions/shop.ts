@@ -1,17 +1,20 @@
 "use server";
 
 import { z } from "zod";
-import { ZodRarity } from "~/lib/types";
+import { type ErrorResponse, ZodRarity } from "~/lib/types";
 import {
   purchaseBalls,
   purchaseCharm,
   purchaseWildcard,
+  type PurchasedSpecies,
 } from "~/server/db/mutations/shop";
 
 export async function purchaseBallsAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<
+  ErrorResponse | { success: true; purchasedSpecies: PurchasedSpecies }
+> {
   const formSchema = z.object({
     ballId: z.string(),
     quantity: z.coerce.number().min(1).max(10),
@@ -22,6 +25,7 @@ export async function purchaseBallsAction(
 
   if (input.error) {
     return {
+      success: false,
       error: "Something went wrong. Please try again.",
     };
   }
