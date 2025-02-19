@@ -287,8 +287,9 @@ export default function PokedexGrid() {
           </DropdownMenu>
         </div>
       </div>
+      {/*hi  */}
       <div className="flex flex-col items-center justify-center gap-10">
-        {pokemon.isInitialLoading && <LoadingSpinner />}
+        {pokemon.isLoading && <LoadingSpinner />}
         <div
           className={`grid ${open ? `grid-cols-1 lg:grid-cols-2 xl:grid-cols-3` : `grid-cols-1 lg:grid-cols-2 xl:grid-cols-3`} gap-10`}
         >
