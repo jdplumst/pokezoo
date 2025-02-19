@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Input } from "~/components/ui/input";
 import { useToast } from "~/hooks/use-toast";
-import { createProfile } from "~/server/actions/onboarding";
+import { createProfileAction } from "~/server/actions/onboarding";
 import { useActionState, useEffect } from "react";
 import LoadingSpinner from "~/components/loading-spinner";
 
@@ -12,7 +12,10 @@ export default function OnboardingForm(props: {
 }) {
   const { toast } = useToast();
 
-  const [data, action, isPending] = useActionState(createProfile, undefined);
+  const [data, action, isPending] = useActionState(
+    createProfileAction,
+    undefined,
+  );
 
   useEffect(() => {
     if (data?.error) {
