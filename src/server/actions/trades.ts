@@ -54,33 +54,8 @@ export async function cancelTradeAction(tradeId: string) {
   return await cancelTrade(tradeId);
 }
 
-export async function withdrawTrade(tradeId: string) {
-  const session = await isAuthed();
-
-  await hasProfile();
-
-  const tradeData = (
-    await db.select().from(trades).where(eq(trades.id, tradeId))
-  )[0];
-
-  if (!tradeData) {
-    redirect("/trades");
-  }
-
-  if (tradeData.offererId !== session.user.id) {
-    redirect("/trades");
-  }
-
-  await db
-    .update(trades)
-    .set({
-      offererId: null,
-      offererInstanceId: null,
-      modifyDate: new Date(),
-    })
-    .where(eq(trades.id, tradeId));
-
-  redirect("/trades");
+export async function withdrawTradeAction(tradeId: string) {
+  return await withdrawTradeAction(tradeId);
 }
 
 export async function acceptTrade(tradeId: string) {

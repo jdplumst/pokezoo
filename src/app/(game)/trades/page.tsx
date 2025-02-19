@@ -3,7 +3,7 @@ import {
   acceptTrade,
   cancelTradeAction,
   declineTrade,
-  withdrawTrade,
+  withdrawTradeAction,
 } from "~/server/actions/trades";
 import { type Metadata } from "next";
 import SubmitButton from "~/components/submit-button";
@@ -92,7 +92,7 @@ export default async function Trades() {
                       action={async () => {
                         "use server";
 
-                        await withdrawTrade(t.id);
+                        await withdrawTradeAction(t.id);
                       }}
                     >
                       <SubmitButton text="Withdraw" />
