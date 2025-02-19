@@ -1,6 +1,7 @@
 "use server";
 
 import { z } from "zod";
+import { type MessageResponse, type ErrorResponse } from "~/lib/types";
 import { claimReward, sellPokemon } from "~/server/db/mutations/game";
 
 export async function claimRewardAction(
@@ -13,7 +14,7 @@ export async function claimRewardAction(
 export async function sellPokemonAction(
   _previousState: unknown,
   formData: FormData,
-) {
+): Promise<MessageResponse | ErrorResponse | undefined> {
   const formSchema = z.object({
     ids: z.preprocess((ids) => {
       if (typeof ids === "string") return ids.split(",");
@@ -24,6 +25,7 @@ export async function sellPokemonAction(
 
   if (input.error) {
     return {
+      success: false,
       error: "Something went wrong. Please try again.",
     };
   }

@@ -6,7 +6,7 @@ import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { getTime } from "~/server/db/queries/cookies";
 import { instances, profiles, species, trades } from "~/server/db/schema";
-import { type ErrorResponse } from "~/lib/types";
+import { type MessageResponse, type ErrorResponse } from "~/lib/types";
 
 type Cards = {
   Common: number;
@@ -104,7 +104,9 @@ export async function claimReward(): Promise<
   };
 }
 
-export async function sellPokemon(ids: string[]) {
+export async function sellPokemon(
+  ids: string[],
+): Promise<MessageResponse | ErrorResponse | undefined> {
   const session = await isAuthed();
 
   for (const i of ids) {
@@ -118,6 +120,7 @@ export async function sellPokemon(ids: string[]) {
 
       if (!exists) {
         return {
+          success: false,
           error: "You are trying to sell a Pokémon that you do not own.",
         };
       }
@@ -128,6 +131,7 @@ export async function sellPokemon(ids: string[]) {
 
       if (!speciesData) {
         return {
+          success: false,
           error: "You are trying to sell a Pokémon that does not exist.",
         };
       }
@@ -157,6 +161,7 @@ export async function sellPokemon(ids: string[]) {
     });
   }
   return {
+    success: true,
     message: "You have successfully sold your Pokémon!",
   };
 }
