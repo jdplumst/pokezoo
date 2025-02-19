@@ -2,12 +2,12 @@ feature:
   - all:
       - changed-files:
           - any-glob-to-any-file: ["src/**/*"]
-          - all-globs-to-all-files: ["!tests/**/*"]
+          - all-globs-to-all-files: ["!e2e/**/*"]
 
 tests:
   - any:
       - changed-files:
-          - any-glob-to-any-file: ["tests/**/*"]
+          - any-glob-to-any-file: ["e2e/**/*"]
 
 config:
   - all:
