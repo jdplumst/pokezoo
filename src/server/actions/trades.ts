@@ -7,15 +7,12 @@ import { and, eq, or } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { z } from "zod";
+import { initiateTrade } from "~/server/db/mutations/trades";
 
-export async function initiateTrade(
+export async function initiateTradeAction(
   _previousState: unknown,
   formData: FormData,
 ) {
-  const session = await isAuthed();
-
-  await hasProfile();
-
   const formSchema = z.object({
     instanceId: z.string().min(1),
     description: z.string().max(100),
@@ -29,54 +26,7 @@ export async function initiateTrade(
     };
   }
 
-  const initiatorId = session.user.id;
-
-  const instanceData = (
-    await db
-      .select()
-      .from(instances)
-      .where(eq(instances.id, input.data.instanceId))
-  )[0];
-
-  if (!instanceData) {
-    return {
-      error: "The pokémon you tried to trade does not exist.",
-    };
-  }
-
-  if (instanceData.userId !== initiatorId) {
-    return {
-      error: "The pokémon you tried to trade does not belong to you.",
-    };
-  }
-
-  const exists = (
-    await db
-      .select()
-      .from(trades)
-      .where(
-        or(
-          eq(trades.initiatorInstanceId, input.data.instanceId),
-          eq(trades.offererInstanceId, input.data.instanceId),
-        ),
-      )
-  )[0];
-
-  if (exists) {
-    return {
-      error: "The pokémon you are trying to trade is already in a trade.",
-    };
-  }
-
-  await db.insert(trades).values({
-    initiatorId: initiatorId,
-    initiatorInstanceId: input.data.instanceId,
-    description: input.data.description,
-  });
-
-  return {
-    message: "You have successfully added a trade!",
-  };
+  return await initiateTrade(input.data.instanceId, input.data.description);
 }
 
 export async function offerTrade(_previousState: unknown, formData: FormData) {

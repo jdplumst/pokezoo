@@ -1,5 +1,6 @@
-import { eq } from "drizzle-orm";
 import "server-only";
+
+import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { instances, profiles, regions, species } from "~/server/db/schema";

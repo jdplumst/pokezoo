@@ -14,7 +14,7 @@ import { useActionState, useEffect, useState } from "react";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
-import { initiateTrade, offerTrade } from "~/server/actions/trades";
+import { initiateTradeAction, offerTrade } from "~/server/actions/trades";
 import LoadingSpinner from "~/components/loading-spinner";
 import { api } from "~/trpc/react";
 import { type Rarity } from "~/lib/types";
@@ -41,27 +41,29 @@ export default function TradeForm(
   });
 
   const [initiateData, initiateAction, initiateIsPending] = useActionState(
-    initiateTrade,
+    initiateTradeAction,
     undefined,
   );
 
   useEffect(() => {
-    if (initiateData?.error) {
-      toast({
-        title: "Error",
-        description: initiateData.error,
-        variant: "destructive",
-      });
-    } else if (initiateData?.message) {
-      toast({
-        title: "Success! 🎉",
-        description: initiateData.message,
-      });
-      setDescription("");
-      setSearch("");
-      setInstance("");
-      setOpen(false);
-      router.refresh();
+    if (initiateData) {
+      if ("error" in initiateData) {
+        toast({
+          title: "Error",
+          description: initiateData.error,
+          variant: "destructive",
+        });
+      } else if (initiateData.message) {
+        toast({
+          title: "Success! 🎉",
+          description: initiateData.message,
+        });
+        setDescription("");
+        setSearch("");
+        setInstance("");
+        setOpen(false);
+        router.refresh();
+      }
     }
   }, [initiateData, toast, router]);
 
