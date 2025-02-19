@@ -20,16 +20,7 @@ jobs:
         run: pnpm exec playwright install --with-deps
       - name: Run Playwright tests
         env:
-          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
-          TEST_NAME: ${{ secrets.TEST_NAME }}
-          TEST_VALUE1: ${{ secrets.TEST_VALUE1 }}
-          TEST_UNAME1: ${{ secrets.TEST_UNAME1 }}
-          TEST_VALUE2: ${{ secrets.TEST_VALUE2 }}
-          TEST_UNAME2: ${{ secrets.TEST_UNAME2 }}
-          TEST_RESET: ${{ secrets.TEST_RESET  }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL}}
-          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN}}
           SKIP_VALIDATION: "true"
         run: pnpm exec playwright test
       - uses: actions/upload-artifact@v4
