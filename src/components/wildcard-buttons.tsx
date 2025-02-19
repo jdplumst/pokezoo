@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 import Wildcard from "~/components/wildcard";
 import { useRouter } from "next/navigation";
 import { useToast } from "~/hooks/use-toast";
-import { purchaseWildcard } from "~/server/actions/shop";
+import { purchaseWildcardAction } from "~/server/actions/shop";
 import { useActionState, useEffect } from "react";
 import { type Rarity } from "~/lib/types";
 
@@ -21,21 +21,26 @@ export default function WildcardButtons(props: {
 
   const { toast } = useToast();
 
-  const [data, action, isPending] = useActionState(purchaseWildcard, undefined);
+  const [data, action, isPending] = useActionState(
+    purchaseWildcardAction,
+    undefined,
+  );
 
   useEffect(() => {
-    if (data?.error) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
-    } else if (data?.message) {
-      toast({
-        title: "Success! 🎉",
-        description: data.message,
-      });
-      router.refresh();
+    if (data) {
+      if ("error" in data) {
+        toast({
+          title: "Error",
+          description: data.error,
+          variant: "destructive",
+        });
+      } else if (data.message) {
+        toast({
+          title: "Success! 🎉",
+          description: data.message,
+        });
+        router.refresh();
+      }
     }
   }, [data, toast, router]);
 
