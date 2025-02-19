@@ -80,10 +80,10 @@ export async function claimReward() {
   };
 }
 
-export async function sellPokemon(input: { ids: string[] }) {
+export async function sellPokemon(ids: string[]) {
   const session = await isAuthed();
 
-  for (const i of input.ids) {
+  for (const i of ids) {
     await db.transaction(async (tx) => {
       const exists = (
         await tx

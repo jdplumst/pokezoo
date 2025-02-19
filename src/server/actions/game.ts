@@ -28,5 +28,5 @@ export async function sellPokemonAction(
     };
   }
 
-  return await sellPokemon(input.data);
+  return await sellPokemon(input.data.ids);
 }
