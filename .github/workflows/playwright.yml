@@ -21,6 +21,14 @@ jobs:
       - name: Run Playwright tests
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          COOKIE_NAME: ${{ secrets.COOKIE_NAME }}
+          GREEN_SESSION: ${{ secrets.GREEN_SESSION }}
+          RED_SESSION: ${{ secrets.RED_SESSION }}
+          BLUE_SESSION: ${{ secrets.BLUE_SESSION }}
+          NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
+          UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
           SKIP_VALIDATION: "true"
         run: pnpm exec playwright test
       - uses: actions/upload-artifact@v4

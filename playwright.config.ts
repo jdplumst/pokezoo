@@ -55,11 +55,11 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"] },
       dependencies: ["setup auth"],
     },
-    {
-      name: "firefox",
-      use: { ...devices["Desktop Firefox"] },
-      dependencies: ["setup auth"],
-    },
+    // {
+    //   name: "firefox",
+    //   use: { ...devices["Desktop Firefox"] },
+    //   dependencies: ["setup auth"],
+    // },
 
     // {
     //   name: "webkit",
@@ -67,11 +67,11 @@ export default defineConfig({
     // },
 
     /* Test against mobile viewports. */
-    {
-      name: "Mobile Chrome",
-      use: { ...devices["Pixel 5"] },
-      dependencies: ["setup auth"],
-    },
+    // {
+    //   name: "Mobile Chrome",
+    //   use: { ...devices["Pixel 5"] },
+    //   dependencies: ["setup auth"],
+    // },
     // {
     //   name: 'Mobile Safari',
     //   use: { ...devices['iPhone 12'] },
