@@ -32,7 +32,7 @@ import {
 import { Card, CardContent } from "~/components/ui/card";
 import { type Region, RegionValues } from "~/lib/types";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
-import { purchaseBalls } from "~/server/actions/shop";
+import { purchaseBallsAction } from "~/server/actions/shop";
 import { api } from "~/trpc/react";
 
 export default function BallSlider(props: {
@@ -49,18 +49,23 @@ export default function BallSlider(props: {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const [data, action, isPending] = useActionState(purchaseBalls, undefined);
+  const [data, action, isPending] = useActionState(
+    purchaseBallsAction,
+    undefined,
+  );
 
   useEffect(() => {
-    if (data?.error) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
-    } else if (data?.purchasedSpecies) {
-      setIsOpen(true);
-      void utils.game.getPokemon.invalidate();
+    if (data) {
+      if ("error" in data) {
+        toast({
+          title: "Error",
+          description: data.error,
+          variant: "destructive",
+        });
+      } else if (data.purchasedSpecies) {
+        setIsOpen(true);
+        void utils.game.getPokemon.invalidate();
+      }
     }
   }, [data, toast, utils.game.getPokemon]);
 
@@ -138,12 +143,13 @@ export default function BallSlider(props: {
         </Drawer>
       ) : (
         <form action={action}>
-          <input type="hidden" name="ballId" value={props.ballId} />
+          <input type="hidden" name="ballId" value={props.ballId} readOnly />
           <input
             type="number"
             name="quantity"
             value={sliderValue[0]}
             className="hidden"
+            readOnly
           />
           <Button type="submit" disabled={isPending}>
             {isPending ? <LoadingSpinner /> : "Buy"}
@@ -159,15 +165,17 @@ export default function BallSlider(props: {
             Here is all the Pokémon you have obtained.
           </DialogDescription>
           <div className="flex h-80 flex-col gap-4 overflow-y-scroll">
-            {data?.purchasedSpecies?.map((s, idx) => (
-              <MiniPokemonCard
-                key={idx}
-                name={s.name}
-                img={s.img}
-                shiny={s.shiny}
-                rarity={s.rarity}
-              />
-            ))}
+            {data && "error" in data
+              ? null
+              : data?.purchasedSpecies?.map((s, idx) => (
+                  <MiniPokemonCard
+                    key={idx}
+                    name={s.name}
+                    img={s.img}
+                    shiny={s.shiny}
+                    rarity={s.rarity}
+                  />
+                ))}
           </div>
         </DialogContent>
       </Dialog>
