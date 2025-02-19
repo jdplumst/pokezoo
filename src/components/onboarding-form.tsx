@@ -18,7 +18,7 @@ export default function OnboardingForm(props: {
   );
 
   useEffect(() => {
-    if (data?.error) {
+    if (data?.success === false) {
       toast({
         title: "Error",
         description: data.error,
