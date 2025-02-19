@@ -26,6 +26,7 @@ jobs:
           RED_SESSION: ${{ secrets.RED_SESSION }}
           BLUE_SESSION: ${{ secrets.BLUE_SESSION }}
           NEXTAUTH_URL: ${{ secrets.NEXTAUTH_URL }}
+          NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           SKIP_VALIDATION: "true"
         run: pnpm exec playwright test
       - uses: actions/upload-artifact@v4
