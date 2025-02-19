@@ -11,11 +11,13 @@ import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { getTime } from "~/server/db/queries/cookies";
 import {
   balls,
+  charms,
   instances,
   profiles,
   rarities,
   regions,
   species,
+  userCharms,
 } from "~/server/db/schema";
 
 export async function purchaseBalls(
@@ -207,4 +209,55 @@ export async function purchaseBalls(
   revalidatePath("/game");
   revalidatePath("/shop");
   return { purchasedSpecies };
+}
+
+export async function purchaseCharm(charmId: number) {
+  const session = await isAuthed();
+
+  const currProfile = await hasProfile();
+
+  const charmData = (
+    await db.select().from(charms).where(eq(charms.id, charmId))
+  )[0];
+
+  if (!charmData) {
+    return {
+      error: "The charm you are trying to purchase does not exist.",
+    };
+  }
+
+  const exists = (
+    await db
+      .select()
+      .from(userCharms)
+      .where(
+        and(
+          eq(userCharms.charmId, charmId),
+          eq(userCharms.userId, session.user.id),
+        ),
+      )
+  )[0];
+
+  if (exists) {
+    return { error: "You have already purchased this charm." };
+  }
+
+  if (currProfile.profile.balance < charmData.cost) {
+    return { error: "You cannot afford this charm." };
+  }
+
+  await db.transaction(async (tx) => {
+    await tx
+      .insert(userCharms)
+      .values({ userId: session.user.id, charmId: charmId });
+
+    await tx
+      .update(profiles)
+      .set({ balance: currProfile.profile.balance - charmData.cost })
+      .where(eq(profiles.userId, session.user.id));
+  });
+
+  return {
+    message: `You have successfully purchased the ${charmData.name} Charm!`,
+  };
 }

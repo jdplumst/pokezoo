@@ -1,12 +1,12 @@
 "use server";
 
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { charms, profiles, userCharms } from "~/server/db/schema";
+import { profiles } from "~/server/db/schema";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { z } from "zod";
 import { ZodRarity } from "~/lib/types";
-import { purchaseBalls } from "~/server/db/mutations/shop";
+import { purchaseBalls, purchaseCharm } from "~/server/db/mutations/shop";
 
 export async function purchaseBallsAction(
   _previousState: unknown,
@@ -21,7 +21,6 @@ export async function purchaseBallsAction(
   const input = formSchema.safeParse(Object.fromEntries(formData));
 
   if (input.error) {
-    console.error(input.error);
     return {
       error: "Something went wrong. Please try again.",
     };
@@ -34,14 +33,10 @@ export async function purchaseBallsAction(
   );
 }
 
-export async function purchaseCharm(
+export async function purchaseCharmAction(
   _previousState: unknown,
   formData: FormData,
 ) {
-  const session = await isAuthed();
-
-  const currProfile = await hasProfile();
-
   const formSchema = z.object({
     charmId: z.coerce.number(),
   });
@@ -54,50 +49,7 @@ export async function purchaseCharm(
     };
   }
 
-  const charmData = (
-    await db.select().from(charms).where(eq(charms.id, input.data.charmId))
-  )[0];
-
-  if (!charmData) {
-    return {
-      error: "The charm you are trying to purchase does not exist.",
-    };
-  }
-
-  const exists = (
-    await db
-      .select()
-      .from(userCharms)
-      .where(
-        and(
-          eq(userCharms.charmId, input.data.charmId),
-          eq(userCharms.userId, session.user.id),
-        ),
-      )
-  )[0];
-
-  if (exists) {
-    return { error: "You have already purchased this charm." };
-  }
-
-  if (currProfile.profile.balance < charmData.cost) {
-    return { error: "You cannot afford this charm." };
-  }
-
-  await db.transaction(async (tx) => {
-    await tx
-      .insert(userCharms)
-      .values({ userId: session.user.id, charmId: input.data.charmId });
-
-    await tx
-      .update(profiles)
-      .set({ balance: currProfile.profile.balance - charmData.cost })
-      .where(eq(profiles.userId, session.user.id));
-  });
-
-  return {
-    message: `You have successfully purchased the ${charmData.name} Charm!`,
-  };
+  return await purchaseCharm(input.data.charmId);
 }
 
 export async function purchaseWildcard(
