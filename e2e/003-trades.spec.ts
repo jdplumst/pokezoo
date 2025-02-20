@@ -24,7 +24,38 @@ export const test = base.extend<Fixtures>({
   },
 });
 
-test("initiate trade", async ({ redTradesPage }) => {
+test.describe("end to end trades", () => {
+  test("initiate trade", async ({ redTradesPage }) => {
+    await redTradesPage.goto();
+    await expect(redTradesPage.topbar.content).toContainText(
+      "You have 2,000 / 2,000",
+    );
+    await expect(redTradesPage.topbar.content).toContainText(
+      "You will receive P100 on the next payout.",
+    );
+    await expect(redTradesPage.initiateSuccessMessage).not.toBeVisible();
+    await expect(redTradesPage.initiatorText).not.toBeVisible();
+    await expect(redTradesPage.initiatorSprite).not.toBeVisible();
+    await expect(redTradesPage.initiatorPokemon).not.toBeVisible();
+    await expect(redTradesPage.initiatorDescription).not.toBeVisible();
+    await expect(redTradesPage.cancelTradeButton).not.toBeVisible();
+    await redTradesPage.initiateTrade();
+    await expect(redTradesPage.initiateSuccessMessage).toBeVisible();
+    await expect(redTradesPage.topbar.content).toContainText(
+      "You have 2,000 / 2,000",
+    );
+    await expect(redTradesPage.topbar.content).toContainText(
+      "You will receive P100 on the next payout.",
+    );
+    await expect(redTradesPage.initiatorText).toBeVisible();
+    await expect(redTradesPage.initiatorSprite).toBeVisible();
+    await expect(redTradesPage.initiatorPokemon).toBeVisible();
+    await expect(redTradesPage.initiatorDescription).toBeVisible();
+    await expect(redTradesPage.cancelTradeButton).toBeVisible();
+  });
+});
+
+test("cancel trade", async ({ redTradesPage }) => {
   await redTradesPage.goto();
   await expect(redTradesPage.topbar.content).toContainText(
     "You have 2,000 / 2,000",
@@ -32,23 +63,23 @@ test("initiate trade", async ({ redTradesPage }) => {
   await expect(redTradesPage.topbar.content).toContainText(
     "You will receive P100 on the next payout.",
   );
-  await redTradesPage.addTradeButton.click();
-  await expect(redTradesPage.descriptionCount).toHaveText("0 / 100");
-  await redTradesPage.descriptionInput.fill("Hello world");
-  await expect(redTradesPage.descriptionCount).toHaveText("11 / 100");
-  await redTradesPage.pokemonSearch.fill("charmander");
-  await redTradesPage.charmander.click();
-  await redTradesPage.addTradeButton.scrollIntoViewIfNeeded();
-  await redTradesPage.addTradeButton.click();
+  // TODO: uncomment this when full trade flow is implemented or when testing in isolation
+  // await redTradesPage.initiateTrade();
+  await redTradesPage.cancelTradeButton.click();
   await expect(redTradesPage.topbar.content).toContainText(
     "You have 2,000 / 2,000",
   );
   await expect(redTradesPage.topbar.content).toContainText(
     "You will receive P100 on the next payout.",
   );
+  await expect(redTradesPage.initiatorText).not.toBeVisible();
+  await expect(redTradesPage.initiatorSprite).not.toBeVisible();
+  await expect(redTradesPage.initiatorPokemon).not.toBeVisible();
+  await expect(redTradesPage.initiatorDescription).not.toBeVisible();
+  await expect(redTradesPage.cancelTradeButton).not.toBeVisible();
 });
 
-test.afterEach(async ({ redTradesPage, blueTradesPage }) => {
-  await redTradesPage.page.close();
-  await blueTradesPage.page.close();
-});
+// test.afterEach(async ({ redTradesPage, blueTradesPage }) => {
+//   await redTradesPage.page.close();
+//   await blueTradesPage.page.close();
+// });
