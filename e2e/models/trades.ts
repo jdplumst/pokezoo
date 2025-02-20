@@ -6,6 +6,8 @@ export class TradesPage {
   readonly topbar: Topbar;
   readonly addTradeButton: Locator;
   readonly cancelTradeButton: Locator;
+  readonly offerTradeButton: Locator;
+  readonly withdrawTradeButton: Locator;
   readonly descriptionInput: Locator;
   readonly descriptionCount: Locator;
   readonly pokemonSearch: Locator;
@@ -15,13 +17,19 @@ export class TradesPage {
   readonly initiatorSprite: Locator;
   readonly initiatorPokemon: Locator;
   readonly initiatorDescription: Locator;
-  readonly initiateSuccessMessage: Locator;
+  readonly initiatorSuccessMessage: Locator;
+  readonly offererText: Locator;
+  readonly offererSprite: Locator;
+  readonly offererPokemon: Locator;
+  readonly offererSuccessMessage: Locator;
 
   constructor(page: Page) {
     this.page = page;
     this.topbar = new Topbar(page);
     this.addTradeButton = page.getByRole("button", { name: "Add Trade" });
     this.cancelTradeButton = page.getByRole("button", { name: "Cancel Trade" });
+    this.offerTradeButton = page.getByRole("button", { name: "Add Offer" });
+    this.withdrawTradeButton = page.getByRole("button", { name: "Withdraw" });
     this.descriptionInput = page.getByPlaceholder(
       "Enter a short message here.",
     );
@@ -35,8 +43,14 @@ export class TradesPage {
     this.initiatorSprite = page.getByRole("img", { name: "charmander" });
     this.initiatorPokemon = page.getByText("charmander");
     this.initiatorDescription = page.getByText("Hello world");
-    this.initiateSuccessMessage = page
+    this.initiatorSuccessMessage = page
       .getByText("You have successfully added a trade!")
+      .first();
+    this.offererText = page.getByText("Blue has an offer!");
+    this.offererSprite = page.getByRole("img", { name: "squirtle" });
+    this.offererPokemon = page.getByText("squirtle");
+    this.offererSuccessMessage = page
+      .getByText("You have successfully added an offer to the trade.")
       .first();
   }
 
@@ -53,5 +67,15 @@ export class TradesPage {
     await this.charmander.click();
     await this.addTradeButton.scrollIntoViewIfNeeded();
     await this.addTradeButton.click();
+  }
+
+  async offerTrade() {
+    await this.offerTradeButton.click();
+    await expect(this.descriptionInput).not.toBeVisible();
+    await expect(this.descriptionCount).not.toBeVisible();
+    await this.pokemonSearch.fill("squirtle");
+    await this.squirtle.click();
+    await this.offerTradeButton.scrollIntoViewIfNeeded();
+    await this.offerTradeButton.click();
   }
 }

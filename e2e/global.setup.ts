@@ -106,7 +106,7 @@ setup("setting up database", async ({}) => {
 
   await db
     .update(profiles)
-    .set({ balance: 100000000, totalYield: 100, instanceCount: 2000 })
+    .set({ balance: 100000000, totalYield: 100, instanceCount: 1 })
     .where(eq(profiles.userId, blue.userId));
 
   await db.delete(trades).where(eq(trades.initiatorId, blue.userId));
