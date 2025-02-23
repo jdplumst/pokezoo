@@ -184,15 +184,12 @@ export async function withdrawTrade(tradeId: string) {
   const tradeData = (
     await db.select().from(trades).where(eq(trades.id, tradeId))
   )[0];
-
   if (!tradeData) {
     redirect("/trades");
   }
-
   if (tradeData.offererId !== session.user.id) {
     redirect("/trades");
   }
-
   await db
     .update(trades)
     .set({
@@ -201,7 +198,6 @@ export async function withdrawTrade(tradeId: string) {
       modifyDate: new Date(),
     })
     .where(eq(trades.id, tradeId));
-
   redirect("/trades");
 }
 

@@ -8,6 +8,7 @@ import {
   declineTrade,
   initiateTrade,
   offerTrade,
+  withdrawTrade,
 } from "~/server/db/mutations/trades";
 
 export async function initiateTradeAction(
@@ -54,7 +55,7 @@ export async function cancelTradeAction(tradeId: string) {
 }
 
 export async function withdrawTradeAction(tradeId: string) {
-  return await withdrawTradeAction(tradeId);
+  return await withdrawTrade(tradeId);
 }
 
 export async function acceptTradeAction(tradeId: string) {
