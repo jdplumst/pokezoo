@@ -8,6 +8,7 @@ export class TradesPage {
   readonly cancelTradeButton: Locator;
   readonly offerTradeButton: Locator;
   readonly withdrawTradeButton: Locator;
+  readonly declineTradeButton: Locator;
   readonly descriptionInput: Locator;
   readonly descriptionCount: Locator;
   readonly pokemonSearch: Locator;
@@ -31,6 +32,7 @@ export class TradesPage {
     this.cancelTradeButton = page.getByRole("button", { name: "Cancel Trade" });
     this.offerTradeButton = page.getByRole("button", { name: "Add Offer" });
     this.withdrawTradeButton = page.getByRole("button", { name: "Withdraw" });
+    this.declineTradeButton = page.getByRole("button", { name: "Decline" });
     this.descriptionInput = page.getByPlaceholder(
       "Enter a short message here.",
     );
