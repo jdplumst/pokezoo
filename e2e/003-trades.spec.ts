@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { test as base, expect } from "@playwright/test";
-import { TradesPage } from "./models/trades";
-import { GamePage } from "./models/game";
+import { TradesPage } from "./models/trades.model";
+import { GamePage } from "./models/game.model";
 
 type Fixtures = {
   redTradesPage: TradesPage;

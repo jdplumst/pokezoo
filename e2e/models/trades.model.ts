@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page } from "@playwright/test";
-import { Topbar } from "./topbar";
+import { Topbar } from "./topbar.model";
 
 export class TradesPage {
   readonly page: Page;
