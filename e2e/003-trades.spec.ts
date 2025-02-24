@@ -1,10 +1,13 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { test as base, expect } from "@playwright/test";
 import { TradesPage } from "./models/trades";
+import { GamePage } from "./models/game";
 
 type Fixtures = {
   redTradesPage: TradesPage;
   blueTradesPage: TradesPage;
+  redGamePage: GamePage;
+  blueGamePage: GamePage;
 };
 
 export const test = base.extend<Fixtures>({
@@ -21,6 +24,20 @@ export const test = base.extend<Fixtures>({
       storageState: "./playwright/.auth/blue.json",
     });
     await use(new TradesPage(await context.newPage()));
+  },
+
+  redGamePage: async ({ browser }, use) => {
+    const context = await browser.newContext({
+      storageState: "./playwright/.auth/red.json",
+    });
+    await use(new GamePage(await context.newPage()));
+  },
+
+  blueGamePage: async ({ browser }, use) => {
+    const context = await browser.newContext({
+      storageState: "./playwright/.auth/blue.json",
+    });
+    await use(new GamePage(await context.newPage()));
   },
 });
 
@@ -147,9 +164,49 @@ test.describe("end to end trades", () => {
     await expect(blueTradesPage.withdrawTradeButton).toBeVisible();
     await expect(blueTradesPage.offerTradeButton).not.toBeVisible();
   });
+
+  test("accept trade", async ({
+    redTradesPage,
+    blueTradesPage,
+    redGamePage,
+    blueGamePage,
+  }) => {
+    await redTradesPage.goto();
+    await redTradesPage.acceptTrade();
+    await redTradesPage.isTradeInitiated(false);
+    await redTradesPage.isTradeOffered(false);
+    await expect(redTradesPage.topbar.content).toContainText(
+      "You have 2,000 / 2,000",
+    );
+    await expect(redTradesPage.topbar.content).toContainText(
+      "You will receive P100 on the next payout.",
+    );
+
+    await redGamePage.goto();
+    await expect(redGamePage.squirtle).toBeVisible();
+    await expect(redGamePage.charmander).not.toBeVisible();
+
+    await blueTradesPage.goto();
+    await blueTradesPage.isTradeInitiated(false);
+    await blueTradesPage.isTradeOffered(false);
+    await expect(blueTradesPage.topbar.content).toContainText(
+      "You have 1 / 2,000",
+    );
+    await expect(blueTradesPage.topbar.content).toContainText(
+      "You will receive P100 on the next payout.",
+    );
+
+    await blueGamePage.goto();
+    await expect(blueGamePage.charmander).toBeVisible();
+    await expect(blueGamePage.squirtle).not.toBeVisible();
+  });
 });
 
-test.afterEach(async ({ redTradesPage, blueTradesPage }) => {
-  await redTradesPage.page.close();
-  await blueTradesPage.page.close();
-});
+test.afterEach(
+  async ({ redTradesPage, blueTradesPage, redGamePage, blueGamePage }) => {
+    await redTradesPage.page.close();
+    await blueTradesPage.page.close();
+    await redGamePage.page.close();
+    await blueGamePage.page.close();
+  },
+);

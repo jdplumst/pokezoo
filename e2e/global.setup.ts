@@ -1,5 +1,5 @@
 import { test as setup } from "@playwright/test";
-import { and, eq, ne } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import {
   instances,
@@ -51,14 +51,12 @@ setup("setting up database", async ({}) => {
     await db.select().from(species).where(eq(species.name, "charmander"))
   )[0];
 
-  await db
-    .delete(instances)
-    .where(
-      and(
-        eq(instances.userId, red.userId),
-        ne(instances.speciesId, charmander.id),
-      ),
-    );
+  await db.delete(instances).where(eq(instances.userId, red.userId));
+
+  await db.insert(instances).values({
+    userId: red.userId,
+    speciesId: charmander.id,
+  });
 
   await db
     .update(profiles)
@@ -95,14 +93,12 @@ setup("setting up database", async ({}) => {
     await db.select().from(species).where(eq(species.name, "squirtle"))
   )[0];
 
-  await db
-    .delete(instances)
-    .where(
-      and(
-        eq(instances.userId, blue.userId),
-        ne(instances.speciesId, squirtle.id),
-      ),
-    );
+  await db.delete(instances).where(eq(instances.userId, blue.userId));
+
+  await db.insert(instances).values({
+    userId: blue.userId,
+    speciesId: squirtle.id,
+  });
 
   await db
     .update(profiles)

@@ -7,6 +7,7 @@ export class TradesPage {
   readonly addTradeButton: Locator;
   readonly cancelTradeButton: Locator;
   readonly offerTradeButton: Locator;
+  readonly acceptTradeButton: Locator;
   readonly withdrawTradeButton: Locator;
   readonly declineTradeButton: Locator;
   readonly descriptionInput: Locator;
@@ -31,6 +32,7 @@ export class TradesPage {
     this.addTradeButton = page.getByRole("button", { name: "Add Trade" });
     this.cancelTradeButton = page.getByRole("button", { name: "Cancel Trade" });
     this.offerTradeButton = page.getByRole("button", { name: "Add Offer" });
+    this.acceptTradeButton = page.getByRole("button", { name: "Accept" });
     this.withdrawTradeButton = page.getByRole("button", { name: "Withdraw" });
     this.declineTradeButton = page.getByRole("button", { name: "Decline" });
     this.descriptionInput = page.getByPlaceholder(
@@ -94,6 +96,16 @@ export class TradesPage {
     await this.squirtle.click();
     await this.offerTradeButton.scrollIntoViewIfNeeded();
     await this.offerTradeButton.click();
+    await responsePromise;
+  }
+
+  async acceptTrade() {
+    const responsePromise = this.page.waitForResponse(
+      (response) =>
+        response.url().includes("/trades") &&
+        response.request().method() === "POST",
+    );
+    await this.acceptTradeButton.click();
     await responsePromise;
   }
 
