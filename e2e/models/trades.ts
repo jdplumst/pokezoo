@@ -46,14 +46,14 @@ export class TradesPage {
     this.squirtle = page.getByRole("button", { name: "squirtle squirtle" });
     this.initiatorText = page.getByText("Red wants to trade!");
     this.initiatorSprite = page.getByRole("img", { name: "charmander" });
-    this.initiatorPokemon = page.getByText("charmander");
+    this.initiatorPokemon = page.getByText("charmander").first();
     this.initiatorDescription = page.getByText("Hello world");
     this.initiatorSuccessMessage = page
       .getByText("You have successfully added a trade!")
       .first();
     this.offererText = page.getByText("Blue has an offer!");
     this.offererSprite = page.getByRole("img", { name: "squirtle" });
-    this.offererPokemon = page.getByText("squirtle");
+    this.offererPokemon = page.getByText("squirtle").first();
     this.offererSuccessMessage = page
       .getByText("You have successfully added an offer to the trade.")
       .first();
