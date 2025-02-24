@@ -8,7 +8,7 @@ export class Topbar {
     this.page = page;
     this.content = page
       .locator("div")
-      .filter({ hasText: "Hi Green!You have 1 / 2,000" })
+      .filter({ hasText: "Your current balance is" })
       .nth(2);
   }
 }

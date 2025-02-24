@@ -96,7 +96,7 @@ export default function TradeForm(
         {props.type === "initiate" ? "Add Trade" : "Add Offer"}
       </Button>
       <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent>
+        <SheetContent className="overflow-y-scroll">
           <SheetHeader>
             <SheetTitle>Add Trade</SheetTitle>
             <SheetDescription hidden={true}>
