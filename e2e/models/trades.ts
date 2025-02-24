@@ -65,6 +65,11 @@ export class TradesPage {
   }
 
   async initiateTrade() {
+    const responsePromise = this.page.waitForResponse(
+      (response) =>
+        response.url().includes("/trades") &&
+        response.request().method() === "POST",
+    );
     await this.addTradeButton.click();
     await expect(this.descriptionCount).toHaveText("0 / 100");
     await this.descriptionInput.fill("Hello world");
@@ -73,9 +78,15 @@ export class TradesPage {
     await this.charmander.click();
     await this.addTradeButton.scrollIntoViewIfNeeded();
     await this.addTradeButton.click();
+    await responsePromise;
   }
 
   async offerTrade() {
+    const responsePromise = this.page.waitForResponse(
+      (response) =>
+        response.url().includes("/trades") &&
+        response.request().method() === "POST",
+    );
     await this.offerTradeButton.click();
     await expect(this.descriptionInput).not.toBeVisible();
     await expect(this.descriptionCount).not.toBeVisible();
@@ -83,5 +94,62 @@ export class TradesPage {
     await this.squirtle.click();
     await this.offerTradeButton.scrollIntoViewIfNeeded();
     await this.offerTradeButton.click();
+    await responsePromise;
+  }
+
+  async cancelTrade() {
+    const responsePromise = this.page.waitForResponse(
+      (response) =>
+        response.url().includes("/trades") &&
+        response.request().method() === "POST",
+    );
+    await this.cancelTradeButton.click();
+    await responsePromise;
+  }
+
+  async withdrawTrade() {
+    const responsePromise = this.page.waitForResponse(
+      (response) =>
+        response.url().includes("/trades") &&
+        response.request().method() === "POST",
+    );
+    await this.withdrawTradeButton.click();
+    await responsePromise;
+  }
+
+  async declineTrade() {
+    const responsePromise = this.page.waitForResponse(
+      (response) =>
+        response.url().includes("/trades") &&
+        response.request().method() === "POST",
+    );
+    await this.declineTradeButton.click();
+    await responsePromise;
+  }
+
+  async isTradeInitiated(initiated: boolean) {
+    if (initiated) {
+      await expect(this.initiatorText).toBeVisible();
+      await expect(this.initiatorSprite).toBeVisible();
+      await expect(this.initiatorPokemon).toBeVisible();
+      await expect(this.initiatorDescription).toBeVisible();
+    } else {
+      await expect(this.initiatorText).not.toBeVisible();
+      await expect(this.initiatorSprite).not.toBeVisible();
+      await expect(this.initiatorPokemon).not.toBeVisible();
+      await expect(this.initiatorDescription).not.toBeVisible();
+    }
+  }
+
+  async isTradeOffered(offered: boolean) {
+    if (offered) {
+      await expect(this.offererText).toBeVisible();
+      await expect(this.offererSprite).toBeVisible();
+      await expect(this.offererPokemon).toBeVisible();
+    } else {
+      await expect(this.offererText).not.toBeVisible();
+      await expect(this.offererSprite).not.toBeVisible();
+      await expect(this.offererPokemon).not.toBeVisible();
+    }
   }
 }
