@@ -17,4 +17,4 @@ The app is currently on version 8.10.
 - NextAuth.js
 - tRPC
 - shadcn/ui
-- Upstash
+- Redist with Upstash
