@@ -11,18 +11,16 @@ import {
 import Image from "next/image";
 import { Button } from "~/components/ui/button";
 import { useActionState, useEffect, useState } from "react";
-import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { selectStarterAction } from "~/server/actions/starters";
 import LoadingSpinner from "~/components/loading-spinner";
 import { api } from "~/trpc/react";
+import { toast } from "sonner";
 
 export default function StarterSelect(props: {
   regionId: number;
   regionName: string;
 }) {
-  const { toast } = useToast();
-
   const router = useRouter();
 
   const utils = api.useUtils();
@@ -40,20 +38,13 @@ export default function StarterSelect(props: {
 
   useEffect(() => {
     if (data?.success === false) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
+      toast.error(data.error);
     } else if (data?.success === true) {
-      toast({
-        title: "Success! 🎉",
-        description: data.message,
-      });
+      toast.message(data.message);
       void utils.game.invalidate();
       router.refresh();
     }
-  }, [data, toast, router, utils.game]);
+  }, [data, router, utils.game]);
 
   return (
     <Dialog open={true}>

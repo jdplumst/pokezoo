@@ -17,7 +17,6 @@ import {
   RegionsList,
   TypesList,
 } from "~/lib/constants";
-import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
@@ -26,11 +25,10 @@ import PokemonCard from "~/components/pokemon-card";
 import Wildcard from "~/components/wildcard";
 import { purchasePokemonAction } from "~/server/actions/pokedex";
 import { api } from "~/trpc/react";
+import { toast } from "sonner";
 
 export default function PokedexGrid() {
   const { open } = useSidebar();
-
-  const { toast } = useToast();
 
   const router = useRouter();
 
@@ -82,22 +80,15 @@ export default function PokedexGrid() {
 
   useEffect(() => {
     if (data?.success === false) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
+      toast.error(data.error);
     } else if (data?.success === true) {
-      toast({
-        title: "Success!",
-        description: data.message,
-      });
+      toast.message(data.message);
       setPurhcaseId(null);
       router.refresh();
       void utils.pokedex.getPokedex.invalidate();
       void utils.game.getPokemon.invalidate();
     }
-  }, [data, toast, router, utils.pokedex.getPokedex, utils.game.getPokemon]);
+  }, [data, router, utils.pokedex.getPokedex, utils.game.getPokemon]);
 
   return (
     <>

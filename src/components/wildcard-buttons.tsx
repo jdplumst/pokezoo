@@ -3,10 +3,10 @@
 import { Button } from "~/components/ui/button";
 import Wildcard from "~/components/wildcard";
 import { useRouter } from "next/navigation";
-import { useToast } from "~/hooks/use-toast";
 import { purchaseWildcardAction } from "~/server/actions/shop";
 import { useActionState, useEffect } from "react";
 import { type Rarity } from "~/lib/types";
+import { toast } from "sonner";
 
 export default function WildcardButtons(props: {
   wildcard: {
@@ -19,8 +19,6 @@ export default function WildcardButtons(props: {
 }) {
   const router = useRouter();
 
-  const { toast } = useToast();
-
   const [data, action, isPending] = useActionState(
     purchaseWildcardAction,
     undefined,
@@ -28,19 +26,12 @@ export default function WildcardButtons(props: {
 
   useEffect(() => {
     if (data?.success === false) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
+      toast.error(data.error);
     } else if (data?.success === true) {
-      toast({
-        title: "Success! 🎉",
-        description: data.message,
-      });
+      toast.message(data.message);
       router.refresh();
     }
-  }, [data, toast, router]);
+  }, [data, router]);
 
   return (
     <div className="flex gap-1">

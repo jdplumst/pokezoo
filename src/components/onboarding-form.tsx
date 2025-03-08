@@ -2,16 +2,14 @@
 
 import Image from "next/image";
 import { Input } from "~/components/ui/input";
-import { useToast } from "~/hooks/use-toast";
 import { createProfileAction } from "~/server/actions/onboarding";
 import { useActionState, useEffect } from "react";
 import LoadingSpinner from "~/components/loading-spinner";
+import { toast } from "sonner";
 
 export default function OnboardingForm(props: {
   starters: { id: string; name: string; img: string }[];
 }) {
-  const { toast } = useToast();
-
   const [data, action, isPending] = useActionState(
     createProfileAction,
     undefined,
@@ -19,13 +17,9 @@ export default function OnboardingForm(props: {
 
   useEffect(() => {
     if (data?.success === false) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
+      toast.error(data.error);
     }
-  }, [data, toast]);
+  }, [data]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800 p-8 text-white">

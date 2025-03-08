@@ -20,16 +20,14 @@ import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
 import React, { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import PokemonCard from "./pokemon-card";
-import { useToast } from "~/hooks/use-toast";
 import LoadingSpinner from "~/components/loading-spinner";
 import { useRouter } from "next/navigation";
 import { sellPokemonAction } from "~/server/actions/game";
 import { api } from "~/trpc/react";
+import { toast } from "sonner";
 
 export default function GameGrid() {
   const { open } = useSidebar();
-
-  const { toast } = useToast();
 
   const router = useRouter();
 
@@ -84,22 +82,15 @@ export default function GameGrid() {
 
   useEffect(() => {
     if (data?.success === false) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
+      toast.error(data.error);
     } else if (data?.success === true) {
-      toast({
-        title: "Success! 🎉",
-        description: data.message,
-      });
+      toast.message(data.message);
       setSellIds([]);
       void pokemon.refetch();
       router.refresh();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, toast, router]);
+  }, [data, router]);
 
   return (
     <>
