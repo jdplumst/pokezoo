@@ -12,12 +12,12 @@ import {
 import { Textarea } from "~/components/ui/textarea";
 import { useActionState, useEffect, useState } from "react";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
-import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { initiateTradeAction, offerTradeAction } from "~/server/actions/trades";
 import LoadingSpinner from "~/components/loading-spinner";
 import { api } from "~/trpc/react";
 import { type Rarity } from "~/lib/types";
+import { toast } from "sonner";
 
 export default function TradeForm(
   props:
@@ -27,8 +27,6 @@ export default function TradeForm(
     | { type: "offer"; tradeId: string },
 ) {
   const router = useRouter();
-
-  const { toast } = useToast();
 
   const [open, setOpen] = useState(false);
 
@@ -47,23 +45,16 @@ export default function TradeForm(
 
   useEffect(() => {
     if (initiateData?.success === false) {
-      toast({
-        title: "Error",
-        description: initiateData.error,
-        variant: "destructive",
-      });
+      toast.error(initiateData.error);
     } else if (initiateData?.success === true) {
-      toast({
-        title: "Success! 🎉",
-        description: initiateData.message,
-      });
+      toast.message(initiateData.message);
       setDescription("");
       setSearch("");
       setInstance("");
       setOpen(false);
       router.refresh();
     }
-  }, [initiateData, toast, router]);
+  }, [initiateData, router]);
 
   const [offerData, offerAction, offerIsPending] = useActionState(
     offerTradeAction,
@@ -72,23 +63,16 @@ export default function TradeForm(
 
   useEffect(() => {
     if (offerData?.success === false) {
-      toast({
-        title: "Error",
-        description: offerData.error,
-        variant: "destructive",
-      });
+      toast.error(offerData.error);
     } else if (offerData?.success === true) {
-      toast({
-        title: "Success! 🎉",
-        description: offerData.message,
-      });
+      toast.message(offerData.message);
       setDescription("");
       setSearch("");
       setInstance("");
       setOpen(false);
       router.refresh();
     }
-  }, [offerData, toast, router]);
+  }, [offerData, router]);
 
   return (
     <>

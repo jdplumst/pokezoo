@@ -8,21 +8,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "~/components/ui/dialog";
-import { useToast } from "~/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import Wildcard from "~/components/wildcard";
 import { claimRewardAction } from "~/server/actions/game";
 import LoadingSpinner from "~/components/loading-spinner";
 import { type Time } from "~/lib/types";
+import { toast } from "sonner";
 
 export default function RewardButton(props: {
   time: Time;
   profile: { claimedDaily: boolean; claimedNightly: boolean };
 }) {
   const router = useRouter();
-
-  const { toast } = useToast();
 
   const [isOpen, setIsOpen] = useState(false);
 
@@ -33,16 +31,12 @@ export default function RewardButton(props: {
 
   useEffect(() => {
     if (data?.success === false) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
+      toast.error(data.error);
     } else if (data?.success === true) {
       setIsOpen(true);
       router.refresh();
     }
-  }, [data, toast, router]);
+  }, [data, router]);
 
   return (
     <>

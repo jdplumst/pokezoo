@@ -20,7 +20,7 @@ export class OnboardingPage {
     this.beginJourneyButton = page.getByRole("button", {
       name: "Begin Journey",
     });
-    this.errorToast = page.locator("li");
+    this.errorToast = page.getByRole("listitem");
   }
 
   async goto() {

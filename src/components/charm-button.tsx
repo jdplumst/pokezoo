@@ -1,15 +1,13 @@
 "use client";
 
 import { Button } from "~/components/ui/button";
-import { useToast } from "~/hooks/use-toast";
 import LoadingSpinner from "./loading-spinner";
 import { useActionState, useEffect } from "react";
 import { purchaseCharmAction } from "~/server/actions/shop";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function CharmButton(props: { charmId: number }) {
-  const { toast } = useToast();
-
   const router = useRouter();
 
   const [data, action, isPending] = useActionState(
@@ -19,19 +17,12 @@ export default function CharmButton(props: { charmId: number }) {
 
   useEffect(() => {
     if (data?.success === false) {
-      toast({
-        title: "Error",
-        description: data.error,
-        variant: "destructive",
-      });
+      toast.error(data.error);
     } else if (data?.success === true) {
-      toast({
-        title: "Success! 🎉",
-        description: data.message,
-      });
+      toast.message(data.message);
       router.refresh();
     }
-  }, [data, toast, router]);
+  }, [data, router]);
 
   return (
     <form action={action}>
