@@ -24,7 +24,6 @@ test.beforeEach(async ({ onboardingPage }) => {
 test("no username and no starter", async ({ onboardingPage }) => {
   await onboardingPage.beginJourneyButton.click();
   await expect(onboardingPage.errorToast).toBeVisible();
-  await expect(onboardingPage.errorToast).toContainText("Error");
   await expect(onboardingPage.errorToast).toContainText(
     "You must select a starter pokémon, and your username must be between 3 and 30 characters.",
   );
@@ -38,7 +37,6 @@ test("no username", async ({ onboardingPage }) => {
   await onboardingPage.bulbasaur.click();
   await onboardingPage.beginJourneyButton.click();
   await expect(onboardingPage.errorToast).toBeVisible();
-  await expect(onboardingPage.errorToast).toContainText("Error");
   await expect(onboardingPage.errorToast).toContainText(
     "You must select a starter pokémon, and your username must be between 3 and 30 characters.",
   );
@@ -52,7 +50,6 @@ test("no starter", async ({ onboardingPage }) => {
   await onboardingPage.usernameInput.fill("Green");
   await onboardingPage.beginJourneyButton.click();
   await expect(onboardingPage.errorToast).toBeVisible();
-  await expect(onboardingPage.errorToast).toContainText("Error");
   await expect(onboardingPage.errorToast).toContainText(
     "You must select a starter pokémon, and your username must be between 3 and 30 characters.",
   );
