@@ -17,6 +17,7 @@
     "db:studio": "dotenv drizzle-kit studio",
     "script": "dotenv tsx",
     "e2e": "playwright test",
+    "e2e:debug": "playwright test --debug",
     "e2e:ui": "playwright test --ui",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
