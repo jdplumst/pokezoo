@@ -16,6 +16,30 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
+      <Patch patch="8.11" date="March 10, 2025">
+        <Note note="Sort balls in shop by price." />
+        <Note note="Added balance changes:" />
+        <div className="px-4 pt-4 text-2xl font-bold">Master Ball</div>
+        <ul className="list-disc px-4">
+          <li className="ml-4">Epic chance changed from 95% to 93%</li>
+          <li className="ml-4">Legendary chance changed from 5% to 7%</li>
+        </ul>
+        <div className="px-4 pt-4 text-2xl font-bold">Cherish Ball</div>
+        <ul className="list-disc px-4">
+          <li className="ml-4">Legendary chance changed from 95% to 93%</li>
+          <li className="ml-4">Mega chance changed from 5% to 7%</li>
+        </ul>
+        <div className="px-4 pt-4 text-2xl font-bold">Beast Ball</div>
+        <ul className="list-disc px-4">
+          <li className="ml-4">Legendary chance changed from 95% to 93%</li>
+          <li className="ml-4">Ultra Beast chance changed from 5% to 7%</li>
+        </ul>
+        <div className="px-4 pt-4 text-2xl font-bold">Dream Ball</div>
+        <ul className="list-disc px-4">
+          <li className="ml-4">Legendary chance changed from 95% to 93%</li>
+          <li className="ml-4">Gigantamax chance changed from 5% to 7%</li>
+        </ul>
+      </Patch>
       <Patch patch="8.10" date="February 7, 2024">
         <Note note="Fixed purchasing balls always purchasing a single ball." />
       </Patch>
@@ -489,7 +513,7 @@ export default async function PatchNotes() {
         <Note note="Added habitat information to cards." />
       </Patch>
       <Patch patch="2.13" date="May 14, 2023">
-        <p className="px-4 pt-4">
+        <p className="pt-4">
           Modified type colours to use the colours from{" "}
           <a href="https://gist.github.com/apaleslimghost/0d25ec801ca4fc43317bcff298af43c3">
             <span>here</span>
