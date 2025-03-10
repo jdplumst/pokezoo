@@ -10,7 +10,7 @@ export async function getShopData() {
 
   await hasProfile();
 
-  const ballsData = await db.select().from(balls);
+  const ballsData = await db.select().from(balls).orderBy(balls.cost);
 
   const charmsData = await db.select().from(charms);
 
