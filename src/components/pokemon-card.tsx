@@ -1,18 +1,11 @@
 "use client";
 
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "~/components/ui/sheet";
 import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "~/lib/types";
 import Image from "next/image";
 import { type ReactNode, useState } from "react";
 import { z } from "zod";
-import TypeButton from "~/components/type-button";
 import { getRarityColor } from "~/lib/get-rarity-color";
+import { PokemonSheet } from "~/components/pokemon-sheet";
 
 export default function PokemonCard(props: {
   children: ReactNode;
@@ -91,64 +84,7 @@ export default function PokemonCard(props: {
         </div>
       </div>
 
-      <Sheet open={open} onOpenChange={setOpen}>
-        <SheetContent>
-          <SheetHeader className="flex flex-col items-center">
-            <SheetTitle className="font-2xl capitalize">
-              {pokemon.data.shiny && "🌟"}{" "}
-              {"#" + pokemon.data.pokedexNumber + ":"} {pokemon.data.name}
-            </SheetTitle>
-            <SheetDescription hidden={true}>
-              A description of {pokemon.data.name}
-            </SheetDescription>
-            <div className="flex flex-col items-start text-lg">
-              <Image
-                src={pokemon.data.img}
-                alt={pokemon.data.name}
-                width={200}
-                height={200}
-              />
-
-              <div className="flex gap-4 pb-5">
-                <TypeButton type={pokemon.data.typeOne} />
-                {pokemon.data.typeTwo && (
-                  <TypeButton type={pokemon.data.typeTwo} />
-                )}
-              </div>
-              <div>
-                <b>Rarity:</b> {pokemon.data.rarity}
-              </div>
-              <div>
-                <b>Yield:</b> P{pokemon.data.yield.toLocaleString()}
-              </div>
-              <div>
-                <b>Sell Price:</b> P{pokemon.data.sellPrice.toLocaleString()}
-              </div>
-              <div>
-                <b>Habitat:</b> {pokemon.data.habitat}
-              </div>
-              <div>
-                <b>Region:</b> {pokemon.data.region}
-              </div>
-              <div>
-                <b>Generation:</b> {pokemon.data.generation}
-              </div>
-              <div>
-                <b>Shiny:</b> {pokemon.data.shiny ? "Shiny" : "Regular"}
-              </div>
-              <div>
-                <b>Time of Day:</b>{" "}
-                {pokemon.data.habitat === "Grassland"
-                  ? "Day"
-                  : pokemon.data.habitat === "Forest" ||
-                      pokemon.data.habitat === "Cave"
-                    ? "Night"
-                    : "Anytime"}
-              </div>
-            </div>
-          </SheetHeader>
-        </SheetContent>
-      </Sheet>
+      <PokemonSheet open={open} setOpen={setOpen} pokemon={pokemon.data} />
     </>
   );
 }

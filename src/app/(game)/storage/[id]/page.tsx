@@ -27,8 +27,8 @@ export default async function StoragePage({
     redirect("/storage/1");
   }
 
-  const nextPage = id === "8" ? 1 : parseInt(id) + 1;
-  const prevPage = id === "1" ? 8 : parseInt(id) - 1;
+  const nextPage = id === "8" ? 1 : idInt + 1;
+  const prevPage = id === "1" ? 8 : idInt - 1;
 
   const pokemon = await getStorage(idInt);
 
