@@ -159,6 +159,7 @@ export const instances = pgTable(
     modifyDate: timestamp("modifyDate", { mode: "date" })
       .notNull()
       .default(sql`now()`),
+    box: integer("box").notNull().default(0),
   },
   (i) => {
     return {
