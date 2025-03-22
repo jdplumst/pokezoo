@@ -112,7 +112,11 @@ export async function sellPokemon(
     await db.transaction(async (tx) => {
       const exists = (
         await tx
-          .select({ id: instances.id, speciesId: instances.speciesId })
+          .select({
+            id: instances.id,
+            speciesId: instances.speciesId,
+            box: instances.box,
+          })
           .from(instances)
           .where(eq(instances.id, i))
       )[0];
@@ -154,7 +158,10 @@ export async function sellPokemon(
             currProfile.profile.balance + speciesData.sellPrice > MAX_BALANCE
               ? MAX_BALANCE
               : currProfile.profile.balance + speciesData.sellPrice,
-          instanceCount: currProfile.profile.instanceCount - 1,
+          instanceCount:
+            exists.box === 0
+              ? currProfile.profile.instanceCount - 1
+              : currProfile.profile.instanceCount,
         })
         .where(eq(profiles.userId, session.user.id));
     });

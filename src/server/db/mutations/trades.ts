@@ -228,6 +228,7 @@ export async function acceptTrade(tradeId: string) {
         id: instances.id,
         userId: instances.userId,
         yield: species.yield,
+        box: instances.box,
       })
       .from(instances)
       .innerJoin(species, eq(instances.speciesId, species.id))
@@ -245,6 +246,7 @@ export async function acceptTrade(tradeId: string) {
         id: instances.id,
         userId: instances.userId,
         yield: species.yield,
+        box: instances.box,
       })
       .from(instances)
       .innerJoin(species, eq(instances.speciesId, species.id))
@@ -277,14 +279,20 @@ export async function acceptTrade(tradeId: string) {
 
   const initiator = (
     await db
-      .select({ totalYield: profiles.totalYield })
+      .select({
+        totalYield: profiles.totalYield,
+        instanceCount: profiles.instanceCount,
+      })
       .from(profiles)
       .where(eq(profiles.userId, tradeData.initiatorId))
   )[0];
 
   const offerer = (
     await db
-      .select({ totalYield: profiles.totalYield })
+      .select({
+        totalYield: profiles.totalYield,
+        instanceCount: profiles.instanceCount,
+      })
       .from(profiles)
       .where(eq(profiles.userId, tradeData.offererId))
   )[0];
@@ -307,6 +315,10 @@ export async function acceptTrade(tradeId: string) {
           initiator.totalYield -
           initiatorInstance.yield +
           offererInstance.yield,
+        instanceCount:
+          initiatorInstance.box > 0
+            ? initiator.instanceCount + 1
+            : initiator.instanceCount,
       })
       .where(eq(profiles.userId, tradeData.initiatorId));
 
@@ -315,6 +327,10 @@ export async function acceptTrade(tradeId: string) {
       .set({
         totalYield:
           offerer.totalYield - offererInstance.yield + initiatorInstance.yield,
+        instanceCount:
+          offererInstance.box > 0
+            ? offerer.instanceCount + 1
+            : offerer.instanceCount,
       })
       .where(eq(profiles.userId, tradeData.offererId!));
 

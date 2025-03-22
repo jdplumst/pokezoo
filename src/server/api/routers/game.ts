@@ -99,6 +99,7 @@ export const gameRouter = createTRPCRouter({
         .innerJoin(habitats, eq(species.habitatId, habitats.id))
         .where(
           and(
+            eq(instances.box, 0),
             eq(instances.userId, ctx.session.user.id),
             eq(species.shiny, input.shiny),
             input.regions.length > 0
