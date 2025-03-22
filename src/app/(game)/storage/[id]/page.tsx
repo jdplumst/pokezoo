@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getStorage } from "~/server/db/queries/storage";
 import { StorageGrid } from "~/components/storage-grid";
@@ -17,11 +17,14 @@ export default async function StoragePage({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  console.log("here!");
   const { id } = await params;
+  if (!id) {
+    redirect("/storage/1");
+  }
+
   const idInt = parseInt(id);
   if (isNaN(idInt) || idInt < 1 || idInt > 8) {
-    notFound();
+    redirect("/storage/1");
   }
 
   const nextPage = id === "8" ? 1 : parseInt(id) + 1;
