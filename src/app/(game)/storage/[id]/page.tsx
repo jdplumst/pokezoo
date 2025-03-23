@@ -23,12 +23,12 @@ export default async function StoragePage({
   }
 
   const idInt = parseInt(id);
-  if (isNaN(idInt) || idInt < 1 || idInt > 8) {
+  if (isNaN(idInt) || idInt < 1 || idInt > 30) {
     redirect("/storage/1");
   }
 
-  const nextPage = id === "8" ? 1 : idInt + 1;
-  const prevPage = id === "1" ? 8 : idInt - 1;
+  const nextPage = id === "30" ? 1 : idInt + 1;
+  const prevPage = id === "1" ? 30 : idInt - 1;
 
   const pokemon = await getStorage(idInt);
 
@@ -76,7 +76,7 @@ export default async function StoragePage({
             <div className="bg-gray-700 p-4">
               <div className="flex items-center justify-between">
                 <div className="text-white">
-                  <span className="text-gray-300">Box {id} of 8</span>
+                  <span className="text-gray-300">Box {id} of 30</span>
                 </div>
 
                 {/* <div className="flex space-x-2">
