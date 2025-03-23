@@ -320,9 +320,11 @@ export async function acceptTrade(tradeId: string) {
       .update(profiles)
       .set({
         totalYield:
-          initiator.totalYield -
-          initiatorInstance.yield +
-          offererInstance.yield,
+          initiatorInstance.box > 0
+            ? initiator.totalYield -
+              initiatorInstance.yield +
+              offererInstance.yield
+            : initiator.totalYield,
         instanceCount:
           initiatorInstance.box > 0
             ? initiator.instanceCount + 1
@@ -334,7 +336,11 @@ export async function acceptTrade(tradeId: string) {
       .update(profiles)
       .set({
         totalYield:
-          offerer.totalYield - offererInstance.yield + initiatorInstance.yield,
+          offererInstance.box > 0
+            ? offerer.totalYield -
+              offererInstance.yield +
+              initiatorInstance.yield
+            : offerer.totalYield,
         instanceCount:
           offererInstance.box > 0
             ? offerer.instanceCount + 1
