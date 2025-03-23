@@ -300,12 +300,20 @@ export async function acceptTrade(tradeId: string) {
   await db.transaction(async (tx) => {
     await tx
       .update(instances)
-      .set({ userId: tradeData.offererId!, modifyDate: new Date() })
+      .set({
+        userId: tradeData.offererId!,
+        modifyDate: new Date(),
+        box: offererInstance.box,
+      })
       .where(eq(instances.id, tradeData.initiatorInstanceId));
 
     await tx
       .update(instances)
-      .set({ userId: tradeData.initiatorId, modifyDate: new Date() })
+      .set({
+        userId: tradeData.initiatorId,
+        modifyDate: new Date(),
+        box: initiatorInstance.box,
+      })
       .where(eq(instances.id, tradeData.offererInstanceId!));
 
     await tx
