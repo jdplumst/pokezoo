@@ -37,7 +37,7 @@ export function StorageGrid(props: {
               />
             </div>
             <p className="mt-1 truncate text-center text-xs capitalize text-white">
-              {p.name}
+              {p.shiny && "🌟 "} {p.name}
             </p>
           </div>
         ))}
