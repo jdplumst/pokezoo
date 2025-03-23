@@ -50,19 +50,20 @@ export async function moveToParty(
     "add",
   );
 
-  await db
-    .update(instances)
-    .set({ box: 0 })
-    .where(eq(instances.id, instanceId));
+  await db.transaction(async (tx) => {
+    await tx
+      .update(instances)
+      .set({ box: 0, modifyDate: new Date() })
+      .where(eq(instances.id, instanceId));
 
-  await db
-    .update(profiles)
-    .set({
-      instanceCount: currProfile.profile.instanceCount + 1,
-      totalYield: newYield,
-    })
-    .where(eq(profiles.id, currProfile.profile.id));
-
+    await tx
+      .update(profiles)
+      .set({
+        instanceCount: currProfile.profile.instanceCount + 1,
+        totalYield: newYield,
+      })
+      .where(eq(profiles.id, currProfile.profile.id));
+  });
   revalidatePath("/storage");
 
   return {

@@ -208,18 +208,20 @@ export async function moveToStorage(
     "subtract",
   );
 
-  await db
-    .update(instances)
-    .set({ box: box })
-    .where(eq(instances.id, instanceId));
+  await db.transaction(async (tx) => {
+    await tx
+      .update(instances)
+      .set({ box: box, modifyDate: new Date() })
+      .where(eq(instances.id, instanceId));
 
-  await db
-    .update(profiles)
-    .set({
-      instanceCount: currProfile.profile.instanceCount - 1,
-      totalYield: newYield,
-    })
-    .where(eq(profiles.userId, userId));
+    await tx
+      .update(profiles)
+      .set({
+        instanceCount: currProfile.profile.instanceCount - 1,
+        totalYield: newYield,
+      })
+      .where(eq(profiles.userId, userId));
+  });
 
   revalidatePath("/game");
   return {
