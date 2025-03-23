@@ -79,6 +79,7 @@ export async function purchasePokemon(
   const newYield = calcNewYield(
     currProfile.profile.totalYield,
     currSpecies.species.yield,
+    "add",
   );
 
   await db.transaction(async (tx) => {

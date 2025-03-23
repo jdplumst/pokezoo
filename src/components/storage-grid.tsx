@@ -54,6 +54,7 @@ export function StorageGrid(props: {
         <PokemonSheet
           open={selectedPokemon !== null}
           setOpen={handleClose}
+          storage={true}
           pokemon={selectedPokemon}
         />
       )}

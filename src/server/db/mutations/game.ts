@@ -1,12 +1,16 @@
 import "server-only";
 
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { MAX_BALANCE } from "~/lib/constants";
 import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { getTime } from "~/server/db/queries/cookies";
 import { instances, profiles, species, trades } from "~/server/db/schema";
 import { type MessageResponse, type ErrorResponse } from "~/lib/types";
+import { redirect } from "next/navigation";
+import { getAvailableBox } from "~/lib/get-available-box";
+import { revalidatePath } from "next/cache";
+import { calcNewYield } from "~/lib/calc-new-yield";
 
 type Cards = {
   Common: number;
@@ -169,5 +173,57 @@ export async function sellPokemon(
   return {
     success: true,
     message: "You have successfully sold your Pokémon!",
+  };
+}
+
+export async function moveToStorage(
+  instanceId: string,
+  userId: string,
+  currProfile: Awaited<ReturnType<typeof hasProfile>>,
+): Promise<MessageResponse | ErrorResponse | undefined> {
+  const instanceData = (
+    await db
+      .select()
+      .from(instances)
+      .innerJoin(species, eq(instances.speciesId, species.id))
+      .where(and(eq(instances.userId, userId), eq(instances.id, instanceId)))
+  )[0];
+
+  if (!instanceData) {
+    redirect("/game");
+  }
+
+  const box = await getAvailableBox();
+  if (!box) {
+    return {
+      success: false,
+      error:
+        "Your storage is full. Sell some of your pokémon in your storage and try again.",
+    };
+  }
+
+  const newYield = calcNewYield(
+    currProfile.profile.totalYield,
+    instanceData.species.yield,
+    "subtract",
+  );
+
+  await db
+    .update(instances)
+    .set({ box: box })
+    .where(eq(instances.id, instanceId));
+
+  await db
+    .update(profiles)
+    .set({
+      instanceCount: currProfile.profile.instanceCount - 1,
+      totalYield: newYield,
+    })
+    .where(eq(profiles.userId, userId));
+
+  revalidatePath("/game");
+  return {
+    success: true,
+    message: "The pokémon has been moved to your storage.",
   };
 }

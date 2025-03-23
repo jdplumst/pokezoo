@@ -208,7 +208,11 @@ export async function purchaseBalls(
     }
   });
 
-  const totalNewYield = calcNewYield(currProfile.profile.totalYield, newYield);
+  const totalNewYield = calcNewYield(
+    currProfile.profile.totalYield,
+    newYield,
+    "add",
+  );
 
   await db.transaction(async (tx) => {
     await tx

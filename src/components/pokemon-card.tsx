@@ -11,6 +11,7 @@ export default function PokemonCard(props: {
   children: ReactNode;
   caught?: boolean;
   pokemon: {
+    id: string;
     pokedexNumber: number;
     name: string;
     rarity: string;
@@ -28,6 +29,7 @@ export default function PokemonCard(props: {
   const [open, setOpen] = useState(false);
 
   const pokemonSchema = z.object({
+    id: z.string(),
     pokedexNumber: z.number(),
     name: z.string(),
     rarity: ZodRarity,
@@ -84,7 +86,12 @@ export default function PokemonCard(props: {
         </div>
       </div>
 
-      <PokemonSheet open={open} setOpen={setOpen} pokemon={pokemon.data} />
+      <PokemonSheet
+        open={open}
+        setOpen={setOpen}
+        storage={false}
+        pokemon={pokemon.data}
+      />
     </>
   );
 }

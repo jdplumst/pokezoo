@@ -75,7 +75,7 @@ export const gameRouter = createTRPCRouter({
 
       const instancesData = await ctx.db
         .select({
-          id: species.id,
+          id: instances.id,
           pokedexNumber: species.pokedexNumber,
           name: species.name,
           rarity: rarities.name,

@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { z } from "zod";
+import { MovePartyForm } from "~/components/move-party-form";
+import { MoveStorageForm } from "~/components/move-storage-form";
 import TypeButton from "~/components/type-button";
 import {
   Sheet,
@@ -13,7 +15,9 @@ import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "~/lib/types";
 export function PokemonSheet(props: {
   open: boolean;
   setOpen: (open: boolean) => void;
+  storage: boolean;
   pokemon: {
+    id: string;
     pokedexNumber: number;
     name: string;
     rarity: string;
@@ -29,6 +33,7 @@ export function PokemonSheet(props: {
   };
 }) {
   const pokemonSchema = z.object({
+    id: z.string(),
     pokedexNumber: z.number(),
     name: z.string(),
     rarity: ZodRarity,
@@ -49,7 +54,7 @@ export function PokemonSheet(props: {
 
   return (
     <Sheet open={props.open} onOpenChange={props.setOpen}>
-      <SheetContent>
+      <SheetContent className="flex flex-col items-center gap-8">
         <SheetHeader className="flex flex-col items-center">
           <SheetTitle className="font-2xl capitalize">
             {pokemon.data.shiny && "🌟"}{" "}
@@ -104,6 +109,11 @@ export function PokemonSheet(props: {
             </div>
           </div>
         </SheetHeader>
+        {props.storage ? (
+          <MovePartyForm instanceId={pokemon.data.id} />
+        ) : (
+          <MoveStorageForm instanceId={pokemon.data.id} />
+        )}
       </SheetContent>
     </Sheet>
   );
