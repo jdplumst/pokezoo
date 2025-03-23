@@ -16,6 +16,9 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
+      <Patch patch="8.12" date="March 23, 2025">
+        <Note note="Added storage! Now you can move Pokémon between your party and storage. Pokémon in your storage do not count towards your total yield." />
+      </Patch>
       <Patch patch="8.11" date="March 10, 2025">
         <Note note="Sort balls in shop by price." />
         <Note note="Added balance changes:" />
