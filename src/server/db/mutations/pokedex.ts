@@ -9,6 +9,7 @@ import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { instances, profiles, rarities, species } from "~/server/db/schema";
 import { type ErrorResponse, type MessageResponse } from "~/lib/types";
+import { getAvailableBoxes } from "~/lib/get-available-boxes";
 
 export async function purchasePokemon(
   speciesId: string,
@@ -61,17 +62,21 @@ export async function purchasePokemon(
     return { success: false, error: "You cannot afford this Pokémon." };
   }
 
+  let boxes: Awaited<ReturnType<typeof getAvailableBoxes>> = [0];
   if (
     !withinInstanceLimit(
       currProfile.profile.instanceCount,
       !!currProfile.catchingCharm,
     )
   ) {
-    return {
-      success: false,
-      error:
-        "You have reached your Pokémon limit. Sell Pokémon if you want to buy more.",
-    };
+    boxes = await getAvailableBoxes();
+    if (!boxes) {
+      return {
+        success: false,
+        error:
+          "You have reached your Pokémon limit. Sell Pokémon if you want to buy more.",
+      };
+    }
   }
 
   await updateUserQuest(currSpecies.species, session.user.id);
@@ -79,6 +84,7 @@ export async function purchasePokemon(
   const newYield = calcNewYield(
     currProfile.profile.totalYield,
     currSpecies.species.yield,
+    "add",
   );
 
   await db.transaction(async (tx) => {
@@ -111,13 +117,16 @@ export async function purchasePokemon(
                 currSpecies.species.shiny
               ? currProfile.profile.legendaryCards - SHINY_WILDCARD_COST
               : currProfile.profile.legendaryCards,
-        instanceCount: currProfile.profile.instanceCount + 1,
+        instanceCount:
+          boxes[0] === 0
+            ? currProfile.profile.instanceCount + 1
+            : currProfile.profile.instanceCount,
       })
       .where(eq(profiles.userId, session.user.id));
 
     await tx
       .insert(instances)
-      .values({ userId: session.user.id, speciesId: speciesId });
+      .values({ userId: session.user.id, speciesId: speciesId, box: boxes[0] });
   });
 
   return {

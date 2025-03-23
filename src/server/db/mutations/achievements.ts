@@ -42,6 +42,7 @@ export async function claimAchievement(achievementId: string) {
   const newYield = calcNewYield(
     currProfile.profile.totalYield,
     achievementData.yield,
+    "add",
   );
 
   await db.transaction(async (tx) => {

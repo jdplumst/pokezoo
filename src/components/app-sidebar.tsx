@@ -22,6 +22,7 @@ import {
   Settings,
   Rat,
   LogOut,
+  Database,
 } from "lucide-react";
 import Github from "~/components/github";
 import SignOut from "~/components/sign-out";
@@ -54,6 +55,15 @@ export async function AppSidebar() {
                   <Link href="/shop">
                     <ShoppingCart />
                     <SidebarMenuLabel>Shop</SidebarMenuLabel>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+
+              <SidebarMenuItem key={"Storage"}>
+                <SidebarMenuButton asChild>
+                  <Link href="/storage/1">
+                    <Database />
+                    <SidebarMenuLabel>Storage</SidebarMenuLabel>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
