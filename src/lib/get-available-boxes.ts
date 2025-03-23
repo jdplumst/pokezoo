@@ -16,8 +16,8 @@ export async function getAvailableBoxes(quantity = 1) {
   const boxes: number[] = [];
   for (let i = 0; i < 1; i++) {
     const box = instanceData.filter((instance) => instance.box === i + 1);
-    if (box.length < 9) {
-      for (let j = 0; j < 9 - box.length; j++) {
+    if (box.length < 30) {
+      for (let j = 0; j < 30 - box.length; j++) {
         boxes.push(i + 1);
       }
     }
