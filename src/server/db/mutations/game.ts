@@ -8,7 +8,7 @@ import { getTime } from "~/server/db/queries/cookies";
 import { instances, profiles, species, trades } from "~/server/db/schema";
 import { type MessageResponse, type ErrorResponse } from "~/lib/types";
 import { redirect } from "next/navigation";
-import { getAvailableBox } from "~/lib/get-available-box";
+import { getAvailableBoxes } from "~/lib/get-available-boxes";
 import { revalidatePath } from "next/cache";
 import { calcNewYield } from "~/lib/calc-new-yield";
 
@@ -193,8 +193,8 @@ export async function moveToStorage(
     redirect("/game");
   }
 
-  const box = await getAvailableBox();
-  if (!box) {
+  const boxes = await getAvailableBoxes();
+  if (!boxes) {
     return {
       success: false,
       error:
@@ -211,7 +211,7 @@ export async function moveToStorage(
   await db.transaction(async (tx) => {
     await tx
       .update(instances)
-      .set({ box: box, modifyDate: new Date() })
+      .set({ box: boxes[0], modifyDate: new Date() })
       .where(eq(instances.id, instanceId));
 
     await tx

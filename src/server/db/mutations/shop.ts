@@ -23,6 +23,7 @@ import {
   species,
   userCharms,
 } from "~/server/db/schema";
+import { getAvailableBoxes } from "~/lib/get-available-boxes";
 
 export type PurchasedSpecies = {
   name: string;
@@ -59,17 +60,24 @@ export async function purchaseBalls(
     return { success: false, error: "You cannot afford these balls." };
   }
 
+  let boxes: Awaited<ReturnType<typeof getAvailableBoxes>> = new Array(
+    quantity,
+  ).fill(0);
+
   if (
     !withinInstanceLimit(
       currProfile.profile.instanceCount + quantity,
       !!currProfile.catchingCharm,
     )
   ) {
-    return {
-      success: false,
-      error:
-        "You will go over your Pokémon limit. Reduce the number of balls you are purchasing or sell Pokémon if you want to buy more.",
-    };
+    boxes = await getAvailableBoxes(quantity);
+    if (!boxes) {
+      return {
+        success: false,
+        error:
+          "You will go over your Pokémon limit. Reduce the number of balls you are purchasing or sell Pokémon if you want to buy more.",
+      };
+    }
   }
 
   if (currBall.name === "Premier" && !regionName) {
@@ -202,9 +210,11 @@ export async function purchaseBalls(
 
       newYield += currSpecies.species.yield;
 
-      await tx
-        .insert(instances)
-        .values({ userId: session.user.id, speciesId: currSpecies.species.id });
+      await tx.insert(instances).values({
+        userId: session.user.id,
+        speciesId: currSpecies.species.id,
+        box: boxes[i],
+      });
     }
   });
 
@@ -220,7 +230,10 @@ export async function purchaseBalls(
       .set({
         totalYield: totalNewYield,
         balance: currProfile.profile.balance - currBall.cost * quantity,
-        instanceCount: currProfile.profile.instanceCount + quantity,
+        instanceCount:
+          boxes[0] === 0
+            ? currProfile.profile.instanceCount + quantity
+            : currProfile.profile.instanceCount,
       })
       .where(eq(profiles.userId, session.user.id));
   });

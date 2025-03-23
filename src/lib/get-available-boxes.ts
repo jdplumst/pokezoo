@@ -5,7 +5,7 @@ import { db } from "~/server/db";
 import { isAuthed } from "~/server/db/queries/auth";
 import { instances } from "~/server/db/schema";
 
-export async function getAvailableBox() {
+export async function getAvailableBoxes(quantity = 1) {
   const session = await isAuthed();
 
   const instanceData = await db
@@ -13,10 +13,16 @@ export async function getAvailableBox() {
     .from(instances)
     .where(and(eq(instances.userId, session.user.id), gte(instances.box, 1)));
 
-  for (let i = 0; i < 30; i++) {
+  const boxes: number[] = [];
+  for (let i = 0; i < 1; i++) {
     const box = instanceData.filter((instance) => instance.box === i + 1);
-    if (box.length < 30) {
-      return i + 1;
+    if (box.length < 9) {
+      for (let j = 0; j < 9 - box.length; j++) {
+        boxes.push(i + 1);
+      }
+    }
+    if (boxes.length >= quantity) {
+      return boxes;
     }
   }
 
