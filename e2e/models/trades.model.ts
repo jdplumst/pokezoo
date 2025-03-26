@@ -67,6 +67,7 @@ export class TradesPage {
       (response) =>
         response.url().includes("/trades") &&
         response.request().method() === "POST",
+      { timeout: 30000 },
     );
     await this.addTradeButton.click();
     await expect(this.descriptionCount).toHaveText("0 / 100");
