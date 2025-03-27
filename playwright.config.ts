@@ -31,8 +31,8 @@ export default defineConfig({
     /* Base URL to use in actions like `await page.goto('/')`. */
     baseURL: env.NEXTAUTH_URL,
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: "on-first-retry",
+    /* Collect trace on failed test. See https://playwright.dev/docs/trace-viewer */
+    trace: "on",
   },
   expect: {
     /* Set default timeout on assertions to be 10s */
