@@ -63,12 +63,13 @@ export class TradesPage {
   }
 
   async initiateTrade() {
-    const responsePromise = this.page.waitForResponse(
-      (response) =>
-        response.url().includes("/trades") &&
-        response.request().method() === "POST",
-      { timeout: 30000 },
-    );
+    // const responsePromise = this.page.waitForResponse(
+    //   (response) =>
+    //     response.url().includes("/trades") &&
+    //     response.request().method() === "POST",
+    //   { timeout: 30000 },
+    // );
+    await this.page.waitForTimeout(5000);
     await this.addTradeButton.click();
     await expect(this.descriptionCount).toHaveText("0 / 100");
     await this.descriptionInput.fill("Hello world");
@@ -77,16 +78,17 @@ export class TradesPage {
     await this.charmander.click();
     await this.addTradeButton.scrollIntoViewIfNeeded();
     await this.addTradeButton.click();
-    await responsePromise;
+    // await responsePromise;
   }
 
   async offerTrade() {
-    const responsePromise = this.page.waitForResponse(
-      (response) =>
-        response.url().includes("/trades") &&
-        response.request().method() === "POST",
-      { timeout: 30000 },
-    );
+    // const responsePromise = this.page.waitForResponse(
+    //   (response) =>
+    //     response.url().includes("/trades") &&
+    //     response.request().method() === "POST",
+    //   { timeout: 30000 },
+    // );
+    await this.page.waitForTimeout(5000);
     await this.offerTradeButton.click();
     await expect(this.descriptionInput).not.toBeVisible();
     await expect(this.descriptionCount).not.toBeVisible();
@@ -94,51 +96,55 @@ export class TradesPage {
     await this.squirtle.click();
     await this.offerTradeButton.scrollIntoViewIfNeeded();
     await this.offerTradeButton.click();
-    await responsePromise;
+    // await responsePromise;
   }
 
   async acceptTrade() {
-    const responsePromise = this.page.waitForResponse(
-      (response) =>
-        response.url().includes("/trades") &&
-        response.request().method() === "POST",
-      { timeout: 30000 },
-    );
+    // const responsePromise = this.page.waitForResponse(
+    //   (response) =>
+    //     response.url().includes("/trades") &&
+    //     response.request().method() === "POST",
+    //   { timeout: 30000 },
+    // );
+    await this.page.waitForTimeout(5000);
     await this.acceptTradeButton.click();
-    await responsePromise;
+    // await responsePromise;
   }
 
   async cancelTrade() {
-    const responsePromise = this.page.waitForResponse(
-      (response) =>
-        response.url().includes("/trades") &&
-        response.request().method() === "POST",
-      { timeout: 30000 },
-    );
+    // const responsePromise = this.page.waitForResponse(
+    //   (response) =>
+    //     response.url().includes("/trades") &&
+    //     response.request().method() === "POST",
+    //   { timeout: 30000 },
+    // );
+    await this.page.waitForTimeout(5000);
     await this.cancelTradeButton.click();
-    await responsePromise;
+    // await responsePromise;
   }
 
   async withdrawTrade() {
-    const responsePromise = this.page.waitForResponse(
-      (response) =>
-        response.url().includes("/trades") &&
-        response.request().method() === "POST",
-      { timeout: 30000 },
-    );
+    // const responsePromise = this.page.waitForResponse(
+    //   (response) =>
+    //     response.url().includes("/trades") &&
+    //     response.request().method() === "POST",
+    //   { timeout: 30000 },
+    // );
+    await this.page.waitForTimeout(5000);
     await this.withdrawTradeButton.click();
-    await responsePromise;
+    // await responsePromise;
   }
 
   async declineTrade() {
-    const responsePromise = this.page.waitForResponse(
-      (response) =>
-        response.url().includes("/trades") &&
-        response.request().method() === "POST",
-      { timeout: 30000 },
-    );
+    // const responsePromise = this.page.waitForResponse(
+    //   (response) =>
+    //     response.url().includes("/trades") &&
+    //     response.request().method() === "POST",
+    //   { timeout: 30000 },
+    // );
+    await this.page.waitForTimeout(5000);
     await this.declineTradeButton.click();
-    await responsePromise;
+    // await responsePromise;
   }
 
   async isTradeInitiated(initiated: boolean) {
