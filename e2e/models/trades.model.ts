@@ -60,7 +60,7 @@ export class TradesPage {
 
   async goto() {
     await this.page.goto("./trades");
-    await this.page.reload();
+    await this.page.reload({ waitUntil: "networkidle" });
   }
 
   async initiateTrade() {
