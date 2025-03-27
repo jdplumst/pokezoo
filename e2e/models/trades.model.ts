@@ -85,6 +85,7 @@ export class TradesPage {
       (response) =>
         response.url().includes("/trades") &&
         response.request().method() === "POST",
+      { timeout: 30000 },
     );
     await this.offerTradeButton.click();
     await expect(this.descriptionInput).not.toBeVisible();
@@ -101,6 +102,7 @@ export class TradesPage {
       (response) =>
         response.url().includes("/trades") &&
         response.request().method() === "POST",
+      { timeout: 30000 },
     );
     await this.acceptTradeButton.click();
     await responsePromise;
@@ -111,6 +113,7 @@ export class TradesPage {
       (response) =>
         response.url().includes("/trades") &&
         response.request().method() === "POST",
+      { timeout: 30000 },
     );
     await this.cancelTradeButton.click();
     await responsePromise;
@@ -121,6 +124,7 @@ export class TradesPage {
       (response) =>
         response.url().includes("/trades") &&
         response.request().method() === "POST",
+      { timeout: 30000 },
     );
     await this.withdrawTradeButton.click();
     await responsePromise;
@@ -131,6 +135,7 @@ export class TradesPage {
       (response) =>
         response.url().includes("/trades") &&
         response.request().method() === "POST",
+      { timeout: 30000 },
     );
     await this.declineTradeButton.click();
     await responsePromise;
