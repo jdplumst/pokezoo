@@ -20,7 +20,6 @@ jobs:
         run: pnpm exec playwright install --with-deps
       - name: Run Playwright tests
         env:
-          NODE_ENV: production
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           COOKIE_NAME: ${{ secrets.COOKIE_NAME }}
           GREEN_SESSION: ${{ secrets.GREEN_SESSION }}
@@ -30,6 +29,7 @@ jobs:
           NEXTAUTH_SECRET: ${{ secrets.NEXTAUTH_SECRET }}
           UPSTASH_REDIS_REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
           UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+          NODE_ENV: "production"
           SKIP_VALIDATION: "true"
         run: pnpm exec playwright test
       - uses: actions/upload-artifact@v4
