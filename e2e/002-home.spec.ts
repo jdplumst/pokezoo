@@ -1,6 +1,8 @@
 import { test, expect } from "@playwright/test";
+import { env } from "~/env";
 
 test("home page contents", async ({ page }) => {
+  console.log(env.NODE_ENV);
   await page.goto("./");
   await expect(page).toHaveTitle("PokéZoo");
   await expect(page.locator("h1")).toContainText("PokéZoo");
