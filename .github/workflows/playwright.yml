@@ -31,6 +31,7 @@ jobs:
           UPSTASH_REDIS_REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
           NODE_ENV: "production"
           SKIP_VALIDATION: "true"
+          AUTH_TRUST_HOST: "true"
         run: pnpm exec playwright test
       - uses: actions/upload-artifact@v4
         if: always()
