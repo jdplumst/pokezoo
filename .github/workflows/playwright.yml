@@ -20,6 +20,7 @@ jobs:
         run: pnpm exec playwright install --with-deps
       - name: Run Playwright tests
         env:
+          NODE_ENV: "test"
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           COOKIE_NAME: ${{ secrets.COOKIE_NAME }}
           GREEN_SESSION: ${{ secrets.GREEN_SESSION }}
