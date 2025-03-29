@@ -201,11 +201,11 @@ test.describe("end to end trades", () => {
   });
 });
 
-test.afterEach(
-  async ({ redTradesPage, blueTradesPage, redGamePage, blueGamePage }) => {
-    await redTradesPage.page.close();
-    await blueTradesPage.page.close();
-    await redGamePage.page.close();
-    await blueGamePage.page.close();
-  },
-);
+// test.afterEach(
+//   async ({ redTradesPage, blueTradesPage, redGamePage, blueGamePage }) => {
+//     await redTradesPage.page.close();
+//     await blueTradesPage.page.close();
+//     await redGamePage.page.close();
+//     await blueGamePage.page.close();
+//   },
+// );
