@@ -32,12 +32,12 @@ export async function Event() {
       )}
 
       {/* PokéZoo Day Unclaimed */}
-      {day >= 29 && day <= 31 && month === 3 && !claimedEvent && (
+      {day >= 5 && day <= 12 && month === 4 && !claimedEvent && (
         <EventButton event="PokéZoo Day" />
       )}
 
       {/* PokéZoo Day Claimed */}
-      {day >= 29 && day <= 31 && month === 3 && claimedEvent && (
+      {day >= 5 && day <= 12 && month === 4 && claimedEvent && (
         <EventMessage event="PokéZoo Day" />
       )}
     </div>
