@@ -1,16 +1,26 @@
 import "server-only";
 
-import { and, eq } from "drizzle-orm";
+import { and, eq, sql } from "drizzle-orm";
 import { MAX_BALANCE } from "~/lib/constants";
 import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { getTime } from "~/server/db/queries/cookies";
-import { instances, profiles, species, trades } from "~/server/db/schema";
+import {
+  habitats,
+  instances,
+  profiles,
+  rarities,
+  regions,
+  species,
+  trades,
+  types,
+} from "~/server/db/schema";
 import { type MessageResponse, type ErrorResponse } from "~/lib/types";
 import { redirect } from "next/navigation";
 import { getAvailableBoxes } from "~/lib/get-available-boxes";
 import { revalidatePath } from "next/cache";
 import { calcNewYield } from "~/lib/calc-new-yield";
+import { alias } from "drizzle-orm/pg-core";
 
 type Cards = {
   Common: number;
@@ -228,4 +238,60 @@ export async function moveToStorage(
     success: true,
     message: "The pokémon has been moved to your storage.",
   };
+}
+
+export async function claimEvent(userId: string) {
+  const currProfile = await hasProfile();
+
+  const typeOne = alias(types, "typeOne");
+  const typeTwo = alias(types, "typeTwo");
+
+  const gift = (
+    await db
+      .select({
+        id: species.id,
+        pokedexNumber: species.pokedexNumber,
+        name: species.name,
+        rarity: rarities.name,
+        yield: species.yield,
+        img: species.img,
+        sellPrice: species.sellPrice,
+        shiny: species.shiny,
+        typeOne: typeOne.name,
+        typeTwo: typeTwo.name,
+        generation: species.generation,
+        habitat: habitats.name,
+        region: regions.name,
+      })
+      .from(species)
+      .innerJoin(regions, eq(species.regionId, regions.id))
+      .innerJoin(rarities, eq(species.rarityId, rarities.id))
+      .innerJoin(habitats, eq(species.habitatId, habitats.id))
+      .innerJoin(typeOne, eq(species.typeOneId, typeOne.id))
+      .leftJoin(typeTwo, eq(species.typeTwoId, typeTwo.id))
+      .where(eq(species.shiny, true))
+      .orderBy(sql`RANDOM()`)
+      .limit(1)
+  )[0];
+
+  const newYield = calcNewYield(
+    currProfile.profile.totalYield,
+    gift.yield,
+    "add",
+  );
+
+  await db.transaction(async (tx) => {
+    await tx
+      .update(profiles)
+      .set({
+        claimedEvent: true,
+        totalYield: newYield,
+        instanceCount: currProfile.profile.instanceCount + 1,
+      })
+      .where(eq(profiles.userId, userId));
+
+    await tx.insert(instances).values({ userId: userId, speciesId: gift.id });
+  });
+
+  return { success: true, gift: gift };
 }
