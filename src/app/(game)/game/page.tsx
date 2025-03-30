@@ -1,4 +1,5 @@
 import { type Metadata } from "next";
+import { Event } from "~/components/event";
 import GameGrid from "~/components/game-grid";
 import RewardButton from "~/components/reward-button";
 import StarterSelect from "~/components/starter-select";
@@ -37,6 +38,7 @@ export default async function Game() {
         <StarterSelect regionId={9} regionName="Hisui" />
       ) : null}
       <RewardButton time={time} profile={data.currProfile} />
+      <Event />
       <GameGrid />
     </div>
   );

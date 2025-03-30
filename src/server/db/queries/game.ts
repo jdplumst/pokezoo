@@ -33,3 +33,18 @@ export async function getGame() {
 
   return { currProfile };
 }
+
+export async function getEvent() {
+  const session = await isAuthed();
+
+  const claimedEvent = (
+    await db
+      .select({
+        claimedEvent: profiles.claimedEvent,
+      })
+      .from(profiles)
+      .where(eq(profiles.userId, session.user.id))
+  )[0];
+
+  return claimedEvent.claimedEvent;
+}

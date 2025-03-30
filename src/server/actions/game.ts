@@ -1,11 +1,13 @@
 "use server";
 
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { type MessageResponse, type ErrorResponse } from "~/lib/types";
 import {
   claimReward,
   moveToStorage,
   sellPokemon,
+  claimEvent,
 } from "~/server/db/mutations/game";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 
@@ -64,4 +66,18 @@ export async function moveToStorageAction(
     session.user.id,
     currProfile,
   );
+}
+
+export async function claimEventAction(
+  _previousState: unknown,
+  _formData: FormData,
+) {
+  const session = await isAuthed();
+
+  const currProfile = await hasProfile();
+  if (currProfile.profile.claimedEvent) {
+    redirect("/game");
+  }
+
+  return await claimEvent(session.user.id);
 }

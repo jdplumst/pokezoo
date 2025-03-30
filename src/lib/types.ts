@@ -4,6 +4,10 @@ export const ThemeValues = ["blue", "purple", "green", "orange"] as const;
 export type Theme = (typeof ThemeValues)[number];
 export const ZodTheme = z.enum(ThemeValues);
 
+export const EventValues = ["Christmas", "New Year's", "PokéZoo Day"] as const;
+export type Event = (typeof EventValues)[number];
+export const ZodEvent = z.enum(EventValues);
+
 export const SortValues = [
   "Oldest",
   "Newest",
