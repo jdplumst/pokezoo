@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import "server-only";
 import { db } from "~/server/db";
@@ -42,5 +42,6 @@ export async function getStorage(box: number) {
     .innerJoin(typeOne, eq(species.typeOneId, typeOne.id))
     .leftJoin(typeTwo, eq(species.typeTwoId, typeTwo.id))
     .innerJoin(habitats, eq(species.habitatId, habitats.id))
-    .where(eq(instances.box, box));
+    .where(eq(instances.box, box))
+    .orderBy(asc(instances.modifyDate));
 }
