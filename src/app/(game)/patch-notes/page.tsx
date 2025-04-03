@@ -16,6 +16,9 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
+      <Patch patch="8.14" date="April 2, 2025">
+        <Note note="Added button to switch Pokémon between boxes." />
+      </Patch>
       <Patch patch="8.13" date="April 1, 2025">
         <Note note="Pokémon in storage is now sorted by when they were placed in storage. Traded Pokémon are considered newly added to storage despite the position of the Pokémon it was traded for." />
       </Patch>
@@ -87,7 +90,7 @@ export default async function PatchNotes() {
       </Patch>
       <Patch patch="8.04" date="November 26, 2024">
         <Note
-          note="Added Hisui Pokémon! Start collecting Pokémon from Hisui 
+          note="Added Hisui Pokémon! Start collecting Pokémon from Hisui
                 alongside Pokémon from the previous regions."
         />
         <Note
@@ -151,7 +154,7 @@ export default async function PatchNotes() {
       </Patch>
       <Patch patch="7.00" date="April 23, 2024">
         <Note
-          note="Added Alola Pokémon! Start collecting Pokémon from Alola 
+          note="Added Alola Pokémon! Start collecting Pokémon from Alola
                 alongside Pokémon from the previous regions."
         />
         <Note
@@ -167,7 +170,7 @@ export default async function PatchNotes() {
       </Patch>
       <Patch patch="6.10" date="March 10, 2024">
         <Note
-          note="Added Wildcards to Shop! Users can now trade in 
+          note="Added Wildcards to Shop! Users can now trade in
                 their wildcards for wildcards of other rarities."
         />
       </Patch>
