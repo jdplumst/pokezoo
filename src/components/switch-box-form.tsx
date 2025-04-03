@@ -42,7 +42,9 @@ export function SwitchBoxForm(props: { instanceId: string }) {
           <DropdownMenuGroup className="mx-auto text-center">
             {boxes.map((b) => (
               <DropdownMenuItem key={b} className="flex justify-center">
-                <button onClick={() => setBox(String(b))}>Box {b}</button>
+                <button className="w-full" onClick={() => setBox(String(b))}>
+                  Box {b}
+                </button>
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
