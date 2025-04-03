@@ -2,6 +2,7 @@ import Image from "next/image";
 import { z } from "zod";
 import { MovePartyForm } from "~/components/move-party-form";
 import { MoveStorageForm } from "~/components/move-storage-form";
+import { SwitchBoxForm } from "~/components/switch-box-form";
 import TypeButton from "~/components/type-button";
 import {
   Sheet,
@@ -110,7 +111,10 @@ export function PokemonSheet(props: {
           </div>
         </SheetHeader>
         {props.storage ? (
-          <MovePartyForm instanceId={pokemon.data.id} />
+          <>
+            <MovePartyForm instanceId={pokemon.data.id} />
+            <SwitchBoxForm instanceId={pokemon.data.id} />
+          </>
         ) : (
           <MoveStorageForm instanceId={pokemon.data.id} />
         )}

@@ -8,6 +8,7 @@ import { type ErrorResponse, type MessageResponse } from "~/lib/types";
 import { type hasProfile } from "~/server/db/queries/auth";
 import { calcNewYield } from "~/lib/calc-new-yield";
 import { withinInstanceLimit } from "~/lib/within-instance-limit";
+import { redirect } from "next/navigation";
 
 export async function moveToParty(
   instanceId: string,
@@ -69,5 +70,32 @@ export async function moveToParty(
   return {
     success: true,
     message: "The pokémon has been moved to your party.",
+  };
+}
+
+export async function switchBox(
+  instanceId: string,
+  box: number,
+  userId: string,
+): Promise<MessageResponse> {
+  const currInstance = (
+    await db
+      .select({ box: instances.box })
+      .from(instances)
+      .where(and(eq(instances.id, instanceId), eq(instances.userId, userId)))
+  )[0];
+
+  if (!currInstance || currInstance.box === 0) {
+    redirect("/storage");
+  }
+
+  await db
+    .update(instances)
+    .set({ box: box, modifyDate: new Date() })
+    .where(eq(instances.id, instanceId));
+
+  return {
+    success: true,
+    message: "You have moved your pokémon to a different box.",
   };
 }
