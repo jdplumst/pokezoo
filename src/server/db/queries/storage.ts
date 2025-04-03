@@ -12,7 +12,7 @@ import {
 } from "~/server/db/schema";
 
 export async function getStorage(box: number) {
-  if (box < 1 || box > 8) {
+  if (box < 1 || box > 30) {
     return [];
   }
 
