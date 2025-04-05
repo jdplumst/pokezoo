@@ -16,6 +16,16 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
+      <Patch patch="9.00" date="April 5, 2025">
+        <Note
+          note="Added Paldea Pokémon! Start collecting Pokémon from Paldea 
+                alongside Pokémon from the previous regions."
+        />
+        <Note
+          note="All exising users will get to choose a Paldea starter between
+                Sprigatito, Fuecoco, and Quaxly for free!"
+        />
+      </Patch>
       <Patch patch="8.14" date="April 2, 2025">
         <Note note="Added button to switch Pokémon between boxes." />
       </Patch>
