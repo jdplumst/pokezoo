@@ -33,6 +33,7 @@ export const RegionValues = [
   "Alola",
   "Galar",
   "Hisui",
+  "Paldea",
 ] as const;
 export type Region = (typeof RegionValues)[number];
 export const ZodRegion = z.enum(RegionValues);
