@@ -36,6 +36,8 @@ export default async function Game() {
         <StarterSelect regionId={8} regionName="Galar" />
       ) : data.currProfile.hisuiStarter === false ? (
         <StarterSelect regionId={9} regionName="Hisui" />
+      ) : data.currProfile.paldeaStarter === false ? (
+        <StarterSelect regionId={10} regionName="Paldea" />
       ) : null}
       <RewardButton time={time} profile={data.currProfile} />
       <Event />

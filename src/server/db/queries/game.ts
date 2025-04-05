@@ -22,6 +22,7 @@ export async function getGame() {
         alolaStarter: profiles.alolaStarter,
         galarStarter: profiles.galarStarter,
         hisuiStarter: profiles.hisuiStarter,
+        paldeaStarter: profiles.paldeaStarter,
       })
       .from(profiles)
       .where(eq(profiles.userId, session.user.id))

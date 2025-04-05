@@ -129,6 +129,7 @@ const populateGenNineDB = async () => {
       generation: 9,
       habitatId: habitat,
       regionId: 10,
+      starter: i === 906 || i === 909 || i === 912,
     });
 
     await db.insert(species).values({

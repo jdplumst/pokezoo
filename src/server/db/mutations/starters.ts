@@ -89,6 +89,14 @@ export async function selectStarter(
       success: false,
       error: "You have already received a Hisui starter.",
     };
+  } else if (
+    speciesData.region === "Paldea" &&
+    currProfile.profile.paldeaStarter
+  ) {
+    return {
+      success: false,
+      error: "You have already received a Paldea starter.",
+    };
   }
 
   await db.transaction(async (tx) => {
@@ -129,6 +137,10 @@ export async function selectStarter(
           speciesData.region === "Hisui"
             ? true
             : currProfile.profile.hisuiStarter,
+        paldeaStarter:
+          speciesData.region === "Paldea"
+            ? true
+            : currProfile.profile.paldeaStarter,
       })
       .where(eq(profiles.userId, session.user.id));
 
