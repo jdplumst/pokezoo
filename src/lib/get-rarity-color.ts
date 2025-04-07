@@ -16,5 +16,7 @@ export function getRarityColor(rarity: Rarity) {
       return "bg-ub-unfocus hover:bg-ub-focus shadow-ub-focus";
     case "Gigantamax":
       return "bg-gmax-unfocus hover:bg-gmax-focus shadow-gmax-focus";
+    case "Paradox":
+      return "bg-paradox-unfocus hover:bg-paradox-focus shadow-paradox-focus";
   }
 }

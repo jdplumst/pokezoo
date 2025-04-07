@@ -24,6 +24,8 @@ const config = {
         "ub-unfocus": "var(--color-ub-unfocus)",
         "gmax-focus": "var(--color-gmax-focus)",
         "gmax-unfocus": "var(--color-gmax-unfocus)",
+        "paradox-focus": "var(--color-paradox-focus)",
+        "paradox-unfocus": "var(--color-paradox-unfocus)",
         normal: "var(--color-normal)",
         grass: "var(--color-grass)",
         bug: "var(--color-bug)",
