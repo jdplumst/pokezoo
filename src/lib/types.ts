@@ -46,6 +46,7 @@ export const RarityValues = [
   "Mega",
   "Ultra Beast",
   "Gigantamax",
+  "Paradox",
 ] as const;
 export type Rarity = (typeof RarityValues)[number];
 export const ZodRarity = z.enum(RarityValues);

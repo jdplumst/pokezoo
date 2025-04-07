@@ -117,6 +117,7 @@ export default function BallSlider(props: {
               <form action={action}>
                 <input type="hidden" name="ballId" value={props.ballId} />
                 <input
+                  readOnly
                   type="number"
                   name="quantity"
                   value={sliderValue[0]}
