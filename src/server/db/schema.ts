@@ -125,6 +125,7 @@ export const balls = pgTable("ball", {
   megaChance: integer("megaChance").notNull(),
   ubChance: integer("ubChance").notNull().default(0),
   gmaxChance: integer("gmaxChance").notNull().default(0),
+  paradoxChance: integer("paradoxChance").notNull().default(0),
 });
 
 export const charms = pgTable("charm", {

@@ -153,6 +153,9 @@ export async function purchaseBalls(
   for (let i = 0; i < currBall.gmaxChance; i++) {
     randomizer.push(7);
   }
+  for (let i = 0; i < currBall.paradoxChance; i++) {
+    randomizer.push(8);
+  }
 
   const generatedRarities: number[] = [];
   for (let i = 0; i < quantity; i++) {

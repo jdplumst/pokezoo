@@ -68,6 +68,9 @@ export default function BallsGrid(props: {
               <div className="text-gmax-unfocus">
                 {b.gmaxChance}% Gigantamax
               </div>
+              <div className="text-paradox-focus">
+                {b.paradoxChance}% Paradox
+              </div>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>

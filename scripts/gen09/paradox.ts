@@ -2,7 +2,7 @@ import { PokemonClient } from "pokenode-ts";
 import { type z } from "zod";
 import { capitalize } from "../helpers/capitalize";
 import { db } from "~/server/db";
-import { rarities, species } from "~/server/db/schema";
+import { balls, rarities, species } from "~/server/db/schema";
 import { type ZodSpeciesType } from "~/lib/types";
 import { getHabitat } from "../helpers/get-habitat";
 
@@ -41,6 +41,21 @@ const rare = [988, 994, 1007, 1008, 1010, 1022, 1023];
 const paradoxPokemon = async () => {
   // Add Paradox Rarity
   await db.insert(rarities).values({ id: 8, name: "Paradox" });
+
+  // Add Stange Ball
+  await db.insert(balls).values({
+    name: "Strange",
+    img: "https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/items/lastrange-ball.png",
+    cost: 8000000,
+    commonChance: 0,
+    rareChance: 0,
+    epicChance: 0,
+    legendaryChance: 93,
+    megaChance: 0,
+    ubChance: 0,
+    gmaxChance: 0,
+    paradoxChance: 9,
+  });
 
   const api = new PokemonClient();
 
