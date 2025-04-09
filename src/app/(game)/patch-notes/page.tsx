@@ -16,6 +16,10 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
+      <Patch patch="9.02" date="Aprils 9, 2025">
+        <Note note="Added Paldean regional forms." />
+        <Note note="Added varieties for Gimmighoul, Ogerpon and Terapagos." />
+      </Patch>
       <Patch patch="9.01" date="April 7, 2025">
         <Note note="Added a new rarity: Paradox!" />
         <Note note="Added Paradox Pokémon." />
