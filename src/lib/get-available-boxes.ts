@@ -14,7 +14,7 @@ export async function getAvailableBoxes(quantity = 1) {
     .where(and(eq(instances.userId, session.user.id), gte(instances.box, 1)));
 
   const boxes: number[] = [];
-  for (let i = 0; i < 1; i++) {
+  for (let i = 0; i < 30; i++) {
     const box = instanceData.filter((instance) => instance.box === i + 1);
     if (box.length < 30) {
       for (let j = 0; j < 30 - box.length; j++) {
