@@ -16,7 +16,7 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
-      <Patch patch="9.03" date="April 9, 2025">
+      <Patch patch="9.03" date="April 10, 2025">
         <Note note="Added Paldea and Paradox Achievements." />
       </Patch>
       <Patch patch="9.02" date="April 9, 2025">
