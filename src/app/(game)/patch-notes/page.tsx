@@ -16,6 +16,9 @@ export default async function PatchNotes() {
   return (
     <div className="px-8">
       <h1 className="py-4 text-5xl font-bold">Patch Notes</h1>
+      <Patch patch="9.04" date="April 11, 2025">
+        <Note note="Fixed pokémon not being able to be moved beyond box 1 in storage." />
+      </Patch>
       <Patch patch="9.03" date="April 10, 2025">
         <Note note="Added Paldea and Paradox Achievements." />
       </Patch>
