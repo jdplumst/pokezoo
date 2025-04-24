@@ -66,6 +66,7 @@ test("withdraw trade", async ({ redTradesPage, blueTradesPage }) => {
   await redTradesPage.initiateTrade();
   await blueTradesPage.goto();
   await blueTradesPage.offerTrade();
+  await blueTradesPage.closeToast.click();
   await blueTradesPage.withdrawTrade();
   await expect(blueTradesPage.topbar.content).toContainText(
     "You have 1 / 2,000",

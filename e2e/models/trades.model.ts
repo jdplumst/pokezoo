@@ -24,6 +24,7 @@ export class TradesPage {
   readonly offererSprite: Locator;
   readonly offererPokemon: Locator;
   readonly offererSuccessMessage: Locator;
+  readonly closeToast: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -56,6 +57,7 @@ export class TradesPage {
     this.offererSuccessMessage = page
       .getByText("You have successfully added an offer to the trade.")
       .first();
+    this.closeToast = page.getByRole("button", { name: "Close toast" });
   }
 
   async goto() {
