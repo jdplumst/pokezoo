@@ -19,7 +19,7 @@ export default async function RootLayout({
     <html lang="en" className={`${GeistSans.className} ${theme} ${mode}`}>
       <body>
         {env.NODE_ENV === "development" && <ReactScan />}
-        <Toaster />
+        <Toaster closeButton />
         <TRPCReactProvider>{children}</TRPCReactProvider>
       </body>
     </html>
