@@ -77,7 +77,7 @@ export async function switchBox(
   instanceId: string,
   box: number,
   userId: string,
-): Promise<MessageResponse> {
+): Promise<MessageResponse | ErrorResponse> {
   const currInstance = (
     await db
       .select({ box: instances.box })
@@ -87,6 +87,18 @@ export async function switchBox(
 
   if (!currInstance || currInstance.box === 0) {
     redirect("/storage");
+  }
+
+  const instancesInBox = await db
+    .select()
+    .from(instances)
+    .where(eq(instances.box, box));
+
+  if (instancesInBox.length >= 30) {
+    return {
+      success: false,
+      error: "The box you are trying to move to is full.",
+    };
   }
 
   await db
