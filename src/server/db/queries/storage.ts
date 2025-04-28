@@ -1,6 +1,7 @@
-import { asc, eq } from "drizzle-orm";
-import { alias } from "drizzle-orm/pg-core";
 import "server-only";
+
+import { and, asc, eq } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
 import { db } from "~/server/db";
 import {
   habitats,
@@ -10,8 +11,11 @@ import {
   species,
   types,
 } from "~/server/db/schema";
+import { isAuthed } from "./auth";
 
 export async function getStorage(box: number) {
+  const auth = await isAuthed();
+
   if (box < 1 || box > 30) {
     return [];
   }
@@ -42,6 +46,6 @@ export async function getStorage(box: number) {
     .innerJoin(typeOne, eq(species.typeOneId, typeOne.id))
     .leftJoin(typeTwo, eq(species.typeTwoId, typeTwo.id))
     .innerJoin(habitats, eq(species.habitatId, habitats.id))
-    .where(eq(instances.box, box))
+    .where(and(eq(instances.box, box), eq(instances.userId, auth.user.id)))
     .orderBy(asc(instances.modifyDate));
 }
