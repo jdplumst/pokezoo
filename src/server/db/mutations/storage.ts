@@ -34,7 +34,7 @@ export async function moveToParty(
 
   if (
     !withinInstanceLimit(
-      currProfile.profile.instanceCount,
+      currProfile.profile.instanceCount + 1,
       !!currProfile.catchingCharm,
     )
   ) {
