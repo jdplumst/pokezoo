@@ -1,7 +1,7 @@
 export function withinInstanceLimit(
-  instanceCount: number,
+  newInstanceCount: number, // instances after
   catchingCharm: boolean,
 ) {
   const limit = catchingCharm ? 3000 : 2000;
-  return instanceCount <= limit;
+  return newInstanceCount <= limit;
 }
