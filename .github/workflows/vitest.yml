@@ -1,0 +1,17 @@
+name: Vitest Tests
+on:
+  pull_request:
+    branches: [main, master]
+jobs:
+  test:
+    timeout-minutes: 20
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 8
+      - name: Install dependencies
+        run: pnpm install
+      - name: Run Vitest tests
+        run: pnpm run test
