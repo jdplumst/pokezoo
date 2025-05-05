@@ -42,11 +42,11 @@ export const accounts = pgTable(
     id_token: text("id_token"),
     session_state: text("session_state"),
   },
-  (account) => ({
-    compoundKey: primaryKey({
+  (account) => [
+    primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  }),
+  ],
 );
 
 export const sessions = pgTable("session", {
@@ -64,9 +64,7 @@ export const verificationTokens = pgTable(
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
   },
-  (vt) => ({
-    compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  }),
+  (vt) => [primaryKey({ columns: [vt.identifier, vt.token] })],
 );
 
 // PokeZoo Tables
@@ -93,11 +91,11 @@ export const achievements = pgTable(
     shiny: boolean("shiny").notNull(),
     generation: integer("generation").notNull(),
   },
-  (a) => ({
-    typeIdIdx: index("Achievement_typeId_idx").on(a.typeId),
-    attributeIdIdx: index("Achievement_attributeId_id").on(a.attributeId),
-    regionIdIdx: index("Achievement_regionId_idx").on(a.regionId),
-  }),
+  (a) => [
+    index("Achievement_typeId_idx").on(a.typeId),
+    index("Achievement_attributeId_id").on(a.attributeId),
+    index("Achievement_regionId_idx").on(a.regionId),
+  ],
 );
 
 export const achievementTypes = pgTable("achievementType", {
@@ -162,12 +160,10 @@ export const instances = pgTable(
       .default(sql`now()`),
     box: integer("box").notNull().default(0),
   },
-  (i) => {
-    return {
-      userIdIdx: index("Instance_userId_idx").on(i.userId),
-      speciesIdIdx: index("Instance_speciesId_idx").on(i.speciesId),
-    };
-  },
+  (i) => [
+    index("Instance_userId_idx").on(i.userId),
+    index("Instance_speciesId_idx").on(i.speciesId),
+  ],
 );
 
 export const profiles = pgTable(
@@ -202,11 +198,7 @@ export const profiles = pgTable(
     hisuiStarter: boolean("hisuiStarter").notNull().default(true),
     paldeaStarter: boolean("paldeaStarter").notNull().default(true),
   },
-  (p) => {
-    return {
-      userIdIdx: index("Profile_userId_idx").on(p.userId),
-    };
-  },
+  (p) => [index("Profile_userId_idx").on(p.userId)],
 );
 
 export const quests = pgTable(
@@ -220,11 +212,7 @@ export const quests = pgTable(
     reward: integer("reward").notNull(),
     goal: integer("goal").notNull(),
   },
-  (q) => {
-    return {
-      typeIdIdx: index("Quest_typeId_idx").on(q.typeId),
-    };
-  },
+  (q) => [index("Quest_typeId_idx").on(q.typeId)],
 );
 
 export const questTypes = pgTable("questType", {
@@ -273,15 +261,13 @@ export const species = pgTable(
       .references(() => regions.id, { onDelete: "cascade" }),
     starter: boolean("starter").notNull().default(false),
   },
-  (s) => {
-    return {
-      rarityIdIdx: index("Species_rarityId_idx").on(s.rarityId),
-      typeOneIdIdx: index("Species_typeOneId_idx").on(s.typeOneId),
-      typeTwoIdIdx: index("Species_typeTwoId_idx").on(s.typeTwoId),
-      habitatIdIdx: index("Species_habitatId_idx").on(s.habitatId),
-      regionIdIdx: index("Species_regionId_idx").on(s.regionId),
-    };
-  },
+  (s) => [
+    index("Species_rarityId_idx").on(s.rarityId),
+    index("Species_typeOneId_idx").on(s.typeOneId),
+    index("Species_typeTwoId_idx").on(s.typeTwoId),
+    index("Species_habitatId_idx").on(s.habitatId),
+    index("Species_regionId_idx").on(s.regionId),
+  ],
 );
 
 export const trades = pgTable(
@@ -314,18 +300,12 @@ export const trades = pgTable(
       },
     ),
   },
-  (t) => {
-    return {
-      initiatorIdIdx: index("Trade_initiatorId_idx").on(t.initiatorId),
-      offererIdIdx: index("Trade_offererId_idx").on(t.offererId),
-      initiatorInstanceIdIdx: index("Trade_initiatorInstanceId_idx").on(
-        t.initiatorInstanceId,
-      ),
-      offererInstanceIdIdx: index("Trade_offererInstanceId_idx").on(
-        t.offererInstanceId,
-      ),
-    };
-  },
+  (t) => [
+    index("Trade_initiatorId_idx").on(t.initiatorId),
+    index("Trade_offererId_idx").on(t.offererId),
+    index("Trade_initiatorInstanceId_idx").on(t.initiatorInstanceId),
+    index("Trade_offererInstanceId_idx").on(t.offererInstanceId),
+  ],
 );
 
 export const types = pgTable("type", {
@@ -350,14 +330,10 @@ export const userAchievements = pgTable(
       .notNull()
       .default(sql`now()`),
   },
-  (ua) => {
-    return {
-      userIdIdx: index("UserAchievement_userId_idx").on(ua.userId),
-      achievementIdIdx: index("UserAchievement_achievementId_idx").on(
-        ua.achievementId,
-      ),
-    };
-  },
+  (ua) => [
+    index("UserAchievement_userId_idx").on(ua.userId),
+    index("UserAchievement_achievementId_idx").on(ua.achievementId),
+  ],
 );
 
 export const userCharms = pgTable(
@@ -377,12 +353,10 @@ export const userCharms = pgTable(
       .notNull()
       .default(sql`now()`),
   },
-  (uc) => {
-    return {
-      userIdIdx: index("UserCharm_userId_idx").on(uc.userId),
-      charmIdIdx: index("UserCharm_charmId_idx").on(uc.charmId),
-    };
-  },
+  (uc) => [
+    index("UserCharm_userId_idx").on(uc.userId),
+    index("UserCharm_charmId_idx").on(uc.charmId),
+  ],
 );
 
 export const userQuests = pgTable(
@@ -401,12 +375,10 @@ export const userQuests = pgTable(
     count: integer("count").notNull(),
     claimed: boolean("claimed").notNull(),
   },
-  (uq) => {
-    return {
-      userIdIdx: index("UserQuest_userId_idx").on(uq.userId),
-      questIdIdx: index("UserQuest_questId_idx").on(uq.questId),
-    };
-  },
+  (uq) => [
+    index("UserQuest_userId_idx").on(uq.userId),
+    index("UserQuest_questId_idx").on(uq.questId),
+  ],
 );
 
 // Drizzle Zod Table Types
