@@ -16,10 +16,11 @@ import { selectStarterAction } from "~/server/actions/starters";
 import LoadingSpinner from "~/components/loading-spinner";
 import { api } from "~/trpc/react";
 import { toast } from "sonner";
+import { type Region } from "~/lib/types";
 
 export default function StarterSelect(props: {
   regionId: number;
-  regionName: string;
+  regionName: Region;
 }) {
   const router = useRouter();
 
