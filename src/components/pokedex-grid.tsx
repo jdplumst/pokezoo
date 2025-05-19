@@ -20,7 +20,7 @@ import {
 import { useRouter } from "next/navigation";
 import { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
-import LoadingSpinner from "~/components/loading-spinner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import PokemonCard from "~/components/pokemon-card";
 import Wildcard from "~/components/wildcard";
 import { purchasePokemonAction } from "~/server/actions/pokedex";

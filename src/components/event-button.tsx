@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useEffect, useState } from "react";
-import LoadingSpinner from "~/components/loading-spinner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import { Button } from "~/components/ui/button";
 import { type Rarity, type Event } from "~/lib/types";
 import { claimEventAction } from "~/server/actions/game";

@@ -1,4 +1,4 @@
-export default function LoadingSpinner() {
+export function LoadingSpinner() {
   return (
     <div className="text-center">
       <div role="status">

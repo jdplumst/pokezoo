@@ -2,7 +2,7 @@
 
 import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
-import LoadingSpinner from "~/components/loading-spinner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import { Button } from "~/components/ui/button";
 import { moveToPartyAction } from "~/server/actions/storage";
 import { api } from "~/trpc/react";

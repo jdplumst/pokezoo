@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import Wildcard from "~/components/wildcard";
 import { claimRewardAction } from "~/server/actions/game";
-import LoadingSpinner from "~/components/loading-spinner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import { type Time } from "~/lib/types";
 import { toast } from "sonner";
 

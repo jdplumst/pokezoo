@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { calcNewYield } from "./calc-new-yield";
-import { MAX_YIELD } from "./constants";
+import { calcNewYield } from "~/lib/calc-new-yield";
+import { MAX_YIELD } from "~/lib/constants";
 
 describe("calc new yield", () => {
   it("add", () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { getRarityColor } from "./get-rarity-color";
+import { getRarityColor } from "~/lib/get-rarity-color";
 
 describe("get rarity color", () => {
   it("common", () => {

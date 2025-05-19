@@ -1,11 +1,11 @@
 "use client";
 
 import { Button } from "~/components/ui/button";
-import LoadingSpinner from "./loading-spinner";
 import { useActionState, useEffect } from "react";
 import { purchaseCharmAction } from "~/server/actions/shop";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 
 export default function CharmButton(props: { charmId: number }) {
   const router = useRouter();

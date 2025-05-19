@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { withinInstanceLimit } from "./within-instance-limit";
+import { withinInstanceLimit } from "~/lib/within-instance-limit";
 
 describe("within instance limit", () => {
   it("within limit, no catching charm", () => {

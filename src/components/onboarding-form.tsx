@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Input } from "~/components/ui/input";
 import { createProfileAction } from "~/server/actions/onboarding";
 import { useActionState, useEffect } from "react";
-import LoadingSpinner from "~/components/loading-spinner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import { toast } from "sonner";
 
 export default function OnboardingForm(props: {

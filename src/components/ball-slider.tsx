@@ -10,7 +10,7 @@ import {
 } from "~/components/ui/dialog";
 import { Slider } from "~/components/ui/slider";
 import { useActionState, useEffect, useState } from "react";
-import LoadingSpinner from "~/components/loading-spinner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import {
   Drawer,
   DrawerClose,

@@ -14,7 +14,7 @@ import { useActionState, useEffect, useState } from "react";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { useRouter } from "next/navigation";
 import { initiateTradeAction, offerTradeAction } from "~/server/actions/trades";
-import LoadingSpinner from "~/components/loading-spinner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import { api } from "~/trpc/react";
 import { type Rarity } from "~/lib/types";
 import { toast } from "sonner";

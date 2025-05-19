@@ -1,6 +1,6 @@
 "use client";
 
-import LoadingSpinner from "~/components/loading-spinner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import { Button } from "~/components/ui/button";
 import { useFormStatus } from "react-dom";
 

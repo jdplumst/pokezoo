@@ -13,7 +13,7 @@ import { Button } from "~/components/ui/button";
 import { useActionState, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { selectStarterAction } from "~/server/actions/starters";
-import LoadingSpinner from "~/components/loading-spinner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import { api } from "~/trpc/react";
 import { toast } from "sonner";
 import { type Region } from "~/lib/types";

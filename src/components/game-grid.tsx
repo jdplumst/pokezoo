@@ -20,7 +20,7 @@ import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
 import React, { Fragment, useActionState, useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 import PokemonCard from "./pokemon-card";
-import LoadingSpinner from "~/components/loading-spinner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import { useRouter } from "next/navigation";
 import { sellPokemonAction } from "~/server/actions/game";
 import { api } from "~/trpc/react";
