@@ -78,11 +78,11 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       drizzle-orm:
-        specifier: ^0.41.0
-        version: 0.41.0(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)
+        specifier: ^0.43.0
+        version: 0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)
       drizzle-zod:
         specifier: ^0.7.0
-        version: 0.7.1(drizzle-orm@0.41.0(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5))(zod@3.24.4)
+        version: 0.7.1(drizzle-orm@0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5))(zod@3.24.4)
       embla-carousel-react:
         specifier: ^8.5.2
         version: 8.6.0(react@19.1.0)
@@ -2334,8 +2334,8 @@ packages:
     resolution: {integrity: sha512-PUjYKWtzOzPtdtQlTHQG3qfv4Y0XT8+Eas6UbxCmxTj7qgMf+39dDujf1BP1I+qqZtw9uzwTh8jYtkMuCq+B0Q==}
     hasBin: true
 
-  drizzle-orm@0.41.0:
-    resolution: {integrity: sha512-7A4ZxhHk9gdlXmTdPj/lREtP+3u8KvZ4yEN6MYVxBzZGex5Wtdc+CWSbu7btgF6TB0N+MNPrvW7RKBbxJchs/Q==}
+  drizzle-orm@0.43.1:
+    resolution: {integrity: sha512-dUcDaZtE/zN4RV/xqGrVSMpnEczxd5cIaoDeor7Zst9wOe/HzC/7eAaulywWGYXdDEc9oBPMjayVEDg0ziTLJA==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -2345,7 +2345,7 @@ packages:
       '@neondatabase/serverless': '>=0.10.0'
       '@op-engineering/op-sqlite': '>=2'
       '@opentelemetry/api': ^1.4.1
-      '@planetscale/database': '>=1'
+      '@planetscale/database': '>=1.13'
       '@prisma/client': '*'
       '@tidbcloud/serverless': '*'
       '@types/better-sqlite3': '*'
@@ -6035,16 +6035,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.41.0(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5):
+  drizzle-orm@0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5):
     optionalDependencies:
       '@planetscale/database': 1.16.0
       gel: 2.0.1
       pg: 8.16.0
       postgres: 3.4.5
 
-  drizzle-zod@0.7.1(drizzle-orm@0.41.0(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5))(zod@3.24.4):
+  drizzle-zod@0.7.1(drizzle-orm@0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5))(zod@3.24.4):
     dependencies:
-      drizzle-orm: 0.41.0(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)
+      drizzle-orm: 0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.5)
       zod: 3.24.4
 
   dunder-proto@1.0.1:
@@ -6615,9 +6615,9 @@ snapshots:
   gel@2.0.1:
     dependencies:
       '@petamoriken/float16': 3.9.2
-      debug: 4.4.0
+      debug: 4.4.1
       env-paths: 3.0.0
-      semver: 7.7.1
+      semver: 7.7.2
       shell-quote: 1.8.2
       which: 4.0.0
     transitivePeerDependencies:
@@ -7493,7 +7493,8 @@ snapshots:
 
   semver@6.3.1: {}
 
-  semver@7.7.1: {}
+  semver@7.7.1:
+    optional: true
 
   semver@7.7.2: {}
 
