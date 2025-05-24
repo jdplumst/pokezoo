@@ -43,7 +43,7 @@ importers:
         version: 1.2.7(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@t3-oss/env-nextjs':
         specifier: ^0.13.0
-        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.23)
+        version: 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.28)
       '@tanstack/react-query':
         specifier: ^5.66.0
         version: 5.76.2(react@19.1.0)
@@ -82,7 +82,7 @@ importers:
         version: 0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7)
       drizzle-zod:
         specifier: ^0.7.0
-        version: 0.7.1(drizzle-orm@0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.23)
+        version: 0.7.1(drizzle-orm@0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.28)
       embla-carousel-react:
         specifier: ^8.5.2
         version: 8.6.0(react@19.1.0)
@@ -139,7 +139,7 @@ importers:
         version: 1.1.2(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zod:
         specifier: ^3.23.8
-        version: 3.25.23
+        version: 3.25.28
     devDependencies:
       '@next/bundle-analyzer':
         specifier: ^15.0.0
@@ -4098,8 +4098,8 @@ packages:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
 
-  zod@3.25.23:
-    resolution: {integrity: sha512-Od2bdMosahjSrSgJtakrwjMDb1zM1A3VIHCPGveZt/3/wlrTWBya2lmEh2OYe4OIu8mPTmmr0gnLHIWQXdtWBg==}
+  zod@3.25.28:
+    resolution: {integrity: sha512-/nt/67WYKnr5by3YS7LroZJbtcCBurDKKPBPWWzaxvVCGuG/NOsiKkrjoOhI8mJ+SQUXEbUzeB3S+6XDUEEj7Q==}
 
 snapshots:
 
@@ -5204,19 +5204,19 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@t3-oss/env-core@0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.23)':
+  '@t3-oss/env-core@0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.28)':
     dependencies:
       arktype: 2.1.20
     optionalDependencies:
       typescript: 5.8.3
-      zod: 3.25.23
+      zod: 3.25.28
 
-  '@t3-oss/env-nextjs@0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.23)':
+  '@t3-oss/env-nextjs@0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.28)':
     dependencies:
-      '@t3-oss/env-core': 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.23)
+      '@t3-oss/env-core': 0.13.4(arktype@2.1.20)(typescript@5.8.3)(zod@3.25.28)
     optionalDependencies:
       typescript: 5.8.3
-      zod: 3.25.23
+      zod: 3.25.28
     transitivePeerDependencies:
       - arktype
 
@@ -5852,10 +5852,10 @@ snapshots:
       pg: 8.16.0
       postgres: 3.4.7
 
-  drizzle-zod@0.7.1(drizzle-orm@0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.23):
+  drizzle-zod@0.7.1(drizzle-orm@0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.28):
     dependencies:
       drizzle-orm: 0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7)
-      zod: 3.25.23
+      zod: 3.25.28
 
   dunder-proto@1.0.1:
     dependencies:
@@ -7904,4 +7904,4 @@ snapshots:
 
   yocto-queue@0.1.0: {}
 
-  zod@3.25.23: {}
+  zod@3.25.28: {}
