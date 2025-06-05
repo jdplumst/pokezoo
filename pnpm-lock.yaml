@@ -78,11 +78,11 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       drizzle-orm:
-        specifier: ^0.43.0
-        version: 0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7)
+        specifier: ^0.44.0
+        version: 0.44.2(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7)
       drizzle-zod:
         specifier: ^0.7.0
-        version: 0.7.1(drizzle-orm@0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.46)
+        version: 0.7.1(drizzle-orm@0.44.2(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.46)
       embla-carousel-react:
         specifier: ^8.5.2
         version: 8.6.0(react@19.1.0)
@@ -2224,8 +2224,8 @@ packages:
     resolution: {integrity: sha512-PUjYKWtzOzPtdtQlTHQG3qfv4Y0XT8+Eas6UbxCmxTj7qgMf+39dDujf1BP1I+qqZtw9uzwTh8jYtkMuCq+B0Q==}
     hasBin: true
 
-  drizzle-orm@0.43.1:
-    resolution: {integrity: sha512-dUcDaZtE/zN4RV/xqGrVSMpnEczxd5cIaoDeor7Zst9wOe/HzC/7eAaulywWGYXdDEc9oBPMjayVEDg0ziTLJA==}
+  drizzle-orm@0.44.2:
+    resolution: {integrity: sha512-zGAqBzWWkVSFjZpwPOrmCrgO++1kZ5H/rZ4qTGeGOe18iXGVJWf3WPfHOVwFIbmi8kHjfJstC6rJomzGx8g/dQ==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -2241,6 +2241,7 @@ packages:
       '@types/better-sqlite3': '*'
       '@types/pg': '*'
       '@types/sql.js': '*'
+      '@upstash/redis': '>=1.34.7'
       '@vercel/postgres': '>=0.8.0'
       '@xata.io/client': '*'
       better-sqlite3: '>=7'
@@ -2283,6 +2284,8 @@ packages:
       '@types/pg':
         optional: true
       '@types/sql.js':
+        optional: true
+      '@upstash/redis':
         optional: true
       '@vercel/postgres':
         optional: true
@@ -5883,16 +5886,17 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7):
+  drizzle-orm@0.44.2(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7):
     optionalDependencies:
       '@planetscale/database': 1.16.0
+      '@upstash/redis': 1.34.9
       gel: 2.0.1
       pg: 8.16.0
       postgres: 3.4.7
 
-  drizzle-zod@0.7.1(drizzle-orm@0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.46):
+  drizzle-zod@0.7.1(drizzle-orm@0.44.2(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.46):
     dependencies:
-      drizzle-orm: 0.43.1(@planetscale/database@1.16.0)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7)
+      drizzle-orm: 0.44.2(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7)
       zod: 3.25.46
 
   dunder-proto@1.0.1:
