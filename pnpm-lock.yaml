@@ -79,10 +79,10 @@ importers:
         version: 2.1.1
       drizzle-orm:
         specifier: ^0.44.0
-        version: 0.44.2(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7)
+        version: 0.44.3(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7)
       drizzle-zod:
         specifier: ^0.7.0
-        version: 0.7.1(drizzle-orm@0.44.2(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.76)
+        version: 0.7.1(drizzle-orm@0.44.3(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.76)
       embla-carousel-react:
         specifier: ^8.5.2
         version: 8.6.0(react@19.1.0)
@@ -2384,8 +2384,8 @@ packages:
     resolution: {integrity: sha512-tCPWVZWZqWVx2XUsVpJRnH9Mx0ClVOf5YUHerZ5so1OKSlqww4zy1R5ksEdGRcO3tM3zj0PYN6V48TbQCL1RfA==}
     hasBin: true
 
-  drizzle-orm@0.44.2:
-    resolution: {integrity: sha512-zGAqBzWWkVSFjZpwPOrmCrgO++1kZ5H/rZ4qTGeGOe18iXGVJWf3WPfHOVwFIbmi8kHjfJstC6rJomzGx8g/dQ==}
+  drizzle-orm@0.44.3:
+    resolution: {integrity: sha512-8nIiYQxOpgUicEL04YFojJmvC4DNO4KoyXsEIqN44+g6gNBr6hmVpWk3uyAt4CaTiRGDwoU+alfqNNeonLAFOQ==}
     peerDependencies:
       '@aws-sdk/client-rds-data': '>=3'
       '@cloudflare/workers-types': '>=4'
@@ -2779,8 +2779,8 @@ packages:
     resolution: {integrity: sha512-gIXjKqtFuWEgzFRJA9WCQeSJLZDjgJUOMCMzxtvFq/37KojM1BFGufqsCy0r4qSQmYLsZYMeyRqzIWOMup03sw==}
     engines: {node: '>=14'}
 
-  form-data@4.0.3:
-    resolution: {integrity: sha512-qsITQPfmvMOSAdeyZ+12I1c+CKSstAFAwu+97zrnWAbIr5u8wfsExUzCesVLC8NgHuRUqNN4Zy6UPWUTRGslcA==}
+  form-data@4.0.4:
+    resolution: {integrity: sha512-KrGhL9Q4zjj0kiUt5OO4Mr/A/jlI2jDYs5eHBpYHPcBEVSiipAvn2Ko2HnPe20rmcuuvMHNdZFp+4IlGTMF0Ow==}
     engines: {node: '>= 6'}
 
   fraction.js@4.3.7:
@@ -5866,7 +5866,7 @@ snapshots:
   axios@1.6.5:
     dependencies:
       follow-redirects: 1.15.9
-      form-data: 4.0.3
+      form-data: 4.0.4
       proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
@@ -6138,7 +6138,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.44.2(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7):
+  drizzle-orm@0.44.3(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7):
     optionalDependencies:
       '@planetscale/database': 1.16.0
       '@upstash/redis': 1.34.9
@@ -6146,9 +6146,9 @@ snapshots:
       pg: 8.16.0
       postgres: 3.4.7
 
-  drizzle-zod@0.7.1(drizzle-orm@0.44.2(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.76):
+  drizzle-zod@0.7.1(drizzle-orm@0.44.3(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7))(zod@3.25.76):
     dependencies:
-      drizzle-orm: 0.44.2(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7)
+      drizzle-orm: 0.44.3(@planetscale/database@1.16.0)(@upstash/redis@1.34.9)(gel@2.0.1)(pg@8.16.0)(postgres@3.4.7)
       zod: 3.25.76
 
   dunder-proto@1.0.1:
@@ -6684,7 +6684,7 @@ snapshots:
       cross-spawn: 7.0.6
       signal-exit: 4.1.0
 
-  form-data@4.0.3:
+  form-data@4.0.4:
     dependencies:
       asynckit: 0.4.0
       combined-stream: 1.0.8
