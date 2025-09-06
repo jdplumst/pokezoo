@@ -117,8 +117,8 @@ importers:
         specifier: ^9.13.1
         version: 9.16.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react-scan:
-        specifier: ^0.3.3
-        version: 0.3.6(@types/react@19.1.12)(next@15.4.6(@babel/core@7.28.0)(@playwright/test@1.54.2)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(rollup@4.46.2)
+        specifier: ^0.4.0
+        version: 0.4.3(@types/react@19.1.12)(next@15.4.6(@babel/core@7.28.0)(@playwright/test@1.54.2)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(rollup@4.46.2)
       server-only:
         specifier: ^0.0.1
         version: 0.0.1
@@ -3372,8 +3372,8 @@ packages:
       '@types/react':
         optional: true
 
-  react-scan@0.3.6:
-    resolution: {integrity: sha512-HCXRaP/zirXbNoI+mm11AibURYxkz4vCCnP64bzPRln3T8W9J2UGI1nxBygQIoKqrGz9W++rOROPvyNB+FpvXA==}
+  react-scan@0.4.3:
+    resolution: {integrity: sha512-jhAQuQ1nja6HUYrSpbmNFHqZPsRCXk8Yqu0lHoRIw9eb8N96uTfXCpVyQhTTnJ/nWqnwuvxbpKVG/oWZT8+iTQ==}
     hasBin: true
     peerDependencies:
       '@remix-run/react': '>=1.0.0'
@@ -6905,7 +6905,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.1.12
 
-  react-scan@0.3.6(@types/react@19.1.12)(next@15.4.6(@babel/core@7.28.0)(@playwright/test@1.54.2)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(rollup@4.46.2):
+  react-scan@0.4.3(@types/react@19.1.12)(next@15.4.6(@babel/core@7.28.0)(@playwright/test@1.54.2)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)(rollup@4.46.2):
     dependencies:
       '@babel/core': 7.28.0
       '@babel/generator': 7.28.0
