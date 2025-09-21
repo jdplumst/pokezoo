@@ -58,7 +58,8 @@ jobs:
                 } else if (run.conclusion === 'failure') {
                   console.log(`Workflow ${run.name} failed`);
                   core.setFailed(`Required workflow ${run.name} failed`);
-                  return { all_passed: false };
+                  core.setOutput('all_passed', 'false');
+                  return;
                 }
               }
             }
@@ -68,18 +69,19 @@ jobs:
               if (!passedWorkflows.has(workflow)) {
                 console.log(`Workflow ${workflow} did not complete successfully`);
                 core.setFailed(`Required workflow ${workflow} did not complete successfully`);
-                return { all_passed: false };
+                core.setOutput('all_passed', 'false');
+                return;
               }
             }
 
             console.log('All required workflows passed successfully');
-            return { all_passed: true };
+            core.setOutput('all_passed', 'true');
 
   # Only run the deploy if all tests passed
   deploy:
     name: Deploy to Vercel
     needs: verify-tests
-    if: github.event_name == 'workflow_dispatch' || (needs.verify-tests.outputs.all_passed == 'true')
+    if: ${{ github.event_name == 'workflow_dispatch' || (needs.verify-tests.outputs.all_passed == 'true') }}
     runs-on: ubuntu-latest
     environment: production
 
