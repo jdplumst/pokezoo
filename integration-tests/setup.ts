@@ -31,7 +31,7 @@ beforeAll(async () => {
   try {
     // Bring up the services in detached mode (-d)
     const { stdout: upStdout, stderr: upStderr } = await exec(
-      `docker-compose -f ${composeFilePath} up -d`,
+      `docker compose -f ${composeFilePath} up -d`,
     );
     console.log("Docker Compose Up Output:", upStdout);
     if (upStderr) console.error("Docker Compose Up Error:", upStderr);
@@ -39,17 +39,17 @@ beforeAll(async () => {
     // Wait for the database to be healthy
     console.log("[Global Setup] Waiting for database to be healthy...");
     const { stdout: healthStdout, stderr: healthStderr } = await exec(
-      `docker-compose -f ${composeFilePath} ps -q test-db | xargs docker inspect --format='{{json .State.Health}}' | grep "healthy" || true`,
+      `docker compose -f ${composeFilePath} ps -q test-db | xargs docker inspect --format='{{json .State.Health}}' | grep "healthy" || true`,
     );
     // Poll until healthy
     let attempts = 0;
-    while (!healthStdout.includes('"Status":"healthy"') && attempts < 30) {
+    while (!healthStdout?.includes('"Status":"healthy"') && attempts < 30) {
       process.stdout.write("."); // Indicate waiting
       await new Promise((resolve) => setTimeout(resolve, 2000)); // Wait 2 seconds
       const { stdout: newHealthStdout } = await exec(
-        `docker-compose -f ${composeFilePath} ps -q test-db | xargs docker inspect --format='{{json .State.Health}}' | grep "healthy" || true`,
+        `docker compose -f ${composeFilePath} ps -q test-db | xargs docker inspect --format='{{json .State.Health}}' | grep "healthy" || true`,
       );
-      if (newHealthStdout.includes('"Status":"healthy"')) {
+      if (newHealthStdout?.includes('"Status":"healthy"')) {
         console.log("\n[Global Setup] Database is healthy!");
         break;
       }
@@ -83,7 +83,7 @@ beforeAll(async () => {
     try {
       // Bring down services and remove volumes to ensure a clean slate next time
       const { stdout: downStdout, stderr: downStderr } = await exec(
-        `docker-compose -f ${composeFilePath} down --volumes --remove-orphans`,
+        `docker compose -f ${composeFilePath} down --volumes --remove-orphans`,
       );
       console.log("Docker Compose Down Output:", downStdout);
       if (downStderr) console.error("Docker Compose Down Error:", downStderr);

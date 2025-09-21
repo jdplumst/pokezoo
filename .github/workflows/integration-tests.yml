@@ -35,10 +35,22 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+          
+      # Add Docker in Docker service
+      docker:
+        image: docker:dind
+        options: --privileged
+        env:
+          DOCKER_TLS_CERTDIR: ""
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v2
+        with:
+          install: true
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
