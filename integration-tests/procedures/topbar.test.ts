@@ -2,16 +2,8 @@ import { describe, test, expect, vi, beforeEach } from "vitest";
 import { getProfileForTopbar } from "~/server/repositories/profile";
 import { createCaller } from "~/server/api/root";
 import type { createTRPCContext } from "~/server/api/trpc";
-
-type Session = {
-  user: {
-    id: string;
-    name: string | null;
-    email: string | null;
-    image: string | null;
-  };
-  expires: string;
-};
+import { ERROR_MESSAGES } from "~/lib/errors";
+import type { Session } from "next-auth";
 
 type Context = Awaited<ReturnType<typeof createTRPCContext>> & {
   session: Session | null;
@@ -38,19 +30,7 @@ vi.mock("~/server/repositories/profile", () => ({
   getProfileForTopbar: vi.fn(),
 }));
 
-type TopbarProfile = {
-  id: string;
-  username: string | null;
-  admin: boolean;
-  totalYield: number;
-  balance: number;
-  instanceCount: number;
-  commonCards: number;
-  rareCards: number;
-  epicCards: number;
-  legendaryCards: number;
-  catchingCharm: number | null;
-};
+type TopbarProfile = Awaited<ReturnType<typeof getProfileForTopbar>>;
 
 describe("Topbar Router", () => {
   let caller: ReturnType<typeof createCaller>;
@@ -116,11 +96,11 @@ describe("Topbar Router", () => {
     });
 
     test("should throw NOT_FOUND error when profile does not exist", async () => {
-      vi.mocked(getProfileForTopbar).mockResolvedValue(null);
+      vi.mocked(getProfileForTopbar).mockResolvedValueOnce(null);
 
       await expect(caller.topbar.getTopbarData()).rejects.toMatchObject({
         code: "NOT_FOUND",
-        message: "Profile not found",
+        message: ERROR_MESSAGES.PROFILE.NOT_FOUND,
       });
 
       expect(getProfileForTopbar).toHaveBeenCalled();

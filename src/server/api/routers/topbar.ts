@@ -1,6 +1,7 @@
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { getProfileForTopbar } from "~/server/repositories/profile";
 import { TRPCError } from "@trpc/server";
+import { ERROR_MESSAGES } from "~/lib/errors";
 
 export const topbarRouter = createTRPCRouter({
   getTopbarData: protectedProcedure.query(async () => {
@@ -9,7 +10,7 @@ export const topbarRouter = createTRPCRouter({
       if (profile === null) {
         throw new TRPCError({
           code: "NOT_FOUND",
-          message: "Profile not found",
+          message: ERROR_MESSAGES.PROFILE.NOT_FOUND,
         });
       }
 
@@ -23,7 +24,7 @@ export const topbarRouter = createTRPCRouter({
 
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
-        message: "Something went wrong",
+        message: ERROR_MESSAGES.COMMON.INTERNAL_SERVER_ERROR,
       });
     }
   }),
