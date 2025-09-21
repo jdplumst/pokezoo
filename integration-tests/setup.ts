@@ -8,7 +8,6 @@ const exec = promisify(_exec);
 
 config({ path: path.resolve(process.cwd(), ".env.test") });
 
-// beforeAll(async () => {
 export default async function setup() {
   if (!process.env.DATABASE_URL) {
     throw new Error(
