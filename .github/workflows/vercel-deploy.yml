@@ -84,6 +84,11 @@ jobs:
     if: ${{ github.event_name == 'workflow_dispatch' || (needs.verify-tests.outputs.all_passed == 'true') }}
     runs-on: ubuntu-latest
     environment: production
+    env:
+      # Only need Vercel auth tokens
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
     steps:
       - name: Checkout code
@@ -107,29 +112,21 @@ jobs:
         run: pnpm install --global vercel@latest
 
       - name: Configure Vercel
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
         run: |
           echo "Configuring Vercel..."
-          vercel link --yes --token ${{ secrets.VERCEL_TOKEN }} --project $VERCEL_PROJECT_ID
+          vercel link --yes --token $VERCEL_TOKEN --project $VERCEL_PROJECT_ID
 
       - name: Build and Deploy to Vercel
         id: vercel-deploy
-        env:
-          # Only need Vercel auth tokens
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
         run: |
           # Pull environment and project settings (this will use Vercel's env vars)
           echo "Pulling Vercel project configuration..."
           vercel pull --yes --environment=production --token=$VERCEL_TOKEN
-          
+
           # Build the project using Vercel's environment variables
           echo "Building project..."
-          vercel build --token=$VERCEL_TOKEN
-          
+          vercel build --prod --token=$VERCEL_TOKEN
+
           # Deploy to production using Vercel's environment variables
           echo "Deploying to production..."
           vercel deploy --prebuilt --prod --token=$VERCEL_TOKEN
