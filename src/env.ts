@@ -51,7 +51,8 @@ export const env = createEnv({
     BLUE_SESSION: process.env.BLUE_SESSION,
   },
   emptyStringAsUndefined: true,
-  skipValidation: process.env.SKIP_VALIDATION === "true",
+  skipValidation:
+    process.env.SKIP_VALIDATION === "true" || process.env.NODE_ENV === "test",
   // For Next.js >= 13.4.4, you only need to destructure client variables:
   // experimental__runtimeEnv: {
   //   NEXT_PUBLIC_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_PUBLISHABLE_KEY,
