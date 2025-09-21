@@ -8,7 +8,8 @@ const exec = promisify(_exec);
 
 config({ path: path.resolve(process.cwd(), ".env.test") });
 
-beforeAll(async () => {
+// beforeAll(async () => {
+export default async function setup() {
   if (!process.env.DATABASE_URL) {
     throw new Error(
       "DATABASE_URL environment variable is required for integration tests. Make sure to run 'pnpm test:db:up' first.",
@@ -92,4 +93,4 @@ beforeAll(async () => {
     }
     console.log("[Global Teardown] Test database stopped.");
   };
-}, 60000);
+}
