@@ -174,20 +174,20 @@ describe("getProfileForTopbar", () => {
     });
   });
 
-  it("should return undefined for unauthenticated user", async () => {
+  it("should return null for unauthenticated user", async () => {
     setupAuthMock(null);
 
     const result = await getProfileForTopbar();
 
-    expect(result).toBeUndefined();
+    expect(result).toBeNull();
   });
 
-  it("should return undefined for user with no profile", async () => {
+  it("should return null for user with no profile", async () => {
     setupAuthMock(testUsers[3].id);
 
     const result = await getProfileForTopbar();
 
-    expect(result).toBeUndefined();
+    expect(result).toBeNull();
   });
 
   it("should handle admin user correctly", async () => {
@@ -228,6 +228,6 @@ describe("getProfileForTopbar", () => {
 
     const result = await getProfileForTopbar();
 
-    expect(result).toBeUndefined();
+    expect(result).toBeNull();
   });
 });
