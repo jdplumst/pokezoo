@@ -35,7 +35,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          
+
       # Add Docker in Docker service
       docker:
         image: docker:dind
@@ -46,7 +46,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
         with:
@@ -69,7 +69,8 @@ jobs:
 
       - name: Run integration tests
         env:
-          DATABASE_URL: postgresql://test:test@localhost:5432/test
+          # Match the database URL from .env.test
+          DATABASE_URL: postgresql://test_user:test_password@localhost:5433/pokezoo_test
           NODE_ENV: test
         run: pnpm test:integration
 
