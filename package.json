@@ -20,6 +20,8 @@
     "e2e:debug": "playwright test --debug",
     "e2e:ui": "playwright test --ui",
     "test": "vitest",
+    "test:unit": "vitest --project unit",
+    "test:integration": "vitest --project integration",
     "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
   },

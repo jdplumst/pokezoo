@@ -1,0 +1,57 @@
+name: Vercel Deploy
+
+on:
+  workflow_run:
+    workflows: ["Unit Tests", "Integration Tests", "Check", "Playwright Tests"]
+    branches: [main, master]
+    types:
+      - completed
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: "Reason for manual deployment"
+        required: true
+        default: "Manual deployment triggered"
+
+jobs:
+  deploy:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    environment: production
+
+    # Only run if all required workflows completed successfully
+    if: |
+      (github.event_name == 'workflow_dispatch' || 
+       (github.event_name == 'workflow_run' && 
+        github.event.workflow_run.event == 'push' &&
+        github.event.workflow_run.conclusion == 'success'))
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Vercel CLI
+        run: npm install --global vercel@latest
+
+      - name: Build and Deploy to Vercel
+        id: vercel-deploy
+        run: |
+          vercel pull --yes --token=${{ secrets.VERCEL_TOKEN }}
+          vercel build --token=${{ secrets.VERCEL_TOKEN }}
+          vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+        env:
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}

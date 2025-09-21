@@ -1,21 +1,39 @@
 name: Playwright Tests
+
 on:
-  schedule:
-    - cron: "0 0 * * *"
+  push:
+    branches: [main, master]
+    # Skip CI for documentation changes
+    paths-ignore:
+      - "**/*.md"
+      - "**/*.mdx"
+      - "**/docs/**"
 jobs:
   e2e:
+    name: Run E2E Tests
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    # This allows a single in-progress job to be canceled when a new commit is pushed
     concurrency:
-      group: test-group
-      cancel-in-progress: false
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 8
+
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
       - name: Run Playwright tests

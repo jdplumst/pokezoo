@@ -1,7 +1,14 @@
-name: Lint and Typecheck
+name: Check
 on:
   pull_request:
     branches: [main, master]
+  push:
+    branches: [main, master]
+    paths-ignore:
+      - "**/*.md"
+      - "**/*.mdx"
+      - "**/docs/**"
+
 jobs:
   check:
     runs-on: ubuntu-latest
