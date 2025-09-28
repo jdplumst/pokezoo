@@ -18,6 +18,18 @@ export default defineConfig({
           name: "integration",
           include: ["integration-tests/**/*.test.ts"],
           globalSetup: "./integration-tests/setup.ts",
+          pool: "threads",
+          poolOptions: {
+            threads: {
+              singleThread: true,
+              isolate: true,
+            },
+          },
+          sequence: {
+            concurrent: false,
+            hooks: "stack",
+            shuffle: false,
+          },
         },
       },
     ],
