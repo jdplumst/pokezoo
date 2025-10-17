@@ -1,9 +1,9 @@
 name: Vercel Deploy
 
 on:
-  # Only trigger when the last test workflow (Playwright Tests) completes
+  # Only trigger when the last test workflow (Integration Tests) completes
   workflow_run:
-    workflows: ["Playwright Tests"]
+    workflows: ["Integration Tests"]
     branches: [main, master]
     types: [completed]
   workflow_dispatch:
@@ -43,8 +43,7 @@ jobs:
             const requiredWorkflows = new Set([
               'Unit Tests',
               'Integration Tests',
-              'Check',
-              'Playwright Tests'
+              'Check'
             ]);
 
             // Track which workflows have passed
