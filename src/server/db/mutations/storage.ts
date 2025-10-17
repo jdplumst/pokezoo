@@ -85,7 +85,7 @@ export async function switchBox(
       .where(and(eq(instances.id, instanceId), eq(instances.userId, userId)))
   )[0];
 
-  if (!currInstance || currInstance.box === 0) {
+  if (currInstance?.box === 0) {
     redirect("/storage");
   }
 
