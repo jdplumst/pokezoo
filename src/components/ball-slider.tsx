@@ -34,6 +34,7 @@ import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { purchaseBallsAction } from "~/server/actions/shop";
 import { api } from "~/trpc/react";
 import { toast } from "sonner";
+import { ScrollArea } from "./ui/scroll-area";
 
 export default function BallSlider(props: {
   ballId: string;
@@ -158,7 +159,7 @@ export default function BallSlider(props: {
             <DialogDescription>
               Here is all the Pokémon you have obtained.
             </DialogDescription>
-            <div className="flex flex-col gap-4">
+            <ScrollArea className="flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
               {data.purchasedSpecies.map((s, idx) => (
                 <MiniPokemonCard
                   key={idx}
@@ -168,7 +169,7 @@ export default function BallSlider(props: {
                   rarity={s.rarity}
                 />
               ))}
-            </div>
+            </ScrollArea>
           </DialogContent>
         </Dialog>
       )}
