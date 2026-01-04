@@ -46,7 +46,7 @@ export default async function Trades() {
                     rarity={t.initiatorPokemonRarity as Rarity}
                   />
                 </div>
-                <div className="flex h-1/6 w-full items-center justify-center overflow-x-scroll overflow-y-scroll text-center">
+                <div className="flex h-1/6 w-full items-center justify-center text-center">
                   {t.description}
                 </div>
                 {t.initiatorId === data.session.user.id ? (

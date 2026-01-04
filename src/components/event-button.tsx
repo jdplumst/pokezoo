@@ -65,7 +65,7 @@ export function EventButton(props: { event: Event }) {
             <DialogDescription>
               Here is the Pokémon you have obtained.
             </DialogDescription>
-            <div className="flex h-80 flex-col gap-4 overflow-y-scroll">
+            <div className="flex h-80 flex-col gap-4">
               <MiniPokemonCard
                 name={data.gift.name}
                 img={data.gift.img}

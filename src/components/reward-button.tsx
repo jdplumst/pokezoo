@@ -77,7 +77,7 @@ export default function RewardButton(props: {
                 Here are the rewards you have claimed.
               </DialogDescription>
             </DialogHeader>
-            <div className="flex h-32 flex-col gap-2 overflow-y-scroll">
+            <div className="flex h-32 flex-col gap-2">
               <div className="font-semibold">
                 You received P{data.reward.toLocaleString()}!
               </div>
