@@ -158,7 +158,7 @@ export default function BallSlider(props: {
             <DialogDescription>
               Here is all the Pokémon you have obtained.
             </DialogDescription>
-            <div className="flex h-80 flex-col gap-4">
+            <div className="flex flex-col gap-4">
               {data.purchasedSpecies.map((s, idx) => (
                 <MiniPokemonCard
                   key={idx}
