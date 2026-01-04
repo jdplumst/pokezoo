@@ -13,7 +13,7 @@ import { type NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
   const authorization = req.headers.get("authorization");
-  if (!authorization || authorization.split(" ")[1] !== env.CRON_TOKEN) {
+  if (authorization?.split(" ")[1] !== env.CRON_TOKEN) {
     throw new Error("Not authorized to make this request.");
   }
   try {
