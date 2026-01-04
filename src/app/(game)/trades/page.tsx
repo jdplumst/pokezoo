@@ -11,6 +11,7 @@ import TradeForm from "~/components/trade-form";
 import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { type Rarity } from "~/lib/types";
 import { getTrades } from "~/server/db/queries/trades";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 
 export const metadata: Metadata = {
   title: "PokéZoo - Trades",
@@ -46,9 +47,10 @@ export default async function Trades() {
                     rarity={t.initiatorPokemonRarity as Rarity}
                   />
                 </div>
-                <div className="flex h-1/6 w-full items-center justify-center text-center">
-                  {t.description}
-                </div>
+                <ScrollArea className="flex h-1/6 w-5/6 items-center justify-center text-center">
+                    {t.description}
+                    <ScrollBar orientation="horizontal" />
+                </ScrollArea>
                 {t.initiatorId === data.session.user.id ? (
                   <form
                     className="h-1/6"
@@ -66,13 +68,13 @@ export default async function Trades() {
               </div>
               <Separator orientation="vertical" />
               {t.offererId &&
-              t.offererName &&
-              t.offererPokemonId &&
-              t.offererPokemonImg &&
-              t.offererPokemonName &&
-              (t.offererPokemonShiny === true ||
-                t.offererPokemonShiny === false) &&
-              t.offererPokemonRarity ? (
+                t.offererName &&
+                t.offererPokemonId &&
+                t.offererPokemonImg &&
+                t.offererPokemonName &&
+                (t.offererPokemonShiny === true ||
+                  t.offererPokemonShiny === false) &&
+                t.offererPokemonRarity ? (
                 <div className="flex w-1/2 flex-col items-center gap-4">
                   <div className="h-1/6 px-2 text-center font-semibold">
                     {t.offererName} has an offer!
