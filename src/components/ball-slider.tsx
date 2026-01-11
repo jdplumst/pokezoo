@@ -160,15 +160,17 @@ export default function BallSlider(props: {
               Here is all the Pokémon you have obtained.
             </DialogDescription>
             <ScrollArea className="flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
-              {data.purchasedSpecies.map((s, idx) => (
-                <MiniPokemonCard
-                  key={idx}
-                  name={s.name}
-                  img={s.img}
-                  shiny={s.shiny}
-                  rarity={s.rarity}
-                />
-              ))}
+              <div className="flex flex-col gap-4">
+                {data.purchasedSpecies.map((s, idx) => (
+                  <MiniPokemonCard
+                    key={idx}
+                    name={s.name}
+                    img={s.img}
+                    shiny={s.shiny}
+                    rarity={s.rarity}
+                  />
+                ))}
+              </div>
             </ScrollArea>
           </DialogContent>
         </Dialog>
