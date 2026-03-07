@@ -3,14 +3,14 @@ import { type Metadata } from "next";
 import OnboardingForm from "~/components/onboarding-form";
 
 export const metadata: Metadata = {
-  title: "PokéZoo",
-  icons: {
-    icon: "/favicon.png",
-  },
+	title: "PokéZoo",
+	icons: {
+		icon: "/favicon.png",
+	},
 };
 
 export default async function Onboarding() {
-  const starters = await getOnboarding();
+	const starters = await getOnboarding();
 
-  return <OnboardingForm starters={starters} />;
+	return <OnboardingForm starters={starters} />;
 }

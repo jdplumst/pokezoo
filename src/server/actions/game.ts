@@ -4,80 +4,80 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { type MessageResponse, type ErrorResponse } from "~/lib/types";
 import {
-  claimReward,
-  moveToStorage,
-  sellPokemon,
-  claimEvent,
+	claimReward,
+	moveToStorage,
+	sellPokemon,
+	claimEvent,
 } from "~/server/db/mutations/game";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 
 export async function claimRewardAction(
-  _previousState: unknown,
-  _formData: FormData,
+	_previousState: unknown,
+	_formData: FormData,
 ) {
-  return await claimReward();
+	return await claimReward();
 }
 
 export async function sellPokemonAction(
-  _previousState: unknown,
-  formData: FormData,
+	_previousState: unknown,
+	formData: FormData,
 ): Promise<MessageResponse | ErrorResponse> {
-  const formSchema = z.object({
-    ids: z.preprocess((ids) => {
-      if (typeof ids === "string") return ids.split(",");
-    }, z.array(z.string())),
-  });
+	const formSchema = z.object({
+		ids: z.preprocess((ids) => {
+			if (typeof ids === "string") return ids.split(",");
+		}, z.array(z.string())),
+	});
 
-  const input = formSchema.safeParse(Object.fromEntries(formData));
+	const input = formSchema.safeParse(Object.fromEntries(formData));
 
-  if (input.error) {
-    return {
-      success: false,
-      error: "Something went wrong. Please try again.",
-    };
-  }
+	if (input.error) {
+		return {
+			success: false,
+			error: "Something went wrong. Please try again.",
+		};
+	}
 
-  return await sellPokemon(input.data.ids);
+	return await sellPokemon(input.data.ids);
 }
 
 export async function moveToStorageAction(
-  _previousState: unknown,
-  formData: FormData,
+	_previousState: unknown,
+	formData: FormData,
 ): Promise<MessageResponse | ErrorResponse | undefined> {
-  const session = await isAuthed();
+	const session = await isAuthed();
 
-  const currProfile = await hasProfile();
+	const currProfile = await hasProfile();
 
-  const formSchema = z.object({
-    instanceId: z.string(),
-  });
+	const formSchema = z.object({
+		instanceId: z.string(),
+	});
 
-  const input = formSchema.safeParse(Object.fromEntries(formData));
+	const input = formSchema.safeParse(Object.fromEntries(formData));
 
-  if (input.error) {
-    return {
-      success: false,
-      error: "Something went wrong. Please try again.",
-    };
-  }
+	if (input.error) {
+		return {
+			success: false,
+			error: "Something went wrong. Please try again.",
+		};
+	}
 
-  return await moveToStorage(
-    input.data.instanceId,
-    session.user.id,
-    currProfile,
-  );
+	return await moveToStorage(
+		input.data.instanceId,
+		session.user.id,
+		currProfile,
+	);
 }
 
 export async function claimEventAction(
-  _previousState: unknown,
-  _formData: FormData,
+	_previousState: unknown,
+	_formData: FormData,
 ) {
-  const session = await isAuthed();
+	const session = await isAuthed();
 
-  const currProfile = await hasProfile();
-  if (currProfile.profile.claimedEvent) {
-    redirect("/game");
-  }
+	const currProfile = await hasProfile();
+	if (currProfile.profile.claimedEvent) {
+		redirect("/game");
+	}
 
-  return await claimEvent(session.user.id);
+	return await claimEvent(session.user.id);
 }

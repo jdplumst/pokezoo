@@ -5,20 +5,20 @@ import { TRPCReactProvider } from "~/trpc/react";
 import { getTheme, getTime } from "~/server/db/queries/cookies";
 
 export default async function RootLayout({
-  children,
+	children,
 }: {
-  children: React.ReactNode;
+	children: React.ReactNode;
 }) {
-  const theme = await getTheme();
-  const time = await getTime();
-  const mode = time === "day" ? "light" : "dark";
+	const theme = await getTheme();
+	const time = await getTime();
+	const mode = time === "day" ? "light" : "dark";
 
-  return (
-    <html lang="en" className={`${GeistSans.className} ${theme} ${mode}`}>
-      <body>
-        <Toaster closeButton />
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en" className={`${GeistSans.className} ${theme} ${mode}`}>
+			<body>
+				<Toaster closeButton />
+				<TRPCReactProvider>{children}</TRPCReactProvider>
+			</body>
+		</html>
+	);
 }

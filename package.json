@@ -8,9 +8,10 @@
     "dev": "next dev --turbo",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint src",
+    "lint": "biome lint",
+    "lint:write": "biome lint --write",
     "typecheck": "tsc --noEmit",
-    "check": "eslint src && tsc --noEmit",
+    "check": "biome check",
     "analyze": "cross-env ANALYZE=true next build",
     "db:push": "dotenv drizzle-kit push",
     "db:pull": "dotenv drizzle-kit introspect",
@@ -22,8 +23,8 @@
     "test": "vitest",
     "test:unit": "vitest --project unit",
     "test:integration": "vitest --project integration",
-    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
+    "format:write": "biome format --write",
+    "format:check": "biome format"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.10.0",
@@ -71,6 +72,7 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.4.6",
     "@next/bundle-analyzer": "^15.4.6",
     "@playwright/test": "^1.55.0",
     "@types/node": "^22.18.6",

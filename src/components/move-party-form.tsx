@@ -8,26 +8,26 @@ import { moveToPartyAction } from "~/server/actions/storage";
 import { api } from "~/trpc/react";
 
 export function MovePartyForm(props: { instanceId: string }) {
-  const utils = api.useUtils();
+	const utils = api.useUtils();
 
-  const [data, action, isPending] = useActionState(
-    moveToPartyAction,
-    undefined,
-  );
+	const [data, action, isPending] = useActionState(
+		moveToPartyAction,
+		undefined,
+	);
 
-  useEffect(() => {
-    if (data?.success === false) {
-      toast.error(data.error);
-    } else if (data?.success === true) {
-      toast.message(data.message);
-      void utils.game.getPokemon.invalidate();
-    }
-  }, [data, utils]);
+	useEffect(() => {
+		if (data?.success === false) {
+			toast.error(data.error);
+		} else if (data?.success === true) {
+			toast.message(data.message);
+			void utils.game.getPokemon.invalidate();
+		}
+	}, [data, utils]);
 
-  return (
-    <form action={action}>
-      <input type="hidden" name="instanceId" value={props.instanceId} />
-      <Button>{isPending ? <LoadingSpinner /> : "Move To Party"}</Button>
-    </form>
-  );
+	return (
+		<form action={action}>
+			<input type="hidden" name="instanceId" value={props.instanceId} />
+			<Button>{isPending ? <LoadingSpinner /> : "Move To Party"}</Button>
+		</form>
+	);
 }
