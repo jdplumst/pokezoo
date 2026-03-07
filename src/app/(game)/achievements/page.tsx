@@ -63,7 +63,7 @@ export default async function Achievements() {
 									</form>
 								) : (
 									<div>
-										`${a.value} / ${a.max} (${a.percent}%)`
+										{`${a.value} / ${a.max} (${a.percent}%)`}
 										<Progress value={a.percent} />
 									</div>
 								)}
