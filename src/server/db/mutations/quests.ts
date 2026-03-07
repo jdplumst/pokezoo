@@ -37,10 +37,12 @@ export async function claimQuest(userQuestId: string) {
   // Validate that user can claim this quest
   if (currUserQuest.claimed) {
     revalidatePath("/quests");
+    return;
   }
 
   if (currUserQuest.count < currQuest.goal) {
     revalidatePath("/quests");
+    return;
   }
 
   const currProfile = (
