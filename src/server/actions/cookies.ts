@@ -1,20 +1,20 @@
 "use server";
 
-import { type Theme } from "~/lib/types";
+import type { Theme } from "~/lib/types";
 import {
-  setTheme,
-  setTimezone,
-  toggleTime,
+	setTheme,
+	setTimezone,
+	toggleTime,
 } from "~/server/db/mutations/cookies";
 
 export async function setThemeAction(theme: Theme) {
-  await setTheme(theme);
+	await setTheme(theme);
 }
 
 export async function setTimezoneAction(timezone: string, offset: string) {
-  await setTimezone(timezone, offset);
+	await setTimezone(timezone, offset);
 }
 
 export async function toggleTimeAction() {
-  await toggleTime();
+	await toggleTime();
 }

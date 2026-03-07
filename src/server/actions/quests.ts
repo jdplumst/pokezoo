@@ -3,5 +3,5 @@
 import { claimQuest } from "~/server/db/mutations/quests";
 
 export async function claimQuestAction(userQuestId: string) {
-  return await claimQuest(userQuestId);
+	return await claimQuest(userQuestId);
 }

@@ -1,3 +1,3 @@
 export function GET() {
-  return new Response("blocked", { status: 429 });
+	return new Response("blocked", { status: 429 });
 }

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
 export default function StorageRedirect() {
-  redirect("/storage/1");
+	redirect("/storage/1");
 }

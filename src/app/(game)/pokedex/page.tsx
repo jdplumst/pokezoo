@@ -1,20 +1,20 @@
-import { isAuthed } from "~/server/db/queries/auth";
-import { type Metadata } from "next";
+import type { Metadata } from "next";
 import PokedexGrid from "~/components/pokedex-grid";
+import { isAuthed } from "~/server/db/queries/auth";
 
 export const metadata: Metadata = {
-  title: "PokéZoo - Pokédex",
-  icons: {
-    icon: "/favicon.png",
-  },
+	title: "PokéZoo - Pokédex",
+	icons: {
+		icon: "/favicon.png",
+	},
 };
 
 export default async function Pokedex() {
-  await isAuthed();
+	await isAuthed();
 
-  return (
-    <div className="flex flex-col gap-4 p-8">
-      <PokedexGrid />
-    </div>
-  );
+	return (
+		<div className="flex flex-col gap-4 p-8">
+			<PokedexGrid />
+		</div>
+	);
 }

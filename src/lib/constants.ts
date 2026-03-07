@@ -1,8 +1,8 @@
 import {
-  HabitatValues,
-  RarityValues,
-  RegionValues,
-  SpeciesTypeValues,
+	HabitatValues,
+	RarityValues,
+	RegionValues,
+	SpeciesTypeValues,
 } from "~/lib/types";
 
 export const MAX_BALANCE = 1000000000;

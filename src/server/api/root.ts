@@ -1,8 +1,8 @@
 import { gameRouter } from "~/server/api/routers/game";
 import { pokedexRouter } from "~/server/api/routers/pokedex";
+import { topbarRouter } from "~/server/api/routers/topbar";
 import { tradesRouter } from "~/server/api/routers/trades";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
-import { topbarRouter } from "~/server/api/routers/topbar";
 
 /**
  * This is the primary router for your server.
@@ -10,10 +10,10 @@ import { topbarRouter } from "~/server/api/routers/topbar";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  topbar: topbarRouter,
-  game: gameRouter,
-  pokedex: pokedexRouter,
-  trades: tradesRouter,
+	topbar: topbarRouter,
+	game: gameRouter,
+	pokedex: pokedexRouter,
+	trades: tradesRouter,
 });
 
 // export type definition of API

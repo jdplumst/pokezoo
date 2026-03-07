@@ -1,257 +1,259 @@
+/* biome-ignore-all lint: css file */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
-  html {
-    scrollbar-width: thin;
+	html {
+		scrollbar-width: thin;
 
-    /* Pokemon Rarity Colours */
-    --color-common-focus: #f1f5f9;
-    --color-common-unfocus: white;
-    --color-rare-focus: #ea580c;
-    --color-rare-unfocus: #f97316;
-    --color-epic-focus: #9333ea;
-    --color-epic-unfocus: #a855f7;
-    --color-legendary-focus: #059669;
-    --color-legendary-unfocus: #10b981;
-    --color-mega-focus: #dc2626;
-    --color-mega-unfocus: #ef4444;
-    --color-ub-focus: #1e40af;
-    --color-ub-unfocus: #1d4ed8;
-    --color-gmax-focus: #db2777;
-    --color-gmax-unfocus: #ec4899;
-    --color-paradox-focus: #6d28d9;
-    --color-paradox-unfocus: #7c3aed;
+		/* Pokemon Rarity Colours */
+		--color-common-focus: #f1f5f9;
+		--color-common-unfocus: white;
+		--color-rare-focus: #ea580c;
+		--color-rare-unfocus: #f97316;
+		--color-epic-focus: #9333ea;
+		--color-epic-unfocus: #a855f7;
+		--color-legendary-focus: #059669;
+		--color-legendary-unfocus: #10b981;
+		--color-mega-focus: #dc2626;
+		--color-mega-unfocus: #ef4444;
+		--color-ub-focus: #1e40af;
+		--color-ub-unfocus: #1d4ed8;
+		--color-gmax-focus: #db2777;
+		--color-gmax-unfocus: #ec4899;
+		--color-paradox-focus: #6d28d9;
+		--color-paradox-unfocus: #7c3aed;
 
-    /* Pokemon Type Colours */
-    --color-normal: #a8a77a;
-    --color-grass: #7ac74c;
-    --color-bug: #a6b91a;
-    --color-fire: #ee8130;
-    --color-electric: #f7d02c;
-    --color-ground: #e2bf65;
-    --color-water: #6390f0;
-    --color-fighting: #c22e28;
-    --color-poison: #a33ea1;
-    --color-rock: #b6a136;
-    --color-ice: #96d9d6;
-    --color-ghost: #735797;
-    --color-psychic: #f95587;
-    --color-fairy: #d685ad;
-    --color-dark: #705746;
-    --color-dragon: #6f35fc;
-    --color-steel: #b7b7ce;
-    --color-flying: #a98ff3;
+		/* Pokemon Type Colours */
+		--color-normal: #a8a77a;
+		--color-grass: #7ac74c;
+		--color-bug: #a6b91a;
+		--color-fire: #ee8130;
+		--color-electric: #f7d02c;
+		--color-ground: #e2bf65;
+		--color-water: #6390f0;
+		--color-fighting: #c22e28;
+		--color-poison: #a33ea1;
+		--color-rock: #b6a136;
+		--color-ice: #96d9d6;
+		--color-ghost: #735797;
+		--color-psychic: #f95587;
+		--color-fairy: #d685ad;
+		--color-dark: #705746;
+		--color-dragon: #6f35fc;
+		--color-steel: #b7b7ce;
+		--color-flying: #a98ff3;
 
-    /* Modal Button */
-    --color-red-btn-focus: #dc2626;
-    --color-red-btn-unfocus: #ef4444;
-  }
+		/* Modal Button */
+		--color-red-btn-focus: #dc2626;
+		--color-red-btn-unfocus: #ef4444;
+	}
 
-  :root {
-    --background: 234 100% 95%;
-    --foreground: 234 5% 10%;
-    --card: 234 50% 90%;
-    --card-foreground: 234 5% 15%;
-    --popover: 234 100% 95%;
-    --popover-foreground: 234 100% 10%;
-    --primary: 234 78% 47%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 234 30% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 196 30% 85%;
-    --muted-foreground: 234 5% 35%;
-    --accent: 196 30% 80%;
-    --accent-foreground: 234 5% 15%;
-    --destructive: 0 100% 33%;
-    --destructive-foreground: 234 5% 90%;
-    --border: 234 30% 50%;
-    --input: 234 30% 33%;
-    --ring: 234 78% 47%;
-    --radius: 0.3rem;
-    scrollbar-color: blue rgba(0, 0, 0, 0);
-  }
-  .dark {
-    --background: 234 50% 10%;
-    --foreground: 234 5% 90%;
-    --card: 234 50% 10%;
-    --card-foreground: 234 5% 90%;
-    --popover: 234 50% 5%;
-    --popover-foreground: 234 5% 90%;
-    --primary: 234 78% 47%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 234 30% 20%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 196 30% 25%;
-    --muted-foreground: 234 5% 60%;
-    --accent: 196 30% 25%;
-    --accent-foreground: 234 5% 90%;
-    --destructive: 0 100% 33%;
-    --destructive-foreground: 234 5% 90%;
-    --border: 234 30% 33%;
-    --input: 234 30% 33%;
-    --ring: 234 78% 47%;
-    --radius: 0.3rem;
+	:root {
+		--background: 234 100% 95%;
+		--foreground: 234 5% 10%;
+		--card: 234 50% 90%;
+		--card-foreground: 234 5% 15%;
+		--popover: 234 100% 95%;
+		--popover-foreground: 234 100% 10%;
+		--primary: 234 78% 47%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 234 30% 70%;
+		--secondary-foreground: 0 0% 0%;
+		--muted: 196 30% 85%;
+		--muted-foreground: 234 5% 35%;
+		--accent: 196 30% 80%;
+		--accent-foreground: 234 5% 15%;
+		--destructive: 0 100% 33%;
+		--destructive-foreground: 234 5% 90%;
+		--border: 234 30% 50%;
+		--input: 234 30% 33%;
+		--ring: 234 78% 47%;
+		--radius: 0.3rem;
+		scrollbar-color: blue rgba(0, 0, 0, 0);
+	}
+	.dark {
+		--background: 234 50% 10%;
+		--foreground: 234 5% 90%;
+		--card: 234 50% 10%;
+		--card-foreground: 234 5% 90%;
+		--popover: 234 50% 5%;
+		--popover-foreground: 234 5% 90%;
+		--primary: 234 78% 47%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 234 30% 20%;
+		--secondary-foreground: 0 0% 100%;
+		--muted: 196 30% 25%;
+		--muted-foreground: 234 5% 60%;
+		--accent: 196 30% 25%;
+		--accent-foreground: 234 5% 90%;
+		--destructive: 0 100% 33%;
+		--destructive-foreground: 234 5% 90%;
+		--border: 234 30% 33%;
+		--input: 234 30% 33%;
+		--ring: 234 78% 47%;
+		--radius: 0.3rem;
 
-    /* Pokemon Rarity Colours */
-    --color-common-focus: #475569;
-    --color-common-unfocus: #64748b;
-  }
+		/* Pokemon Rarity Colours */
+		--color-common-focus: #475569;
+		--color-common-unfocus: #64748b;
+	}
 
-  :root.purple {
-    --background: 274 100% 95%;
-    --foreground: 274 5% 10%;
-    --card: 274 50% 90%;
-    --card-foreground: 274 5% 15%;
-    --popover: 274 100% 95%;
-    --popover-foreground: 274 100% 10%;
-    --primary: 274 78% 47%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 274 30% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 236 30% 85%;
-    --muted-foreground: 274 5% 35%;
-    --accent: 236 30% 80%;
-    --accent-foreground: 274 5% 15%;
-    --destructive: 0 100% 33%;
-    --destructive-foreground: 274 5% 90%;
-    --border: 274 30% 50%;
-    --input: 274 30% 33%;
-    --ring: 274 78% 47%;
-    --radius: 0.3rem;
-    scrollbar-color: #d946ef rgba(0, 0, 0, 0);
-  }
-  .dark.purple {
-    --background: 274 50% 10%;
-    --foreground: 274 5% 90%;
-    --card: 274 50% 10%;
-    --card-foreground: 274 5% 90%;
-    --popover: 274 50% 5%;
-    --popover-foreground: 274 5% 90%;
-    --primary: 274 78% 47%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 274 30% 20%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 236 30% 25%;
-    --muted-foreground: 274 5% 60%;
-    --accent: 236 30% 25%;
-    --accent-foreground: 274 5% 90%;
-    --destructive: 0 100% 33%;
-    --destructive-foreground: 274 5% 90%;
-    --border: 274 30% 33%;
-    --input: 274 30% 33%;
-    --ring: 274 78% 47%;
-    --radius: 0.3rem;
-  }
+	:root.purple {
+		--background: 274 100% 95%;
+		--foreground: 274 5% 10%;
+		--card: 274 50% 90%;
+		--card-foreground: 274 5% 15%;
+		--popover: 274 100% 95%;
+		--popover-foreground: 274 100% 10%;
+		--primary: 274 78% 47%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 274 30% 70%;
+		--secondary-foreground: 0 0% 0%;
+		--muted: 236 30% 85%;
+		--muted-foreground: 274 5% 35%;
+		--accent: 236 30% 80%;
+		--accent-foreground: 274 5% 15%;
+		--destructive: 0 100% 33%;
+		--destructive-foreground: 274 5% 90%;
+		--border: 274 30% 50%;
+		--input: 274 30% 33%;
+		--ring: 274 78% 47%;
+		--radius: 0.3rem;
+		scrollbar-color: #d946ef rgba(0, 0, 0, 0);
+	}
+	.dark.purple {
+		--background: 274 50% 10%;
+		--foreground: 274 5% 90%;
+		--card: 274 50% 10%;
+		--card-foreground: 274 5% 90%;
+		--popover: 274 50% 5%;
+		--popover-foreground: 274 5% 90%;
+		--primary: 274 78% 47%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 274 30% 20%;
+		--secondary-foreground: 0 0% 100%;
+		--muted: 236 30% 25%;
+		--muted-foreground: 274 5% 60%;
+		--accent: 236 30% 25%;
+		--accent-foreground: 274 5% 90%;
+		--destructive: 0 100% 33%;
+		--destructive-foreground: 274 5% 90%;
+		--border: 274 30% 33%;
+		--input: 274 30% 33%;
+		--ring: 274 78% 47%;
+		--radius: 0.3rem;
+	}
 
-  :root.orange {
-    --background: 31 100% 95%;
-    --foreground: 31 5% 10%;
-    --card: 31 50% 90%;
-    --card-foreground: 31 5% 15%;
-    --popover: 31 100% 95%;
-    --popover-foreground: 31 100% 10%;
-    --primary: 31 78% 47%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 31 30% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: -7 30% 85%;
-    --muted-foreground: 31 5% 35%;
-    --accent: -7 30% 80%;
-    --accent-foreground: 31 5% 15%;
-    --destructive: 0 100% 33%;
-    --destructive-foreground: 31 5% 90%;
-    --border: 31 30% 50%;
-    --input: 31 30% 33%;
-    --ring: 31 78% 47%;
-    --radius: 0.3rem;
-    scrollbar-color: orange rgba(0, 0, 0, 0);
-  }
-  .dark.orange {
-    --background: 31 50% 10%;
-    --foreground: 31 5% 90%;
-    --card: 31 50% 10%;
-    --card-foreground: 31 5% 90%;
-    --popover: 31 50% 5%;
-    --popover-foreground: 31 5% 90%;
-    --primary: 31 78% 47%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 31 30% 20%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: -7 30% 25%;
-    --muted-foreground: 31 5% 60%;
-    --accent: -7 30% 25%;
-    --accent-foreground: 31 5% 90%;
-    --destructive: 0 100% 33%;
-    --destructive-foreground: 31 5% 90%;
-    --border: 31 30% 33%;
-    --input: 31 30% 33%;
-    --ring: 31 78% 47%;
-    --radius: 0.3rem;
-  }
+	:root.orange {
+		--background: 31 100% 95%;
+		--foreground: 31 5% 10%;
+		--card: 31 50% 90%;
+		--card-foreground: 31 5% 15%;
+		--popover: 31 100% 95%;
+		--popover-foreground: 31 100% 10%;
+		--primary: 31 78% 47%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 31 30% 70%;
+		--secondary-foreground: 0 0% 0%;
+		--muted: -7 30% 85%;
+		--muted-foreground: 31 5% 35%;
+		--accent: -7 30% 80%;
+		--accent-foreground: 31 5% 15%;
+		--destructive: 0 100% 33%;
+		--destructive-foreground: 31 5% 90%;
+		--border: 31 30% 50%;
+		--input: 31 30% 33%;
+		--ring: 31 78% 47%;
+		--radius: 0.3rem;
+		scrollbar-color: orange rgba(0, 0, 0, 0);
+	}
+	.dark.orange {
+		--background: 31 50% 10%;
+		--foreground: 31 5% 90%;
+		--card: 31 50% 10%;
+		--card-foreground: 31 5% 90%;
+		--popover: 31 50% 5%;
+		--popover-foreground: 31 5% 90%;
+		--primary: 31 78% 47%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 31 30% 20%;
+		--secondary-foreground: 0 0% 100%;
+		--muted: -7 30% 25%;
+		--muted-foreground: 31 5% 60%;
+		--accent: -7 30% 25%;
+		--accent-foreground: 31 5% 90%;
+		--destructive: 0 100% 33%;
+		--destructive-foreground: 31 5% 90%;
+		--border: 31 30% 33%;
+		--input: 31 30% 33%;
+		--ring: 31 78% 47%;
+		--radius: 0.3rem;
+	}
 
-  :root.green {
-    --background: 119 100% 95%;
-    --foreground: 119 5% 10%;
-    --card: 119 50% 90%;
-    --card-foreground: 119 5% 15%;
-    --popover: 119 100% 95%;
-    --popover-foreground: 119 100% 10%;
-    --primary: 119 78% 47%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 119 30% 70%;
-    --secondary-foreground: 0 0% 0%;
-    --muted: 81 30% 85%;
-    --muted-foreground: 119 5% 35%;
-    --accent: 81 30% 80%;
-    --accent-foreground: 119 5% 15%;
-    --destructive: 0 100% 33%;
-    --destructive-foreground: 119 5% 90%;
-    --border: 119 30% 50%;
-    --input: 119 30% 33%;
-    --ring: 119 78% 47%;
-    --radius: 0.3rem;
-    scrollbar-color: green rgba(0, 0, 0, 0);
-  }
-  .dark.green {
-    --background: 119 50% 10%;
-    --foreground: 119 5% 90%;
-    --card: 119 50% 10%;
-    --card-foreground: 119 5% 90%;
-    --popover: 119 50% 5%;
-    --popover-foreground: 119 5% 90%;
-    --primary: 119 78% 47%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 119 30% 20%;
-    --secondary-foreground: 0 0% 100%;
-    --muted: 81 30% 25%;
-    --muted-foreground: 119 5% 60%;
-    --accent: 81 30% 25%;
-    --accent-foreground: 119 5% 90%;
-    --destructive: 0 100% 33%;
-    --destructive-foreground: 119 5% 90%;
-    --border: 119 30% 33%;
-    --input: 119 30% 33%;
-    --ring: 119 78% 47%;
-    --radius: 0.3rem;
-  }
+	:root.green {
+		--background: 119 100% 95%;
+		--foreground: 119 5% 10%;
+		--card: 119 50% 90%;
+		--card-foreground: 119 5% 15%;
+		--popover: 119 100% 95%;
+		--popover-foreground: 119 100% 10%;
+		--primary: 119 78% 47%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 119 30% 70%;
+		--secondary-foreground: 0 0% 0%;
+		--muted: 81 30% 85%;
+		--muted-foreground: 119 5% 35%;
+		--accent: 81 30% 80%;
+		--accent-foreground: 119 5% 15%;
+		--destructive: 0 100% 33%;
+		--destructive-foreground: 119 5% 90%;
+		--border: 119 30% 50%;
+		--input: 119 30% 33%;
+		--ring: 119 78% 47%;
+		--radius: 0.3rem;
+		scrollbar-color: green rgba(0, 0, 0, 0);
+	}
+	.dark.green {
+		--background: 119 50% 10%;
+		--foreground: 119 5% 90%;
+		--card: 119 50% 10%;
+		--card-foreground: 119 5% 90%;
+		--popover: 119 50% 5%;
+		--popover-foreground: 119 5% 90%;
+		--primary: 119 78% 47%;
+		--primary-foreground: 0 0% 100%;
+		--secondary: 119 30% 20%;
+		--secondary-foreground: 0 0% 100%;
+		--muted: 81 30% 25%;
+		--muted-foreground: 119 5% 60%;
+		--accent: 81 30% 25%;
+		--accent-foreground: 119 5% 90%;
+		--destructive: 0 100% 33%;
+		--destructive-foreground: 119 5% 90%;
+		--border: 119 30% 33%;
+		--input: 119 30% 33%;
+		--ring: 119 78% 47%;
+		--radius: 0.3rem;
+	}
 }
 
 /* Scrollbar */
 html::-webkit-scrollbar,
 div::-webkit-scrollbar {
-  width: 8px;
+	width: 8px;
 }
 
 html::-webkit-scrollbar-track,
 div::-webkit-scrollbar-track {
-  background-color: rgba(0, 0, 0, 0);
+	background-color: rgba(0, 0, 0, 0);
 }
 
 html::-webkit-scrollbar-thumb,
 div::-webkit-scrollbar-track {
-  background-color: #d946ef;
+	background-color: #d946ef;
 }
 /* .blue html::-webkit-scrollbar-thumb,
 .blue div::-webkit-scrollbar-track {
@@ -264,307 +266,307 @@ div::-webkit-scrollbar-thumb {
 } */
 
 a span {
-  color: rgb(37, 99, 235);
+	color: rgb(37, 99, 235);
 }
 
 a span:visited {
-  color: rgb(147, 51, 234);
+	color: rgb(147, 51, 234);
 }
 
 button {
-  outline: none;
+	outline: none;
 }
 
 /* Sprite */
 .pixelated {
-  image-rendering: pixelated;
+	image-rendering: pixelated;
 }
 
 /* Card Hover Animation */
 /* https://codepen.io/nxworld/pen/vrpJZN */
 .card-contents {
-  transition: 0.5s ease;
+	transition: 0.5s ease;
 }
 
 .card-hover {
-  position: absolute;
-  z-index: 2;
-  width: calc(100% / 3);
-  height: calc(100% / 3);
+	position: absolute;
+	z-index: 2;
+	width: calc(100% / 3);
+	height: calc(100% / 3);
 }
 
 .card-hover:nth-child(1) {
-  top: 0;
-  left: 0;
+	top: 0;
+	left: 0;
 }
 
 .card-hover:nth-child(2) {
-  top: 0;
-  left: calc(100% / 3);
+	top: 0;
+	left: calc(100% / 3);
 }
 
 .card-hover:nth-child(3) {
-  top: 0;
-  right: 0;
+	top: 0;
+	right: 0;
 }
 
 .card-hover:nth-child(4) {
-  top: calc(100% / 3);
-  left: 0;
+	top: calc(100% / 3);
+	left: 0;
 }
 
 .card-hover:nth-child(5) {
-  top: calc(100% / 3);
-  right: 0;
+	top: calc(100% / 3);
+	right: 0;
 }
 
 .card-hover:nth-child(6) {
-  bottom: 0;
-  left: 0;
+	bottom: 0;
+	left: 0;
 }
 
 .card-hover:nth-child(7) {
-  bottom: 0;
-  left: calc(100% / 3);
+	bottom: 0;
+	left: calc(100% / 3);
 }
 
 .card-hover:nth-child(8) {
-  bottom: 0;
-  right: 0;
+	bottom: 0;
+	right: 0;
 }
 
 .card-hover:nth-child(1):hover ~ .card-contents {
-  box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.3);
-  transform-origin: right top;
-  transform: perspective(1000px) rotateX(10deg) rotateY(-10deg) rotateZ(2deg);
+	box-shadow: 15px 15px 50px rgba(0, 0, 0, 0.3);
+	transform-origin: right top;
+	transform: perspective(1000px) rotateX(10deg) rotateY(-10deg) rotateZ(2deg);
 }
 
 .card-hover:nth-child(2):hover ~ .card-contents {
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-  transform-origin: center top;
-  transform: perspective(1000px) rotateX(10deg);
+	box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+	transform-origin: center top;
+	transform: perspective(1000px) rotateX(10deg);
 }
 
 .card-hover:nth-child(3):hover ~ .card-contents {
-  box-shadow: -15px 15px 50px rgba(0, 0, 0, 0.3);
-  transform-origin: left top;
-  transform: perspective(1000px) rotateX(10deg) rotateY(10deg) rotateZ(-2deg);
+	box-shadow: -15px 15px 50px rgba(0, 0, 0, 0.3);
+	transform-origin: left top;
+	transform: perspective(1000px) rotateX(10deg) rotateY(10deg) rotateZ(-2deg);
 }
 
 .card-hover:nth-child(4):hover ~ .card-contents {
-  box-shadow: 15px 5px 50px rgba(0, 0, 0, 0.3);
-  transform-origin: left center;
-  transform: perspective(1000px) rotateY(-10deg);
+	box-shadow: 15px 5px 50px rgba(0, 0, 0, 0.3);
+	transform-origin: left center;
+	transform: perspective(1000px) rotateY(-10deg);
 }
 
 .card-hover:nth-child(5):hover ~ .card-contents {
-  box-shadow: -15px 5px 50px rgba(0, 0, 0, 0.3);
-  transform-origin: right center;
-  transform: perspective(1000px) rotateY(10deg);
+	box-shadow: -15px 5px 50px rgba(0, 0, 0, 0.3);
+	transform-origin: right center;
+	transform: perspective(1000px) rotateY(10deg);
 }
 
 .card-hover:nth-child(6):hover ~ .card-contents {
-  box-shadow: 15px -15px 50px rgba(0, 0, 0, 0.3);
-  transform-origin: right bottom;
-  transform: perspective(1000px) rotateX(-10deg) rotateY(-10deg) rotateZ(-2deg);
+	box-shadow: 15px -15px 50px rgba(0, 0, 0, 0.3);
+	transform-origin: right bottom;
+	transform: perspective(1000px) rotateX(-10deg) rotateY(-10deg) rotateZ(-2deg);
 }
 
 .card-hover:nth-child(7):hover ~ .card-contents {
-  box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.3);
-  transform-origin: center bottom;
-  transform: perspective(1000px) rotateX(-10deg);
+	box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.3);
+	transform-origin: center bottom;
+	transform: perspective(1000px) rotateX(-10deg);
 }
 
 .card-hover:nth-child(8):hover ~ .card-contents {
-  box-shadow: -15px -15px 50px rgba(0, 0, 0, 0.3);
-  transform-origin: left bottom;
-  transform: perspective(1000px) rotateX(-10deg) rotateY(10deg) rotateZ(2deg);
+	box-shadow: -15px -15px 50px rgba(0, 0, 0, 0.3);
+	transform-origin: left bottom;
+	transform: perspective(1000px) rotateX(-10deg) rotateY(10deg) rotateZ(2deg);
 }
 
 /* Loading Animation */
 .ring {
-  animation: ring 2s linear infinite;
+	animation: ring 2s linear infinite;
 }
 
 @keyframes ring {
-  0% {
-    transform: rotate(0deg);
-    box-shadow: 1px 5px 2px #ef4444;
-  }
-  6.25% {
-    transform: rotate(22.5deg);
-    box-shadow: 1px 5px 2px #f97316;
-  }
-  12.5% {
-    transform: rotate(45deg);
-    box-shadow: 1px 5px 2px #f59e0b;
-  }
-  18.75% {
-    transform: rotate(67.5deg);
-    box-shadow: 1px 5px 2px #eab308;
-  }
-  25% {
-    transform: rotate(90deg);
-    box-shadow: 1px 5px 2px #84cc16;
-  }
-  31.25% {
-    transform: rotate(112.5deg);
-    box-shadow: 1px 5px 2px #22c55e;
-  }
-  37.5% {
-    transform: rotate(135deg);
-    box-shadow: 1px 5px 2px #10b981;
-  }
-  43.75% {
-    transform: rotate(157.5deg);
-    box-shadow: 1px 5px 2px #14b8a6;
-  }
-  50% {
-    transform: rotate(180deg);
-    box-shadow: 1px 5px 2px #06b6d4;
-  }
-  56.25% {
-    transform: rotate(202.5deg);
-    box-shadow: 1px 5px 2px #0ea5e9;
-  }
-  62.5% {
-    transform: rotate(225deg);
-    box-shadow: 1px 5px 2px #3b82f6;
-  }
-  68.75% {
-    transform: rotate(247.5deg);
-    box-shadow: 1px 5px 2px #6366f1;
-  }
-  75% {
-    transform: rotate(270deg);
-    box-shadow: 1px 5px 2px #8b5cf6;
-  }
-  81.25% {
-    transform: rotate(292.5deg);
-    box-shadow: 1px 5px 2px #a855f7;
-  }
-  87.5% {
-    transform: rotate(315deg);
-    box-shadow: 1px 5px 2px #d946ef;
-  }
-  93.75% {
-    transform: rotate(337.5deg);
-    box-shadow: 1px 5px 2px #ec4899;
-  }
-  100% {
-    transform: rotate(360deg);
-    box-shadow: 1px 5px 2px #f43f5e;
-  }
+	0% {
+		transform: rotate(0deg);
+		box-shadow: 1px 5px 2px #ef4444;
+	}
+	6.25% {
+		transform: rotate(22.5deg);
+		box-shadow: 1px 5px 2px #f97316;
+	}
+	12.5% {
+		transform: rotate(45deg);
+		box-shadow: 1px 5px 2px #f59e0b;
+	}
+	18.75% {
+		transform: rotate(67.5deg);
+		box-shadow: 1px 5px 2px #eab308;
+	}
+	25% {
+		transform: rotate(90deg);
+		box-shadow: 1px 5px 2px #84cc16;
+	}
+	31.25% {
+		transform: rotate(112.5deg);
+		box-shadow: 1px 5px 2px #22c55e;
+	}
+	37.5% {
+		transform: rotate(135deg);
+		box-shadow: 1px 5px 2px #10b981;
+	}
+	43.75% {
+		transform: rotate(157.5deg);
+		box-shadow: 1px 5px 2px #14b8a6;
+	}
+	50% {
+		transform: rotate(180deg);
+		box-shadow: 1px 5px 2px #06b6d4;
+	}
+	56.25% {
+		transform: rotate(202.5deg);
+		box-shadow: 1px 5px 2px #0ea5e9;
+	}
+	62.5% {
+		transform: rotate(225deg);
+		box-shadow: 1px 5px 2px #3b82f6;
+	}
+	68.75% {
+		transform: rotate(247.5deg);
+		box-shadow: 1px 5px 2px #6366f1;
+	}
+	75% {
+		transform: rotate(270deg);
+		box-shadow: 1px 5px 2px #8b5cf6;
+	}
+	81.25% {
+		transform: rotate(292.5deg);
+		box-shadow: 1px 5px 2px #a855f7;
+	}
+	87.5% {
+		transform: rotate(315deg);
+		box-shadow: 1px 5px 2px #d946ef;
+	}
+	93.75% {
+		transform: rotate(337.5deg);
+		box-shadow: 1px 5px 2px #ec4899;
+	}
+	100% {
+		transform: rotate(360deg);
+		box-shadow: 1px 5px 2px #f43f5e;
+	}
 }
 
 /* Fade Home Page In */
 .fade-in {
-  animation: fadeIn 4s;
+	animation: fadeIn 4s;
 }
 
 @keyframes fadeIn {
-  0% {
-    opacity: 0;
-    z-index: 0;
-  }
-  100% {
-    opacity: 1;
-    z-index: 0;
-  }
+	0% {
+		opacity: 0;
+		z-index: 0;
+	}
+	100% {
+		opacity: 1;
+		z-index: 0;
+	}
 }
 
 /* Candy Cane https://codemyui.com/css-only-candy-cane-text-animation/ */
 .candy-cane {
-  font-family: "Open Sans", sans-serif;
-  background: repeating-linear-gradient(
-    45deg,
-    white,
-    white 30px,
-    red 30px,
-    red 60px
-  );
-  background-clip: text;
-  color: transparent;
-  -webkit-background-clip: text;
-  animation: 40s linear 0s infinite move;
+	font-family: "Open Sans", sans-serif;
+	background: repeating-linear-gradient(
+		45deg,
+		white,
+		white 30px,
+		red 30px,
+		red 60px
+	);
+	background-clip: text;
+	color: transparent;
+	-webkit-background-clip: text;
+	animation: 40s linear 0s infinite move;
 }
 
 @keyframes move {
-  from {
-    background-position: 0px;
-  }
-  to {
-    background-position: 1000px;
-  }
+	from {
+		background-position: 0px;
+	}
+	to {
+		background-position: 1000px;
+	}
 }
 
 /* https://www.youtube.com/watch?v=eMPNVtsBY_o */
 .new-year {
-  font-family: "Open Sans", sans-serif;
-  text-shadow:
-    0 0 10px yellow,
-    0 0 25px yellow;
-  animation: glow 2.5s linear infinite;
+	font-family: "Open Sans", sans-serif;
+	text-shadow:
+		0 0 10px yellow,
+		0 0 25px yellow;
+	animation: glow 2.5s linear infinite;
 }
 
 @keyframes glow {
-  0% {
-    filter: hue-rotate(0deg);
-  }
-  100% {
-    filter: hue-rotate(360deg);
-  }
+	0% {
+		filter: hue-rotate(0deg);
+	}
+	100% {
+		filter: hue-rotate(360deg);
+	}
 }
 
 .pokezoo {
-  color: transparent;
+	color: transparent;
 }
 
 .pokezoo span {
-  animation: animate 4s linear infinite;
-  animation-delay: calc(0.1s * var(--i));
+	animation: animate 4s linear infinite;
+	animation-delay: calc(0.1s * var(--i));
 }
 
 @keyframes animate {
-  0% {
-    color: #fff;
-    filter: blur(0px) hue-rotate(0deg);
-    text-shadow:
-      0 0 10px #00b3ff,
-      0 0 20px #00b3ff,
-      0 0 40px #00b3ff,
-      0 0 80px #00b3ff,
-      0 0 120px #00b3ff,
-      0 0 200px #00b3ff,
-      0 0 300px #00b3ff,
-      0 0 400px #00b3ff;
-  }
-  30%,
-  70% {
-    color: #fff;
-    filter: blur(0px) hue-rotate(360deg);
-    text-shadow:
-      0 0 10px #00b3ff,
-      0 0 20px #00b3ff,
-      0 0 40px #00b3ff,
-      0 0 80px #00b3ff,
-      0 0 120px #00b3ff,
-      0 0 200px #00b3ff,
-      0 0 300px #00b3ff,
-      0 0 400px #00b3ff;
-  }
-  100% {
-    color: transparent;
-    box-shadow: none;
-    filter: blur(0px) hue-rotate(0deg);
-  }
+	0% {
+		color: #fff;
+		filter: blur(0px) hue-rotate(0deg);
+		text-shadow:
+			0 0 10px #00b3ff,
+			0 0 20px #00b3ff,
+			0 0 40px #00b3ff,
+			0 0 80px #00b3ff,
+			0 0 120px #00b3ff,
+			0 0 200px #00b3ff,
+			0 0 300px #00b3ff,
+			0 0 400px #00b3ff;
+	}
+	30%,
+	70% {
+		color: #fff;
+		filter: blur(0px) hue-rotate(360deg);
+		text-shadow:
+			0 0 10px #00b3ff,
+			0 0 20px #00b3ff,
+			0 0 40px #00b3ff,
+			0 0 80px #00b3ff,
+			0 0 120px #00b3ff,
+			0 0 200px #00b3ff,
+			0 0 300px #00b3ff,
+			0 0 400px #00b3ff;
+	}
+	100% {
+		color: transparent;
+		box-shadow: none;
+		filter: blur(0px) hue-rotate(0deg);
+	}
 }
 
 @layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
 }

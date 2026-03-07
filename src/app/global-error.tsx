@@ -1,22 +1,24 @@
 "use client";
 
 export default function GlobalError({
-  error,
-  reset,
+	error,
+	reset,
 }: {
-  error: Error & { digest?: string };
-  reset: () => void;
+	error: Error & { digest?: string };
+	reset: () => void;
 }) {
-  if (process.env.NODE_ENV === "development") {
-    console.error(error);
-  }
+	if (process.env.NODE_ENV === "development") {
+		console.error(error);
+	}
 
-  return (
-    <html>
-      <body>
-        <h2>Something went wrong!</h2>
-        <button onClick={() => reset()}>Try again</button>
-      </body>
-    </html>
-  );
+	return (
+		<html lang="en">
+			<body>
+				<h2>Something went wrong!</h2>
+				<button onClick={() => reset()} type="button">
+					Try again
+				</button>
+			</body>
+		</html>
+	);
 }
