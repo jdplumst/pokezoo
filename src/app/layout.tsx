@@ -1,8 +1,8 @@
 import "~/styles/globals.css";
 import { GeistSans } from "geist/font/sans";
 import { Toaster } from "~/components/ui/sonner";
-import { TRPCReactProvider } from "~/trpc/react";
 import { getTheme, getTime } from "~/server/db/queries/cookies";
+import { TRPCReactProvider } from "~/trpc/react";
 
 export default async function RootLayout({
 	children,
@@ -14,7 +14,7 @@ export default async function RootLayout({
 	const mode = time === "day" ? "light" : "dark";
 
 	return (
-		<html lang="en" className={`${GeistSans.className} ${theme} ${mode}`}>
+		<html className={`${GeistSans.className} ${theme} ${mode}`} lang="en">
 			<body>
 				<Toaster closeButton />
 				<TRPCReactProvider>{children}</TRPCReactProvider>

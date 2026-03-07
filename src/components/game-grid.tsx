@@ -1,5 +1,11 @@
 "use client";
 
+import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
+import { useRouter } from "next/navigation";
+import { Fragment, useActionState, useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
+import { toast } from "sonner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -16,15 +22,9 @@ import {
 	RegionsList,
 	TypesList,
 } from "~/lib/constants";
-import { DropdownMenuRadioGroup } from "@radix-ui/react-dropdown-menu";
-import React, { Fragment, useActionState, useEffect, useState } from "react";
-import { useInView } from "react-intersection-observer";
-import PokemonCard from "./pokemon-card";
-import { LoadingSpinner } from "~/components/loading-spinner";
-import { useRouter } from "next/navigation";
 import { sellPokemonAction } from "~/server/actions/game";
 import { api } from "~/trpc/react";
-import { toast } from "sonner";
+import PokemonCard from "./pokemon-card";
 
 export default function GameGrid() {
 	const { open } = useSidebar();
@@ -55,7 +55,7 @@ export default function GameGrid() {
 		{
 			limit: 50,
 			order: sortedBy,
-			shiny: shiny === "Shiny" ? true : false,
+			shiny: shiny === "Shiny",
 			regions: regions,
 			rarities: rarities,
 			types: types,
@@ -68,11 +68,11 @@ export default function GameGrid() {
 
 	const { ref, inView } = useInView();
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: address later
 	useEffect(() => {
 		if (inView && pokemon.hasNextPage) {
 			void pokemon.fetchNextPage();
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [pokemon.fetchNextPage, inView]);
 
 	const [data, action, isPending] = useActionState(
@@ -80,6 +80,7 @@ export default function GameGrid() {
 		undefined,
 	);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: address later
 	useEffect(() => {
 		if (data?.success === false) {
 			toast.error(data.error);
@@ -89,23 +90,22 @@ export default function GameGrid() {
 			void pokemon.refetch();
 			router.refresh();
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data, router]);
 
 	return (
 		<>
 			{sellIds.length > 0 && (
-				<div className="sticky top-0 z-10 flex items-center justify-between border-2 border-solid border-black bg-secondary p-4">
+				<div className="sticky top-0 z-10 flex items-center justify-between border-2 border-black border-solid bg-secondary p-4">
 					<span className="font-bold">
 						You have selected {sellIds.length} Pokémon to sell.
 					</span>
 
 					<form action={action}>
-						<input type="hidden" name="ids" value={sellIds} />
+						<input name="ids" type="hidden" value={sellIds} />
 						<Button
-							type="submit"
-							disabled={isPending}
 							className="rounded-lg border-2 border-black p-2 font-bold"
+							disabled={isPending}
+							type="submit"
 						>
 							{isPending ? <LoadingSpinner /> : "Confirm Sell"}
 						</Button>
@@ -120,9 +120,9 @@ export default function GameGrid() {
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
 							<DropdownMenuRadioGroup
-								value={sortedBy}
 								// @ts-expect-error expects string but is specific string
 								onValueChange={setSortedBy}
+								value={sortedBy}
 							>
 								{sortValues.map((s) => (
 									<DropdownMenuRadioItem key={s} value={s}>
@@ -139,9 +139,9 @@ export default function GameGrid() {
 						</DropdownMenuTrigger>
 						<DropdownMenuContent>
 							<DropdownMenuRadioGroup
-								value={shiny}
 								// @ts-expect-error expects string but is specific string
 								onValueChange={setShiny}
+								value={shiny}
 							>
 								<DropdownMenuRadioItem key={"Regular"} value={"Regular"}>
 									{"Regular"}
@@ -173,10 +173,10 @@ export default function GameGrid() {
 							<DropdownMenuSeparator />
 							{RegionsList.map((r) => (
 								<DropdownMenuCheckboxItem
-									key={r}
 									checked={regions.some((region) => region === r)}
+									key={r}
 									onCheckedChange={() => {
-										const i = regions.findIndex((region) => region === r);
+										const i = regions.indexOf(r);
 										if (i === -1) {
 											setRegions([...regions, r]);
 										} else {
@@ -208,10 +208,10 @@ export default function GameGrid() {
 							<DropdownMenuSeparator />
 							{RaritiesList.map((r) => (
 								<DropdownMenuCheckboxItem
-									key={r}
 									checked={rarities.some((rarity) => rarity === r)}
+									key={r}
 									onCheckedChange={() => {
-										const i = rarities.findIndex((rarity) => rarity === r);
+										const i = rarities.indexOf(r);
 										if (i === -1) {
 											setRarities([...rarities, r]);
 										} else {
@@ -241,10 +241,10 @@ export default function GameGrid() {
 							<DropdownMenuSeparator />
 							{TypesList.map((t) => (
 								<DropdownMenuCheckboxItem
-									key={t}
 									checked={types.some((type) => type === t)}
+									key={t}
 									onCheckedChange={() => {
-										const i = types.findIndex((type) => type === t);
+										const i = types.indexOf(t);
 										if (i === -1) {
 											setTypes([...types, t]);
 										} else {
@@ -276,10 +276,10 @@ export default function GameGrid() {
 							<DropdownMenuSeparator />
 							{HabitatList.map((h) => (
 								<DropdownMenuCheckboxItem
-									key={h}
 									checked={habitats.some((habitat) => habitat === h)}
+									key={h}
 									onCheckedChange={() => {
-										const i = habitats.findIndex((habitat) => habitat === h);
+										const i = habitats.indexOf(h);
 										if (i === -1) {
 											setHabitats([...habitats, h]);
 										} else {
@@ -300,6 +300,7 @@ export default function GameGrid() {
 					className={`grid ${open ? `grid-cols-1 lg:grid-cols-2 xl:grid-cols-3` : `grid-cols-1 lg:grid-cols-2 xl:grid-cols-3`} gap-10`}
 				>
 					{pokemon.data?.pages.map((p, idx) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey: address later
 						<Fragment key={idx}>
 							{p.instancesData.map((i) => (
 								<PokemonCard key={i.instance.id} pokemon={i}>

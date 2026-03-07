@@ -1,9 +1,9 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { redirect } from "next/navigation";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { getStorage } from "~/server/db/queries/storage";
+import { redirect } from "next/navigation";
 import { StorageGrid } from "~/components/storage-grid";
-import { type Metadata } from "next";
+import { getStorage } from "~/server/db/queries/storage";
 
 export const metadata: Metadata = {
 	title: "PokéZoo - Storage",
@@ -22,8 +22,8 @@ export default async function StoragePage({
 		redirect("/storage/1");
 	}
 
-	const idInt = parseInt(id);
-	if (isNaN(idInt) || idInt < 1 || idInt > 30) {
+	const idInt = parseInt(id, 10);
+	if (Number.isNaN(idInt) || idInt < 1 || idInt > 30) {
 		redirect("/storage/1");
 	}
 
@@ -35,7 +35,7 @@ export default async function StoragePage({
 	return (
 		<div className="min-h-screen p-4">
 			<div className="mx-auto max-w-4xl">
-				<h1 className="mb-6 text-center text-3xl font-bold">
+				<h1 className="mb-6 text-center font-bold text-3xl">
 					Pokémon Storage System
 				</h1>
 
@@ -43,7 +43,10 @@ export default async function StoragePage({
 					{/* Box header */}
 					<div className="flex items-center justify-between bg-gray-700 p-4">
 						<Link href={`/storage/${prevPage}`}>
-							<button className="rounded-full bg-gray-600 p-2 text-white hover:bg-gray-500">
+							<button
+								className="rounded-full bg-gray-600 p-2 text-white hover:bg-gray-500"
+								type="button"
+							>
 								<ChevronLeft size={20} />
 							</button>
 						</Link>
@@ -51,7 +54,10 @@ export default async function StoragePage({
 						<div className="flex items-center text-white">Box {id}</div>
 
 						<Link href={`/storage/${nextPage}`}>
-							<button className="rounded-full bg-gray-600 p-2 text-white hover:bg-gray-500">
+							<button
+								className="rounded-full bg-gray-600 p-2 text-white hover:bg-gray-500"
+								type="button"
+							>
 								<ChevronRight size={20} />
 							</button>
 						</Link>

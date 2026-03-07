@@ -54,22 +54,22 @@ export function PokemonSheet(props: {
 	}
 
 	return (
-		<Sheet open={props.open} onOpenChange={props.setOpen}>
+		<Sheet onOpenChange={props.setOpen} open={props.open}>
 			<SheetContent className="flex flex-col items-center gap-8">
 				<SheetHeader className="flex flex-col items-center">
 					<SheetTitle className="font-2xl capitalize">
-						{pokemon.data.shiny && "🌟"}{" "}
-						{"#" + pokemon.data.pokedexNumber + ":"} {pokemon.data.name}
+						{pokemon.data.shiny && "🌟"} {`#${pokemon.data.pokedexNumber}:`}{" "}
+						{pokemon.data.name}
 					</SheetTitle>
 					<SheetDescription hidden={true}>
 						A description of {pokemon.data.name}
 					</SheetDescription>
 					<div className="flex flex-col items-start text-lg">
 						<Image
-							src={pokemon.data.img}
 							alt={pokemon.data.name}
-							width={200}
 							height={200}
+							src={pokemon.data.img}
+							width={200}
 						/>
 
 						<div className="flex gap-4 pb-5">

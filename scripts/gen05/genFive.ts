@@ -1,7 +1,7 @@
 // @ts-nocheck
 
+import type { Rarity, SpeciesType } from "@prisma/client";
 import { prisma } from "../../src/server/db";
-import { Rarity, SpeciesType } from "@prisma/client";
 
 function capitalize(s: string) {
 	return s.charAt(0).toUpperCase() + s.slice(1);

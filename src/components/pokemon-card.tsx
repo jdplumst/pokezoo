@@ -1,11 +1,11 @@
 "use client";
 
-import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "~/lib/types";
 import Image from "next/image";
 import { type ReactNode, useState } from "react";
 import { z } from "zod";
-import { getRarityColor } from "~/lib/get-rarity-color";
 import { PokemonSheet } from "~/components/pokemon-sheet";
+import { getRarityColor } from "~/lib/get-rarity-color";
+import { ZodHabitat, ZodRarity, ZodRegion, ZodSpeciesType } from "~/lib/types";
 
 export default function PokemonCard(props: {
 	children: ReactNode;
@@ -50,32 +50,34 @@ export default function PokemonCard(props: {
 
 	return (
 		<>
+			{/** biome-ignore lint/a11y/noStaticElementInteractions: address later */}
+			{/** biome-ignore lint/a11y/useKeyWithClickEvents: address later */}
 			<div
+				className={`relative w-80 rounded-2xl border-2 border-black border-solid p-4 shadow-xl hover:cursor-pointer ${getRarityColor(pokemon.data.rarity)}`}
 				onClick={() => setOpen(true)}
-				className={`relative w-80 rounded-2xl border-2 border-solid border-black p-4 shadow-xl hover:cursor-pointer ${getRarityColor(pokemon.data.rarity)}`}
 			>
 				{props.caught && (
 					<Image
+						alt="Caught"
+						className="absolute top-0 left-0 z-10"
+						height={40}
 						src={
 							"https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/items/poke-ball.png"
 						}
-						alt="Caught"
 						width={40}
-						height={40}
-						className="absolute left-0 top-0 z-10"
 					/>
 				)}
 				<div className="flex flex-col items-center gap-2">
 					<Image
-						src={pokemon.data.img}
 						alt={pokemon.data.name}
-						width={100}
-						height={100}
 						className="pixelated"
+						height={100}
+						src={pokemon.data.img}
+						width={100}
 					/>
 					<div className="font-lg font-semibold capitalize">
-						{pokemon.data.shiny && "🌟"}{" "}
-						{"#" + pokemon.data.pokedexNumber + ":"} {pokemon.data.name}
+						{pokemon.data.shiny && "🌟"} {`#${pokemon.data.pokedexNumber}:`}{" "}
+						{pokemon.data.name}
 					</div>
 					<div className="flex flex-col items-center gap-0">
 						<div>Rarity: {pokemon.data.rarity}</div>
@@ -88,9 +90,9 @@ export default function PokemonCard(props: {
 
 			<PokemonSheet
 				open={open}
+				pokemon={pokemon.data}
 				setOpen={setOpen}
 				storage={false}
-				pokemon={pokemon.data}
 			/>
 		</>
 	);

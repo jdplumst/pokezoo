@@ -1,22 +1,3 @@
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import {
-	habitats,
-	instances,
-	rarities,
-	regions,
-	species,
-	types,
-} from "~/server/db/schema";
-import {
-	HabitatValues,
-	RarityValues,
-	RegionValues,
-	SpeciesTypeValues,
-	ZodHabitat,
-	ZodRarity,
-	ZodRegion,
-	ZodSpeciesType,
-} from "~/lib/types";
 import {
 	and,
 	asc,
@@ -30,6 +11,25 @@ import {
 } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { z } from "zod";
+import {
+	HabitatValues,
+	RarityValues,
+	RegionValues,
+	SpeciesTypeValues,
+	ZodHabitat,
+	ZodRarity,
+	ZodRegion,
+	ZodSpeciesType,
+} from "~/lib/types";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import {
+	habitats,
+	instances,
+	rarities,
+	regions,
+	species,
+	types,
+} from "~/server/db/schema";
 
 export const pokedexRouter = createTRPCRouter({
 	getPokedex: protectedProcedure
@@ -118,7 +118,7 @@ export const pokedexRouter = createTRPCRouter({
 					asc(species.name),
 				);
 
-			let nextCursor: typeof input.cursor | undefined = undefined;
+			let nextCursor: typeof input.cursor | undefined;
 			if (pokemon.length > limit) {
 				const nextItem = pokemon.pop()!;
 				nextCursor = {

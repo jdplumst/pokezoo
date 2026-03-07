@@ -1,6 +1,18 @@
 "use client";
 
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { LoadingSpinner } from "~/components/loading-spinner";
+import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { Button } from "~/components/ui/button";
+import { Card, CardContent } from "~/components/ui/card";
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious,
+} from "~/components/ui/carousel";
 import {
 	Dialog,
 	DialogContent,
@@ -8,9 +20,6 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "~/components/ui/dialog";
-import { Slider } from "~/components/ui/slider";
-import { useActionState, useEffect, useState } from "react";
-import { LoadingSpinner } from "~/components/loading-spinner";
 import {
 	Drawer,
 	DrawerClose,
@@ -21,19 +30,10 @@ import {
 	DrawerTitle,
 	DrawerTrigger,
 } from "~/components/ui/drawer";
-import {
-	Carousel,
-	CarouselContent,
-	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
-} from "~/components/ui/carousel";
-import { Card, CardContent } from "~/components/ui/card";
+import { Slider } from "~/components/ui/slider";
 import { type Region, RegionValues } from "~/lib/types";
-import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { purchaseBallsAction } from "~/server/actions/shop";
 import { api } from "~/trpc/react";
-import { toast } from "sonner";
 import { ScrollArea } from "./ui/scroll-area";
 
 export default function BallSlider(props: {
@@ -67,11 +67,11 @@ export default function BallSlider(props: {
 			<div>Quantity: {sliderValue[0]}</div>
 			<Slider
 				defaultValue={[1]}
-				min={1}
 				max={10}
+				min={1}
+				onValueChange={(e) => setSliderValue(e)}
 				step={1}
 				value={sliderValue}
-				onValueChange={(e) => setSliderValue(e)}
 			/>
 			{props.ballName === "Premier" ? (
 				<Drawer>
@@ -84,24 +84,25 @@ export default function BallSlider(props: {
 							<DrawerDescription>Please select a region.</DrawerDescription>
 						</DrawerHeader>
 						<Carousel
+							className="w-full max-w-sm"
 							opts={{
 								align: "start",
 							}}
-							className="w-full max-w-sm"
 						>
 							<CarouselContent>
 								{RegionValues.map((r) => (
-									<CarouselItem key={r} className="md:basis-1/2 lg:basis-1/3">
+									<CarouselItem className="md:basis-1/2 lg:basis-1/3" key={r}>
 										<div className={`p-1`}>
 											<Card
 												className={`${premierRegion === r && `bg-secondary`}`}
 											>
 												<CardContent className="flex aspect-square items-center justify-center p-6">
+													{/** biome-ignore lint/a11y/useButtonType: address later */}
 													<button
+														className="font-semibold text-3xl"
 														onClick={() => {
 															setPremierRegion(r);
 														}}
-														className="text-3xl font-semibold"
 													>
 														{r}
 													</button>
@@ -116,16 +117,16 @@ export default function BallSlider(props: {
 						</Carousel>
 						<DrawerFooter className="flex flex-col items-center">
 							<form action={action}>
-								<input type="hidden" name="ballId" value={props.ballId} />
+								<input name="ballId" type="hidden" value={props.ballId} />
 								<input
+									className="hidden"
+									name="quantity"
 									readOnly
 									type="number"
-									name="quantity"
 									value={sliderValue[0]}
-									className="hidden"
 								/>
-								<input type="hidden" name="regionName" value={premierRegion} />
-								<Button type="submit" disabled={isPending}>
+								<input name="regionName" type="hidden" value={premierRegion} />
+								<Button disabled={isPending} type="submit">
 									{isPending ? <LoadingSpinner /> : "Submit"}
 								</Button>
 							</form>
@@ -137,21 +138,21 @@ export default function BallSlider(props: {
 				</Drawer>
 			) : (
 				<form action={action}>
-					<input type="hidden" name="ballId" value={props.ballId} readOnly />
+					<input name="ballId" readOnly type="hidden" value={props.ballId} />
 					<input
-						type="number"
-						name="quantity"
-						value={sliderValue[0]}
 						className="hidden"
+						name="quantity"
 						readOnly
+						type="number"
+						value={sliderValue[0]}
 					/>
-					<Button type="submit" disabled={isPending}>
+					<Button disabled={isPending} type="submit">
 						{isPending ? <LoadingSpinner /> : "Buy"}
 					</Button>
 				</form>
 			)}
 			{data?.success === true && (
-				<Dialog open={isOpen} onOpenChange={setIsOpen}>
+				<Dialog onOpenChange={setIsOpen} open={isOpen}>
 					<DialogContent className="w-96">
 						<DialogHeader>
 							<DialogTitle>You have obtained new Pokémon!</DialogTitle>
@@ -159,15 +160,16 @@ export default function BallSlider(props: {
 						<DialogDescription>
 							Here is all the Pokémon you have obtained.
 						</DialogDescription>
-						<ScrollArea className="flex flex-col gap-4 max-h-[80vh] overflow-y-auto">
+						<ScrollArea className="flex max-h-[80vh] flex-col gap-4 overflow-y-auto">
 							<div className="flex flex-col gap-4">
 								{data.purchasedSpecies.map((s, idx) => (
 									<MiniPokemonCard
+										img={s.img}
+										// biome-ignore lint/suspicious/noArrayIndexKey: address later
 										key={idx}
 										name={s.name}
-										img={s.img}
-										shiny={s.shiny}
 										rarity={s.rarity}
+										shiny={s.shiny}
 									/>
 								))}
 							</div>

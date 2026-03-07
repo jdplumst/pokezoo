@@ -3,6 +3,7 @@ import "server-only";
 import { desc, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { db } from "~/server/db";
+import { isAuthed } from "~/server/db/queries/auth";
 import {
 	instances,
 	profiles,
@@ -10,7 +11,6 @@ import {
 	species,
 	trades,
 } from "~/server/db/schema";
-import { isAuthed } from "~/server/db/queries/auth";
 
 export async function getTrades() {
 	const session = await isAuthed();

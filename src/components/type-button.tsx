@@ -1,5 +1,5 @@
 import { Button } from "~/components/ui/button";
-import { type SpeciesType } from "~/lib/types";
+import type { SpeciesType } from "~/lib/types";
 
 export default function TypeButton(props: { type: SpeciesType }) {
 	function getTypeColor(type: SpeciesType): string {

@@ -3,8 +3,8 @@ import "server-only";
 import { and, eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { db } from "~/server/db";
-import { profiles, species } from "~/server/db/schema";
 import { isAuthed } from "~/server/db/queries/auth";
+import { profiles, species } from "~/server/db/schema";
 
 export async function getOnboarding() {
 	const session = await isAuthed();

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Button } from "~/components/ui/button";
 import {
 	DropdownMenu,
@@ -7,10 +8,9 @@ import {
 	DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
 import { Separator } from "~/components/ui/separator";
-import { isAuthed } from "~/server/db/queries/auth";
-import { setThemeAction, setTimezoneAction } from "~/server/actions/cookies";
 import { timezones } from "~/lib/timezones";
-import { type Metadata } from "next";
+import { setThemeAction, setTimezoneAction } from "~/server/actions/cookies";
+import { isAuthed } from "~/server/db/queries/auth";
 import { getTimezone } from "~/server/db/queries/cookies";
 
 export const metadata: Metadata = {
@@ -27,50 +27,50 @@ export default async function Settings() {
 
 	return (
 		<div className="px-8">
-			<h1 className="py-4 text-5xl font-bold">Settings</h1>
+			<h1 className="py-4 font-bold text-5xl">Settings</h1>
 			<Separator className="mb-4" />
 			<div className="flex flex-col gap-10">
 				<div className="flex flex-col gap-4">
-					<h3 className="text-2xl font-semibold">Pick a Theme</h3>
+					<h3 className="font-semibold text-2xl">Pick a Theme</h3>
 					<div className="flex gap-5">
 						<form
-							className="blue dark"
 							action={async () => {
 								"use server";
 
 								await setThemeAction("blue");
 							}}
+							className="blue dark"
 						>
 							<Button>Blue</Button>
 						</form>
 						<form
-							className="purple dark"
 							action={async () => {
 								"use server";
 
 								await setThemeAction("purple");
 							}}
+							className="purple dark"
 						>
 							{" "}
 							<Button>Purple</Button>
 						</form>
 						<form
-							className="green dark"
 							action={async () => {
 								"use server";
 
 								await setThemeAction("green");
 							}}
+							className="green dark"
 						>
 							<Button>Green</Button>
 						</form>
 						<form
-							className="orange dark"
 							action={async () => {
 								"use server";
 
 								await setThemeAction("orange");
 							}}
+							className="orange dark"
 						>
 							<Button>Orange</Button>
 						</form>
@@ -78,10 +78,10 @@ export default async function Settings() {
 				</div>
 
 				<div className="flex flex-col gap-2">
-					<h3 className="text-2xl font-semibold">Select a Timezone</h3>
+					<h3 className="font-semibold text-2xl">Select a Timezone</h3>
 					<DropdownMenu>
 						<DropdownMenuTrigger asChild>
-							<Button variant="outline" className="w-[400px]">
+							<Button className="w-[400px]" variant="outline">
 								{timezone}
 							</Button>
 						</DropdownMenuTrigger>
@@ -89,16 +89,16 @@ export default async function Settings() {
 							<DropdownMenuGroup className="mx-auto text-center">
 								{timezones.map((t) => (
 									<form
-										key={t.name}
 										action={async () => {
 											"use server";
 
 											await setTimezoneAction(t.name, t.offset);
 										}}
+										key={t.name}
 									>
 										<DropdownMenuItem
-											key={t.name}
 											className="flex justify-center"
+											key={t.name}
 										>
 											<button type="submit">{t.name}</button>
 										</DropdownMenuItem>

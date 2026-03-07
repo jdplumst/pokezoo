@@ -1,6 +1,6 @@
 import Wildcard from "~/components/wildcard";
 import WildcardButtons from "~/components/wildcard-buttons";
-import { type Rarity } from "~/lib/types";
+import type { Rarity } from "~/lib/types";
 
 export default function WildcardsGrid() {
 	const wildcards: {
@@ -40,11 +40,11 @@ export default function WildcardsGrid() {
 		<>
 			{wildcards.map((w) => (
 				<div
-					key={w.name}
 					className="flex w-52 flex-col items-center gap-5 border-2 border-solid p-2 shadow-lg"
+					key={w.name}
 				>
-					<Wildcard wildcard={w.name} width={50} height={50} />
-					<div className="text-lg font-semibold">{w.name} Wildcard</div>
+					<Wildcard height={50} width={50} wildcard={w.name} />
+					<div className="font-semibold text-lg">{w.name} Wildcard</div>
 					<div className="text-center">
 						Trade in your wildcards for one wildcard.
 					</div>

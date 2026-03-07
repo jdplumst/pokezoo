@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import SubmitButton from "~/components/submit-button";
 import { Progress } from "~/components/ui/progress";
 import { Separator } from "~/components/ui/separator";
 import {
@@ -10,8 +12,6 @@ import {
 	TableRow,
 } from "~/components/ui/table";
 import { claimAchievementAction } from "~/server/actions/achievements";
-import { type Metadata } from "next";
-import SubmitButton from "~/components/submit-button";
 import { getAchievements } from "~/server/db/queries/achievements";
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default async function Achievements() {
 
 	return (
 		<div className="px-8 pb-8">
-			<h1 className="py-4 text-5xl font-bold">Achievements</h1>
+			<h1 className="py-4 font-bold text-5xl">Achievements</h1>
 			<Separator className="mb-4" />
 			<Table>
 				<TableCaption hidden={true}>
@@ -63,7 +63,7 @@ export default async function Achievements() {
 									</form>
 								) : (
 									<div>
-										{a.value + " / " + a.max + " (" + a.percent + "%)"}
+										`${a.value} / ${a.max} (${a.percent}%)`
 										<Progress value={a.percent} />
 									</div>
 								)}

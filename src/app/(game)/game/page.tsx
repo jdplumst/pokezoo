@@ -1,4 +1,4 @@
-import { type Metadata } from "next";
+import type { Metadata } from "next";
 import { Event } from "~/components/event";
 import GameGrid from "~/components/game-grid";
 import RewardButton from "~/components/reward-button";
@@ -39,7 +39,7 @@ export default async function Game() {
 			) : data.currProfile.paldeaStarter === false ? (
 				<StarterSelect regionId={10} regionName="Paldea" />
 			) : null}
-			<RewardButton time={time} profile={data.currProfile} />
+			<RewardButton profile={data.currProfile} time={time} />
 			<Event />
 			<GameGrid />
 		</div>

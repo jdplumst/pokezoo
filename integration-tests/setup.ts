@@ -1,8 +1,7 @@
-import { beforeAll } from "vitest";
+import { exec as _exec } from "node:child_process";
+import path from "node:path";
+import { promisify } from "node:util";
 import { config } from "dotenv";
-import path from "path";
-import { exec as _exec } from "child_process";
-import { promisify } from "util";
 
 const exec = promisify(_exec);
 
@@ -23,7 +22,7 @@ export default async function setup() {
 	}
 
 	const composeFilePath = path.resolve(
-		__dirname + "/../",
+		`${__dirname}/../`,
 		"docker-compose.test.yml",
 	);
 
@@ -38,7 +37,7 @@ export default async function setup() {
 
 		// Wait for the database to be healthy
 		console.log("[Global Setup] Waiting for database to be healthy...");
-		const { stdout: healthStdout, stderr: healthStderr } = await exec(
+		const { stdout: healthStdout, stderr: _healthStderr } = await exec(
 			`docker compose -f ${composeFilePath} ps -q test-db | xargs docker inspect --format='{{json .State.Health}}' | grep "healthy" || true`,
 		);
 		// Poll until healthy

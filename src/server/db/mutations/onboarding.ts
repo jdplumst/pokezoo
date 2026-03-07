@@ -2,10 +2,10 @@ import "server-only";
 
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
+import type { ErrorResponse } from "~/lib/types";
 import { db } from "~/server/db";
 import { isAuthed } from "~/server/db/queries/auth";
 import { instances, profiles, regions, species } from "~/server/db/schema";
-import { type ErrorResponse } from "~/lib/types";
 
 export async function createProfile(
 	username: string,

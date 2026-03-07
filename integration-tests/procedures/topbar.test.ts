@@ -1,9 +1,9 @@
-import { describe, test, expect, vi, beforeEach } from "vitest";
-import { getProfileForTopbar } from "~/server/repositories/profile";
+import type { Session } from "next-auth";
+import { beforeEach, describe, expect, test, vi } from "vitest";
+import { ERROR_MESSAGES } from "~/lib/errors";
 import { createCaller } from "~/server/api/root";
 import type { createTRPCContext } from "~/server/api/trpc";
-import { ERROR_MESSAGES } from "~/lib/errors";
-import type { Session } from "next-auth";
+import { getProfileForTopbar } from "~/server/repositories/profile";
 
 type Context = Awaited<ReturnType<typeof createTRPCContext>> & {
 	session: Session | null;

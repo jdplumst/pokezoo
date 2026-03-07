@@ -1,8 +1,8 @@
 import "server-only";
 
 import { cookies } from "next/headers";
-import { ZodTheme } from "~/lib/types";
 import { timezones } from "~/lib/timezones";
+import { ZodTheme } from "~/lib/types";
 
 export async function getTheme() {
 	const cookieStore = await cookies();

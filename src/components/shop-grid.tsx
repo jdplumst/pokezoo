@@ -1,7 +1,7 @@
 "use client";
 
+import type React from "react";
 import { useSidebar } from "~/components/ui/sidebar";
-import React from "react";
 
 export default function ShopGrid(props: { children: React.ReactNode }) {
 	const { open } = useSidebar();

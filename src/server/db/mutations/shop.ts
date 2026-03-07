@@ -3,11 +3,8 @@ import "server-only";
 import { and, eq, inArray, or, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { calcNewYield } from "~/lib/calc-new-yield";
-import {
-	type MessageResponse,
-	type ErrorResponse,
-	type Rarity,
-} from "~/lib/types";
+import { getAvailableBoxes } from "~/lib/get-available-boxes";
+import type { ErrorResponse, MessageResponse, Rarity } from "~/lib/types";
 import { updateUserQuest } from "~/lib/update-user-quest";
 import { withinInstanceLimit } from "~/lib/within-instance-limit";
 import { db } from "~/server/db";
@@ -23,7 +20,6 @@ import {
 	species,
 	userCharms,
 } from "~/server/db/schema";
-import { getAvailableBoxes } from "~/lib/get-available-boxes";
 
 export type PurchasedSpecies = {
 	name: string;
@@ -88,7 +84,7 @@ export async function purchaseBalls(
 	}
 
 	if (currBall.name === "Premier" && regionName) {
-		// eslint-disable-next-line no-var
+		// biome-ignore lint/correctness/noInnerDeclarations: address later
 		var currRegion = (
 			await db.select().from(regions).where(eq(regions.name, regionName))
 		)[0];

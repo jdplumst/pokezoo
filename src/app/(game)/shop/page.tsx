@@ -1,4 +1,4 @@
-import { type Metadata } from "next";
+import type { Metadata } from "next";
 import BallsGrid from "~/components/balls-grid";
 import CharmsGrid from "~/components/charms-grid";
 import ShopGrid from "~/components/shop-grid";
@@ -18,7 +18,7 @@ export default async function Shop() {
 
 	return (
 		<div className="px-8 pb-8">
-			<h1 className="py-4 text-5xl font-bold">Shop</h1>
+			<h1 className="py-4 font-bold text-5xl">Shop</h1>
 			<Separator className="mb-4" />
 			<div className="flex flex-col gap-20">
 				<ShopGrid>

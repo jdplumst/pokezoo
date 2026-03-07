@@ -41,8 +41,12 @@ export function SwitchBoxForm(props: { instanceId: string }) {
 				<DropdownMenuContent className="h-80 overflow-y-scroll">
 					<DropdownMenuGroup className="mx-auto text-center">
 						{boxes.map((b) => (
-							<DropdownMenuItem key={b} className="flex justify-center">
-								<button className="w-full" onClick={() => setBox(String(b))}>
+							<DropdownMenuItem className="flex justify-center" key={b}>
+								<button
+									className="w-full"
+									onClick={() => setBox(String(b))}
+									type="button"
+								>
 									Box {b}
 								</button>
 							</DropdownMenuItem>
@@ -51,8 +55,8 @@ export function SwitchBoxForm(props: { instanceId: string }) {
 				</DropdownMenuContent>
 			</DropdownMenu>
 			<form action={action}>
-				<input type="hidden" name="instanceId" value={props.instanceId} />
-				<input type="hidden" name="box" value={box} />
+				<input name="instanceId" type="hidden" value={props.instanceId} />
+				<input name="box" type="hidden" value={box} />
 				<Button>{isPending ? <LoadingSpinner /> : "Switch Box"}</Button>
 			</form>
 		</div>

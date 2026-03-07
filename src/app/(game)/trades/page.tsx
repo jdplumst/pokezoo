@@ -1,17 +1,17 @@
+import type { Metadata } from "next";
+import MiniPokemonCard from "~/components/mini-pokemon-card";
+import SubmitButton from "~/components/submit-button";
+import TradeForm from "~/components/trade-form";
+import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 import { Separator } from "~/components/ui/separator";
+import type { Rarity } from "~/lib/types";
 import {
 	acceptTradeAction,
 	cancelTradeAction,
 	declineTradeAction,
 	withdrawTradeAction,
 } from "~/server/actions/trades";
-import { type Metadata } from "next";
-import SubmitButton from "~/components/submit-button";
-import TradeForm from "~/components/trade-form";
-import MiniPokemonCard from "~/components/mini-pokemon-card";
-import { type Rarity } from "~/lib/types";
 import { getTrades } from "~/server/db/queries/trades";
-import { ScrollArea, ScrollBar } from "~/components/ui/scroll-area";
 
 export const metadata: Metadata = {
 	title: "PokéZoo - Trades",
@@ -25,15 +25,15 @@ export default async function Trades() {
 
 	return (
 		<div className="px-8">
-			<h1 className="py-4 text-5xl font-bold">Trades</h1>
+			<h1 className="py-4 font-bold text-5xl">Trades</h1>
 			<Separator className="mb-4" />
 			<div className="flex flex-col gap-4">
 				<TradeForm type="initiate" />
 				<div className="grid grid-cols-1 gap-y-4">
 					{data.trades.map((t) => (
 						<div
-							key={t.id}
 							className="flex h-96 w-full justify-between border-2 border-solid py-2"
+							key={t.id}
 						>
 							<div className="flex w-1/2 flex-col items-center gap-4">
 								<div className="h-1/6 px-2 text-center font-semibold">
@@ -41,10 +41,10 @@ export default async function Trades() {
 								</div>
 								<div className="h-3/6 w-5/6">
 									<MiniPokemonCard
-										name={t.initiatorPokemonName}
 										img={t.initiatorPokemonImg}
-										shiny={t.initiatorPokemonShiny}
+										name={t.initiatorPokemonName}
 										rarity={t.initiatorPokemonRarity as Rarity}
+										shiny={t.initiatorPokemonShiny}
 									/>
 								</div>
 								<ScrollArea className="flex h-1/6 w-5/6 items-center justify-center text-center">
@@ -53,12 +53,12 @@ export default async function Trades() {
 								</ScrollArea>
 								{t.initiatorId === data.session.user.id ? (
 									<form
-										className="h-1/6"
 										action={async () => {
 											"use server";
 
 											await cancelTradeAction(t.id);
 										}}
+										className="h-1/6"
 									>
 										<SubmitButton text="Cancel Trade" variant="destructive" />
 									</form>
@@ -81,21 +81,21 @@ export default async function Trades() {
 									</div>
 									<div className="h-3/6 w-5/6">
 										<MiniPokemonCard
-											name={t.offererPokemonName}
 											img={t.offererPokemonImg}
-											shiny={t.offererPokemonShiny}
+											name={t.offererPokemonName}
 											rarity={t.offererPokemonRarity as Rarity}
+											shiny={t.offererPokemonShiny}
 										/>
 									</div>
 									<div className="h-1/6"></div>
 									{t.offererId === data.session.user.id ? (
 										<form
-											className="h-1/6"
 											action={async () => {
 												"use server";
 
 												await withdrawTradeAction(t.id);
 											}}
+											className="h-1/6"
 										>
 											<SubmitButton text="Withdraw" />
 										</form>
@@ -133,7 +133,7 @@ export default async function Trades() {
 									</div>
 									<div className="h-1/6"></div>
 									{t.initiatorId !== data.session.user.id && (
-										<TradeForm type="offer" tradeId={t.id} />
+										<TradeForm tradeId={t.id} type="offer" />
 									)}
 								</div>
 							)}

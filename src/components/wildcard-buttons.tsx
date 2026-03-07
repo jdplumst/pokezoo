@@ -1,12 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect } from "react";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import Wildcard from "~/components/wildcard";
-import { useRouter } from "next/navigation";
+import type { Rarity } from "~/lib/types";
 import { purchaseWildcardAction } from "~/server/actions/shop";
-import { useActionState, useEffect } from "react";
-import { type Rarity } from "~/lib/types";
-import { toast } from "sonner";
 
 export default function WildcardButtons(props: {
 	wildcard: {
@@ -37,56 +37,56 @@ export default function WildcardButtons(props: {
 		<div className="flex gap-1">
 			{props.wildcard.commonCost && (
 				<form action={action}>
-					<input type="hidden" name="tradedWildcard" value="Common" />
+					<input name="tradedWildcard" type="hidden" value="Common" />
 					<input
-						type="hidden"
 						name="purchasedWildcard"
+						type="hidden"
 						value={props.wildcard.name}
 					/>
-					<Button type="submit" disabled={isPending} className="flex gap-1">
-						<Wildcard wildcard="Common" width={30} height={30} />
+					<Button className="flex gap-1" disabled={isPending} type="submit">
+						<Wildcard height={30} width={30} wildcard="Common" />
 						{props.wildcard.commonCost}
 					</Button>
 				</form>
 			)}
 			{props.wildcard.rareCost && (
 				<form action={action}>
-					<input type="hidden" name="tradedWildcard" value="Rare" />
+					<input name="tradedWildcard" type="hidden" value="Rare" />
 					<input
-						type="hidden"
 						name="purchasedWildcard"
+						type="hidden"
 						value={props.wildcard.name}
 					/>
-					<Button type="submit" disabled={isPending} className="flex gap-1">
-						<Wildcard wildcard="Rare" width={30} height={30} />
+					<Button className="flex gap-1" disabled={isPending} type="submit">
+						<Wildcard height={30} width={30} wildcard="Rare" />
 						{props.wildcard.rareCost}
 					</Button>
 				</form>
 			)}
 			{props.wildcard.epicCost && (
 				<form action={action}>
-					<input type="hidden" name="tradedWildcard" value="Epic" />
+					<input name="tradedWildcard" type="hidden" value="Epic" />
 					<input
-						type="hidden"
 						name="purchasedWildcard"
+						type="hidden"
 						value={props.wildcard.name}
 					/>
-					<Button type="submit" disabled={isPending} className="flex gap-1">
-						<Wildcard wildcard="Epic" width={30} height={30} />
+					<Button className="flex gap-1" disabled={isPending} type="submit">
+						<Wildcard height={30} width={30} wildcard="Epic" />
 						{props.wildcard.epicCost}
 					</Button>
 				</form>
 			)}
 			{props.wildcard.legendaryCost && (
 				<form action={action}>
-					<input type="hidden" name="tradedWildcard" value="Legendary" />
+					<input name="tradedWildcard" type="hidden" value="Legendary" />
 					<input
-						type="hidden"
 						name="purchasedWildcard"
+						type="hidden"
 						value={props.wildcard.name}
 					/>
-					<Button type="submit" disabled={isPending} className="flex gap-1">
-						<Wildcard wildcard="Legendary" width={30} height={30} />
+					<Button className="flex gap-1" disabled={isPending} type="submit">
+						<Wildcard height={30} width={30} wildcard="Legendary" />
 						{props.wildcard.legendaryCost}
 					</Button>
 				</form>

@@ -1,5 +1,10 @@
+/** biome-ignore-all lint/complexity/noUselessFragments: address later */
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { LoadingSpinner } from "~/components/loading-spinner";
 import { Button } from "~/components/ui/button";
 import {
 	Dialog,
@@ -8,13 +13,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "~/components/ui/dialog";
-import { useRouter } from "next/navigation";
-import { useActionState, useEffect, useState } from "react";
 import Wildcard from "~/components/wildcard";
+import type { Time } from "~/lib/types";
 import { claimRewardAction } from "~/server/actions/game";
-import { LoadingSpinner } from "~/components/loading-spinner";
-import { type Time } from "~/lib/types";
-import { toast } from "sonner";
 
 export default function RewardButton(props: {
 	time: Time;
@@ -47,9 +48,9 @@ export default function RewardButton(props: {
 			) : props.time === "day" ? (
 				<form action={action}>
 					<Button
-						type="submit"
-						disabled={isPending}
 						className="w-40 bg-yellow-400 text-black hover:bg-yellow-500"
+						disabled={isPending}
+						type="submit"
 					>
 						{isPending ? <LoadingSpinner /> : "Claim Daily Reward"}
 					</Button>
@@ -57,16 +58,16 @@ export default function RewardButton(props: {
 			) : (
 				<form action={action}>
 					<Button
-						type="submit"
-						disabled={isPending}
 						className="w-40 bg-purple-600 hover:bg-purple-700"
+						disabled={isPending}
+						type="submit"
 					>
 						{isPending ? <LoadingSpinner /> : "Claim Nightly Reward"}
 					</Button>
 				</form>
 			)}
 			{data?.success === true && (
-				<Dialog open={isOpen} onOpenChange={setIsOpen}>
+				<Dialog onOpenChange={setIsOpen} open={isOpen}>
 					<DialogContent className="w-96">
 						<DialogHeader>
 							<DialogTitle>
@@ -87,7 +88,7 @@ export default function RewardButton(props: {
 										You received {data.cards.Common} Common wildcard
 										{data.cards.Common > 1 && "s"}
 									</div>
-									<Wildcard wildcard="Common" width={20} height={20} />
+									<Wildcard height={20} width={20} wildcard="Common" />
 								</div>
 							) : (
 								<></>
@@ -98,7 +99,7 @@ export default function RewardButton(props: {
 										You received {data.cards.Rare} Rare wildcard
 										{data.cards.Rare > 1 && "s"}
 									</div>
-									<Wildcard wildcard="Rare" width={20} height={20} />
+									<Wildcard height={20} width={20} wildcard="Rare" />
 								</div>
 							) : (
 								<></>
@@ -109,7 +110,7 @@ export default function RewardButton(props: {
 										You received {data.cards.Epic} Epic wildcard
 										{data.cards.Epic > 1 && "s"}
 									</div>
-									<Wildcard wildcard="Epic" width={20} height={20} />
+									<Wildcard height={20} width={20} wildcard="Epic" />
 								</div>
 							) : (
 								<></>
@@ -120,7 +121,7 @@ export default function RewardButton(props: {
 										You received {data.cards.Legendary} Legendary wildcard
 										{data.cards.Legendary > 1 && "s"}
 									</div>
-									<Wildcard wildcard="Legendary" width={20} height={20} />
+									<Wildcard height={20} width={20} wildcard="Legendary" />
 								</div>
 							) : (
 								<></>

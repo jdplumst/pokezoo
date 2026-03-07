@@ -26,7 +26,7 @@ export function MovePartyForm(props: { instanceId: string }) {
 
 	return (
 		<form action={action}>
-			<input type="hidden" name="instanceId" value={props.instanceId} />
+			<input name="instanceId" type="hidden" value={props.instanceId} />
 			<Button>{isPending ? <LoadingSpinner /> : "Move To Party"}</Button>
 		</form>
 	);

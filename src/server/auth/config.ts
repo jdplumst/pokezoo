@@ -1,8 +1,9 @@
-import { type DefaultSession, type NextAuthConfig } from "next-auth";
-import GithubProvider from "next-auth/providers/github";
-import TwitchProvider from "next-auth/providers/twitch";
-import GoogleProvider from "next-auth/providers/google";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
+import type { DefaultSession, NextAuthConfig } from "next-auth";
+import GithubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
+import TwitchProvider from "next-auth/providers/twitch";
+import { env } from "~/env";
 import { db } from "~/server/db/index";
 import {
 	accounts,
@@ -10,7 +11,6 @@ import {
 	users,
 	verificationTokens,
 } from "~/server/db/schema";
-import { env } from "~/env";
 
 declare module "next-auth" {
 	interface Session extends DefaultSession {

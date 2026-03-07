@@ -1,10 +1,12 @@
 // @ts-nocheck
+// biome-ignore-all lint: legacy file
+
 import { PokemonClient } from "pokenode-ts";
-import { type ZodSpeciesType } from "@/src/utils/zod";
-import { z } from "zod";
-import { capitalize } from "../helpers/capitalize";
+import type { z } from "zod";
 import { db } from "@/src/server/db";
 import { species } from "@/src/server/db/schema";
+import type { ZodSpeciesType } from "@/src/utils/zod";
+import { capitalize } from "../helpers/capitalize";
 
 const TypesMap = {
 	Normal: 1,

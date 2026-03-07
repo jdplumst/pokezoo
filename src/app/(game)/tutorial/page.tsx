@@ -1,6 +1,6 @@
+import type { Metadata } from "next";
 import { Separator } from "~/components/ui/separator";
 import { isAuthed } from "~/server/db/queries/auth";
-import { type Metadata } from "next";
 
 export const metadata: Metadata = {
 	title: "PokéZoo - Tutorial",
@@ -14,7 +14,7 @@ export default async function Tutorial() {
 
 	return (
 		<div className="px-8">
-			<h1 className="py-4 text-5xl font-bold">Tutorial</h1>
+			<h1 className="py-4 font-bold text-5xl">Tutorial</h1>
 			<Separator className="mb-4" />
 			<p>
 				PokéZoo is a game where players collect Pokémon. Each Pokémon gives the

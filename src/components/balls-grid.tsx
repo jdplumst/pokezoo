@@ -1,13 +1,13 @@
+import Image from "next/image";
+import type { z } from "zod";
+import BallSlider from "~/components/ball-slider";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
 } from "~/components/ui/tooltip";
-import Image from "next/image";
-import BallSlider from "~/components/ball-slider";
-import { type z } from "zod";
-import { type selectBallSchema } from "~/server/db/schema";
+import type { selectBallSchema } from "~/server/db/schema";
 
 export default function BallsGrid(props: {
 	balls: z.infer<typeof selectBallSchema>[];
@@ -20,20 +20,20 @@ export default function BallsGrid(props: {
 						<TooltipTrigger asChild>
 							<div className="flex w-52 flex-col items-center gap-2 border-2 border-solid p-2 shadow-lg">
 								<Image
-									src={b.img}
 									alt={b.name}
-									width={150}
-									height={150}
 									className="pixelated"
+									height={150}
+									src={b.img}
+									width={150}
 								/>
-								<div className="text-lg font-semibold">{b.name} Ball</div>
-								<div className="text-md font-medium">
+								<div className="font-semibold text-lg">{b.name} Ball</div>
+								<div className="font-medium text-md">
 									P{b.cost.toLocaleString()}
 								</div>
 								<BallSlider ballId={b.id} ballName={b.name} />
 							</div>
 						</TooltipTrigger>
-						<TooltipContent className="text-md bg-black">
+						<TooltipContent className="bg-black text-md">
 							{b.name === "Net" && (
 								<p>
 									A guaranteed <span className="text-water">Water</span> or{" "}

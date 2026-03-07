@@ -1,3 +1,8 @@
+import { eq, sql } from "drizzle-orm";
+import type { NextRequest } from "next/server";
+import type { z } from "zod";
+import { env } from "~/env";
+import { MAX_BALANCE } from "~/lib/constants";
 import { db } from "~/server/db/index";
 import {
 	profiles,
@@ -5,11 +10,6 @@ import {
 	type selectProfileSchema,
 	userQuests,
 } from "~/server/db/schema";
-import { eq, sql } from "drizzle-orm";
-import { MAX_BALANCE } from "~/lib/constants";
-import { env } from "~/env";
-import { type z } from "zod";
-import { type NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
 	const authorization = req.headers.get("authorization");

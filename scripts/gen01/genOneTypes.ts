@@ -1,4 +1,5 @@
 //@ts-nocheck
+// biome-ignore-all lint: legacy file
 
 import { prisma } from "@/src/server/db";
 

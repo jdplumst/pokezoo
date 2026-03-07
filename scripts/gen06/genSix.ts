@@ -1,11 +1,12 @@
 // @ts-nocheck
+// biome-ignore-all lint: legacy file
 
 import { PokemonClient } from "pokenode-ts";
-import { type ZodRarity, type ZodSpeciesType } from "@/src/utils/zod";
-import { z } from "zod";
-import { capitalize } from "../helpers/capitalize";
+import type { z } from "zod";
 import { db } from "@/src/server/db";
 import { species } from "@/src/server/db/schema";
+import type { ZodRarity, ZodSpeciesType } from "@/src/utils/zod";
+import { capitalize } from "../helpers/capitalize";
 
 // Script to populate Species collection
 const populateGenSixDB = async () => {

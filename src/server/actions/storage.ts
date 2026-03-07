@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { type ErrorResponse, type MessageResponse } from "~/lib/types";
+import type { ErrorResponse, MessageResponse } from "~/lib/types";
 import { moveToParty, switchBox } from "~/server/db/mutations/storage";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 

@@ -1,3 +1,5 @@
+/* biome-ignore-all lint: fix later */
+
 "use client";
 
 import type React from "react";
@@ -128,8 +130,8 @@ const BackgroundEffects: React.FC = () => {
 
 	return (
 		<canvas
+			className="pointer-events-none fixed top-0 left-0 h-full w-full"
 			ref={canvasRef}
-			className="pointer-events-none fixed left-0 top-0 h-full w-full"
 		/>
 	);
 };

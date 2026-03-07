@@ -1,8 +1,8 @@
-import { describe, expect, it, beforeAll, afterAll, vi } from "vitest";
 import { eq, inArray } from "drizzle-orm";
-import { db } from "~/server/db";
-import { profiles, users, userCharms, charms } from "~/server/db/schema";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { CATCHING_CHARM_ID } from "~/lib/constants";
+import { db } from "~/server/db";
+import { charms, profiles, userCharms, users } from "~/server/db/schema";
 import { getProfileForTopbar } from "~/server/repositories/profile";
 
 let mockAuthResponse: { user: { id: string } } | null = null;

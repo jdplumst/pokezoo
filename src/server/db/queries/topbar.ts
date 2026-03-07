@@ -1,11 +1,11 @@
 import "server-only";
 
-import { isAuthed } from "~/server/db/queries/auth";
-import { alias } from "drizzle-orm/pg-core";
-import { profiles, userCharms } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { db } from "~/server/db";
+import { alias } from "drizzle-orm/pg-core";
 import { redirect } from "next/navigation";
+import { db } from "~/server/db";
+import { isAuthed } from "~/server/db/queries/auth";
+import { profiles, userCharms } from "~/server/db/schema";
 
 export async function getTopbar() {
 	const session = await isAuthed();

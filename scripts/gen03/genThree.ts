@@ -1,7 +1,7 @@
 //@ts-nocheck
 
+import type { Rarity } from "@prisma/client";
 import { prisma } from "../../src/server/db";
-import { Rarity } from "@prisma/client";
 
 // Script to populate Species collection
 const populateGenThreeDB = async () => {

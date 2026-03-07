@@ -2,13 +2,13 @@ import "server-only";
 
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { db } from "~/server/db";
-import { instances, profiles, species } from "~/server/db/schema";
-import { type ErrorResponse, type MessageResponse } from "~/lib/types";
-import { type hasProfile } from "~/server/db/queries/auth";
-import { calcNewYield } from "~/lib/calc-new-yield";
-import { withinInstanceLimit } from "~/lib/within-instance-limit";
 import { redirect } from "next/navigation";
+import { calcNewYield } from "~/lib/calc-new-yield";
+import type { ErrorResponse, MessageResponse } from "~/lib/types";
+import { withinInstanceLimit } from "~/lib/within-instance-limit";
+import { db } from "~/server/db";
+import type { hasProfile } from "~/server/db/queries/auth";
+import { instances, profiles, species } from "~/server/db/schema";
 
 export async function moveToParty(
 	instanceId: string,

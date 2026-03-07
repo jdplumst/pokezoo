@@ -1,12 +1,12 @@
 import "server-only";
 
 import { and, eq, or } from "drizzle-orm";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import type { ErrorResponse, MessageResponse } from "~/lib/types";
 import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { instances, profiles, species, trades } from "~/server/db/schema";
-import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import { type ErrorResponse, type MessageResponse } from "~/lib/types";
 
 export async function initiateTrade(
 	instanceId: string,

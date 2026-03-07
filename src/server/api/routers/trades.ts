@@ -1,7 +1,7 @@
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { instances, rarities, species, trades } from "~/server/db/schema";
 import { and, eq, ilike, notInArray } from "drizzle-orm";
 import { z } from "zod";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { instances, rarities, species, trades } from "~/server/db/schema";
 
 export const tradesRouter = createTRPCRouter({
 	getPokemonForTrades: protectedProcedure
@@ -32,7 +32,7 @@ export const tradesRouter = createTRPCRouter({
 				.where(
 					and(
 						eq(instances.userId, ctx.session.user.id),
-						ilike(species.name, "%" + input.name + "%"),
+						ilike(species.name, `%${input.name}%`),
 						notInArray(instances.id, instancesInInitiatedTrades),
 						notInArray(instances.id, instancesInOfferedTrades),
 					),

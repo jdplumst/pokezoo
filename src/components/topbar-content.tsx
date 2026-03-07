@@ -61,7 +61,7 @@ export default function TopbarContent(props: {
 					) : (
 						<p>You have {props.profile.commonCards} Common wildcards.</p>
 					)}
-					<Wildcard wildcard="Common" height={25} width={25} />
+					<Wildcard height={25} width={25} wildcard="Common" />
 				</div>
 				<div className="flex flex-row items-end justify-end">
 					{isMobile || (open && !isLarge) ? (
@@ -69,7 +69,7 @@ export default function TopbarContent(props: {
 					) : (
 						<p>You have {props.profile.rareCards} Rare wildcards.</p>
 					)}
-					<Wildcard wildcard="Rare" height={25} width={25} />
+					<Wildcard height={25} width={25} wildcard="Rare" />
 				</div>
 				<div className="flex flex-row items-end justify-end">
 					{isMobile || (open && !isLarge) ? (
@@ -77,7 +77,7 @@ export default function TopbarContent(props: {
 					) : (
 						<p>You have {props.profile.epicCards} Epic wildcards.</p>
 					)}
-					<Wildcard wildcard="Epic" height={25} width={25} />
+					<Wildcard height={25} width={25} wildcard="Epic" />
 				</div>
 				<div className="flex flex-row items-end justify-end">
 					{isMobile || (open && !isLarge) ? (
@@ -85,7 +85,7 @@ export default function TopbarContent(props: {
 					) : (
 						<p>You have {props.profile.legendaryCards} Legendary wildcards.</p>
 					)}
-					<Wildcard wildcard="Legendary" height={25} width={25} />
+					<Wildcard height={25} width={25} wildcard="Legendary" />
 				</div>
 			</div>
 		</div>

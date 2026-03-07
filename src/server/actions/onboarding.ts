@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { type ErrorResponse } from "~/lib/types";
+import type { ErrorResponse } from "~/lib/types";
 import { createProfile } from "~/server/db/mutations/onboarding";
 
 export async function createProfileAction(

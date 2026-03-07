@@ -2,12 +2,12 @@
 
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { type MessageResponse, type ErrorResponse } from "~/lib/types";
+import type { ErrorResponse, MessageResponse } from "~/lib/types";
 import {
+	claimEvent,
 	claimReward,
 	moveToStorage,
 	sellPokemon,
-	claimEvent,
 } from "~/server/db/mutations/game";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 

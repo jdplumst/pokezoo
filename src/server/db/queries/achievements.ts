@@ -3,6 +3,7 @@ import "server-only";
 import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { db } from "~/server/db";
+import { isAuthed } from "~/server/db/queries/auth";
 import {
 	achievements,
 	achievementTypes,
@@ -15,7 +16,6 @@ import {
 	types,
 	userAchievements,
 } from "~/server/db/schema";
-import { isAuthed } from "~/server/db/queries/auth";
 
 export async function getAchievements() {
 	const session = await isAuthed();
@@ -151,8 +151,8 @@ export async function getAchievements() {
 		});
 	}
 
-	fullAchievements.sort(function (a, b) {
-		if (a.achievement.claimed == b.achievement.claimed) {
+	fullAchievements.sort((a, b) => {
+		if (a.achievement.claimed === b.achievement.claimed) {
 			return b.percent - a.percent;
 		}
 		return a.achievement.claimed ? 1 : -1;

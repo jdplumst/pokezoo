@@ -1,12 +1,7 @@
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import {
-	habitats,
-	instances,
-	rarities,
-	regions,
-	species,
-	types,
-} from "~/server/db/schema";
+import { TRPCError } from "@trpc/server";
+import { and, asc, desc, eq, inArray, notInArray, or, sql } from "drizzle-orm";
+import { alias } from "drizzle-orm/pg-core";
+import { z } from "zod";
 import {
 	HabitatValues,
 	RarityValues,
@@ -18,10 +13,15 @@ import {
 	ZodSort,
 	ZodSpeciesType,
 } from "~/lib/types";
-import { TRPCError } from "@trpc/server";
-import { and, asc, desc, eq, inArray, notInArray, or, sql } from "drizzle-orm";
-import { alias } from "drizzle-orm/pg-core";
-import { z } from "zod";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import {
+	habitats,
+	instances,
+	rarities,
+	regions,
+	species,
+	types,
+} from "~/server/db/schema";
 
 export const gameRouter = createTRPCRouter({
 	getPokemon: protectedProcedure
@@ -52,6 +52,7 @@ export const gameRouter = createTRPCRouter({
 				});
 			}
 
+			// biome-ignore lint/suspicious/noImplicitAnyLet: address later
 			let rarityCursor;
 			switch (input.cursor?.rarity) {
 				case "Common":
@@ -183,7 +184,7 @@ export const gameRouter = createTRPCRouter({
 				)
 				.limit(limit + 1);
 
-			let nextCursor: typeof input.cursor | undefined = undefined;
+			let nextCursor: typeof input.cursor | undefined;
 			if (instancesData.length > limit) {
 				const nextItem = instancesData.pop()!;
 				nextCursor =

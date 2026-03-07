@@ -1,10 +1,10 @@
 import "server-only";
 
 import { eq } from "drizzle-orm";
+import type { ErrorResponse, MessageResponse } from "~/lib/types";
 import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
 import { instances, profiles, regions, species } from "~/server/db/schema";
-import { type ErrorResponse, type MessageResponse } from "~/lib/types";
 
 export async function selectStarter(
 	starterId: string,

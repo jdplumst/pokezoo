@@ -1,4 +1,4 @@
-import { type Rarity } from "~/lib/types";
+import type { Rarity } from "~/lib/types";
 
 interface IWildcardProps {
 	wildcard: Rarity;
@@ -11,44 +11,45 @@ export default function Wildcard({ wildcard, width, height }: IWildcardProps) {
 		case "Common":
 			return (
 				<img
-					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png"
 					alt="common-wildcard"
-					height={height}
-					width={width}
 					className="pixelated"
+					height={height}
+					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/iron-plate.png"
+					width={width}
 				/>
 			);
 		case "Rare":
 			return (
 				<img
-					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png"
 					alt="rare-wildcard"
-					height={height}
-					width={width}
 					className="pixelated"
+					height={height}
+					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/fist-plate.png"
+					width={width}
 				/>
 			);
 		case "Epic":
 			return (
 				<img
-					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png"
 					alt="epic-wildcard"
-					height={height}
-					width={width}
 					className="pixelated"
+					height={height}
+					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/toxic-plate.png"
+					width={width}
 				/>
 			);
 		case "Legendary":
 			return (
 				<img
-					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png"
 					alt="legendary-wildcard"
-					height={height}
-					width={width}
 					className="pixelated"
+					height={height}
+					src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/meadow-plate.png"
+					width={width}
 				/>
 			);
 		default:
+			// biome-ignore lint/complexity/noUselessFragments: address later
 			return <></>;
 	}
 }

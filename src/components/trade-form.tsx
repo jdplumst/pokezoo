@@ -1,5 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { LoadingSpinner } from "~/components/loading-spinner";
+import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import {
@@ -10,14 +15,9 @@ import {
 	SheetTitle,
 } from "~/components/ui/sheet";
 import { Textarea } from "~/components/ui/textarea";
-import { useActionState, useEffect, useState } from "react";
-import MiniPokemonCard from "~/components/mini-pokemon-card";
-import { useRouter } from "next/navigation";
+import type { Rarity } from "~/lib/types";
 import { initiateTradeAction, offerTradeAction } from "~/server/actions/trades";
-import { LoadingSpinner } from "~/components/loading-spinner";
 import { api } from "~/trpc/react";
-import { type Rarity } from "~/lib/types";
-import { toast } from "sonner";
 
 export default function TradeForm(
 	props:
@@ -76,10 +76,10 @@ export default function TradeForm(
 
 	return (
 		<>
-			<Button onClick={() => setOpen(true)} className="w-fit">
+			<Button className="w-fit" onClick={() => setOpen(true)}>
 				{props.type === "initiate" ? "Add Trade" : "Add Offer"}
 			</Button>
-			<Sheet open={open} onOpenChange={setOpen}>
+			<Sheet onOpenChange={setOpen} open={open}>
 				<SheetContent className="overflow-y-scroll">
 					<SheetHeader>
 						<SheetTitle>Add Trade</SheetTitle>
@@ -91,32 +91,33 @@ export default function TradeForm(
 						{props.type === "initiate" && (
 							<div className="flex w-full flex-col">
 								<Textarea
-									value={description}
-									onChange={(e) => setDescription(e.target.value)}
 									maxLength={100}
+									onChange={(e) => setDescription(e.target.value)}
 									placeholder="Enter a short message here."
+									value={description}
 								/>
 								<div>{description.length} / 100</div>
 							</div>
 						)}
 						<Input
+							onChange={(e) => setSearch(e.target.value)}
 							placeholder="Search a pokémon to trade."
 							value={search}
-							onChange={(e) => setSearch(e.target.value)}
 						/>
 						<div className="flex h-[430px] w-full flex-col gap-2 overflow-y-scroll">
 							{pokemon.data?.pokemon.map((p) => (
 								<button
+									className="w-full"
 									key={p.id}
 									onClick={() => setInstance(p.id)}
-									className="w-full"
+									type="button"
 								>
 									<MiniPokemonCard
-										name={p.name}
 										img={p.img}
-										shiny={p.shiny}
+										name={p.name}
 										rarity={p.rarity as Rarity}
 										selected={p.id === instance}
+										shiny={p.shiny}
 									/>
 								</button>
 							))}
@@ -124,14 +125,14 @@ export default function TradeForm(
 						<form
 							action={props.type === "initiate" ? initiateAction : offerAction}
 						>
-							<input type="hidden" name="description" value={description} />
-							<input type="hidden" name="instanceId" value={instance} />
+							<input name="description" type="hidden" value={description} />
+							<input name="instanceId" type="hidden" value={instance} />
 							{props.type === "offer" && (
-								<input type="hidden" name="tradeId" value={props.tradeId} />
+								<input name="tradeId" type="hidden" value={props.tradeId} />
 							)}
 							<Button
-								type="submit"
 								disabled={initiateIsPending || offerIsPending}
+								type="submit"
 							>
 								{initiateIsPending || offerIsPending ? (
 									<LoadingSpinner />

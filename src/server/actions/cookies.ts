@@ -1,6 +1,6 @@
 "use server";
 
-import { type Theme } from "~/lib/types";
+import type { Theme } from "~/lib/types";
 import {
 	setTheme,
 	setTimezone,

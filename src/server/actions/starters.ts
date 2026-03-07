@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { type ErrorResponse, type MessageResponse } from "~/lib/types";
+import type { ErrorResponse, MessageResponse } from "~/lib/types";
 import { selectStarter } from "~/server/db/mutations/starters";
 
 export async function selectStarterAction(

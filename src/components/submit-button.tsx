@@ -1,8 +1,8 @@
 "use client";
 
+import { useFormStatus } from "react-dom";
 import { LoadingSpinner } from "~/components/loading-spinner";
 import { Button } from "~/components/ui/button";
-import { useFormStatus } from "react-dom";
 
 export default function SubmitButton(props: {
 	text: string;
@@ -18,10 +18,10 @@ export default function SubmitButton(props: {
 
 	return (
 		<Button
+			className="w-full"
 			disabled={pending}
 			type="submit"
 			variant={props.variant ?? "default"}
-			className="w-full"
 		>
 			{pending ? <LoadingSpinner /> : props.text}
 		</Button>

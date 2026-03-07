@@ -3,8 +3,8 @@ import "server-only";
 import { eq } from "drizzle-orm";
 import { redirect } from "next/navigation";
 import { db } from "~/server/db";
-import { quests, questTypes, userQuests } from "~/server/db/schema";
 import { isAuthed } from "~/server/db/queries/auth";
+import { quests, questTypes, userQuests } from "~/server/db/schema";
 
 export async function getQuests() {
 	const session = await isAuthed();

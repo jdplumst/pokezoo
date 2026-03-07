@@ -1,7 +1,7 @@
-import { type Metadata } from "next";
+import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import BackgroundEffects from "~/components/background-effect";
 import { auth, signIn } from "~/server/auth";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
 	title: "PokéZoo",
@@ -20,7 +20,7 @@ export default async function Home() {
 		<main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800 p-4 text-white">
 			<BackgroundEffects />
 			<div className="mx-auto max-w-2xl text-center">
-				<h1 className="mb-4 flex items-center justify-center text-6xl font-bold">
+				<h1 className="mb-4 flex items-center justify-center font-bold text-6xl">
 					PokéZoo
 				</h1>
 				<p className="mb-8 text-xl leading-relaxed">
@@ -49,9 +49,9 @@ export default async function Home() {
 
 						await signIn();
 					}}
-					className="inline-block transform rounded-full bg-violet-500 px-8 py-3 text-lg font-semibold text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-violet-600"
+					className="inline-block transform rounded-full bg-violet-500 px-8 py-3 font-semibold text-lg text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-violet-600"
 				>
-					<button>Get Started</button>
+					<button type="submit">Get Started</button>
 				</form>
 			</div>
 		</main>

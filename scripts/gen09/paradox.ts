@@ -1,9 +1,11 @@
+// biome-ignore-all lint: legacy file
+
 import { PokemonClient } from "pokenode-ts";
-import { type z } from "zod";
-import { capitalize } from "../helpers/capitalize";
+import type { z } from "zod";
+import type { ZodSpeciesType } from "~/lib/types";
 import { db } from "~/server/db";
 import { balls, rarities, species } from "~/server/db/schema";
-import { type ZodSpeciesType } from "~/lib/types";
+import { capitalize } from "../helpers/capitalize";
 import { getHabitat } from "../helpers/get-habitat";
 
 const TypesMap = {

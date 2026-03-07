@@ -1,11 +1,11 @@
 import "server-only";
 
-import { db } from "~/server/db";
-import { profiles, quests, userQuests } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
-import { isAuthed } from "~/server/db/queries/auth";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { db } from "~/server/db";
+import { isAuthed } from "~/server/db/queries/auth";
+import { profiles, quests, userQuests } from "~/server/db/schema";
 
 export async function claimQuest(userQuestId: string) {
 	const session = await isAuthed();

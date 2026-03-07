@@ -2,13 +2,13 @@ import { inArray } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { db } from "~/server/db";
 import {
-	profiles,
-	species,
-	users,
-	rarities,
-	types,
 	habitats,
+	profiles,
+	rarities,
 	regions,
+	species,
+	types,
+	users,
 } from "~/server/db/schema";
 import { getStarters } from "~/server/repositories/species";
 

@@ -1,11 +1,11 @@
 import "server-only";
 
-import { db } from "~/server/db";
-import { achievements, profiles, userAchievements } from "~/server/db/schema";
 import { and, eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { calcNewYield } from "~/lib/calc-new-yield";
+import { db } from "~/server/db";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
+import { achievements, profiles, userAchievements } from "~/server/db/schema";
 
 export async function claimAchievement(achievementId: string) {
 	const session = await isAuthed();

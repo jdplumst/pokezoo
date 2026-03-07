@@ -2,8 +2,8 @@ import "server-only";
 
 import { eq } from "drizzle-orm";
 import { db } from "~/server/db";
-import { balls, charms, userCharms } from "~/server/db/schema";
 import { hasProfile, isAuthed } from "~/server/db/queries/auth";
+import { balls, charms, userCharms } from "~/server/db/schema";
 
 export async function getShopData() {
 	const session = await isAuthed();

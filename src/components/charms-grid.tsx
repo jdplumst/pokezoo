@@ -1,16 +1,16 @@
+import Image from "next/image";
+import type { z } from "zod";
+import CharmButton from "~/components/charm-button";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
 } from "~/components/ui/tooltip";
-import {
-	type selectCharmSchema,
-	type selectUserCharmsSchema,
+import type {
+	selectCharmSchema,
+	selectUserCharmsSchema,
 } from "~/server/db/schema";
-import Image from "next/image";
-import { type z } from "zod";
-import CharmButton from "~/components/charm-button";
 
 export default function CharmsGrid(props: {
 	charms: z.infer<typeof selectCharmSchema>[];
@@ -24,14 +24,14 @@ export default function CharmsGrid(props: {
 						<TooltipTrigger asChild>
 							<div className="flex w-52 flex-col items-center gap-2 border-2 border-solid p-2 shadow-lg">
 								<Image
-									src={c.img}
 									alt={c.name}
-									width={150}
-									height={150}
 									className="pixelated"
+									height={150}
+									src={c.img}
+									width={150}
 								/>
-								<div className="text-lg font-semibold">{c.name} Charm</div>
-								<div className="text-md font-medium">
+								<div className="font-semibold text-lg">{c.name} Charm</div>
+								<div className="font-medium text-md">
 									P{c.cost.toLocaleString()}
 								</div>
 								{props.userCharms.some((u) => u.charmId === c.id) ? (
@@ -41,7 +41,7 @@ export default function CharmsGrid(props: {
 								)}
 							</div>
 						</TooltipTrigger>
-						<TooltipContent className="text-md bg-gray-400 dark:bg-black">
+						<TooltipContent className="bg-gray-400 text-md dark:bg-black">
 							{c.name === "Catching" && (
 								<div>
 									Increases the total number of Pokémon a user can have to

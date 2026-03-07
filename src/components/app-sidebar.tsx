@@ -1,4 +1,23 @@
 import {
+	Award,
+	BookText,
+	Database,
+	FileDiff,
+	Gamepad2,
+	Handshake,
+	LogOut,
+	Rat,
+	School,
+	Settings,
+	ShoppingCart,
+	Swords,
+} from "lucide-react";
+import Link from "next/link";
+import Github from "~/components/github";
+import SidebarMenuLabel from "~/components/sidebar-menu-label";
+import SignOut from "~/components/sign-out";
+import { Separator } from "~/components/ui/separator";
+import {
 	Sidebar,
 	SidebarContent,
 	SidebarGroup,
@@ -8,25 +27,6 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "~/components/ui/sidebar";
-import SidebarMenuLabel from "~/components/sidebar-menu-label";
-import Link from "next/link";
-import {
-	Gamepad2,
-	ShoppingCart,
-	Swords,
-	Award,
-	BookText,
-	Handshake,
-	School,
-	FileDiff,
-	Settings,
-	Rat,
-	LogOut,
-	Database,
-} from "lucide-react";
-import Github from "~/components/github";
-import SignOut from "~/components/sign-out";
-import { Separator } from "~/components/ui/separator";
 import { getTime } from "~/server/db/queries/cookies";
 
 export async function AppSidebar() {
@@ -36,7 +36,7 @@ export async function AppSidebar() {
 		<Sidebar collapsible="icon">
 			<SidebarContent>
 				<SidebarGroup>
-					<SidebarGroupLabel className="text-lg font-bold">
+					<SidebarGroupLabel className="font-bold text-lg">
 						PokéZoo
 					</SidebarGroupLabel>
 					<SidebarGroupContent>
@@ -136,7 +136,7 @@ export async function AppSidebar() {
 				<Separator className="my-2" />
 
 				<SidebarGroup>
-					<SidebarGroupLabel className="text-lg font-bold">
+					<SidebarGroupLabel className="font-bold text-lg">
 						Check These Out
 					</SidebarGroupLabel>
 					<SidebarGroupContent>

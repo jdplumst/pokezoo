@@ -1,7 +1,7 @@
-import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
-import { getProfileForTopbar } from "~/server/repositories/profile";
 import { TRPCError } from "@trpc/server";
 import { ERROR_MESSAGES } from "~/lib/errors";
+import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
+import { getProfileForTopbar } from "~/server/repositories/profile";
 
 export const topbarRouter = createTRPCRouter({
 	getTopbarData: protectedProcedure.query(async () => {

@@ -1,12 +1,12 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
+import { ipAddress } from "@vercel/functions";
 import {
 	type NextFetchEvent,
 	type NextRequest,
 	NextResponse,
 } from "next/server";
 import { env } from "~/env";
-import { ipAddress } from "@vercel/functions";
 
 const ratelimit = new Ratelimit({
 	redis: Redis.fromEnv(),

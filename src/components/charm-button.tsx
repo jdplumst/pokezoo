@@ -1,11 +1,11 @@
 "use client";
 
-import { Button } from "~/components/ui/button";
-import { useActionState, useEffect } from "react";
-import { purchaseCharmAction } from "~/server/actions/shop";
 import { useRouter } from "next/navigation";
+import { useActionState, useEffect } from "react";
 import { toast } from "sonner";
 import { LoadingSpinner } from "~/components/loading-spinner";
+import { Button } from "~/components/ui/button";
+import { purchaseCharmAction } from "~/server/actions/shop";
 
 export default function CharmButton(props: { charmId: number }) {
 	const router = useRouter();
@@ -26,7 +26,7 @@ export default function CharmButton(props: { charmId: number }) {
 
 	return (
 		<form action={action}>
-			<input type="hidden" name="charmId" value={props.charmId} />
+			<input name="charmId" type="hidden" value={props.charmId} />
 			<Button disabled={isPending}>
 				{isPending ? <LoadingSpinner /> : "Buy"}
 			</Button>

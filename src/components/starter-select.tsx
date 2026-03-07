@@ -1,5 +1,11 @@
 "use client";
 
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useActionState, useEffect, useState } from "react";
+import { toast } from "sonner";
+import { LoadingSpinner } from "~/components/loading-spinner";
+import { Button } from "~/components/ui/button";
 import {
 	Dialog,
 	DialogContent,
@@ -8,15 +14,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "~/components/ui/dialog";
-import Image from "next/image";
-import { Button } from "~/components/ui/button";
-import { useActionState, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import type { Region } from "~/lib/types";
 import { selectStarterAction } from "~/server/actions/starters";
-import { LoadingSpinner } from "~/components/loading-spinner";
 import { api } from "~/trpc/react";
-import { toast } from "sonner";
-import { type Region } from "~/lib/types";
 
 export default function StarterSelect(props: {
 	regionId: number;
@@ -60,14 +60,16 @@ export default function StarterSelect(props: {
 				</DialogHeader>
 				<div className="flex gap-5">
 					{starters.data?.starters?.map((s) => (
+						// biome-ignore lint/a11y/noStaticElementInteractions: address later
+						// biome-ignore lint/a11y/useKeyWithClickEvents: address later
 						<div
+							className={`w-1/3 border-2 border-black border-solid bg-rare-unfocus p-4 hover:cursor-pointer hover:bg-rare-focus ${s.id === starterId && "border-4 border-yellow-400"}`}
 							key={s.id}
 							onClick={() => setStarterId(s.id)}
-							className={`w-1/3 border-2 border-solid border-black bg-rare-unfocus p-4 hover:cursor-pointer hover:bg-rare-focus ${s.id === starterId && "border-4 border-yellow-400"}`}
 						>
 							<div className="flex flex-col items-center gap-2">
-								<Image src={s.img} alt={s.name} width={70} height={70} />
-								<div className="font-lg text-center font-semibold capitalize">
+								<Image alt={s.name} height={70} src={s.img} width={70} />
+								<div className="text-center font-lg font-semibold capitalize">
 									{s.name}
 								</div>
 							</div>
@@ -76,8 +78,8 @@ export default function StarterSelect(props: {
 				</div>
 				<DialogFooter className="mx-auto">
 					<form action={action}>
-						<input type="hidden" name="starterId" value={starterId} />
-						<Button type="submit" disabled={isPending}>
+						<input name="starterId" type="hidden" value={starterId} />
+						<Button disabled={isPending} type="submit">
 							{isPending ? <LoadingSpinner /> : "Confirm"}
 						</Button>
 					</form>

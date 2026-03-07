@@ -1,10 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { LoadingSpinner } from "~/components/loading-spinner";
+import MiniPokemonCard from "~/components/mini-pokemon-card";
 import { Button } from "~/components/ui/button";
-import { type Rarity, type Event } from "~/lib/types";
-import { claimEventAction } from "~/server/actions/game";
 import {
 	Dialog,
 	DialogContent,
@@ -12,9 +12,9 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from "~/components/ui/dialog";
-import MiniPokemonCard from "~/components/mini-pokemon-card";
+import type { Event, Rarity } from "~/lib/types";
+import { claimEventAction } from "~/server/actions/game";
 import { api } from "~/trpc/react";
-import { useRouter } from "next/navigation";
 
 export function EventButton(props: { event: Event }) {
 	const utils = api.useUtils();
@@ -42,8 +42,8 @@ export function EventButton(props: { event: Event }) {
 		<>
 			<form action={action}>
 				<Button
-					disabled={isPending}
 					className="bg-green-500 hover:bg-green-600"
+					disabled={isPending}
 				>
 					{isPending ? (
 						<LoadingSpinner />
@@ -57,7 +57,7 @@ export function EventButton(props: { event: Event }) {
 				</Button>
 			</form>
 			{data?.success === true && (
-				<Dialog open={open} onOpenChange={setOpen}>
+				<Dialog onOpenChange={setOpen} open={open}>
 					<DialogContent className="w-96">
 						<DialogHeader>
 							<DialogTitle>You have obtained a gift!</DialogTitle>
@@ -67,10 +67,10 @@ export function EventButton(props: { event: Event }) {
 						</DialogDescription>
 						<div className="flex h-80 flex-col gap-4">
 							<MiniPokemonCard
-								name={data.gift.name}
 								img={data.gift.img}
-								shiny={data.gift.shiny}
+								name={data.gift.name}
 								rarity={data.gift.rarity as Rarity}
+								shiny={data.gift.shiny}
 							/>
 						</div>
 					</DialogContent>

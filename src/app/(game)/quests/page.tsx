@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import SubmitButton from "~/components/submit-button";
 import { Separator } from "~/components/ui/separator";
 import {
 	Table,
@@ -9,8 +11,6 @@ import {
 	TableRow,
 } from "~/components/ui/table";
 import { claimQuestAction } from "~/server/actions/quests";
-import { type Metadata } from "next";
-import SubmitButton from "~/components/submit-button";
 import { getQuests } from "~/server/db/queries/quests";
 
 export const metadata: Metadata = {
@@ -25,7 +25,7 @@ export default async function Quests() {
 
 	return (
 		<div className="px-8 pb-8">
-			<h1 className="py-4 text-5xl font-bold">Quests</h1>
+			<h1 className="py-4 font-bold text-5xl">Quests</h1>
 			<Separator className="mb-4" />
 			<Table>
 				<TableCaption hidden={true}>A list of your quests.</TableCaption>
@@ -57,7 +57,7 @@ export default async function Quests() {
 										<SubmitButton text="Claim" />
 									</form>
 								) : (
-									q.userQuest.count + " / " + q.quest.goal
+									`${q.userQuest.count}/${q.quest.goal}`
 								)}
 							</TableCell>
 						</TableRow>

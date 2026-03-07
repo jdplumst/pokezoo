@@ -1,17 +1,17 @@
-import {
-	index,
-	primaryKey,
-	text,
-	integer,
-	boolean,
-	timestamp,
-	pgTableCreator,
-	serial,
-} from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
-import { type AdapterAccount } from "next-auth/adapters";
+import { sql } from "drizzle-orm";
+import {
+	boolean,
+	index,
+	integer,
+	pgTableCreator,
+	primaryKey,
+	serial,
+	text,
+	timestamp,
+} from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
+import type { AdapterAccount } from "next-auth/adapters";
 
 export const pgTable = pgTableCreator((name) => `pokezoo_${name}`);
 
