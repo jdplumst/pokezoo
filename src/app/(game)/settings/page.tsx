@@ -88,21 +88,21 @@ export default async function Settings() {
 						<DropdownMenuContent className="h-80 overflow-y-scroll">
 							<DropdownMenuGroup className="mx-auto text-center">
 								{timezones.map((t) => (
-									<form
-										action={async () => {
-											"use server";
-
-											await setTimezoneAction(t.name, t.offset);
-										}}
+									<DropdownMenuItem
+										className="flex justify-center"
 										key={t.name}
 									>
-										<DropdownMenuItem
-											className="flex justify-center"
-											key={t.name}
+										<button
+											onClick={async () => {
+												"use server";
+
+												await setTimezoneAction(t.name, t.offset);
+											}}
+											type="submit"
 										>
-											<button type="submit">{t.name}</button>
-										</DropdownMenuItem>
-									</form>
+											{t.name}
+										</button>
+									</DropdownMenuItem>
 								))}
 							</DropdownMenuGroup>
 						</DropdownMenuContent>
