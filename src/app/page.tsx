@@ -17,7 +17,7 @@ export default async function Home() {
 	}
 
 	return (
-		<main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800 p-4 text-white">
+		<main className="flex min-h-screen flex-col items-center justify-center bg-linear-to-br from-gray-900 via-purple-900 to-violet-800 p-4 text-white">
 			<BackgroundEffects />
 			<div className="mx-auto max-w-2xl text-center">
 				<h1 className="mb-4 flex items-center justify-center font-bold text-6xl">
@@ -25,17 +25,17 @@ export default async function Home() {
 				</h1>
 				<p className="mb-8 text-xl leading-relaxed">
 					Embark on an epic journey in your virtual Pokémon sanctuary!
-					<span className="bg-gradient-to-r from-pink-500 to-yellow-500 bg-clip-text font-semibold text-transparent">
+					<span className="bg-linear-to-r from-pink-500 to-yellow-500 bg-clip-text font-semibold text-transparent">
 						{" "}
 						Collect
 					</span>{" "}
 					rare Pokémon,
-					<span className="bg-gradient-to-r from-green-400 to-blue-500 bg-clip-text font-semibold text-transparent">
+					<span className="bg-linear-to-r from-green-400 to-blue-500 bg-clip-text font-semibold text-transparent">
 						{" "}
 						earn points
 					</span>
 					, and
-					<span className="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text font-semibold text-transparent">
+					<span className="bg-linear-to-r from-purple-400 to-pink-500 bg-clip-text font-semibold text-transparent">
 						{" "}
 						complete
 					</span>{" "}

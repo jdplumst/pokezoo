@@ -271,7 +271,7 @@ export default async function PatchNotes() {
 			</Patch>
 			<Patch date="November 25, 2023" patch="5.09">
 				<Note note="Added a Rarity Descending sorting button to Game page." />
-				<Note note="Removed white outline that sometimes appeared on buttons." />
+				<Note note="Removed white outline-solid that sometimes appeared on buttons." />
 			</Patch>
 			<Patch date="November 11, 2023" patch="5.08">
 				<Note
