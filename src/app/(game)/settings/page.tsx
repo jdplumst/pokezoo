@@ -93,12 +93,12 @@ export default async function Settings() {
 										key={t.name}
 									>
 										<button
-											type="submit"
 											onClick={async () => {
 												"use server";
 
 												await setTimezoneAction(t.name, t.offset);
 											}}
+											type="submit"
 										>
 											{t.name}
 										</button>
