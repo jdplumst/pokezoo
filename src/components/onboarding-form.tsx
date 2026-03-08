@@ -22,7 +22,7 @@ export default function OnboardingForm(props: {
 	}, [data]);
 
 	return (
-		<div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-purple-900 to-violet-800 p-8 text-white">
+		<div className="flex min-h-screen flex-col items-center justify-center bg-linear-to-br from-gray-900 via-purple-900 to-violet-800 p-8 text-white">
 			<div className="mx-auto max-w-md rounded-lg bg-gray-800 p-6 shadow-lg">
 				<h1 className="mb-6 text-center font-bold text-3xl">
 					Welcome to PokéZoo!
@@ -36,7 +36,7 @@ export default function OnboardingForm(props: {
 							Choose your trainer name:
 						</label>
 						<Input
-							className={`w-full rounded-md bg-gray-700 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-violet-500 ${
+							className={`w-full rounded-md bg-gray-700 px-3 py-2 focus:outline-hidden focus:ring-2 focus:ring-violet-500 ${
 								data?.error && "border border-red-500"
 							}`}
 							id="username"
@@ -53,7 +53,7 @@ export default function OnboardingForm(props: {
 						<div className="grid grid-cols-3 gap-4">
 							{props.starters.map((p) => (
 								<label
-									className={`rounded-lg bg-gray-700 p-2 transition-all hover:cursor-pointer hover:bg-gray-600 has-[:checked]:bg-violet-600 has-[:checked]:ring-violet-400 ${
+									className={`rounded-lg bg-gray-700 p-2 transition-all hover:cursor-pointer hover:bg-gray-600 has-checked:bg-violet-600 has-checked:ring-violet-400 ${
 										data?.error && "border border-red-500"
 									}`}
 									htmlFor={p.id}
