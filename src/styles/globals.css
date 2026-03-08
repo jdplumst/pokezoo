@@ -160,6 +160,7 @@
 		--popover: 234 100% 95%;
 		--popover-foreground: 234 100% 10%;
 		--primary: 234 78% 47%;
+		--color-primary: hsl(234 78% 47%) !important;
 		--primary-foreground: 0 0% 100%;
 		--secondary: 234 30% 70%;
 		--secondary-foreground: 0 0% 0%;
@@ -183,6 +184,7 @@
 		--popover: 234 50% 5%;
 		--popover-foreground: 234 5% 90%;
 		--primary: 234 78% 47%;
+		--color-primary: hsl(234 78% 47%) !important;
 		--primary-foreground: 0 0% 100%;
 		--secondary: 234 30% 20%;
 		--secondary-foreground: 0 0% 100%;
@@ -210,6 +212,7 @@
 		--popover: 274 100% 95%;
 		--popover-foreground: 274 100% 10%;
 		--primary: 274 78% 47%;
+		--color-primary: hsl(274 78% 47%) !important;
 		--primary-foreground: 0 0% 100%;
 		--secondary: 274 30% 70%;
 		--secondary-foreground: 0 0% 0%;
@@ -233,6 +236,7 @@
 		--popover: 274 50% 5%;
 		--popover-foreground: 274 5% 90%;
 		--primary: 274 78% 47%;
+		--color-primary: hsl(274 78% 47%) !important;
 		--primary-foreground: 0 0% 100%;
 		--secondary: 274 30% 20%;
 		--secondary-foreground: 0 0% 100%;
@@ -256,6 +260,7 @@
 		--popover: 31 100% 95%;
 		--popover-foreground: 31 100% 10%;
 		--primary: 31 78% 47%;
+		--color-primary: hsl(31 78% 47%) !important;
 		--primary-foreground: 0 0% 100%;
 		--secondary: 31 30% 70%;
 		--secondary-foreground: 0 0% 0%;
@@ -279,6 +284,7 @@
 		--popover: 31 50% 5%;
 		--popover-foreground: 31 5% 90%;
 		--primary: 31 78% 47%;
+		--color-primary: hsl(31 78% 47%) !important;
 		--primary-foreground: 0 0% 100%;
 		--secondary: 31 30% 20%;
 		--secondary-foreground: 0 0% 100%;
@@ -302,6 +308,7 @@
 		--popover: 119 100% 95%;
 		--popover-foreground: 119 100% 10%;
 		--primary: 119 78% 47%;
+		--color-primary: hsl(119 78% 47%);
 		--primary-foreground: 0 0% 100%;
 		--secondary: 119 30% 70%;
 		--secondary-foreground: 0 0% 0%;
@@ -324,7 +331,8 @@
 		--card-foreground: 119 5% 90%;
 		--popover: 119 50% 5%;
 		--popover-foreground: 119 5% 90%;
-		--primary: 119 78% 47%;
+		--primary: 119 78% 47% !important;
+    --color-primary: hsl(119, 78%, 47%) !important;
 		--primary-foreground: 0 0% 100%;
 		--secondary: 119 30% 20%;
 		--secondary-foreground: 0 0% 100%;
