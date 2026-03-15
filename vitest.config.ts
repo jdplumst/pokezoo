@@ -18,13 +18,9 @@ export default defineConfig({
 					name: "integration",
 					include: ["integration-tests/**/*.test.ts"],
 					globalSetup: "./integration-tests/setup.ts",
+					maxWorkers: 1,
+					isolate: true,
 					pool: "threads",
-					poolOptions: {
-						threads: {
-							singleThread: true,
-							isolate: true,
-						},
-					},
 					sequence: {
 						concurrent: false,
 						hooks: "stack",
