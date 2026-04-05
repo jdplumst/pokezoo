@@ -26,6 +26,11 @@ export const TEST_USERS = {
 		name: "Test Admin User",
 		email: "admin@example.com",
 	},
+	offererUser: {
+		id: "test-offerer-user",
+		name: "Test Offerer User",
+		email: "offerer@example.com",
+	},
 } satisfies Record<string, Partial<typeof users.$inferSelect>>;
 
 export const TEST_USER_IDS = Object.values(TEST_USERS).map((u) => u.id);
