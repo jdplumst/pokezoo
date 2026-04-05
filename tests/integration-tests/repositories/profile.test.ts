@@ -1,8 +1,11 @@
 import { inArray } from "drizzle-orm";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import {
+	getProfile,
+	getProfileForTopbar,
+} from "~/features/profile/repositories/profile.respository";
 import { db } from "~/server/db";
 import { charms, profiles, userCharms, users } from "~/server/db/schema";
-import { getProfileForTopbar } from "~/server/repositories/profile";
 import { TEST_CHARM_IDS, TEST_CHARMS } from "../data/charms";
 import { TEST_PROFILE_IDS, TEST_PROFILES } from "../data/profiles";
 import { TEST_USER_CHARM_IDS, TEST_USER_CHARMS } from "../data/userCharms";
@@ -125,6 +128,18 @@ describe("Profile Repository", () => {
 			const result = await getProfileForTopbar();
 
 			expect(result).toBeNull();
+		});
+	});
+
+	describe("getProfile", async () => {
+		it("should get profile is profile exists", async () => {
+			const profile = await getProfile(db, TEST_USERS.testUser.id);
+			expect(profile).toBeDefined();
+		});
+
+		it("should return undefined if user does not have profile", async () => {
+			const profile = await getProfile(db, TEST_USERS.withoutProfileUser.id);
+			expect(profile).toBeUndefined();
 		});
 	});
 });

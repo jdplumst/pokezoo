@@ -2,7 +2,7 @@ import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 import { CATCHING_CHARM_ID } from "~/lib/constants";
 import { auth } from "~/server/auth";
-import { db } from "~/server/db";
+import { type Database, db } from "~/server/db";
 import { profiles, userCharms } from "~/server/db/schema";
 
 export async function getProfileForTopbar() {
@@ -39,4 +39,20 @@ export async function getProfileForTopbar() {
 	}
 
 	return profileData[0];
+}
+
+export async function getProfile(db: Database, userId: string) {
+	const catchingCharm = alias(userCharms, "catchingCharm");
+	const markCharm = alias(userCharms, "markCharm");
+
+	const currProfile = (
+		await db
+			.select()
+			.from(profiles)
+			.leftJoin(catchingCharm, eq(profiles.userId, catchingCharm.userId))
+			.leftJoin(markCharm, eq(profiles.userId, markCharm.userId))
+			.where(eq(profiles.userId, userId))
+	)[0];
+
+	return currProfile;
 }
