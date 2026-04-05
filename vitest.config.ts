@@ -9,15 +9,15 @@ export default defineConfig({
 				extends: true,
 				test: {
 					name: "unit",
-					include: ["src/**/*.test.ts"],
+					include: ["src/**/*.test.ts", "tests/unit-tests/**/*.test.ts"],
 				},
 			},
 			{
 				extends: true,
 				test: {
 					name: "integration",
-					include: ["integration-tests/**/*.test.ts"],
-					globalSetup: "./integration-tests/setup.ts",
+					include: ["tests/integration-tests/**/*.test.ts"],
+					globalSetup: "./tests/integration-tests/setup.ts",
 					maxWorkers: 1,
 					isolate: true,
 					pool: "threads",

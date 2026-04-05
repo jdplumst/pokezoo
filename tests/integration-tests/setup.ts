@@ -22,7 +22,7 @@ export default async function setup() {
 	}
 
 	const composeFilePath = path.resolve(
-		`${__dirname}/../`,
+		`${__dirname}/../../`,
 		"docker-compose.test.yml",
 	);
 
