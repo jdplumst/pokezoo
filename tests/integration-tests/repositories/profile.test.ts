@@ -54,7 +54,7 @@ describe("Profile Repository", () => {
 	afterAll(async () => {
 		await db
 			.delete(userCharms)
-			.where(inArray(userCharms.userId, TEST_USER_CHARM_IDS));
+			.where(inArray(userCharms.id, TEST_USER_CHARM_IDS));
 
 		await db.delete(charms).where(inArray(charms.id, TEST_CHARM_IDS));
 		await db.delete(profiles).where(inArray(profiles.userId, TEST_PROFILE_IDS));
