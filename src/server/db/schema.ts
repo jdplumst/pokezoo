@@ -292,6 +292,7 @@ export const trades = pgTable(
 		description: text("description"),
 		initiatorInstanceId: text("initiatorInstanceId")
 			.notNull()
+			.unique()
 			.references(() => instances.id, { onDelete: "cascade" }),
 		offererInstanceId: text("offererInstanceId").references(
 			() => instances.id,
