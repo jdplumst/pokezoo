@@ -8,7 +8,7 @@ export const TEST_INSTANCES = {
 		userId: TEST_USERS.testUser.id,
 		speciesId: TEST_SPECIES.bulbasaur.id,
 	},
-	charamnder: {
+	charmander: {
 		id: "charmander-instance",
 		userId: TEST_USERS.testUser.id,
 		speciesId: TEST_SPECIES.charmander.id,

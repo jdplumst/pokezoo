@@ -72,7 +72,7 @@ describe("Trades Repository", () => {
 			.insert(instances)
 			.values([
 				TEST_INSTANCES.bulbasaur,
-				TEST_INSTANCES.charamnder,
+				TEST_INSTANCES.charmander,
 				TEST_INSTANCES.squirtle,
 				TEST_INSTANCES.pikachuOffer,
 			]);
