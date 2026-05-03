@@ -44,7 +44,7 @@ export const TEST_PROFILES = {
 	adminProfile: {
 		id: "test-admin-profile-id",
 		userId: TEST_USERS.adminUser.id,
-		username: "testuser",
+		username: "testadmin",
 		admin: true,
 		totalYield: 1000,
 		balance: 500,
