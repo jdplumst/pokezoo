@@ -16,7 +16,7 @@ export const TEST_TRADES = {
 	charmanderPikachu: {
 		id: "charmander-pikachu-trade",
 		initiatorId: TEST_USERS.testUser.id,
-		initiatorInstanceId: TEST_INSTANCES.charamnder.id,
+		initiatorInstanceId: TEST_INSTANCES.charmander.id,
 		offererId: TEST_USERS.offererUser.id,
 		offererInstanceId: TEST_INSTANCES.pikachuOffer.id,
 		createDate: new Date("2026-01-01"),
