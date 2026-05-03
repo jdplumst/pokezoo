@@ -17,3 +17,4 @@ export const TypesList = Object.values(SpeciesTypeValues);
 export const HabitatList = Object.values(HabitatValues);
 
 export const CATCHING_CHARM_ID = 1;
+export const MARK_CHARM_ID = 2;

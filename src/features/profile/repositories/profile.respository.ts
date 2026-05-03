@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
-import { CATCHING_CHARM_ID } from "~/lib/constants";
+import { CATCHING_CHARM_ID, MARK_CHARM_ID } from "~/lib/constants";
 import { auth } from "~/server/auth";
 import { type Database, db } from "~/server/db";
 import { profiles, userCharms } from "~/server/db/schema";
@@ -49,8 +49,20 @@ export async function getProfile(db: Database, userId: string) {
 		await db
 			.select()
 			.from(profiles)
-			.leftJoin(catchingCharm, eq(profiles.userId, catchingCharm.userId))
-			.leftJoin(markCharm, eq(profiles.userId, markCharm.userId))
+			.leftJoin(
+				catchingCharm,
+				and(
+					eq(profiles.userId, catchingCharm.userId),
+					eq(catchingCharm.charmId, CATCHING_CHARM_ID),
+				),
+			)
+			.leftJoin(
+				markCharm,
+				and(
+					eq(profiles.userId, markCharm.userId),
+					eq(markCharm.charmId, MARK_CHARM_ID),
+				),
+			)
 			.where(eq(profiles.userId, userId))
 	)[0];
 
