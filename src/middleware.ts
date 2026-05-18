@@ -26,7 +26,7 @@ export default async function middleware(
 	if (env.NODE_ENV !== "production") return;
 
 	const { success, pending, limit, reset, remaining } = await ratelimit.limit(
-		`ratelimit_middleware_${ip}`,
+		`pokezoo_ratelimit_middleware_${ip}`,
 	);
 	event.waitUntil(pending);
 
