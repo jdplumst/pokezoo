@@ -11,7 +11,7 @@ import {
 	userQuests,
 } from "~/server/db/schema";
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
 	const authorization = req.headers.get("authorization");
 	if (authorization?.split(" ")[1] !== env.CRON_SECRET) {
 		throw new Error("Not authorized to make this request.");
