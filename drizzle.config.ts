@@ -7,5 +7,4 @@ export default {
 	dbCredentials: {
 		url: env.DATABASE_URL,
 	},
-	tablesFilter: ["pokezoo_*"],
 } satisfies Config;
