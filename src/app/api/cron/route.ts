@@ -37,30 +37,30 @@ export async function GET(req: NextRequest) {
 
 		// Set user quests
 		await db.execute(
-			sql`DELETE FROM "pokezoo_userQuest"
-              WHERE "pokezoo_userQuest"."questId" IN (
+			sql`DELETE FROM "userQuest"
+              WHERE "userQuest"."questId" IN (
               SELECT id
-              FROM "pokezoo_quest"
-              WHERE "pokezoo_quest"."type" = 1)`,
+              FROM "quest"
+              WHERE "quest"."type" = 1)`,
 		);
 
 		if (dayOfWeek === 0) {
 			await db.execute(
-				sql`DELETE FROM "pokezoo_userQuest"
-              WHERE "pokezoo_userQuest"."questId" IN (
+				sql`DELETE FROM "userQuest"
+              WHERE "userQuest"."questId" IN (
               SELECT id
-              FROM "pokezoo_quest"
-              WHERE "pokezoo_quest"."type" = 2)`,
+              FROM "quest"
+              WHERE "quest"."type" = 2)`,
 			);
 		}
 
 		if (day === 1) {
 			await db.execute(
-				sql`DELETE FROM "pokezoo_userQuest"
-              WHERE "pokezoo_userQuest"."questId" IN (
+				sql`DELETE FROM "userQuest"
+              WHERE "userQuest"."questId" IN (
               SELECT id
-              FROM "pokezoo_quest"
-              WHERE "pokezoo_quest"."type" = 3)`,
+              FROM "quest"
+              WHERE "quest"."type" = 3)`,
 			);
 		}
 
