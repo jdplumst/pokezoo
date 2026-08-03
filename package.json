@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@faker-js/faker": "^10.3.0",
+    "@paralleldrive/cuid2": "^3.3.0",
     "@t3-oss/env-core": "^0.13.10",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/match-sorter-utils": "latest",

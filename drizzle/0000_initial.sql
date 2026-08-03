@@ -1,0 +1,257 @@
+-- this is baseline so no need to run
+
+-- CREATE TABLE "account" (
+-- 	"userId" text NOT NULL,
+-- 	"type" text NOT NULL,
+-- 	"provider" text NOT NULL,
+-- 	"providerAccountId" text NOT NULL,
+-- 	"refresh_token" text,
+-- 	"access_token" text,
+-- 	"expires_at" integer,
+-- 	"token_type" text,
+-- 	"scope" text,
+-- 	"id_token" text,
+-- 	"session_state" text,
+-- 	CONSTRAINT "account_provider_providerAccountId_pk" PRIMARY KEY("provider","providerAccountId")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "achievementType" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"name" text NOT NULL,
+-- 	CONSTRAINT "achievementType_name_unique" UNIQUE("name")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "achievement" (
+-- 	"id" text PRIMARY KEY NOT NULL,
+-- 	"description" text NOT NULL,
+-- 	"tier" integer NOT NULL,
+-- 	"yield" integer NOT NULL,
+-- 	"typeId" integer NOT NULL,
+-- 	"attributeId" integer NOT NULL,
+-- 	"regionId" integer NOT NULL,
+-- 	"shiny" boolean NOT NULL,
+-- 	"generation" integer NOT NULL
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "attribute" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"name" text NOT NULL,
+-- 	CONSTRAINT "attribute_name_unique" UNIQUE("name")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "ball" (
+-- 	"id" text PRIMARY KEY NOT NULL,
+-- 	"name" text NOT NULL,
+-- 	"img" text NOT NULL,
+-- 	"cost" integer NOT NULL,
+-- 	"commonChance" integer NOT NULL,
+-- 	"rareChance" integer NOT NULL,
+-- 	"epicChance" integer NOT NULL,
+-- 	"legendaryChance" integer NOT NULL,
+-- 	"megaChance" integer NOT NULL,
+-- 	"ubChance" integer DEFAULT 0 NOT NULL,
+-- 	"gmaxChance" integer DEFAULT 0 NOT NULL,
+-- 	"paradoxChance" integer DEFAULT 0 NOT NULL,
+-- 	CONSTRAINT "ball_name_unique" UNIQUE("name")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "charm" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"name" text NOT NULL,
+-- 	"img" text NOT NULL,
+-- 	"cost" integer NOT NULL,
+-- 	"description" text NOT NULL,
+-- 	CONSTRAINT "charm_name_unique" UNIQUE("name")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "habitat" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"name" text NOT NULL,
+-- 	CONSTRAINT "habitat_name_unique" UNIQUE("name")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "instance" (
+-- 	"id" text PRIMARY KEY NOT NULL,
+-- 	"userId" text NOT NULL,
+-- 	"speciesId" text NOT NULL,
+-- 	"createDate" timestamp DEFAULT now() NOT NULL,
+-- 	"modifyDate" timestamp DEFAULT now() NOT NULL,
+-- 	"box" integer DEFAULT 0 NOT NULL
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "profile" (
+-- 	"id" text PRIMARY KEY NOT NULL,
+-- 	"username" text,
+-- 	"admin" boolean DEFAULT false NOT NULL,
+-- 	"userId" text NOT NULL,
+-- 	"totalYield" integer DEFAULT 0 NOT NULL,
+-- 	"balance" integer DEFAULT 0 NOT NULL,
+-- 	"instanceCount" integer DEFAULT 0 NOT NULL,
+-- 	"claimedDaily" boolean DEFAULT false NOT NULL,
+-- 	"claimedNightly" boolean DEFAULT false NOT NULL,
+-- 	"claimedEvent" boolean DEFAULT true NOT NULL,
+-- 	"commonCards" integer DEFAULT 0 NOT NULL,
+-- 	"rareCards" integer DEFAULT 0 NOT NULL,
+-- 	"epicCards" integer DEFAULT 0 NOT NULL,
+-- 	"legendaryCards" integer DEFAULT 0 NOT NULL,
+-- 	"johtoStarter" boolean DEFAULT true NOT NULL,
+-- 	"hoennStarter" boolean DEFAULT true NOT NULL,
+-- 	"sinnohStarter" boolean DEFAULT true NOT NULL,
+-- 	"unovaStarter" boolean DEFAULT true NOT NULL,
+-- 	"kalosStarter" boolean DEFAULT true NOT NULL,
+-- 	"alolaStarter" boolean DEFAULT true NOT NULL,
+-- 	"galarStarter" boolean DEFAULT true NOT NULL,
+-- 	"hisuiStarter" boolean DEFAULT true NOT NULL,
+-- 	"paldeaStarter" boolean DEFAULT true NOT NULL
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "questType" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"name" text NOT NULL,
+-- 	CONSTRAINT "questType_name_unique" UNIQUE("name")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "quest" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"description" text NOT NULL,
+-- 	"type" integer NOT NULL,
+-- 	"reward" integer NOT NULL,
+-- 	"goal" integer NOT NULL
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "rarity" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"name" text NOT NULL,
+-- 	CONSTRAINT "rarity_name_unique" UNIQUE("name")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "region" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"name" text NOT NULL,
+-- 	CONSTRAINT "region_name_unique" UNIQUE("name")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "session" (
+-- 	"sessionToken" text PRIMARY KEY NOT NULL,
+-- 	"userId" text NOT NULL,
+-- 	"expires" timestamp NOT NULL
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "species" (
+-- 	"id" text PRIMARY KEY NOT NULL,
+-- 	"pokedexNumber" integer NOT NULL,
+-- 	"name" text NOT NULL,
+-- 	"rarityId" serial NOT NULL,
+-- 	"yield" integer NOT NULL,
+-- 	"img" text NOT NULL,
+-- 	"sellPrice" integer NOT NULL,
+-- 	"shiny" boolean NOT NULL,
+-- 	"typeOneId" integer NOT NULL,
+-- 	"typeTwoId" integer,
+-- 	"generation" integer NOT NULL,
+-- 	"habitatId" integer NOT NULL,
+-- 	"regionId" integer NOT NULL,
+-- 	"starter" boolean DEFAULT false NOT NULL
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "trade" (
+-- 	"id" text PRIMARY KEY NOT NULL,
+-- 	"initiatorId" text NOT NULL,
+-- 	"offererId" text,
+-- 	"createDate" timestamp DEFAULT now() NOT NULL,
+-- 	"modifyDate" timestamp DEFAULT now() NOT NULL,
+-- 	"description" text,
+-- 	"initiatorInstanceId" text NOT NULL,
+-- 	"offererInstanceId" text,
+-- 	CONSTRAINT "trade_initiatorInstanceId_unique" UNIQUE("initiatorInstanceId")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "type" (
+-- 	"id" serial PRIMARY KEY NOT NULL,
+-- 	"name" text NOT NULL,
+-- 	CONSTRAINT "type_name_unique" UNIQUE("name")
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "userAchievement" (
+-- 	"id" text PRIMARY KEY NOT NULL,
+-- 	"userId" text NOT NULL,
+-- 	"achievementId" text NOT NULL,
+-- 	"createDate" timestamp DEFAULT now() NOT NULL
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "userCharm" (
+-- 	"id" text PRIMARY KEY NOT NULL,
+-- 	"userId" text NOT NULL,
+-- 	"charmId" integer NOT NULL,
+-- 	"createDate" timestamp DEFAULT now() NOT NULL
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "userQuest" (
+-- 	"id" text PRIMARY KEY NOT NULL,
+-- 	"userId" text NOT NULL,
+-- 	"questId" integer NOT NULL,
+-- 	"count" integer NOT NULL,
+-- 	"claimed" boolean NOT NULL
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "user" (
+-- 	"id" text PRIMARY KEY NOT NULL,
+-- 	"name" text,
+-- 	"email" text NOT NULL,
+-- 	"emailVerified" timestamp,
+-- 	"image" text
+-- );
+-- --> statement-breakpoint
+-- CREATE TABLE "verificationToken" (
+-- 	"identifier" text NOT NULL,
+-- 	"token" text NOT NULL,
+-- 	"expires" timestamp NOT NULL,
+-- 	CONSTRAINT "verificationToken_identifier_token_pk" PRIMARY KEY("identifier","token")
+-- );
+-- --> statement-breakpoint
+-- ALTER TABLE "account" ADD CONSTRAINT "account_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "achievement" ADD CONSTRAINT "achievement_typeId_achievementType_id_fk" FOREIGN KEY ("typeId") REFERENCES "public"."achievementType"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "achievement" ADD CONSTRAINT "achievement_attributeId_attribute_id_fk" FOREIGN KEY ("attributeId") REFERENCES "public"."attribute"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "achievement" ADD CONSTRAINT "achievement_regionId_region_id_fk" FOREIGN KEY ("regionId") REFERENCES "public"."region"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "instance" ADD CONSTRAINT "instance_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "instance" ADD CONSTRAINT "instance_speciesId_species_id_fk" FOREIGN KEY ("speciesId") REFERENCES "public"."species"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "profile" ADD CONSTRAINT "profile_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "quest" ADD CONSTRAINT "quest_type_questType_id_fk" FOREIGN KEY ("type") REFERENCES "public"."questType"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "session" ADD CONSTRAINT "session_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "species" ADD CONSTRAINT "species_rarityId_rarity_id_fk" FOREIGN KEY ("rarityId") REFERENCES "public"."rarity"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "species" ADD CONSTRAINT "species_typeOneId_type_id_fk" FOREIGN KEY ("typeOneId") REFERENCES "public"."type"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "species" ADD CONSTRAINT "species_typeTwoId_type_id_fk" FOREIGN KEY ("typeTwoId") REFERENCES "public"."type"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "species" ADD CONSTRAINT "species_habitatId_habitat_id_fk" FOREIGN KEY ("habitatId") REFERENCES "public"."habitat"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "species" ADD CONSTRAINT "species_regionId_region_id_fk" FOREIGN KEY ("regionId") REFERENCES "public"."region"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "trade" ADD CONSTRAINT "trade_initiatorId_user_id_fk" FOREIGN KEY ("initiatorId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "trade" ADD CONSTRAINT "trade_offererId_user_id_fk" FOREIGN KEY ("offererId") REFERENCES "public"."user"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "trade" ADD CONSTRAINT "trade_initiatorInstanceId_instance_id_fk" FOREIGN KEY ("initiatorInstanceId") REFERENCES "public"."instance"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "trade" ADD CONSTRAINT "trade_offererInstanceId_instance_id_fk" FOREIGN KEY ("offererInstanceId") REFERENCES "public"."instance"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "userAchievement" ADD CONSTRAINT "userAchievement_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "userAchievement" ADD CONSTRAINT "userAchievement_achievementId_achievement_id_fk" FOREIGN KEY ("achievementId") REFERENCES "public"."achievement"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "userCharm" ADD CONSTRAINT "userCharm_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "userCharm" ADD CONSTRAINT "userCharm_charmId_charm_id_fk" FOREIGN KEY ("charmId") REFERENCES "public"."charm"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "userQuest" ADD CONSTRAINT "userQuest_userId_user_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- ALTER TABLE "userQuest" ADD CONSTRAINT "userQuest_questId_quest_id_fk" FOREIGN KEY ("questId") REFERENCES "public"."quest"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+-- CREATE INDEX "Achievement_typeId_idx" ON "achievement" USING btree ("typeId");--> statement-breakpoint
+-- CREATE INDEX "Achievement_attributeId_id" ON "achievement" USING btree ("attributeId");--> statement-breakpoint
+-- CREATE INDEX "Achievement_regionId_idx" ON "achievement" USING btree ("regionId");--> statement-breakpoint
+-- CREATE INDEX "Instance_userId_idx" ON "instance" USING btree ("userId");--> statement-breakpoint
+-- CREATE INDEX "Instance_speciesId_idx" ON "instance" USING btree ("speciesId");--> statement-breakpoint
+-- CREATE INDEX "Profile_userId_idx" ON "profile" USING btree ("userId");--> statement-breakpoint
+-- CREATE INDEX "Quest_typeId_idx" ON "quest" USING btree ("type");--> statement-breakpoint
+-- CREATE INDEX "Species_rarityId_idx" ON "species" USING btree ("rarityId");--> statement-breakpoint
+-- CREATE INDEX "Species_typeOneId_idx" ON "species" USING btree ("typeOneId");--> statement-breakpoint
+-- CREATE INDEX "Species_typeTwoId_idx" ON "species" USING btree ("typeTwoId");--> statement-breakpoint
+-- CREATE INDEX "Species_habitatId_idx" ON "species" USING btree ("habitatId");--> statement-breakpoint
+-- CREATE INDEX "Species_regionId_idx" ON "species" USING btree ("regionId");--> statement-breakpoint
+-- CREATE INDEX "Trade_initiatorId_idx" ON "trade" USING btree ("initiatorId");--> statement-breakpoint
+-- CREATE INDEX "Trade_offererId_idx" ON "trade" USING btree ("offererId");--> statement-breakpoint
+-- CREATE INDEX "Trade_initiatorInstanceId_idx" ON "trade" USING btree ("initiatorInstanceId");--> statement-breakpoint
+-- CREATE INDEX "Trade_offererInstanceId_idx" ON "trade" USING btree ("offererInstanceId");--> statement-breakpoint
+-- CREATE INDEX "UserAchievement_userId_idx" ON "userAchievement" USING btree ("userId");--> statement-breakpoint
+-- CREATE INDEX "UserAchievement_achievementId_idx" ON "userAchievement" USING btree ("achievementId");--> statement-breakpoint
+-- CREATE INDEX "UserCharm_userId_idx" ON "userCharm" USING btree ("userId");--> statement-breakpoint
+-- CREATE INDEX "UserCharm_charmId_idx" ON "userCharm" USING btree ("charmId");--> statement-breakpoint
+-- CREATE INDEX "UserQuest_userId_idx" ON "userQuest" USING btree ("userId");--> statement-breakpoint
+-- CREATE INDEX "UserQuest_questId_idx" ON "userQuest" USING btree ("questId");
