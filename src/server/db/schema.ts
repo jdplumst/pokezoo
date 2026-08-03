@@ -4,7 +4,7 @@ import {
 	boolean,
 	index,
 	integer,
-	pgTableCreator,
+	pgTable,
 	primaryKey,
 	serial,
 	text,
@@ -12,8 +12,6 @@ import {
 } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
 import type { AdapterAccount } from "next-auth/adapters";
-
-export const pgTable = pgTableCreator((name) => `pokezoo_${name}`);
 
 // Next Auth Tables
 
