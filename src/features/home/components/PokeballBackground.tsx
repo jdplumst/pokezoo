@@ -4,11 +4,9 @@ interface PokeballBackgroundProps {
 	children: ReactNode;
 }
 
-export default function PokeballBackground({
-	children,
-}: PokeballBackgroundProps) {
+export function PokeballBackground({ children }: PokeballBackgroundProps) {
 	return (
-		<div className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-red-500 to-white">
+		<div className="relative min-h-screen w-full overflow-hidden bg-linear-to-b from-red-500 to-white">
 			{/* Single centered pokeball, filling the viewport */}
 			<div className="pointer-events-none absolute inset-0 flex items-center justify-center">
 				<PokeballShape className="h-[80vmin] w-[80vmin]" />
