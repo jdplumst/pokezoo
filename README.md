@@ -12,7 +12,7 @@ The app is currently on version 9.07.
 - Next.js (App Router with Server Actions)
 - TypeScript
 - TailwindCSS
-- PostgreSQL with Supabase
+- PostgreSQL with Neon 
 - Drizzle
 - NextAuth.js
 - tRPC
