@@ -6,8 +6,16 @@ import {
 	CardHeader,
 	CardTitle,
 } from "#/components/ui/card";
+import { authClient } from "#/lib/auth-client";
 
 export function SignInCard() {
+	const handleSignIn = async (provider: "github" | "twitch" | "google") => {
+		await authClient.signIn.social({
+			provider: provider,
+			callbackURL: "/game",
+		});
+	};
+
 	return (
 		<div className="flex justify-center">
 			<Card className="w-full sm:w-1/2 self-start">
@@ -18,7 +26,10 @@ export function SignInCard() {
 					</CardDescription>
 				</CardHeader>
 				<CardContent className="flex flex-col items-center gap-4">
-					<Button className="bg-green-500">
+					<Button
+						onClick={() => handleSignIn("github")}
+						className="bg-green-500"
+					>
 						<svg
 							role="img"
 							viewBox="0 0 24 24"
@@ -29,7 +40,10 @@ export function SignInCard() {
 						</svg>
 						GitHub
 					</Button>
-					<Button className="bg-purple-500">
+					<Button
+						onClick={() => handleSignIn("twitch")}
+						className="bg-purple-500"
+					>
 						<svg
 							role="img"
 							viewBox="0 0 24 24"
@@ -40,7 +54,10 @@ export function SignInCard() {
 						</svg>
 						Twitch
 					</Button>
-					<Button className="bg-orange-500">
+					<Button
+						onClick={() => handleSignIn("google")}
+						className="bg-orange-500"
+					>
 						<svg
 							role="img"
 							viewBox="0 0 24 24"
